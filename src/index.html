@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <title>Daggerheart Encounter Tracker</title>
+        <script src="adversaries.js"></script>
         <style>
             .slots {
                 display: inline-block
@@ -25,7 +26,8 @@
                 "adversaries": [
                     {
                         "name": "Bandit 1",
-                        "source": "Jagged Knife Bandit",
+                        "originalName": "Jagged Knife Bandit",
+                        "source": "SRD",
                         "tier": 1,
                         "type": "standard",
                         // TODO: Description, motives/tactics, features, experiences, attacks
@@ -75,7 +77,6 @@
                 }
             };
 
-
             var gainFearButton = document.createElement("button");
             gainFearButton.innerText = "+";
             gainFearButton.onclick = function() {
@@ -119,15 +120,13 @@
         function createAdversaryElement(adversary) {
             var adversaryDiv = document.createElement("div");
             adversaryDiv.className = "adversary";
-            adversaryDiv.innerHTML = "<h3>" + adversary.name + " (" + adversary.source + ")</h3>";
+            adversaryDiv.innerHTML = `<h3>${adversary.name} (${adversary.originalName}, ${adversary.source})</h3>`;
             adversaryDiv.innerHTML += "<p>Tier: " + adversary.tier + "</p>";
             adversaryDiv.innerHTML += "<p>Difficulty: " + adversary.difficulty + "</p>";
-            // adversaryDiv.innerHTML += "<p>HP Slots: " + adversary.hpSlots + "</p>";
-            // adversaryDiv.innerHTML += "<p>Stress Slots: " + adversary.stressSlots + "</p>";
 
             var hpDiv = document.createElement("div");
             hpDiv.className = "slotInfo";
-            hpDiv.innerHTML = "<strong>HP:</strong> ";
+            hpDiv.innerHTML = "HP:";
             var hpSlotsDiv = document.createElement("div");
             hpSlotsDiv.className = "slots";
             updateResource(hpSlotsDiv, adversary.hp);
@@ -143,10 +142,38 @@
             stressDiv.appendChild(stressSlotsDiv);
             adversaryDiv.appendChild(stressDiv);
 
+            var deleteButton = document.createElement("button");
+            deleteButton.innerText = "Remove Adversary";
+            deleteButton.onclick = function() {
+                // TODO: Actually update data structure. This is where React
+                //       would be nice, but trying to keep this light.
+                // TODO: Could also have this function return a type that
+                //       contains both the HTMLElement and events for handling
+                //       changes, so data structure can be updated.
+                adversaryDiv.parentElement.removeChild(adversaryDiv);
+            };
+            adversaryDiv.appendChild(deleteButton);
+
             return adversaryDiv;
         }
 
         var encountersDiv = document.getElementById("encounters");
+
+        // TODO: This is probably a silly way to do this, we
+        //       don't actually want all these DOM elements.
+        //       But it's an easy way to get that autocomplete for now.
+        // TODO: Also, we want a broader search option, should be able
+        //       to search by source, tier, and other arbitrary property text,
+        //       and allow easier browsing.
+        var srdDatalist = document.createElement("datalist");
+        srdDatalist.id = "srd-adversaries";
+        for (var i = 0; i < srdAdversaries.length; i++) {
+            var option = document.createElement("option");
+            option.value = srdAdversaries[i].name;
+            srdDatalist.appendChild(option);
+        }
+
+        encountersDiv.appendChild(srdDatalist);
 
         for (var i = 0; i < encounters.length; i++) {
             var encounter = encounters[i];
@@ -157,14 +184,53 @@
             var fearDiv = createFearTracker(encounter);
             encounterDiv.appendChild(fearDiv);
 
+            var addAdversaryDiv = document.createElement("div");
+            var srdSearch = document.createElement("input");
+            srdSearch.type = "search";
+            srdSearch.placeholder = "Search SRD Adversaries";
+            srdSearch.setAttribute("list", "srd-adversaries");
+            addAdversaryDiv.appendChild(srdSearch);
+            encounterDiv.appendChild(addAdversaryDiv);
+
             var adversariesDiv = document.createElement("div");
             for (var j = 0; j < encounter.adversaries.length; j++) {
                 var adversary = encounter.adversaries[j];
                 var adversaryElement = createAdversaryElement(adversary);
                 adversariesDiv.appendChild(adversaryElement);
             }
-
             encounterDiv.appendChild(adversariesDiv);
+
+            var addAdversaryButton = document.createElement("button");
+            addAdversaryButton.innerText = "Add Adversary";
+            addAdversaryButton.onclick = function() {
+                var selectedOption = srdSearch.value.trim();
+                var srdAdversary = srdAdversaries.find(function(a) {
+                    return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
+                });
+                if (srdAdversary) {
+                    var adversary = {};
+                    adversary.name = srdAdversary.name + " (1)"; // TODO: Naming
+                    adversary.originalName = srdAdversary.name;
+                    adversary.source = "SRD";
+                    adversary.tier = srdAdversary.tier;
+                    adversary.type = srdAdversary.type;
+                    adversary.difficulty = srdAdversary.difficulty;
+                    adversary.hp = {
+                        slots: srdAdversary.hp,
+                        marked: 0
+                    };
+                    adversary.stress = {
+                        slots: srdAdversary.stress,
+                        marked: 0
+                    };
+
+                    encounter.adversaries.push(adversary);
+                    var adversaryElement = createAdversaryElement(adversary);
+                    adversariesDiv.appendChild(adversaryElement);
+                }
+            };
+            addAdversaryDiv.appendChild(addAdversaryButton);
+
             encountersDiv.appendChild(encounterDiv);
         }
     </script>

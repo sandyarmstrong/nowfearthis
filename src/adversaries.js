@@ -1,4 +1,5 @@
-﻿[
+﻿// Courtesy of https://github.com/seansbox/daggerheart-srd/blob/52688eccc7d2bd9f5ef7a3f2d3f28f1532935387/.build/json/adversaries.json
+var srdAdversaries = [
   {
     "name": "Acid Burrower",
     "tier": "1",
@@ -3931,4 +3932,4 @@
       }
     ]
   }
-]
+];
