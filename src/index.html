@@ -153,6 +153,8 @@
             stats.innerText = `Difficulty: ${adversary.difficulty} | Thresholds: ${thresholds}`;
             adversaryDiv.appendChild(stats);
 
+            // TODO: See TODO in convertFromSRD for more stuff we can show
+
             var hpDiv = document.createElement("div");
             hpDiv.className = "slotInfo";
             hpDiv.innerHTML = "HP:";
@@ -170,6 +172,42 @@
             updateResource(stressSlotsDiv, adversary.stress);
             stressDiv.appendChild(stressSlotsDiv);
             adversaryDiv.appendChild(stressDiv);
+
+            // TODO: Allow adding/deleting modifications
+            // TODO: Reflect modifications in the stats
+            var conditionsDiv = document.createElement("div");
+            var conditionsDisplayDiv = document.createElement("div");
+            conditionsDiv.appendChild(conditionsDisplayDiv)
+
+            function updateConditionsDisplay() {
+                conditionsDisplayDiv.innerHTML = "Conditions: ";
+                if (adversary.conditions && adversary.conditions.length > 0) {
+                    // TODO: Allow deleting conditions
+                    conditionsDisplayDiv.innerText += adversary.conditions.join(", ");
+                } else {
+                    conditionsDisplayDiv.innerText += "None";
+                }
+            }
+
+            updateConditionsDisplay();
+
+            var addConditionsDiv = document.createElement("div");
+            var addConditionInput = document.createElement("input");
+            addConditionInput.type = "text";
+            var addConditionButton = document.createElement("button");
+            addConditionButton.innerText = "Add Condition";
+            addConditionButton.onclick = function() {
+                var condition = addConditionInput.value.trim();
+                if (condition) {
+                    adversary.conditions.push(condition);
+                    addConditionInput.value = "";
+                    updateConditionsDisplay();
+                }
+            };
+            addConditionsDiv.appendChild(addConditionInput);
+            addConditionsDiv.appendChild(addConditionButton);
+            conditionsDiv.appendChild(addConditionsDiv);
+            adversaryDiv.appendChild(conditionsDiv);
 
             var deleteButton = document.createElement("button");
             deleteButton.innerText = "Remove Adversary";
@@ -217,7 +255,46 @@
             // TODO: description, motives_and_tactics, attack, range, damage, experience, feats (name/text)
         }
 
+        function calculateBattlePoints(encounter)
+        {
+            var currentBattlePoints = 0;
+            for (var j = 0; j < encounter.adversaries.length; j++) {
+                var adversary = encounter.adversaries[j];
+                // TODO: Deal with tier differences
+                switch(adversary.type) {
+                    case "Minion":
+                        currentBattlePoints += 1 / encounter.playerCount;
+                        break;
+                    case "Social":
+                    case "Support":
+                        currentBattlePoints += 1;
+                        break;
+                    case "Horde":
+                    case "Ranged":
+                    case "Skulk":
+                    case "Standard":
+                        currentBattlePoints += 2;
+                        break;
+                    case "Leader":
+                    case "Elite":
+                        currentBattlePoints += 3;
+                        break;
+                    case "Bruiser":
+                        currentBattlePoints += 4;
+                        break;
+                    case "Solo":
+                        currentBattlePoints += 5;
+                        break;
+                }
+            }
+            return currentBattlePoints;
+        }
+
         var encountersDiv = document.getElementById("encounters");
+
+        // TODO: Add ability to load encounters from JSON (should this append to current state, or replace it?)
+        // TODO: Add ability to save encounters to JSON file
+        // TODO: Save current state to localStorage (when, every modification?), and load it on startup
 
         // TODO: This is probably a silly way to do this, we
         //       don't actually want all these DOM elements.
@@ -241,7 +318,7 @@
             var encounter = encounters[i];
             var encounterDiv = document.createElement("div");
             encounterDiv.className = "encounter";
-            encounterDiv.innerHTML = `<h2>${encounter.name} (Tier ${encounter.playerTier}, ${encounter.playerCount} Players)</h2><p>${encounter.description}</p>`;
+            encounterDiv.innerHTML = `<h2>${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)</h2><p>${encounter.description}</p>`;
 
             var fearDiv = createFearTracker(encounter);
             encounterDiv.appendChild(fearDiv);
@@ -251,36 +328,7 @@
             encounterDiv.appendChild(battlePointsDiv);
 
             function refreshBattlePoints() {
-                var currentBattlePoints = 0;
-                for (var j = 0; j < encounter.adversaries.length; j++) {
-                    var adversary = encounter.adversaries[j];
-                    // TODO: Deal with tier differences
-                    switch(adversary.type) {
-                        case "Minion":
-                            currentBattlePoints += 1 / encounter.playerCount;
-                            break;
-                        case "Social":
-                        case "Support":
-                            currentBattlePoints += 1;
-                            break;
-                        case "Horde":
-                        case "Ranged":
-                        case "Skulk":
-                        case "Standard":
-                            currentBattlePoints += 2;
-                            break;
-                        case "Leader":
-                        case "Elite":
-                            currentBattlePoints += 3;
-                            break;
-                        case "Bruiser":
-                            currentBattlePoints += 4;
-                            break;
-                        case "Solo":
-                            currentBattlePoints += 5;
-                            break;
-                    }
-                }
+                var currentBattlePoints = calculateBattlePoints(encounter);
 
                 // Round to nearest 0.1 for display
                 var remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
