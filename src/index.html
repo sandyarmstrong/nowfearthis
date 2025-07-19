@@ -256,6 +256,12 @@
                     updateConditionsDisplay();
                 }
             };
+            addConditionInput.addEventListener("keyup", function(event) {
+                if (event.keyCode === 13) { // Enter key
+                    event.preventDefault();
+                    addConditionButton.click();
+                }
+            });
             addConditionsDiv.appendChild(addConditionInput);
             addConditionsDiv.appendChild(addConditionButton);
             conditionsDiv.appendChild(addConditionsDiv);
@@ -406,6 +412,10 @@
             addAdversaryButton.innerText = "Add Adversary";
             addAdversaryButton.onclick = function() {
                 var selectedOption = srdSearch.value.trim();
+                if (!selectedOption) {
+                    // TODO: Or some "custom" type?
+                    selectedOption = "Jagged Knife bandit";
+                }
                 var srdAdversary = srdAdversaries.find(function(a) {
                     return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
                 });
@@ -419,6 +429,13 @@
                 }
             };
             addAdversaryDiv.appendChild(addAdversaryButton);
+
+            srdSearch.addEventListener("keyup", function(event) {
+                if (event.keyCode === 13) { // Enter key
+                    event.preventDefault();
+                    addAdversaryButton.click();
+                }
+            });
 
             encountersDiv.appendChild(encounterDiv);
         }
