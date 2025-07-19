@@ -4,6 +4,7 @@
         "targetBattlePoints": 10, // Allows telling user they might need more or less adversaries
         "currentFear": 5, // Convenient. Also allows remembering fear state for different groups
         "playerTier": 1, // Needed to help calculate battle points, if adversary tiers differ
+        "playerCount": 3, // Need to calculate minion battle points
         "description": "A group of bandits ambushes the party in a dense forest.",
         "adversaries": [
             {

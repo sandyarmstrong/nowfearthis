@@ -31,6 +31,7 @@
                 "targetBattlePoints": 10, // Allows telling user they might need more or less adversaries
                 "currentFear": 5, // Convenient. Also allows remembering fear state for different groups
                 "playerTier": 1, // Needed to help calculate battle points, if adversary tiers differ
+                "playerCount": 3, // Need to calculate minion battle points
                 "description": "A group of bandits ambushes the party in a dense forest.",
                 "adversaries": [
                     {
@@ -129,13 +130,7 @@
 
         function createAdversaryElement(encounter, adversary) {
             var warning = "";
-            if (adversary.type == "Minion") {
-                warning += "Minion battle points are not currently calculated.";
-            }
             if (adversary.tier > encounter.playerTier) {
-                if (warning.length > 0) {
-                    warning += " ";
-                }
                 warning += "This adversary is above the player tier.";
             }
 
@@ -246,7 +241,7 @@
             var encounter = encounters[i];
             var encounterDiv = document.createElement("div");
             encounterDiv.className = "encounter";
-            encounterDiv.innerHTML = `<h2>${encounter.name}</h2><p>${encounter.description}</p>`;
+            encounterDiv.innerHTML = `<h2>${encounter.name} (Tier ${encounter.playerTier}, ${encounter.playerCount} Players)</h2><p>${encounter.description}</p>`;
 
             var fearDiv = createFearTracker(encounter);
             encounterDiv.appendChild(fearDiv);
@@ -259,9 +254,11 @@
                 var currentBattlePoints = 0;
                 for (var j = 0; j < encounter.adversaries.length; j++) {
                     var adversary = encounter.adversaries[j];
-                    // TODO: Deal with minions (need to know number of players)
                     // TODO: Deal with tier differences
                     switch(adversary.type) {
+                        case "Minion":
+                            currentBattlePoints += 1 / encounter.playerCount;
+                            break;
                         case "Social":
                         case "Support":
                             currentBattlePoints += 1;
@@ -284,7 +281,11 @@
                             break;
                     }
                 }
-                battlePointsDiv.querySelector("[name='current-battle-points']").innerText = encounter.targetBattlePoints - currentBattlePoints;
+
+                // Round to nearest 0.1 for display
+                var remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
+
+                battlePointsDiv.querySelector("[name='current-battle-points']").innerText = remainingBattlePoints;
             }
 
             var addAdversaryDiv = document.createElement("div");
