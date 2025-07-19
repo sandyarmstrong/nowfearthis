@@ -1,0 +1,37 @@
+{
+    "Forest Ambush": {
+        "targetBattlePoints": 10, // Allows telling user they might need more or less adversaries
+        "currentFear": 5, // Convenient. Also allows remembering fear state for different groups
+        "playerTier": 1, // Needed to help calculate battle points, if adversary tiers differ
+        "description": "A group of bandits ambushes the party in a dense forest.",
+        "adversaries": [
+            {
+                "name": "Bandit 1",
+                "source": "Jagged Knife Bandit",
+                "tier": 1,
+                "type": "standard",
+                // TODO: Description, motives/tactics, features, experiences, attacks
+                "difficulty": 12,
+                "hpSlots": 5,
+                "stressSlots": 3,
+                "majorThreshold": 8,
+                "severeThreshold": 14,
+                "marked": {
+                    "hp": 0,
+                    "stress": 0
+                },
+                "modifications": [
+                    {
+                        "modificationName": "my cool debuff",
+                        "propertyName": "majorThreshold",
+                        "modification": "-1" // - or + to modify, or just a number to hard-set, mods are applied in order
+                    }
+                ],
+                "conditions": [
+                    "restrained",
+                    "vulnerable"
+                ]
+            }
+        ]
+    }
+}

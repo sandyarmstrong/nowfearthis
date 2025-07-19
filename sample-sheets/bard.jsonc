@@ -1,0 +1,91 @@
+{
+    "name": {
+        "playerName": "Alice",
+        "characterName": "Lyra",
+        "pronouns": "she/her"
+    },
+    "level": 1,
+    "class": "Bard",
+    "domains": [ // TODO: Is this needed? Surely it would be in some class schema instead?
+        "grace",
+        "codex"
+    ],
+    "subclass": "Troubadour",
+    "heritage": "Human",
+    "defense": {
+        "evasion": 10,
+        "armorScore": 14,
+        "armorSlots": 4,
+        "markedArmor": 0
+    },
+    "traits": {
+        "agility": 2,
+        "strength": 1,
+        "finesse": 3,
+        "instinct": 2,
+        "presence": 4,
+        "knowledge": 2
+    },
+    "damageAndHealth": {
+        // Maybe these should be derived instead?
+        // I forget if other things can affect these besides armor and level
+        "minorThreshold": 7,
+        "majorThreshold": 14,
+        "hpSlots": 5,
+        "markedHp": 0,
+        "stressSlots": 6,
+        "markedStress": 0
+    },
+    "experiences": {
+        "love to play": 2,
+        "hide and seek": 2
+    },
+    "gold": {
+        "handfuls": 1,
+        "bags": 0,
+        "chests": 0
+    },
+    "classFeature": "TODO", // TODO: How to specify this? What is the schema like?
+    "activeWeapons": {
+        "primaryWeapon": {
+            "name": "rapier",
+            "trait": "presence",
+            "range": "melee",
+            "damageDice": "d8",
+            "damageBonus": 0,
+            "damageType": "phy",
+            "burden": 1,
+            "feature": "Quick: When you make an attack, you can mark a Stress to target another creature within range."
+        },
+        "secondaryWeapon": {
+            "name": "small dagger",
+            "trait": "finesse",
+            "range": "melee",
+            "damageDice": "d8",
+            "damageBonus": 0,
+            "damageType": "phy",
+            "burden": 1,
+            "feature": "Paired: +2 to primary weapon damage to targets within Melee range"
+        }
+    },
+    "activeArmor": {
+        "name": "Gambeson Armor",
+        "minorThreshold": 5,
+        "majorThreshold": 11,
+        "baseScore": 3,
+        "feature": "Flexible: +1 to Evasion"
+    },
+    "inventory": [
+        "torch",
+        "50ft rope",
+        "basic supplies",
+        "minor health potion",
+        "romance novel",
+        "songbook"
+    ]
+    // TODO: Inventory weapons?
+    // TODO: Description
+    // TODO: Background Questions/Answers
+    // TODO: Connections Questions/Answers
+    // TODO: Leveling up squares
+}
