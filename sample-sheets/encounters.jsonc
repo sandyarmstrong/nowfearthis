@@ -11,7 +11,7 @@
                 "originalName": "Jagged Knife Bandit",
                 "source": "SRD",
                 "tier": 1,
-                "type": "standard",
+                "type": "Standard",
                 // TODO: Description, motives/tactics, features, experiences, attacks
                 "difficulty": 12,
                 "majorThreshold": 8,
