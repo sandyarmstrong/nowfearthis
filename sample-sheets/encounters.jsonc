@@ -8,7 +8,7 @@
         "description": "A group of bandits ambushes the party in a dense forest.",
         "adversaries": [
             {
-                "name": "Bandit 1",
+                "name": "Bandit #1",
                 "originalName": "Jagged Knife Bandit",
                 "source": "SRD",
                 "tier": 1,

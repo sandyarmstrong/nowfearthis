@@ -47,11 +47,12 @@
             <option value="Shaken"></option>
         </datalist>
 
+        <input type="file" id="load-encounters" accept=".json" />
         <div id="encounters"></div>
     </body>
 
     <script>
-        var encounters = [
+        var sampleEncounters = [
             {
                 "name": "Forest Ambush",
                 "targetBattlePoints": 10, // Allows telling user they might need more or less adversaries
@@ -247,7 +248,7 @@
             addConditionButton.innerText = "Add Condition";
             addConditionButton.onclick = function() {
                 var condition = addConditionInput.value.trim();
-                if (condition && !adversary.conditions.includes(condition)) {
+                if (condition && (!adversary.conditions || !adversary.conditions.includes(condition))) {
                     if (!adversary.conditions) {
                         adversary.conditions = [];
                     }
@@ -296,15 +297,15 @@
                 name: srdAdversary.name,
                 originalName: srdAdversary.name,
                 source: "SRD",
-                tier: srdAdversary.tier,
+                tier: parseInt(srdAdversary.tier),
                 type: srdAdversary.type,
-                difficulty: srdAdversary.difficulty,
+                difficulty: parseInt(srdAdversary.difficulty),
                 hp: {
-                    slots: srdAdversary.hp,
+                    slots: parseInt(srdAdversary.hp),
                     marked: 0
                 },
                 stress: {
-                    slots: srdAdversary.stress,
+                    slots: parseInt(srdAdversary.stress),
                     marked: 0
                 },
                 majorThreshold: parseInt(thresholds[0]),
@@ -348,11 +349,108 @@
             return currentBattlePoints;
         }
 
-        var encountersDiv = document.getElementById("encounters");
+        function displayEncounters(encounters) {
+            var encountersDiv = document.getElementById("encounters");
+            encountersDiv.innerHTML = ""; // Clear any existing content
 
-        // TODO: Add ability to load encounters from JSON (should this append to current state, or replace it?)
-        // TODO: Add ability to save encounters to JSON file
-        // TODO: Save current state to localStorage (when, every modification?), and load it on startup
+            var saveEncountersButton = document.createElement("button");
+            saveEncountersButton.innerText = "Save Encounters";
+            encountersDiv.appendChild(saveEncountersButton);
+
+            saveEncountersButton.addEventListener("click", function() {
+                var json = JSON.stringify(encounters);
+                var blob = new Blob([json], { type: "application/json" });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                a.href = url;
+                a.download = "encounters.json";
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+
+            // TODO: Save current state to localStorage (when, every modification?), and load it on startup
+
+            // TODO: Actually, show one encounter at a time, and allow switching between them,
+            //       as well as adding or deleting encounters.
+            for (var i = 0; i < encounters.length; i++) {
+                var encounter = encounters[i];
+                var encounterDiv = document.createElement("div");
+                encounterDiv.className = "encounter";
+                encounterDiv.innerHTML = `<h2>${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)</h2><p>${encounter.description}</p>`;
+
+                var fearDiv = createFearTracker(encounter);
+                encounterDiv.appendChild(fearDiv);
+
+                var battlePointsDiv = document.createElement("div");
+                battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> left)</p>`;
+                encounterDiv.appendChild(battlePointsDiv);
+
+                function refreshBattlePoints() {
+                    var currentBattlePoints = calculateBattlePoints(encounter);
+
+                    // Round to nearest 0.1 for display
+                    var remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
+
+                    battlePointsDiv.querySelector("[name='current-battle-points']").innerText = remainingBattlePoints;
+                }
+
+                var addAdversaryDiv = document.createElement("div");
+                var srdSearch = document.createElement("input");
+                srdSearch.type = "search";
+                srdSearch.placeholder = "Search SRD Adversaries";
+                srdSearch.setAttribute("list", "srd-adversaries");
+                addAdversaryDiv.appendChild(srdSearch);
+                encounterDiv.appendChild(addAdversaryDiv);
+
+                var adversariesDiv = document.createElement("div");
+                for (var j = 0; j < encounter.adversaries.length; j++) {
+                    addAdversary(adversariesDiv, encounter, encounter.adversaries[j], refreshBattlePoints);
+                }
+                encounterDiv.appendChild(adversariesDiv);
+
+                var addAdversaryButton = document.createElement("button");
+                addAdversaryButton.innerText = "Add Adversary";
+                addAdversaryButton.onclick = function() {
+                    var selectedOption = srdSearch.value.trim();
+                    if (!selectedOption) {
+                        // TODO: Or some "custom" type?
+                        selectedOption = "Jagged Knife bandit";
+                    }
+                    var srdAdversary = srdAdversaries.find(function(a) {
+                        return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
+                    });
+                    if (srdAdversary) {
+                        var adversary = convertFromSRD(srdAdversary);
+                        var maxDuplicateNumber = 0;
+                        for (var k = 0; k < encounter.adversaries.length; k++) {
+                            var existingAdversaryNameParts = encounter.adversaries[k].name.split(" #");
+                            if (existingAdversaryNameParts[0] === adversary.name) {
+                                if (existingAdversaryNameParts.length > 1) {
+                                    maxDuplicateNumber = Math.max(parseInt(existingAdversaryNameParts[1]), maxDuplicateNumber);
+                                }
+                            }
+                        }
+                        adversary.name += " #" + (maxDuplicateNumber + 1);
+
+                        if (!encounter.adversaries) {
+                            encounter.adversaries = [];
+                        }
+                        encounter.adversaries.push(adversary);
+                        addAdversary(adversariesDiv, encounter, adversary, refreshBattlePoints);
+                    }
+                };
+                addAdversaryDiv.appendChild(addAdversaryButton);
+
+                srdSearch.addEventListener("keyup", function(event) {
+                    if (event.keyCode === 13) { // Enter key
+                        event.preventDefault();
+                        addAdversaryButton.click();
+                    }
+                });
+
+                encountersDiv.appendChild(encounterDiv);
+            }
+        }
 
         // TODO: This is probably a silly way to do this, we
         //       don't actually want all these DOM elements.
@@ -367,88 +465,28 @@
             option.value = srdAdversaries[i].name;
             srdDatalist.appendChild(option);
         }
+        document.body.appendChild(srdDatalist);
 
-        encountersDiv.appendChild(srdDatalist);
+        displayEncounters(sampleEncounters);
 
-        // TODO: Actually, show one encounter at a time, and allow switching between them,
-        //       as well as adding or deleting encounters.
-        for (var i = 0; i < encounters.length; i++) {
-            var encounter = encounters[i];
-            var encounterDiv = document.createElement("div");
-            encounterDiv.className = "encounter";
-            encounterDiv.innerHTML = `<h2>${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)</h2><p>${encounter.description}</p>`;
-
-            var fearDiv = createFearTracker(encounter);
-            encounterDiv.appendChild(fearDiv);
-
-            var battlePointsDiv = document.createElement("div");
-            battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> left)</p>`;
-            encounterDiv.appendChild(battlePointsDiv);
-
-            function refreshBattlePoints() {
-                var currentBattlePoints = calculateBattlePoints(encounter);
-
-                // Round to nearest 0.1 for display
-                var remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
-
-                battlePointsDiv.querySelector("[name='current-battle-points']").innerText = remainingBattlePoints;
-            }
-
-            var addAdversaryDiv = document.createElement("div");
-            var srdSearch = document.createElement("input");
-            srdSearch.type = "search";
-            srdSearch.placeholder = "Search SRD Adversaries";
-            srdSearch.setAttribute("list", "srd-adversaries");
-            addAdversaryDiv.appendChild(srdSearch);
-            encounterDiv.appendChild(addAdversaryDiv);
-
-            var adversariesDiv = document.createElement("div");
-            for (var j = 0; j < encounter.adversaries.length; j++) {
-                addAdversary(adversariesDiv, encounter, encounter.adversaries[j], refreshBattlePoints);
-            }
-            encounterDiv.appendChild(adversariesDiv);
-
-            var addAdversaryButton = document.createElement("button");
-            addAdversaryButton.innerText = "Add Adversary";
-            addAdversaryButton.onclick = function() {
-                var selectedOption = srdSearch.value.trim();
-                if (!selectedOption) {
-                    // TODO: Or some "custom" type?
-                    selectedOption = "Jagged Knife bandit";
-                }
-                var srdAdversary = srdAdversaries.find(function(a) {
-                    return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
-                });
-                if (srdAdversary) {
-                    var adversary = convertFromSRD(srdAdversary);
-                    var maxDuplicateNumber = 0;
-                    for (var k = 0; k < encounter.adversaries.length; k++) {
-                        var existingAdversaryNameParts = encounter.adversaries[k].name.split(" #");
-                        if (existingAdversaryNameParts[0] === adversary.name) {
-                            if (existingAdversaryNameParts.length > 1) {
-                                maxDuplicateNumber = Math.max(parseInt(existingAdversaryNameParts[1]), maxDuplicateNumber);
-                            }
-                        }
+        var fileInput = document.getElementById("load-encounters");
+        fileInput.addEventListener("change", function(event) {
+            var file = event.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        var encounters = JSON.parse(e.target.result);
+                        displayEncounters(encounters);
+                    } catch (error) {
+                        console.error("Error loading encounters:", error);
                     }
-                    adversary.name += " #" + (maxDuplicateNumber + 1);
-
-                    if (!encounter.adversaries) {
-                        encounter.adversaries = [];
-                    }
-                    encounter.adversaries.push(adversary);
-                    addAdversary(adversariesDiv, encounter, adversary, refreshBattlePoints);
-                }
-            };
-            addAdversaryDiv.appendChild(addAdversaryButton);
-
-            srdSearch.addEventListener("keyup", function(event) {
-                if (event.keyCode === 13) { // Enter key
-                    event.preventDefault();
-                    addAdversaryButton.click();
-                }
-            });
-
-            encountersDiv.appendChild(encounterDiv);
-        }
+                };
+                reader.onerror = function(e) {
+                    console.error("Error reading file:", e);
+                };
+                reader.readAsText(file);
+            }
+        });
     </script>
 </html>
