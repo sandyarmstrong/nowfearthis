@@ -16,11 +16,37 @@
             .adversary p {
                 margin: 7px 0px;
             }
+            ul.conditions-list {
+                list-style: none;
+                display: inline;
+            }
+            ul.conditions-list li {
+                display: inline;
+                margin-right: 5px;
+            }
         </style>
     </head>
 
     <body>
         <h1>Daggerheart Encounter Tracker</h1>
+
+        <datalist id="srd-conditions">
+            <option value="Hidden"></option>
+            <option value="Restrained"></option>
+            <option value="Vulnerable"></option>
+            <option value="Asleep"></option>
+            <option value="Stunned"></option>
+            <option value="Silenced"></option>
+            <option value="Corroded"></option>
+            <option value="Ranger's Focus"></option>
+            <option value="Cloaked"></option>
+            <option value="Dizzied"></option>
+            <option value="Enveloped"></option>
+            <option value="Roped"></option>
+            <option value="Broken"></option>
+            <option value="Shaken"></option>
+        </datalist>
+
         <div id="encounters"></div>
     </body>
 
@@ -60,8 +86,8 @@
                             }
                         ],
                         "conditions": [
-                            "restrained",
-                            "vulnerable"
+                            "Restrained",
+                            "Vulnerable"
                         ]
                     }
                 ]
@@ -182,10 +208,32 @@
             function updateConditionsDisplay() {
                 conditionsDisplayDiv.innerHTML = "Conditions: ";
                 if (adversary.conditions && adversary.conditions.length > 0) {
-                    // TODO: Allow deleting conditions
-                    conditionsDisplayDiv.innerText += adversary.conditions.join(", ");
+                    var conditionsList = document.createElement("ul");
+                    conditionsList.className = "conditions-list";
+                    for (var i = 0; i < adversary.conditions.length; i++) {
+                        var condition = adversary.conditions[i];
+
+                        var conditionItem = document.createElement("li");
+                        conditionsList.appendChild(conditionItem);
+
+                        var conditionText = document.createElement("span");
+                        conditionText.innerText = condition;
+                        conditionItem.appendChild(conditionText);
+
+                        var removeButton = document.createElement("button");
+                        removeButton.innerText = "X";
+                        removeButton.condition = condition;
+                        removeButton.onclick = function(event) {
+                            adversary.conditions = adversary.conditions.filter(function(c) {
+                                return c !== event.target.condition;
+                            });
+                            updateConditionsDisplay();
+                        };
+                        conditionItem.appendChild(removeButton);
+                    }
+                    conditionsDisplayDiv.appendChild(conditionsList);
                 } else {
-                    conditionsDisplayDiv.innerText += "None";
+                    conditionsDisplayDiv.innerText += " None";
                 }
             }
 
@@ -194,11 +242,15 @@
             var addConditionsDiv = document.createElement("div");
             var addConditionInput = document.createElement("input");
             addConditionInput.type = "text";
+            addConditionInput.setAttribute("list", "srd-conditions");
             var addConditionButton = document.createElement("button");
             addConditionButton.innerText = "Add Condition";
             addConditionButton.onclick = function() {
                 var condition = addConditionInput.value.trim();
-                if (condition) {
+                if (condition && !adversary.conditions.includes(condition)) {
+                    if (!adversary.conditions) {
+                        adversary.conditions = [];
+                    }
                     adversary.conditions.push(condition);
                     addConditionInput.value = "";
                     updateConditionsDisplay();
@@ -359,7 +411,9 @@
                 });
                 if (srdAdversary) {
                     var adversary = convertFromSRD(srdAdversary);
-
+                    if (!encounter.adversaries) {
+                        encounter.adversaries = [];
+                    }
                     encounter.adversaries.push(adversary);
                     addAdversary(adversariesDiv, encounter, adversary, refreshBattlePoints);
                 }

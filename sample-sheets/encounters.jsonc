@@ -33,8 +33,8 @@
                     }
                 ],
                 "conditions": [
-                    "restrained",
-                    "vulnerable"
+                    "Restrained",
+                    "Vulnerable"
                 ]
             }
         ]
