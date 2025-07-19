@@ -61,7 +61,7 @@
                 "description": "A group of bandits ambushes the party in a dense forest.",
                 "adversaries": [
                     {
-                        "name": "Bandit 1",
+                        "name": "Bandit #1",
                         "originalName": "Jagged Knife Bandit",
                         "source": "SRD",
                         "tier": 1,
@@ -293,7 +293,7 @@
         function convertFromSRD(srdAdversary) {
             var thresholds = srdAdversary.thresholds.split("/");
             return {
-                name: srdAdversary.name + " (1)", // TODO: Naming
+                name: srdAdversary.name,
                 originalName: srdAdversary.name,
                 source: "SRD",
                 tier: srdAdversary.tier,
@@ -421,6 +421,17 @@
                 });
                 if (srdAdversary) {
                     var adversary = convertFromSRD(srdAdversary);
+                    var maxDuplicateNumber = 0;
+                    for (var k = 0; k < encounter.adversaries.length; k++) {
+                        var existingAdversaryNameParts = encounter.adversaries[k].name.split(" #");
+                        if (existingAdversaryNameParts[0] === adversary.name) {
+                            if (existingAdversaryNameParts.length > 1) {
+                                maxDuplicateNumber = Math.max(parseInt(existingAdversaryNameParts[1]), maxDuplicateNumber);
+                            }
+                        }
+                    }
+                    adversary.name += " #" + (maxDuplicateNumber + 1);
+
                     if (!encounter.adversaries) {
                         encounter.adversaries = [];
                     }
