@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Daggerheart Encounter Tracker</title>
+        <style>
+            .slots {
+                display: inline-block
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Daggerheart Encounter Tracker</h1>
+        <div id="encounters"></div>
+    </body>
+
+    <script>
+        var encounters = [
+            {
+                "name": "Forest Ambush",
+                "targetBattlePoints": 10, // Allows telling user they might need more or less adversaries
+                "currentFear": 5, // Convenient. Also allows remembering fear state for different groups
+                "playerTier": 1, // Needed to help calculate battle points, if adversary tiers differ
+                "description": "A group of bandits ambushes the party in a dense forest.",
+                "adversaries": [
+                    {
+                        "name": "Bandit 1",
+                        "source": "Jagged Knife Bandit",
+                        "tier": 1,
+                        "type": "standard",
+                        // TODO: Description, motives/tactics, features, experiences, attacks
+                        "difficulty": 12,
+                        "majorThreshold": 8,
+                        "severeThreshold": 14,
+                        "hp": {
+                            "slots": 5,
+                            "marked": 3
+                        },
+                        "stress": {
+                            "slots": 3,
+                            "marked": 0
+                        },
+                        "modifications": [
+                            {
+                                "modificationName": "my cool debuff",
+                                "propertyName": "majorThreshold",
+                                "modification": "-1" // - or + to modify, or just a number to hard-set, mods are applied in order
+                            }
+                        ],
+                        "conditions": [
+                            "restrained",
+                            "vulnerable"
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        function createFearTracker(encounter) {
+            var fearDiv = document.createElement("div");
+
+            var fearValue = document.createElement("span");
+
+            function updateFearDisplay() {
+                fearValue.innerText = "Fear: " + encounter.currentFear;
+            }
+            updateFearDisplay();
+
+            var useFearButton = document.createElement("button");
+            useFearButton.innerText = "-";
+            useFearButton.onclick = function() {
+                if (encounter.currentFear > 0) {
+                    encounter.currentFear--;
+                    updateFearDisplay();
+                }
+            };
+
+
+            var gainFearButton = document.createElement("button");
+            gainFearButton.innerText = "+";
+            gainFearButton.onclick = function() {
+                if (encounter.currentFear < 12) {
+                    encounter.currentFear++;
+                    updateFearDisplay();
+                }
+            };
+
+            fearDiv.appendChild(useFearButton);
+            fearDiv.appendChild(fearValue);
+            fearDiv.appendChild(gainFearButton);
+
+            return fearDiv;
+        }
+
+        function updateResource(container, resource)
+        {
+            var elements = [];
+
+            for (var i = 0; i < resource.slots; i++) {
+                var slot = document.createElement("input");
+                slot.type = "checkbox";
+                if (i < resource.marked) {
+                    slot.checked = true;
+                }
+                slot.onclick = function(event) {
+                    if (event.target.checked) {
+                        resource.marked++;
+                    } else {
+                        resource.marked--;
+                    }
+                    updateResource(container, resource);
+                };
+                elements.push(slot);
+            }
+
+            container.replaceChildren(...elements);
+        }
+
+        function createAdversaryElement(adversary) {
+            var adversaryDiv = document.createElement("div");
+            adversaryDiv.className = "adversary";
+            adversaryDiv.innerHTML = "<h3>" + adversary.name + " (" + adversary.source + ")</h3>";
+            adversaryDiv.innerHTML += "<p>Tier: " + adversary.tier + "</p>";
+            adversaryDiv.innerHTML += "<p>Difficulty: " + adversary.difficulty + "</p>";
+            // adversaryDiv.innerHTML += "<p>HP Slots: " + adversary.hpSlots + "</p>";
+            // adversaryDiv.innerHTML += "<p>Stress Slots: " + adversary.stressSlots + "</p>";
+
+            var hpDiv = document.createElement("div");
+            hpDiv.className = "slotInfo";
+            hpDiv.innerHTML = "<strong>HP:</strong> ";
+            var hpSlotsDiv = document.createElement("div");
+            hpSlotsDiv.className = "slots";
+            updateResource(hpSlotsDiv, adversary.hp);
+            hpDiv.appendChild(hpSlotsDiv);
+            adversaryDiv.appendChild(hpDiv);
+
+            var stressDiv = document.createElement("div");
+            stressDiv.className = "slotInfo";
+            stressDiv.innerHTML = "<strong>Stress:</strong> ";
+            var stressSlotsDiv = document.createElement("div");
+            stressSlotsDiv.className = "slots";
+            updateResource(stressSlotsDiv, adversary.stress);
+            stressDiv.appendChild(stressSlotsDiv);
+            adversaryDiv.appendChild(stressDiv);
+
+            return adversaryDiv;
+        }
+
+        var encountersDiv = document.getElementById("encounters");
+
+        for (var i = 0; i < encounters.length; i++) {
+            var encounter = encounters[i];
+            var encounterDiv = document.createElement("div");
+            encounterDiv.className = "encounter";
+            encounterDiv.innerHTML = "<h2>" + encounter.name + "</h2><p>" + encounter.description + "</p>";
+
+            var fearDiv = createFearTracker(encounter);
+            encounterDiv.appendChild(fearDiv);
+
+            var adversariesDiv = document.createElement("div");
+            for (var j = 0; j < encounter.adversaries.length; j++) {
+                var adversary = encounter.adversaries[j];
+                var adversaryElement = createAdversaryElement(adversary);
+                adversariesDiv.appendChild(adversaryElement);
+            }
+
+            encounterDiv.appendChild(adversariesDiv);
+            encountersDiv.appendChild(encounterDiv);
+        }
+    </script>
+</html>
