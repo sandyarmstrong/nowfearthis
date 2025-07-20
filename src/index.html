@@ -5,6 +5,68 @@
         <title>Fright Night</title>
         <script src="adversaries.js"></script>
         <style>
+            :root {
+                /* --body-bg-color: rgb(13, 17, 23);
+                --text-color: rgb(159, 177, 209);
+                --adversary-bg-color: rgb(22, 26, 32);
+                --adversary-border-color: rgb(50, 54, 59);
+                --adversary-text-color: var(--text-color);
+                --header-text-color: #c3d0e5; */
+
+                /* --body-bg-color: rgb(38,36,43);
+                --text-color: white; (95,114,176)
+                --adversary-bg-color: rgb(45,44,64);
+                --stats-bg-color: rgb(50,52,86);
+                --adversary-border-color: rgb(63,73,126);
+                --adversary-text-color: var(--text-color);
+                --header-text-color: white; */
+
+                /** Palette courtesy of https://colorffy.com/dark-theme-generator?colors=825aa2-121212 */
+                /** Base colors */
+                --clr-dark-a0: #000000;
+                --clr-light-a0: #ffffff;
+
+                /** Theme primary colors */
+                --clr-primary-a0: #825aa2;
+                --clr-primary-a10: #906bac;
+                --clr-primary-a20: #9e7db6;
+                --clr-primary-a30: #ac8fc1;
+                --clr-primary-a40: #b9a1cb;
+                --clr-primary-a50: #c7b3d5;
+
+                /** Theme surface colors */
+                --clr-surface-a0: #121212;
+                --clr-surface-a10: #282828;
+                --clr-surface-a20: #3f3f3f;
+                --clr-surface-a30: #575757;
+                --clr-surface-a40: #717171;
+                --clr-surface-a50: #8b8b8b;
+
+                /** Theme tonal surface colors */
+                --clr-surface-tonal-a0: #1c191f;
+                --clr-surface-tonal-a10: #312e34;
+                --clr-surface-tonal-a20: #47444a;
+                --clr-surface-tonal-a30: #5f5c61;
+                --clr-surface-tonal-a40: #777579;
+                --clr-surface-tonal-a50: #918f93;
+
+                --body-bg-color: var(--clr-surface-a0);
+                --text-color: var(--clr-light-a0);
+                --adversary-bg-color: var(--clr-surface-a10);
+                --stats-bg-color: var(--clr-surface-a20);
+                --adversary-border-color: var(--adversary-bg-color);
+                --adversary-text-color: var(--text-color);
+                --header-text-color: var(--clr-primary-a50);
+
+                --button-bg-color: var(--clr-primary-a20);
+                --button-bg-hover-color: var(--clr-primary-a10);
+                --button-bg-active-color: var(--clr-primary-a0);
+                --button-text-color: var(--clr-dark-a0);
+            }
+            body {
+                background-color: var(--body-bg-color);
+                color: var(--text-color);
+            }
             #copyright, #repo-info {
                 font-size: smaller;
                 margin-top: 10px;
@@ -19,18 +81,21 @@
             }
             #load-encounters-container label {
                 /* TODO: When styling real buttons, don't forget to update this to match */
-                background-color: rgb(233, 233, 237);
-                border: 1px ridge rgb(143, 143, 157);
-                padding: 5px 10px;
-                border-radius: 5px;
+                background-color: var(--button-bg-color);
+                color: var(--button-text-color);
+                padding: 5px;
+                border-radius: 8px;
                 height: auto;
             }
             #load-encounters-container label:hover {
-                background-color: rgb(208, 208, 215);
-                border-color: rgb(103, 103, 116);
+                background-color: var(--button-bg-hover-color);
+            }
+            #load-encounters-container label:active {
+                background-color: var(--button-bg-active-color);
             }
 
             .adversary {
+                position: relative; /* For action button */
                 display: inline-block;
                 vertical-align: top;
                 /*
@@ -41,14 +106,17 @@
                     Experience line from overflowing.
                 */
                 width: 23em;
-                border: 1px ridge black;
+                border: 1px ridge var(--adversary-border-color);
                 border-radius: 5px;
                 margin-right: 5px;
                 margin-top: 5px;
                 padding: 5px 10px;
+                background-color: var(--adversary-bg-color);
+                color: var(--adversary-text-color);
             }
             .adversary h3 {
                 margin: 8px 0px;
+                color: var(--header-text-color);
             }
             .adversary p {
                 margin: 2px 0px;
@@ -69,7 +137,7 @@
                 font-size: smaller;
             }
             .adversary .stats {
-                background-color: lightgray;
+                background-color: var(--stats-bg-color);
                 border-radius: 3px;
             }
             .adversary .statLabel, .adversary .motivesLabel {
@@ -112,6 +180,22 @@
 
             ul.modifications-list {
                 margin: 5px 0px;
+            }
+
+            button {
+                /* font-size: 1.5em;
+                line-height: 1em; */
+                padding: 5px;
+                border-radius: 8px;
+                color: var(--button-text-color);
+                border: 0px;
+                background-color: var(--button-bg-color);
+            }
+            button:hover {
+                background-color: var(--button-bg-hover-color);
+            }
+            button:active {
+                background-color: var(--button-bg-active-color);
             }
         </style>
     </head>
