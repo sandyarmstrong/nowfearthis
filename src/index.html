@@ -4,18 +4,42 @@
         <title>Daggerheart Encounter Tracker</title>
         <script src="adversaries.js"></script>
         <style>
+            input#load-encounters {
+                /* Hide the file input element and style its label as a button */
+                display: none;
+            }
+            #load-encounters-container {
+                /* Need vertical margin to make room for label padding */
+                margin: 10px 0px;
+            }
+            #load-encounters-container label {
+                /* TODO: When styling real buttons, don't forget to update this to match */
+                background-color: rgb(233, 233, 237);
+                border: 1px ridge rgb(143, 143, 157);
+                padding: 5px 10px;
+                border-radius: 5px;
+                height: auto;
+            }
+            #load-encounters-container label:hover {
+                background-color: rgb(208, 208, 215);
+                border-color: rgb(103, 103, 116);
+            }
+
             .slots {
                 display: inline-block
             }
+
             .adversary {
                 display: inline-block;
             }
+
             .adversary h3 {
                 margin: 10px 0px;
             }
             .adversary p {
                 margin: 7px 0px;
             }
+
             ul.conditions-list {
                 list-style: none;
                 display: inline;
@@ -47,7 +71,17 @@
             <option value="Shaken"></option>
         </datalist>
 
-        <input type="file" id="load-encounters" accept=".json" />
+        <datalist id="modifiable-properties">
+            <option value="difficulty"></option>
+            <option value="majorThreshold"></option>
+            <option value="severeThreshold"></option>
+        </datalist>
+
+        <div id="load-encounters-container">
+            <label for="load-encounters">Load Encounters (replaces existing encounters)</label>
+            <input type="file" id="load-encounters" accept=".json" />
+        </div>
+
         <div id="encounters"></div>
     </body>
 
@@ -81,9 +115,9 @@
                         },
                         "modifications": [
                             {
-                                "modificationName": "my cool debuff",
-                                "propertyName": "majorThreshold",
-                                "modification": "-1" // - or + to modify, or just a number to hard-set, mods are applied in order
+                                "modificationName": "Distracted",
+                                "propertyName": "difficulty",
+                                "modification": "-2" // - or + to modify, or just a number to hard-set, mods are applied in order
                             }
                         ],
                         "conditions": [
@@ -200,7 +234,6 @@
             stressDiv.appendChild(stressSlotsDiv);
             adversaryDiv.appendChild(stressDiv);
 
-            // TODO: Allow adding/deleting modifications
             // TODO: Reflect modifications in the stats
             var conditionsDiv = document.createElement("div");
             var conditionsDisplayDiv = document.createElement("div");
@@ -267,6 +300,82 @@
             addConditionsDiv.appendChild(addConditionButton);
             conditionsDiv.appendChild(addConditionsDiv);
             adversaryDiv.appendChild(conditionsDiv);
+
+            var modificationsDiv = document.createElement("div");
+            var modificationsDisplayDiv = document.createElement("div");
+            modificationsDiv.appendChild(modificationsDisplayDiv);
+
+            function updateModificationsDisplay() {
+                modificationsDisplayDiv.innerHTML = "Modifications: ";
+                if (adversary.modifications && adversary.modifications.length > 0) {
+                    var modificationsList = document.createElement("ul");
+                    for (var i = 0; i < adversary.modifications.length; i++) {
+                        var modification = adversary.modifications[i];
+
+                        var modificationItem = document.createElement("li");
+                        modificationsList.appendChild(modificationItem);
+
+                        var modificationText = document.createElement("span");
+                        modificationText.innerText = `${modification.modificationName} (${modification.propertyName} ${modification.modification})`;
+                        modificationItem.appendChild(modificationText);
+
+                        var removeButton = document.createElement("button");
+                        removeButton.innerText = "X";
+                        removeButton.modification = modification;
+                        removeButton.onclick = function(event) {
+                            adversary.modifications = adversary.modifications.filter(function(m) {
+                                return m !== event.target.modification;
+                            });
+                            updateModificationsDisplay();
+                        };
+                        modificationItem.appendChild(removeButton);
+                    }
+                    modificationsDisplayDiv.appendChild(modificationsList);
+                } else {
+                    modificationsDisplayDiv.innerText += " None";
+                }
+            }
+
+            updateModificationsDisplay();
+
+            var addModificationsDiv = document.createElement("div");
+            var addModificationNameInput = document.createElement("input");
+            addModificationNameInput.type = "text";
+            addModificationNameInput.placeholder = "Name";
+            var addModificationPropertyInput = document.createElement("input");
+            addModificationPropertyInput.type = "text";
+            addModificationPropertyInput.placeholder = "Target Property";
+            addModificationPropertyInput.setAttribute("list", "modifiable-properties");
+            var addModificationValueInput = document.createElement("input");
+            addModificationValueInput.type = "text";
+            addModificationValueInput.placeholder = "Modifier (e.g. -2, +3, 10)";
+            var addModificationButton = document.createElement("button");
+            addModificationButton.innerText = "Add Modification";
+            addModificationButton.onclick = function() {
+                var modificationName = addModificationNameInput.value.trim();
+                var propertyName = addModificationPropertyInput.value.trim();
+                var modificationValue = addModificationValueInput.value.trim();
+                if (modificationName && propertyName && modificationValue) {
+                    if (!adversary.modifications) {
+                        adversary.modifications = [];
+                    }
+                    adversary.modifications.push({
+                        modificationName: modificationName,
+                        propertyName: propertyName,
+                        modification: modificationValue
+                    });
+                    addModificationNameInput.value = "";
+                    addModificationPropertyInput.value = "";
+                    addModificationValueInput.value = "";
+                    updateModificationsDisplay();
+                }
+            };
+            addModificationsDiv.appendChild(addModificationNameInput);
+            addModificationsDiv.appendChild(addModificationPropertyInput);
+            addModificationsDiv.appendChild(addModificationValueInput);
+            addModificationsDiv.appendChild(addModificationButton);
+            modificationsDiv.appendChild(addModificationsDiv);
+            adversaryDiv.appendChild(modificationsDiv);
 
             var deleteButton = document.createElement("button");
             deleteButton.innerText = "Remove Adversary";
