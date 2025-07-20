@@ -66,6 +66,12 @@
                 font-size: larger;
                 margin: 0px 3px;
             }
+            .features {
+                margin-left: 0.75em;
+            }
+            .features .feature {
+                text-indent: -0.75em
+            }
             .featureLabel {
                 font-style: italic;
                 font-weight: bold;
@@ -176,6 +182,20 @@
         // TODO: Change all code that puts user data directly into innerHTML
 
         const adversaryRemovedEvent = new Event("adversaryRemoved");
+
+        var expandAllDetails = false;
+
+        function handleDetailsToggle(event) {
+            var opened = event.target.open
+            if (expandAllDetails != opened) {
+                expandAllDetails = opened;
+                for (const element of document.getElementsByTagName("details")) {
+                    if (element.open != expandAllDetails) {
+                        element.open = expandAllDetails;
+                    }
+                }
+            }
+        }
 
         function createFearTracker(encounter, saveState) {
             // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
@@ -306,10 +326,12 @@
 
             if (adversary.features && adversary.features.length > 0) {
                 var featuresContainer = document.createElement("details");
+                featuresContainer.className = "featuresExpander";
                 featuresContainer.innerHTML = `<summary>FEATURES</summary>`;
                 var featuresDiv = document.createElement("div");
                 featuresDiv.className = "features";
                 featuresContainer.appendChild(featuresDiv);
+                featuresContainer.addEventListener("toggle", handleDetailsToggle);
 
                 for (var i = 0; i < adversary.features.length; i++) {
                     var featureElement = document.createElement("p");
@@ -424,6 +446,7 @@
             modificationsContainer.appendChild(modificationsDiv);
             var modificationsDisplayDiv = document.createElement("div");
             modificationsDiv.appendChild(modificationsDisplayDiv);
+            modificationsContainer.addEventListener("toggle", handleDetailsToggle);
 
             function updateModificationsDisplay() {
                 modificationsDisplayDiv.innerHTML = "";
