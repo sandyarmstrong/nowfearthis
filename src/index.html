@@ -65,6 +65,7 @@
             ul.conditions-list {
                 list-style: none;
                 display: inline;
+                padding: 0px;
             }
             ul.conditions-list li {
                 display: inline;
@@ -232,6 +233,7 @@
             // - Duplicate From Source:
             //     Create a new adversary from the source adversary,
             //     ignoring all edits/conditions/modifications
+            // TODO: Allow reordering?
 
             var warning = "";
             if (adversary.tier > encounter.playerTier) {
@@ -533,7 +535,7 @@
             encountersDiv.appendChild(saveEncountersButton);
 
             saveEncountersButton.addEventListener("click", function() {
-                var json = JSON.stringify(state);
+                var json = JSON.stringify(state, null, "    ");
                 var blob = new Blob([json], { type: "application/json" });
                 var url = URL.createObjectURL(blob);
                 var a = document.createElement("a");
