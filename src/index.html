@@ -197,6 +197,49 @@
             button:active {
                 background-color: var(--button-bg-active-color);
             }
+
+            button.inline-delete {
+                background-color: transparent;
+                color: var(--clr-primary-a50);
+                border: 0px;
+                border-radius: 3px;
+                padding: 2px 4px;
+                margin: 0px 1px;
+                font-size: smaller;
+            }
+
+            button.inline-add {
+                border: 0px;
+                border-radius: 2px;
+                padding: 3px 4px;
+            }
+
+            button.action {
+                float: right;
+            }
+            button.action-top {
+                position: absolute;
+                right: 5px;
+                top: 5px;
+
+                padding: 2px 4px;
+                border-radius: 4px;
+                font-size: smaller;
+            }
+
+            .actions-menu {
+                position: absolute;
+                right: 5px;
+                top: 30px;
+                margin: 0px;
+                padding: 0px;
+                list-style-type: none;
+                /* TODO: Make this look like a menu, round some corners, etc */
+            }
+            .actions-menu button {
+                border-radius: 0px;
+                width: 100%;
+            }
         </style>
     </head>
 
@@ -518,7 +561,9 @@
                         conditionItem.appendChild(conditionText);
 
                         var removeButton = document.createElement("button");
+                        removeButton.className = "inline-delete";
                         removeButton.innerText = "X";
+                        removeButton.title = "Remove condition";
                         removeButton.condition = condition;
                         removeButton.onclick = function(event) {
                             adversary.conditions = adversary.conditions.filter(function(c) {
@@ -542,7 +587,9 @@
             addConditionInput.type = "text";
             addConditionInput.setAttribute("list", "srd-conditions");
             var addConditionButton = document.createElement("button");
+            addConditionButton.className = "inline-add";
             addConditionButton.innerText = "+";
+            addConditionButton.title = "Add condition";
             addConditionButton.onclick = function() {
                 var condition = addConditionInput.value.trim();
                 if (condition && (!adversary.conditions || !adversary.conditions.includes(condition))) {
@@ -591,7 +638,9 @@
                         modificationItem.appendChild(modificationText);
 
                         var removeButton = document.createElement("button");
+                        removeButton.className = "inline-delete";
                         removeButton.innerText = "X";
+                        removeButton.title = "Remove modification";
                         removeButton.modification = modification;
                         removeButton.onclick = function(event) {
                             adversary.modifications = adversary.modifications.filter(function(m) {
@@ -625,7 +674,9 @@
             addModificationValueInput.type = "text";
             addModificationValueInput.placeholder = "Modifier (e.g. -2, +3, 10)";
             var addModificationButton = document.createElement("button");
+            addModificationButton.className = "inline-add";
             addModificationButton.innerText = "+";
+            addModificationButton.title = "Add modification";
             addModificationButton.onclick = function() {
                 var modificationName = addModificationNameInput.value.trim();
                 var propertyName = addModificationPropertyInput.value.trim();
