@@ -318,7 +318,6 @@
                             "source": "SRD",
                             "tier": 1,
                             "type": "Standard",
-                            // TODO: Description, motives/tactics, features, experiences, attacks
                             "difficulty": 12,
                             "majorThreshold": 8,
                             "severeThreshold": 14,
@@ -352,6 +351,8 @@
         // TODO: Change all code that puts user data directly into innerHTML
 
         const adversaryRemovedEvent = new Event("adversaryRemoved");
+        const adversaryCopiedEvent = new Event("adversaryCopied");
+        const adversaryCopiedFromSourceEvent = new Event("adversaryCopiedFromSource");
 
         var expandAllDetails = false;
 
@@ -704,18 +705,61 @@
             modificationsDiv.appendChild(addModificationsDiv);
             adversaryDiv.appendChild(modificationsContainer);
 
-            var deleteButton = document.createElement("button");
-            deleteButton.innerText = "Remove Adversary";
-            deleteButton.onclick = function() {
-                adversaryDiv.dispatchEvent(adversaryRemovedEvent);
+            // var addInstanceButton = document.createElement("button");
+            // addInstanceButton.className = "action";
+            // addInstanceButton.innerText = "+ Add";
+            // addInstanceButton.title = "Add another instance of this adversary";
+            // adversaryDiv.appendChild(addInstanceButton);
+
+            var actionsMenu = document.createElement("menu");
+            actionsMenu.className = "actions-menu";
+
+            var copyAction = document.createElement("li");
+            copyAction.innerHTML = `<button class="menu-action">Copy</button>`;
+            copyAction.title = "Copy this adversary, including all changed state";
+            copyAction.onclick = function() {
+                adversaryDiv.dispatchEvent(adversaryCopiedEvent);
+                actionsMenu.remove();
             };
-            adversaryDiv.appendChild(deleteButton);
+            actionsMenu.appendChild(copyAction);
+
+            var copyFromSourceAction = document.createElement("li");
+            copyFromSourceAction.innerHTML = `<button class="menu-action">Copy From Source</button>`;
+            copyFromSourceAction.title = "Copy this adversary from the source, ignoring all changes";
+            copyFromSourceAction.onclick = function() {
+                adversaryDiv.dispatchEvent(adversaryCopiedFromSourceEvent);
+                actionsMenu.remove();
+            };
+            actionsMenu.appendChild(copyFromSourceAction);
+
+            var deleteAction = document.createElement("li");
+            deleteAction.innerHTML = `<button class="menu-action">Remove</button>`;
+            deleteAction.title = "Remove this adversary from the encounter";
+            deleteAction.onclick = function() {
+                adversaryDiv.dispatchEvent(adversaryRemovedEvent);
+                actionsMenu.remove();
+            };
+            actionsMenu.appendChild(deleteAction);
+
+            var actionsButton = document.createElement("button");
+            actionsButton.className = "action-top";
+            actionsButton.innerText = "…";
+            actionsButton.title = "Adversary management actions";
+            actionsButton.onclick = function() {
+                if (actionsMenu.parentElement) {
+                    actionsMenu.remove();
+                } else {
+                    adversaryDiv.appendChild(actionsMenu);
+                }
+            };
+            adversaryDiv.appendChild(actionsButton);
 
             return adversaryDiv;
         }
 
         function addAdversary(container, encounter, adversary, refreshBattlePoints, saveState) {
             var adversaryElement = createAdversaryElement(encounter, adversary, saveState);
+
             adversaryElement.addEventListener("adversaryRemoved", function(event) {
                 encounter.adversaries = encounter.adversaries.filter(function(a) {
                     return a !== adversary;
@@ -724,6 +768,35 @@
                 refreshBattlePoints();
                 saveState();
             });
+            adversaryElement.addEventListener("adversaryCopied", function(event) {
+                var newAdversary = JSON.parse(JSON.stringify(adversary)); // Deep copy
+                newAdversary.name += " (copy)"; // TODO: Decide naming
+                if (!encounter.adversaries) {
+                    encounter.adversaries = [];
+                }
+                encounter.adversaries.push(newAdversary);
+                addAdversary(container, encounter, newAdversary, refreshBattlePoints, saveState);
+                saveState();
+            });
+            adversaryElement.addEventListener("adversaryCopiedFromSource", function(event) {
+                // TODO: Support non-SRD sources
+                if (adversary.source !== "SRD") {
+                    console.warn("Copying from non-SRD sources is not supported yet.");
+                    return;
+                }
+                var sourceAdversary = srdAdversaries.find(function(a) {
+                    return a.name === adversary.originalName;
+                });
+                var newAdversary = convertFromSRD(sourceAdversary);
+                newAdversary.name += " (copy)"; // TODO: Decide naming
+                if (!encounter.adversaries) {
+                    encounter.adversaries = [];
+                }
+                encounter.adversaries.push(newAdversary);
+                addAdversary(container, encounter, newAdversary, refreshBattlePoints, saveState);
+                saveState();
+            });
+
             container.appendChild(adversaryElement);
             refreshBattlePoints();
         }
