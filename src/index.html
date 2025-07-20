@@ -2,9 +2,13 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Encounter Tracker</title>
+        <title>Fright Night</title>
         <script src="adversaries.js"></script>
         <style>
+            #copyright, #repo-info {
+                font-size: smaller;
+                margin-top: 10px;
+            }
             input#load-encounters {
                 /* Hide the file input element and style its label as a button */
                 display: none;
@@ -113,8 +117,6 @@
     </head>
 
     <body>
-        <h1>Encounter Tracker</h1>
-
         <datalist id="srd-conditions">
             <option value="Hidden"></option>
             <option value="Restrained"></option>
@@ -141,6 +143,10 @@
         </div>
 
         <div id="encounters"></div>
+
+        <div id="repo-info">
+            <p>Fright Night is free and open source and works entirely offline. Please <a href="https://github.com/sandyarmstrong/frightnight/issues">report any bugs or feature requests</a>.</p>
+        </div>
 
         <div id="copyright">
             <p>This project includes materials from the Daggerheart System Reference Document 1.0,
