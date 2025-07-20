@@ -48,6 +48,14 @@
                 display: inline;
                 margin-right: 5px;
             }
+
+            ul.modifications-list {
+                margin: 5px 0px;
+            }
+
+            .modifications {
+                margin-top: 5px;
+            }
         </style>
     </head>
 
@@ -302,6 +310,7 @@
             adversaryDiv.appendChild(conditionsDiv);
 
             var modificationsDiv = document.createElement("div");
+            modificationsDiv.className = "modifications";
             var modificationsDisplayDiv = document.createElement("div");
             modificationsDiv.appendChild(modificationsDisplayDiv);
 
@@ -309,6 +318,7 @@
                 modificationsDisplayDiv.innerHTML = "Modifications: ";
                 if (adversary.modifications && adversary.modifications.length > 0) {
                     var modificationsList = document.createElement("ul");
+                    modificationsList.className = "modifications-list";
                     for (var i = 0; i < adversary.modifications.length; i++) {
                         var modification = adversary.modifications[i];
 
@@ -338,6 +348,11 @@
 
             updateModificationsDisplay();
 
+            // TODO: This UI is pretty big, taking up a lot of space if
+            //       there are a lot of adversaries, even if there are no modifications.
+            //       Could make the input into a modal instead. Could also consider
+            //       displaying modifications directly in the stats, with details
+            //       on hover (but then how to delete?).
             var addModificationsDiv = document.createElement("div");
             var addModificationNameInput = document.createElement("input");
             addModificationNameInput.type = "text";
