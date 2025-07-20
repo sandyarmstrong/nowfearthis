@@ -197,6 +197,10 @@
             button:active {
                 background-color: var(--button-bg-active-color);
             }
+            button:disabled {
+                background-color: var(--clr-surface-a50);
+                opacity: 0.7;;
+            }
 
             button.inline-delete {
                 background-color: transparent;
@@ -716,6 +720,15 @@
 
             var actionsMenu = document.createElement("menu");
             actionsMenu.className = "actions-menu";
+
+            var editAction = document.createElement("li");
+            editAction.innerHTML = `<button class="menu-action" disabled="true">Edit</button>`;
+            editAction.title = "Edit this adversary (coming soon!)";
+            editAction.onclick = function() {
+                // TODO: Implement adversary editor
+                actionsMenu.remove();
+            };
+            actionsMenu.appendChild(editAction);
 
             var copyAction = document.createElement("li");
             copyAction.innerHTML = `<button class="menu-action">Copy</button>`;
