@@ -139,7 +139,7 @@
 
         const adversaryRemovedEvent = new Event("adversaryRemoved");
 
-        function createFearTracker(encounter) {
+        function createFearTracker(encounter, saveState) {
             var fearDiv = document.createElement("div");
 
             var fearValue = document.createElement("span");
@@ -155,6 +155,7 @@
                 if (encounter.currentFear > 0) {
                     encounter.currentFear--;
                     updateFearDisplay();
+                    saveState();
                 }
             };
 
@@ -164,6 +165,7 @@
                 if (encounter.currentFear < 12) {
                     encounter.currentFear++;
                     updateFearDisplay();
+                    saveState();
                 }
             };
 
@@ -174,7 +176,7 @@
             return fearDiv;
         }
 
-        function updateResource(container, resource) {
+        function updateResource(container, resource, saveState) {
             var elements = [];
 
             for (var i = 0; i < resource.slots; i++) {
@@ -189,7 +191,8 @@
                     } else {
                         resource.marked--;
                     }
-                    updateResource(container, resource);
+                    updateResource(container, resource, saveState);
+                    saveState();
                 };
                 elements.push(slot);
             }
@@ -197,7 +200,7 @@
             container.replaceChildren(...elements);
         }
 
-        function createAdversaryElement(encounter, adversary) {
+        function createAdversaryElement(encounter, adversary, saveState) {
             var warning = "";
             if (adversary.tier > encounter.playerTier) {
                 warning += "This adversary is above the player tier.";
@@ -229,7 +232,7 @@
             hpDiv.innerHTML = "HP:";
             var hpSlotsDiv = document.createElement("div");
             hpSlotsDiv.className = "slots";
-            updateResource(hpSlotsDiv, adversary.hp);
+            updateResource(hpSlotsDiv, adversary.hp, saveState);
             hpDiv.appendChild(hpSlotsDiv);
             adversaryDiv.appendChild(hpDiv);
 
@@ -238,7 +241,7 @@
             stressDiv.innerHTML = "Stress:";
             var stressSlotsDiv = document.createElement("div");
             stressSlotsDiv.className = "slots";
-            updateResource(stressSlotsDiv, adversary.stress);
+            updateResource(stressSlotsDiv, adversary.stress, saveState);
             stressDiv.appendChild(stressSlotsDiv);
             adversaryDiv.appendChild(stressDiv);
 
@@ -270,6 +273,7 @@
                                 return c !== event.target.condition;
                             });
                             updateConditionsDisplay();
+                            saveState();
                         };
                         conditionItem.appendChild(removeButton);
                     }
@@ -296,6 +300,7 @@
                     adversary.conditions.push(condition);
                     addConditionInput.value = "";
                     updateConditionsDisplay();
+                    saveState();
                 }
             };
             addConditionInput.addEventListener("keyup", function(event) {
@@ -337,6 +342,7 @@
                                 return m !== event.target.modification;
                             });
                             updateModificationsDisplay();
+                            saveState();
                         };
                         modificationItem.appendChild(removeButton);
                     }
@@ -383,6 +389,7 @@
                     addModificationPropertyInput.value = "";
                     addModificationValueInput.value = "";
                     updateModificationsDisplay();
+                    saveState();
                 }
             };
             addModificationsDiv.appendChild(addModificationNameInput);
@@ -402,14 +409,15 @@
             return adversaryDiv;
         }
 
-        function addAdversary(container, encounter, adversary, refreshBattlePoints) {
-            var adversaryElement = createAdversaryElement(encounter, adversary);
+        function addAdversary(container, encounter, adversary, refreshBattlePoints, saveState) {
+            var adversaryElement = createAdversaryElement(encounter, adversary, saveState);
             adversaryElement.addEventListener("adversaryRemoved", function(event) {
                 encounter.adversaries = encounter.adversaries.filter(function(a) {
                     return a !== adversary;
                 });
                 container.removeChild(adversaryElement);
                 refreshBattlePoints();
+                saveState();
             });
             container.appendChild(adversaryElement);
             refreshBattlePoints();
@@ -474,6 +482,10 @@
         }
 
         function displayEncounters(encounters) {
+            function saveState() {
+                localStorage.setItem("encounters", JSON.stringify(encounters));
+            }
+
             var encountersDiv = document.getElementById("encounters");
             encountersDiv.innerHTML = ""; // Clear any existing content
 
@@ -502,7 +514,7 @@
                 encounterDiv.className = "encounter";
                 encounterDiv.innerHTML = `<h2>${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)</h2><p>${encounter.description}</p>`;
 
-                var fearDiv = createFearTracker(encounter);
+                var fearDiv = createFearTracker(encounter, saveState);
                 encounterDiv.appendChild(fearDiv);
 
                 var battlePointsDiv = document.createElement("div");
@@ -517,6 +529,7 @@
 
                     battlePointsDiv.querySelector("[name='current-battle-points']").innerText = remainingBattlePoints;
                 }
+                refreshBattlePoints();
 
                 var addAdversaryDiv = document.createElement("div");
                 var srdSearch = document.createElement("input");
@@ -528,7 +541,7 @@
 
                 var adversariesDiv = document.createElement("div");
                 for (var j = 0; j < encounter.adversaries.length; j++) {
-                    addAdversary(adversariesDiv, encounter, encounter.adversaries[j], refreshBattlePoints);
+                    addAdversary(adversariesDiv, encounter, encounter.adversaries[j], refreshBattlePoints, saveState);
                 }
                 encounterDiv.appendChild(adversariesDiv);
 
@@ -560,7 +573,8 @@
                             encounter.adversaries = [];
                         }
                         encounter.adversaries.push(adversary);
-                        addAdversary(adversariesDiv, encounter, adversary, refreshBattlePoints);
+                        addAdversary(adversariesDiv, encounter, adversary, refreshBattlePoints, saveState);
+                        saveState();
                     }
                 };
                 addAdversaryDiv.appendChild(addAdversaryButton);
@@ -591,7 +605,19 @@
         }
         document.body.appendChild(srdDatalist);
 
-        displayEncounters(sampleEncounters);
+        var savedEncounters = localStorage.getItem("encounters");
+        if (savedEncounters) {
+            try {
+                var encounters = JSON.parse(savedEncounters);
+                displayEncounters(encounters);
+            } catch (error) {
+                console.error("Error loading saved encounters:", error);
+                displayEncounters(sampleEncounters);
+            }
+        } else {
+            console.warn("No saved encounters found, displaying sample encounters.");
+            displayEncounters(sampleEncounters);
+        }
 
         var fileInput = document.getElementById("load-encounters");
         fileInput.addEventListener("change", function(event) {
