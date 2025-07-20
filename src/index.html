@@ -27,6 +27,7 @@
 
             .adversary {
                 display: inline-block;
+                max-width: 22em; /* Empirical width needed to fit full ATK line for Volcanic Dragon: Ashen Tyrant */
                 border: 1px ridge black;
                 border-radius: 5px;
                 margin-right: 5px;
@@ -47,12 +48,27 @@
                 font-style: italic;
                 font-weight: bold;
             }
-            .adversary .statLabel {
+            .adversary .description {
+                font-size: smaller;
+                font-style: italic;
+            }
+            .adversary .motives {
+                font-size: smaller;
+            }
+            .adversary .stats {
+                background-color: lightgray;
+                border-radius: 3px;
+            }
+            .adversary .statLabel, .adversary .motivesLabel {
                 font-weight: bold;
             }
             .adversary .divider {
                 font-size: larger;
                 margin: 0px 3px;
+            }
+            .featureLabel {
+                font-style: italic;
+                font-weight: bold;
             }
 
             .slots {
@@ -153,8 +169,11 @@
                     ]
                 }
             ],
-            "customAdversaries": [] // Yay homebrew, allow searching this, adding, modifying
+            "customAdversaries": [], // Yay homebrew, allow searching this, adding, modifying
+            "environments": [] // Big TODO
         };
+
+        // TODO: Change all code that puts user data directly into innerHTML
 
         const adversaryRemovedEvent = new Event("adversaryRemoved");
 
@@ -255,6 +274,20 @@
             }
             adversaryDiv.appendChild(tierAndType);
 
+            if (adversary.description) {
+                var description = document.createElement("p");
+                description.className =  "description";
+                description.innerText = adversary.description;
+                adversaryDiv.appendChild(description);
+            }
+
+            if (adversary.motivesAndTactics) {
+                var motives = document.createElement("p");
+                motives.className =  "motives";
+                motives.innerHTML = `<span class="motivesLabel">Motives & Tactics:</span> ${adversary.motivesAndTactics}`;
+                adversaryDiv.appendChild(motives);
+            }
+
             var stats = document.createElement("p");
             stats.className = "stats";
             var thresholds = "None";
@@ -262,9 +295,39 @@
                 thresholds = `${adversary.majorThreshold}/${adversary.severeThreshold}`;
             }
             stats.innerHTML = `<span class="statLabel">Difficulty:</span> ${adversary.difficulty} <span class="divider">|</span> <span class="statLabel">Thresholds:</span> ${thresholds}`;
+            if (adversary.attackDescription) {
+                stats.innerHTML += `<br><span class="statLabel">ATK:</span> ${adversary.attackModifier} <span class="divider">|</span> <span class="statLabel">${adversary.attackDescription}:</span> ${adversary.attackRange} <span class="divider">|</span> ${adversary.attackDamage}`;
+            }
+            if (adversary.experience) {
+                // TODO: <hr> is lame to style, but add some sort of divider above this (top border?)
+                stats.innerHTML += `<br><span class="statLabel experiences">Experience:</span> ${adversary.experience}`;
+            }
             adversaryDiv.appendChild(stats);
 
-            // TODO: See TODO in convertFromSRD for more stuff we can show
+            if (adversary.features && adversary.features.length > 0) {
+                var featuresContainer = document.createElement("details");
+                featuresContainer.innerHTML = `<summary>FEATURES</summary>`;
+                var featuresDiv = document.createElement("div");
+                featuresDiv.className = "features";
+                featuresContainer.appendChild(featuresDiv);
+
+                for (var i = 0; i < adversary.features.length; i++) {
+                    var featureElement = document.createElement("p");
+                    featureElement.className = "feature"; // TODO: Make sure to style with that indent on following lines
+                    featuresDiv.appendChild(featureElement);
+
+                    var label = document.createElement("span");
+                    label.className = "featureLabel";
+                    label.innerText = `${adversary.features[i].name}:`;
+                    featureElement.appendChild(label);
+
+                    var description = document.createElement("span");
+                    description.innerText = ` ${adversary.features[i].text}`;
+                    featureElement.appendChild(description);
+                }
+
+                adversaryDiv.appendChild(featuresContainer);
+            }
 
             var hpDiv = document.createElement("div");
             hpDiv.className = "slotInfo";
@@ -472,6 +535,8 @@
                 source: "SRD",
                 tier: parseInt(srdAdversary.tier),
                 type: srdAdversary.type,
+                description: srdAdversary.description,
+                motivesAndTactics: srdAdversary.motives_and_tactics,
                 difficulty: parseInt(srdAdversary.difficulty),
                 hp: {
                     slots: parseInt(srdAdversary.hp),
@@ -483,8 +548,13 @@
                 },
                 majorThreshold: parseInt(thresholds[0]),
                 severeThreshold: parseInt(thresholds[1]),
+                attackModifier: srdAdversary.atk,
+                attackDescription: srdAdversary.attack,
+                attackRange: srdAdversary.range,
+                attackDamage: srdAdversary.damage,
+                experience: srdAdversary.experience,
+                features: srdAdversary.feats // array of name/text
             };
-            // TODO: description, motives_and_tactics, attack, range, damage, experience, feats (name/text)
         }
 
         function calculateBattlePoints(encounter)
@@ -559,7 +629,7 @@
                 encounterDiv.appendChild(fearDiv);
 
                 var battlePointsDiv = document.createElement("div");
-                battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> left) <span title="TODO: Click for summary from BUILDING BALANCED ENCOUNTERS">ℹ️</span></p>`;
+                battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> <span name="remaining-suffix"></span>) <span title="TODO: Click for summary from BUILDING BALANCED ENCOUNTERS">ℹ️</span></p>`;
                 encounterDiv.appendChild(battlePointsDiv);
 
                 function refreshBattlePoints() {
@@ -568,7 +638,13 @@
                     // Round to nearest 0.1 for display
                     var remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
 
-                    battlePointsDiv.querySelector("[name='current-battle-points']").innerText = remainingBattlePoints;
+                    if (remainingBattlePoints < 0) {
+                        battlePointsDiv.querySelector("[name='current-battle-points']").innerText = `⚠️ ${Math.abs(remainingBattlePoints)}`;
+                        battlePointsDiv.querySelector("[name='remaining-suffix']").innerText = "over";
+                    } else {
+                        battlePointsDiv.querySelector("[name='current-battle-points']").innerText = Math.abs(remainingBattlePoints);
+                        battlePointsDiv.querySelector("[name='remaining-suffix']").innerText = "left";
+                    }
                 }
                 refreshBattlePoints();
 
