@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="utf-8">
         <title>Encounter Tracker</title>
         <script src="adversaries.js"></script>
         <style>
@@ -69,6 +70,9 @@
             .features {
                 margin-left: 0.75em;
             }
+            .featuresExpander summary {
+                font-weight: bold;
+            }
             .features .feature {
                 text-indent: -0.75em
             }
@@ -129,6 +133,14 @@
         </div>
 
         <div id="encounters"></div>
+
+        <div id="copyright">
+            <p>This project includes materials from the Daggerheart System Reference Document 1.0,
+                © Critical Role, LLC. under the terms of the Darrington Press Community Gaming (DPCGL) License.
+                More information can be found at <a href="https://www.daggerheart.com">https://www.daggerheart.com</a>.
+                Minor formatting modifications were provided as part of the excellent
+                <a href="https://github.com/seansbox/daggerheart-srd">https://github.com/seansbox/daggerheart-srd</a>.</p>
+        </div>
     </body>
 
     <script>
@@ -637,8 +649,6 @@
                 a.click();
                 URL.revokeObjectURL(url);
             });
-
-            // TODO: Save current state to localStorage (when, every modification?), and load it on startup
 
             // TODO: Actually, show one encounter at a time, and allow switching between them,
             //       as well as adding or deleting encounters.
