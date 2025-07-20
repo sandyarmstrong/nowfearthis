@@ -370,19 +370,21 @@
 
         function createFearTracker(encounter, saveState) {
             // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
-            // TODO: Roller for getting fear on rests? At least tooltip reminding.
+            // TODO: Roller for getting fear on rests?
+            // TODO: Replace this with a stylized number input?
             var fearDiv = document.createElement("div");
 
             var fearValue = document.createElement("span");
-            fearValue.title = "Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}"
 
             function updateFearDisplay() {
-                fearValue.innerText = "Fear: " + encounter.currentFear;
+                fearValue.innerText = "💀".repeat(encounter.currentFear);
+                fearValue.title = `${encounter.currentFear} Fear | Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}`;
             }
             updateFearDisplay();
 
             var useFearButton = document.createElement("button");
             useFearButton.innerText = "-";
+            useFearButton.title = "Use 1 Fear";
             useFearButton.onclick = function() {
                 if (encounter.currentFear > 0) {
                     encounter.currentFear--;
@@ -393,6 +395,7 @@
 
             var gainFearButton = document.createElement("button");
             gainFearButton.innerText = "+";
+            gainFearButton.title = "Gain 1 Fear (max 12)";
             gainFearButton.onclick = function() {
                 if (encounter.currentFear < 12) {
                     encounter.currentFear++;
@@ -402,8 +405,8 @@
             };
 
             fearDiv.appendChild(useFearButton);
-            fearDiv.appendChild(fearValue);
             fearDiv.appendChild(gainFearButton);
+            fearDiv.appendChild(fearValue);
 
             return fearDiv;
         }
