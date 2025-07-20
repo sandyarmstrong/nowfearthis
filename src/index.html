@@ -140,9 +140,12 @@
         const adversaryRemovedEvent = new Event("adversaryRemoved");
 
         function createFearTracker(encounter, saveState) {
+            // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
+            // TODO: Roller for getting fear on rests? At least tooltip reminding.
             var fearDiv = document.createElement("div");
 
             var fearValue = document.createElement("span");
+            fearValue.title = "Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}"
 
             function updateFearDisplay() {
                 fearValue.innerText = "Fear: " + encounter.currentFear;
@@ -201,9 +204,20 @@
         }
 
         function createAdversaryElement(encounter, adversary, saveState) {
+            // TODO: Add ... menu with Edit, Duplicate, Duplicate From Source
+            // - Edit:
+            //     Full adversary editor form, same as for creating custom adversaries
+            //     TODO: Add ability to create customer adversaries with this form
+            // - Duplicate:
+            //     Create a new adversary based on this one, including all edits
+            //     but excluding conditions/modifications
+            // - Duplicate From Source:
+            //     Create a new adversary from the source adversary,
+            //     ignoring all edits/conditions/modifications
+
             var warning = "";
             if (adversary.tier > encounter.playerTier) {
-                warning += "This adversary is above the player tier.";
+                warning += "This adversary is above the player tier."; // TODO: Or below?
             }
 
             var adversaryDiv = document.createElement("div");
@@ -452,28 +466,28 @@
             for (var j = 0; j < encounter.adversaries.length; j++) {
                 var adversary = encounter.adversaries[j];
                 // TODO: Deal with tier differences
-                switch(adversary.type) {
-                    case "Minion":
+                switch(adversary.type.toLowerCase()) {
+                    case "minion":
                         currentBattlePoints += 1 / encounter.playerCount;
                         break;
-                    case "Social":
-                    case "Support":
+                    case "social":
+                    case "support":
                         currentBattlePoints += 1;
                         break;
-                    case "Horde":
-                    case "Ranged":
-                    case "Skulk":
-                    case "Standard":
+                    case "horde":
+                    case "ranged":
+                    case "skulk":
+                    case "standard":
                         currentBattlePoints += 2;
                         break;
-                    case "Leader":
-                    case "Elite":
+                    case "leader":
+                    case "elite":
                         currentBattlePoints += 3;
                         break;
-                    case "Bruiser":
+                    case "bruiser":
                         currentBattlePoints += 4;
                         break;
-                    case "Solo":
+                    case "solo":
                         currentBattlePoints += 5;
                         break;
                 }
@@ -518,7 +532,7 @@
                 encounterDiv.appendChild(fearDiv);
 
                 var battlePointsDiv = document.createElement("div");
-                battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> left)</p>`;
+                battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> left) <span title="TODO: Click for summary from BUILDING BALANCED ENCOUNTERS">ℹ️</span></p>`;
                 encounterDiv.appendChild(battlePointsDiv);
 
                 function refreshBattlePoints() {
@@ -531,6 +545,9 @@
                 }
                 refreshBattlePoints();
 
+                // TODO: Better would be a list of adversaries to choose from,
+                //       with filtering based on tier/type + text search.
+                //       Rows should include name, source, battle points.
                 var addAdversaryDiv = document.createElement("div");
                 var srdSearch = document.createElement("input");
                 srdSearch.type = "search";
@@ -551,7 +568,7 @@
                     var selectedOption = srdSearch.value.trim();
                     if (!selectedOption) {
                         // TODO: Or some "custom" type?
-                        selectedOption = "Jagged Knife bandit";
+                        selectedOption = "Jagged Knife Bandit";
                     }
                     var srdAdversary = srdAdversaries.find(function(a) {
                         return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
