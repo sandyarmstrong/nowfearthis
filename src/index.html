@@ -152,6 +152,23 @@
     </body>
 
     <script>
+        // TODO: Consider moving hp/stress/conditions/modifications state to something
+        //       like adversaries[n].instances[] so that we can behave like the Quickstart
+        //       and have one statblock for muliple identical enemies. But need to decide
+        //       how to display conditions and especially modifications in that case.
+        //
+        //       Do this sooner rather than later, even if only one instance is supported,
+        //       to avoid breaking state compatibility.
+        //
+        //       Also, some questions:
+        //       - Presumably, there would be a + button to add a new instance right in
+        //         the statblock. But what if a user adds the same adversary type from
+        //         the search? Should this use the same statblock or start a new "group"?
+        //         I think I prefer the latter, let users decide if they prefer shared
+        //         or separate statblocks, and they might have use for grouping anyway.
+        //       - How to handle naming? Wouldn't want to name the whole statblock
+        //         "Jagged Knife Bandit #1" anymore.
+        //       - Are there modifications that can change number of HP/Stress slots?
         var sampleState = {
             "encounters": [
                 {
