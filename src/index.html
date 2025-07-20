@@ -328,13 +328,16 @@
             conditionsDiv.appendChild(addConditionsDiv);
             adversaryDiv.appendChild(conditionsDiv);
 
+            var modificationsContainer = document.createElement("details");
+            modificationsContainer.innerHTML = `<summary>Modifications</summary>`;
             var modificationsDiv = document.createElement("div");
             modificationsDiv.className = "modifications";
+            modificationsContainer.appendChild(modificationsDiv);
             var modificationsDisplayDiv = document.createElement("div");
             modificationsDiv.appendChild(modificationsDisplayDiv);
 
             function updateModificationsDisplay() {
-                modificationsDisplayDiv.innerHTML = "Modifications: ";
+                modificationsDisplayDiv.innerHTML = "";
                 if (adversary.modifications && adversary.modifications.length > 0) {
                     var modificationsList = document.createElement("ul");
                     modificationsList.className = "modifications-list";
@@ -411,7 +414,7 @@
             addModificationsDiv.appendChild(addModificationValueInput);
             addModificationsDiv.appendChild(addModificationButton);
             modificationsDiv.appendChild(addModificationsDiv);
-            adversaryDiv.appendChild(modificationsDiv);
+            adversaryDiv.appendChild(modificationsContainer);
 
             var deleteButton = document.createElement("button");
             deleteButton.innerText = "Remove Adversary";
