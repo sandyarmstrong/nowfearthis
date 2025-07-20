@@ -25,21 +25,43 @@
                 border-color: rgb(103, 103, 116);
             }
 
+            .adversary {
+                display: inline-block;
+                border: 1px ridge black;
+                border-radius: 5px;
+                margin-right: 5px;
+                margin-top: 5px;
+                padding: 5px 10px;
+            }
+            .adversary h3 {
+                margin: 8px 0px;
+            }
+            .adversary p {
+                margin: 2px 0px;
+            }
+            .adversary .source {
+                font-style: italic;
+                font-size: smaller;
+            }
+            .adversary .tier {
+                font-style: italic;
+                font-weight: bold;
+            }
+            .adversary .statLabel {
+                font-weight: bold;
+            }
+            .adversary .divider {
+                font-size: larger;
+                margin: 0px 3px;
+            }
+
             .slots {
                 display: inline-block
             }
 
-            .adversary {
-                display: inline-block;
+            .conditions {
+                margin: 5px 0px;
             }
-
-            .adversary h3 {
-                margin: 10px 0px;
-            }
-            .adversary p {
-                margin: 7px 0px;
-            }
-
             ul.conditions-list {
                 list-style: none;
                 display: inline;
@@ -213,14 +235,18 @@
 
             var warning = "";
             if (adversary.tier > encounter.playerTier) {
-                warning += "This adversary is above the player tier."; // TODO: Or below?
+                warning += "⚠️ above player tier";
+            }
+            else if (adversary.tier < encounter.playerTier) {
+                warning += "⚠️ below player tier"
             }
 
             var adversaryDiv = document.createElement("div");
             adversaryDiv.className = "adversary";
-            adversaryDiv.innerHTML = `<h3>${adversary.name} (${adversary.originalName}, ${adversary.source})</h3>`;
+            adversaryDiv.innerHTML = `<h3>${adversary.name}</h3> <p class="source">(${adversary.originalName}, ${adversary.source})</p>`;
 
             var tierAndType = document.createElement("p");
+            tierAndType.className = "tier";
             tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type}`;
             if (warning) {
                 tierAndType.innerHTML += ` <span class="warning">(${warning})</span>`;
@@ -228,11 +254,12 @@
             adversaryDiv.appendChild(tierAndType);
 
             var stats = document.createElement("p");
+            stats.className = "stats";
             var thresholds = "None";
             if (Number.isInteger(adversary.majorThreshold) && Number.isInteger(adversary.severeThreshold)) {
                 thresholds = `${adversary.majorThreshold}/${adversary.severeThreshold}`;
             }
-            stats.innerText = `Difficulty: ${adversary.difficulty} | Thresholds: ${thresholds}`;
+            stats.innerHTML = `<span class="statLabel">Difficulty:</span> ${adversary.difficulty} <span class="divider">|</span> <span class="statLabel">Thresholds:</span> ${thresholds}`;
             adversaryDiv.appendChild(stats);
 
             // TODO: See TODO in convertFromSRD for more stuff we can show
@@ -257,6 +284,7 @@
 
             // TODO: Parse modifications and reflect them in the stats
             var conditionsDiv = document.createElement("div");
+            conditionsDiv.className = "conditions";
             var conditionsDisplayDiv = document.createElement("div");
             conditionsDiv.appendChild(conditionsDisplayDiv)
 
@@ -300,7 +328,7 @@
             addConditionInput.type = "text";
             addConditionInput.setAttribute("list", "srd-conditions");
             var addConditionButton = document.createElement("button");
-            addConditionButton.innerText = "Add Condition";
+            addConditionButton.innerText = "+";
             addConditionButton.onclick = function() {
                 var condition = addConditionInput.value.trim();
                 if (condition && (!adversary.conditions || !adversary.conditions.includes(condition))) {
@@ -382,7 +410,7 @@
             addModificationValueInput.type = "text";
             addModificationValueInput.placeholder = "Modifier (e.g. -2, +3, 10)";
             var addModificationButton = document.createElement("button");
-            addModificationButton.innerText = "Add Modification";
+            addModificationButton.innerText = "+";
             addModificationButton.onclick = function() {
                 var modificationName = addModificationNameInput.value.trim();
                 var propertyName = addModificationPropertyInput.value.trim();
