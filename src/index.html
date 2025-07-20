@@ -28,7 +28,15 @@
 
             .adversary {
                 display: inline-block;
-                max-width: 22em; /* Empirical width needed to fit full ATK line for Volcanic Dragon: Ashen Tyrant */
+                vertical-align: top;
+                /*
+                    22em is empirical width needed to fit full ATK line for Volcanic Dragon: Ashen Tyrant.
+                    Longest ATK line in SRD is "Fallen Warlord: Undefeated Champion",
+                    which requires 27em (at 22em, both ATK and Experience lines overflow).
+                    27em feels way too wide. Trying 23em, which is enough to stop Fallen Warlord's
+                    Experience line from overflowing.
+                */
+                width: 23em;
                 border: 1px ridge black;
                 border-radius: 5px;
                 margin-right: 5px;
