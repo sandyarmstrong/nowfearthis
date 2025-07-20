@@ -912,6 +912,7 @@
                 var encounterDiv = document.createElement("div");
                 encounterDiv.className = "encounter";
                 encounterDiv.innerHTML = `<h2>${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)</h2><p>${encounter.description}</p>`;
+                // TODO: Add action menu button like with adversaries to allow editing, deleting, etc.
 
                 var fearDiv = createFearTracker(encounter, saveState);
                 encounterDiv.appendChild(fearDiv);
