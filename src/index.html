@@ -275,6 +275,83 @@
 
         <div id="encounters"></div>
 
+        <div id="adversary-editor">
+            <h2>Edit Adversary</h2>
+            <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
+            <div id="adversary-form">
+                <fieldset>
+                    <legend>Basics</legend>
+                    <label for="adversary-name">Name:</label>
+                    <input type="text" id="adversary-name" size="30" required />
+                    <br>
+                    <label for="adversary-tier">Tier:</label>
+                    <input type="number" id="adversary-tier" min="1" max="4" value="1" required />
+                    <label for="adversary-type">Type:</label>
+                    <select id="adversary-type">
+                        <option value="Bruiser">Bruiser</option>
+                        <option value="Horde">Horde</option>
+                        <option value="Leader">Leader</option>
+                        <option value="Minion">Minion</option>
+                        <option value="Ranged">Ranged</option>
+                        <option value="Skulk">Skulk</option>
+                        <option value="Social">Social</option>
+                        <option value="Solo">Solo</option>
+                        <option value="Standard">Standard</option>
+                        <option value="Support">Support</option>
+                    </select>
+                    <br>
+                    <label for="adversary-description">Description:</label>
+                    <textarea id="adversary-description" cols="30" rows="3"></textarea>
+                    <br>
+                    <label for="adversary-motives">Motives & Tactics:</label>
+                    <textarea id="adversary-motives" cols="30" rows="2"></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>Stats</legend>
+                    <label for="adversary-difficulty">Difficulty:</label>
+                    <input type="number" id="adversary-difficulty" min="0" max="20" value="12" required />
+                    <br>
+                    <label for="adversary-major-threshold">Major Threshold:</label>
+                    <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
+                    /
+                    <label for="adversary-severe-threshold">Severe Threshold:</label>
+                    <input type="number" id="adversary-severe-threshold" min="0" max="20" value="14" />
+                    <br>
+                    <label for="adversary-hp">HP:</label>
+                    <input type="number" id="adversary-hp" min="1" max="20" value="5" required />
+                    <label for="adversary-stress">Stress:</label>
+                    <input type="number" id="adversary-stress" min="0" max="20" value="2" required />
+                    <br>
+                    <label for="adversary-experience">Experience:</label>
+                    <input type="text" id="adversary-experience" />
+                </fieldset>
+                <fieldset>
+                    <legend>Attack</legend>
+                    <label for="adversary-attack-modifier">Modifier:</label>
+                    <!-- <input type="number" id="adversary-attack-modifier" min="-10" max="20" value="0" /> -->
+                    <input type="text" id="adversary-attack-modifier" size="3" />
+                    <label for="adversary-attack-description">Description:</label>
+                    <input type="text" id="adversary-attack-description" />
+                    <br>
+                    <label for="adversary-attack-range">Range:</label>
+                    <select id="adversary-attack-range">
+                        <option value="Melee">Melee</option>
+                        <option value="Very Close">Very Close</option>
+                        <option value="Close">Close</option>
+                        <option value="Far">Far</option>
+                    </select>
+                    <label for="adversary-attack-damage">Damage:</label>
+                    <input type="text" id="adversary-attack-damage" /> <!-- TODO: Hint at format and phy/mag -->
+                </fieldset>
+                <fieldset id="adversary-features">
+                    <legend>Features</legend>
+                    <button id="add-feature">+ Add Feature</button> <!-- TODO: Position this statically up top? -->
+                </fieldset>
+                <button id="cancel-adversary-edit">Cancel</button>
+                <button type="submit" id="save-adversary-edit">Save</button>
+            </div>
+        </div>
+
         <div id="repo-info">
             <p>Fright Night is free and open source and works entirely offline. Please <a href="https://github.com/sandyarmstrong/frightnight/issues">report any bugs or feature requests</a>.</p>
         </div>
@@ -440,16 +517,6 @@
         }
 
         function createAdversaryElement(encounter, adversary, saveState) {
-            // TODO: Add ... menu with Edit, Duplicate, Duplicate From Source
-            // - Edit:
-            //     Full adversary editor form, same as for creating custom adversaries
-            //     TODO: Add ability to create customer adversaries with this form
-            // - Duplicate:
-            //     Create a new adversary based on this one, including all edits
-            //     but excluding conditions/modifications
-            // - Duplicate From Source:
-            //     Create a new adversary from the source adversary,
-            //     ignoring all edits/conditions/modifications
             // TODO: Allow reordering?
 
             var warning = "";
@@ -722,10 +789,48 @@
             actionsMenu.className = "actions-menu";
 
             var editAction = document.createElement("li");
-            editAction.innerHTML = `<button class="menu-action" disabled="true">Edit</button>`;
-            editAction.title = "Edit this adversary (coming soon!)";
+            editAction.innerHTML = `<button class="menu-action">Edit</button>`;
+            editAction.title = "Edit this adversary";
             editAction.onclick = function() {
-                // TODO: Implement adversary editor
+                // Basics
+                var editor = document.getElementById("adversary-editor");
+                editor.querySelector("#adversary-name").value = adversary.name;
+                editor.querySelector("#adversary-tier").value = adversary.tier;
+                editor.querySelector("#adversary-type").value = adversary.type; // TODO: Case mangling as needed
+                editor.querySelector("#adversary-description").value = adversary.description || "";
+                editor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
+
+                // Stats
+                editor.querySelector("#adversary-difficulty").value = adversary.difficulty;
+                editor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
+                editor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
+                editor.querySelector("#adversary-hp").value = adversary.hp.slots;
+                editor.querySelector("#adversary-stress").value = adversary.stress.slots;
+                editor.querySelector("#adversary-experience").value = adversary.experience || "";
+
+                // Attack
+                editor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || ""; // TODO: Should input be number, then conversion?
+                editor.querySelector("#adversary-attack-description").value = adversary.attackDescription || "";
+                editor.querySelector("#adversary-attack-range").value = adversary.attackRange || ""; // TODO: Case mangling as needed
+                editor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
+
+                // Features
+                editor.querySelectorAll(".feature").forEach(function(featureElement) {
+                    featureElement.remove();
+                });
+                if (adversary.features && adversary.features.length > 0) {
+                    var featuresFieldset = editor.querySelector("#adversary-features");
+
+                    for (var i = 0; i < adversary.features.length; i++) {
+                        var feature = adversary.features[i];
+                        var featureElement = document.createElement("div");
+                        featureElement.className = "feature";
+                        featureElement.innerHTML = `<label for="adversary-feature-${i}">Name:</label><input type="text" id="adversary-feature-${i}" value="${feature.name}"><label for="adversary-feature-${i}-text">Description:</label><textarea id="adversary-feature-${i}-text" rows="4" cols="50">${feature.text}</textarea>`;
+                        featuresFieldset.appendChild(featureElement);
+                    }
+                }
+                // TODO: Hook up to Add Feature, Save, and Cancel button
+
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(editAction);
@@ -868,7 +973,6 @@
                         currentBattlePoints += 2;
                         break;
                     case "leader":
-                    case "elite":
                         currentBattlePoints += 3;
                         break;
                     case "bruiser":
