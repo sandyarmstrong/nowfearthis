@@ -493,7 +493,7 @@
             // TODO: Abstract this, use in createAdversaryElement as well
             var featureElement = document.createElement("div");
             featureElement.className = "feature";
-            featureElement.innerHTML = `<label for="adversary-feature-${featureCount}">Name:</label><input type="text" id="adversary-feature-${featureCount}"><label for="adversary-feature-${featureCount}-text">Description:</label><textarea id="adversary-feature-${featureCount}-text" rows="4" cols="50"></textarea>`;
+            featureElement.innerHTML = `<label for="adversary-feature-name-${featureCount}">Name:</label><input type="text" class="adversary-feature-name" id="adversary-feature-name-${featureCount}"><label for="adversary-feature-text-${featureCount}">Description:</label><textarea class="adversary-feature-text" id="adversary-feature-text-${featureCount}" rows="4" cols="50"></textarea>`;
             featuresFieldset.appendChild(featureElement);
             // TODO: Allow deletion (but could also do this by deleting all text for a feature)
         });
@@ -504,7 +504,6 @@
         });
 
         document.querySelector("#save-adversary-edit").addEventListener("click", function() {
-            console.log("TODO: Save edit");
             // 0. When showing/populating the editor, the adversary should be attached to the
             //    #adversary-editor element as a property that can be accessed here.
             // 1. Update the adversary object with the values from the editor.
@@ -514,6 +513,52 @@
             //    work? If not, just create the element afterward. Also add to customAdversaries
             //    in the state, which can be searched/referenced/etc just like the SRD.
             // 4. Finally, clear the adversary property from #adversary-editor and hide the editor.
+
+            // TODO: Validation? Use a form?
+
+            var adversary = adversaryEditor.adversary;
+            if (adversary) {
+                // Basics
+                adversary.name = adversaryEditor.querySelector("#adversary-name").value.trim();
+                adversary.tier = parseInt(adversaryEditor.querySelector("#adversary-tier").value);
+                adversary.type = adversaryEditor.querySelector("#adversary-type").value;
+                // TODO: Don't set optional fields if empty
+                adversary.description = adversaryEditor.querySelector("#adversary-description").value.trim();
+                adversary.motivesAndTactics = adversaryEditor.querySelector("#adversary-motives").value.trim();
+
+                // Stats
+                adversary.difficulty = parseInt(adversaryEditor.querySelector("#adversary-difficulty").value);
+                adversary.majorThreshold = parseInt(adversaryEditor.querySelector("#adversary-major-threshold").value);
+                adversary.severeThreshold = parseInt(adversaryEditor.querySelector("#adversary-severe-threshold").value);
+                adversary.hp.slots = parseInt(adversaryEditor.querySelector("#adversary-hp").value);
+                adversary.stress.slots = parseInt(adversaryEditor.querySelector("#adversary-stress").value);
+                adversary.experience = adversaryEditor.querySelector("#adversary-experience").value.trim();
+
+                // Attack
+                adversary.attackModifier = adversaryEditor.querySelector("#adversary-attack-modifier").value.trim();
+                adversary.attackDescription = adversaryEditor.querySelector("#adversary-attack-description").value.trim();
+                adversary.attackRange = adversaryEditor.querySelector("#adversary-attack-range").value;
+                adversary.attackDamage = adversaryEditor.querySelector("#adversary-attack-damage").value.trim();
+
+                // Features
+                adversary.features = [];
+                var featureElements = adversaryEditor.querySelectorAll("#adversary-features .feature");
+                featureElements.forEach(function(featureElement) {
+                    var feature = {
+                        name: featureElement.querySelector(".adversary-feature-name").value.trim(),
+                        text: featureElement.querySelector(".adversary-feature-text").value.trim()
+                    };
+                    adversary.features.push(feature);
+                });
+            }
+
+            // TODO: Refresh display
+
+            if (adversaryEditor.saveState) {
+                adversaryEditor.saveState();
+            }
+            adversaryEditor.adversary = undefined;
+            adversaryEditorOverlay.classList.add("hidden");
         });
 
         function createFearTracker(encounter, saveState) {
@@ -892,7 +937,7 @@
                         var feature = adversary.features[i];
                         var featureElement = document.createElement("div");
                         featureElement.className = "feature";
-                        featureElement.innerHTML = `<label for="adversary-feature-${i}">Name:</label><input type="text" id="adversary-feature-${i}" value="${feature.name}"><label for="adversary-feature-${i}-text">Description:</label><textarea id="adversary-feature-${i}-text" rows="4" cols="50">${feature.text}</textarea>`;
+                        featureElement.innerHTML = `<label for="adversary-feature-name-${i}">Name:</label><input type="text" class="adversary-feature-name" id="adversary-feature-name-${i}" value="${feature.name}"><label for="adversary-feature-text-${i}">Description:</label><textarea id="adversary-feature-text-${i}" class="adversary-feature-text" rows="4" cols="50">${feature.text}</textarea>`;
                         featuresFieldset.appendChild(featureElement);
                     }
                 }
@@ -900,7 +945,7 @@
 
                 actionsMenu.remove();
                 adversaryEditorOverlay.classList.remove("hidden");
-                adversaryEditor.adversary = adversary;
+                adversaryEditor.adversary = adversary; // TODO: Save encounter too?
                 adversaryEditor.querySelector("#adversary-name").select();
             };
             actionsMenu.appendChild(editAction);
@@ -1060,6 +1105,8 @@
             function saveState() {
                 localStorage.setItem("encounters-state", JSON.stringify(state));
             }
+
+            adversaryEditor.saveState = saveState; // TODO: Reset ever?
 
             var encountersDiv = document.getElementById("encounters");
             encountersDiv.innerHTML = ""; // Clear any existing content
