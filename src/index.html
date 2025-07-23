@@ -67,6 +67,9 @@
                 background-color: var(--body-bg-color);
                 color: var(--text-color);
             }
+            .hidden {
+                display: none;
+            }
             #copyright, #repo-info {
                 font-size: smaller;
                 margin-top: 10px;
@@ -244,6 +247,36 @@
                 border-radius: 0px;
                 width: 100%;
             }
+
+            #adversary-editor-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1000; /* Ensure it is above other content */
+            }
+            #adversary-editor {
+                position: fixed;
+                width: 25em;
+                top: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: var(--clr-surface-tonal-a10);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 10px 10px 10px black;
+            }
+            #adversary-editor h2 {
+                text-align: center;
+                padding: 0px;
+                margin: 0px;
+            }
+            #adversary-features {
+                overflow-y: scroll;
+                max-height: 20em;
+            }
         </style>
     </head>
 
@@ -275,80 +308,82 @@
 
         <div id="encounters"></div>
 
-        <div id="adversary-editor">
-            <h2>Edit Adversary</h2>
-            <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
-            <div id="adversary-form">
-                <fieldset>
-                    <legend>Basics</legend>
-                    <label for="adversary-name">Name:</label>
-                    <input type="text" id="adversary-name" size="30" required />
-                    <br>
-                    <label for="adversary-tier">Tier:</label>
-                    <input type="number" id="adversary-tier" min="1" max="4" value="1" required />
-                    <label for="adversary-type">Type:</label>
-                    <select id="adversary-type">
-                        <option value="Bruiser">Bruiser</option>
-                        <option value="Horde">Horde</option>
-                        <option value="Leader">Leader</option>
-                        <option value="Minion">Minion</option>
-                        <option value="Ranged">Ranged</option>
-                        <option value="Skulk">Skulk</option>
-                        <option value="Social">Social</option>
-                        <option value="Solo">Solo</option>
-                        <option value="Standard">Standard</option>
-                        <option value="Support">Support</option>
-                    </select>
-                    <br>
-                    <label for="adversary-description">Description:</label>
-                    <textarea id="adversary-description" cols="30" rows="3"></textarea>
-                    <br>
-                    <label for="adversary-motives">Motives & Tactics:</label>
-                    <textarea id="adversary-motives" cols="30" rows="2"></textarea>
-                </fieldset>
-                <fieldset>
-                    <legend>Stats</legend>
-                    <label for="adversary-difficulty">Difficulty:</label>
-                    <input type="number" id="adversary-difficulty" min="0" max="20" value="12" required />
-                    <br>
-                    <label for="adversary-major-threshold">Major Threshold:</label>
-                    <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
-                    /
-                    <label for="adversary-severe-threshold">Severe Threshold:</label>
-                    <input type="number" id="adversary-severe-threshold" min="0" max="20" value="14" />
-                    <br>
-                    <label for="adversary-hp">HP:</label>
-                    <input type="number" id="adversary-hp" min="1" max="20" value="5" required />
-                    <label for="adversary-stress">Stress:</label>
-                    <input type="number" id="adversary-stress" min="0" max="20" value="2" required />
-                    <br>
-                    <label for="adversary-experience">Experience:</label>
-                    <input type="text" id="adversary-experience" />
-                </fieldset>
-                <fieldset>
-                    <legend>Attack</legend>
-                    <label for="adversary-attack-modifier">Modifier:</label>
-                    <!-- <input type="number" id="adversary-attack-modifier" min="-10" max="20" value="0" /> -->
-                    <input type="text" id="adversary-attack-modifier" size="3" />
-                    <label for="adversary-attack-description">Description:</label>
-                    <input type="text" id="adversary-attack-description" />
-                    <br>
-                    <label for="adversary-attack-range">Range:</label>
-                    <select id="adversary-attack-range">
-                        <option value="Melee">Melee</option>
-                        <option value="Very Close">Very Close</option>
-                        <option value="Close">Close</option>
-                        <option value="Far">Far</option>
-                    </select>
-                    <label for="adversary-attack-damage">Damage:</label>
-                    <input type="text" id="adversary-attack-damage" /> <!-- TODO: Hint at format and phy/mag -->
-                </fieldset>
-                <fieldset id="adversary-features">
-                    <legend>Features</legend>
-                    <button id="add-feature">+ Add Feature</button> <!-- TODO: Position this statically up top? -->
-                </fieldset>
-                <button id="cancel-adversary-edit">Cancel</button>
-                <button type="submit" id="save-adversary-edit">Save</button>
+        <div id="adversary-editor-overlay" class="hidden">
+            <div id="adversary-editor">
+                <h2>Edit Adversary</h2>
+                <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
+                <div id="adversary-form">
+                    <fieldset>
+                        <legend>Basics</legend>
+                        <label for="adversary-name">Name:</label>
+                        <input type="text" id="adversary-name" size="30" required />
+                        <br>
+                        <label for="adversary-tier">Tier:</label>
+                        <input type="number" id="adversary-tier" min="1" max="4" value="1" required />
+                        <label for="adversary-type">Type:</label>
+                        <select id="adversary-type">
+                            <option value="Bruiser">Bruiser</option>
+                            <option value="Horde">Horde</option>
+                            <option value="Leader">Leader</option>
+                            <option value="Minion">Minion</option>
+                            <option value="Ranged">Ranged</option>
+                            <option value="Skulk">Skulk</option>
+                            <option value="Social">Social</option>
+                            <option value="Solo">Solo</option>
+                            <option value="Standard">Standard</option>
+                            <option value="Support">Support</option>
+                        </select>
+                        <br>
+                        <label for="adversary-description">Description:</label>
+                        <textarea id="adversary-description" cols="30" rows="3"></textarea>
+                        <br>
+                        <label for="adversary-motives">Motives & Tactics:</label>
+                        <textarea id="adversary-motives" cols="30" rows="2"></textarea>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Stats</legend>
+                        <label for="adversary-difficulty">Difficulty:</label>
+                        <input type="number" id="adversary-difficulty" min="0" max="20" value="12" required />
+                        <br>
+                        <label for="adversary-major-threshold">Major Threshold:</label>
+                        <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
+                        /
+                        <label for="adversary-severe-threshold">Severe Threshold:</label>
+                        <input type="number" id="adversary-severe-threshold" min="0" max="20" value="14" />
+                        <br>
+                        <label for="adversary-hp">HP:</label>
+                        <input type="number" id="adversary-hp" min="1" max="20" value="5" required />
+                        <label for="adversary-stress">Stress:</label>
+                        <input type="number" id="adversary-stress" min="0" max="20" value="2" required />
+                        <br>
+                        <label for="adversary-experience">Experience:</label>
+                        <input type="text" id="adversary-experience" />
+                    </fieldset>
+                    <fieldset>
+                        <legend>Attack</legend>
+                        <label for="adversary-attack-modifier">Modifier:</label>
+                        <!-- <input type="number" id="adversary-attack-modifier" min="-10" max="20" value="0" /> -->
+                        <input type="text" id="adversary-attack-modifier" size="3" />
+                        <label for="adversary-attack-description">Description:</label>
+                        <input type="text" id="adversary-attack-description" />
+                        <br>
+                        <label for="adversary-attack-range">Range:</label>
+                        <select id="adversary-attack-range">
+                            <option value="Melee">Melee</option>
+                            <option value="Very Close">Very Close</option>
+                            <option value="Close">Close</option>
+                            <option value="Far">Far</option>
+                        </select>
+                        <label for="adversary-attack-damage">Damage:</label>
+                        <input type="text" id="adversary-attack-damage" size="12" /> <!-- TODO: Hint at format and phy/mag -->
+                    </fieldset>
+                    <fieldset id="adversary-features">
+                        <legend>Features</legend>
+                        <button id="add-feature">+ Add Feature</button> <!-- TODO: Position this statically up top? -->
+                    </fieldset>
+                    <button id="cancel-adversary-edit">Cancel</button>
+                    <button type="submit" id="save-adversary-edit">Save</button>
+                </div>
             </div>
         </div>
 
@@ -435,6 +470,9 @@
         const adversaryCopiedEvent = new Event("adversaryCopied");
         const adversaryCopiedFromSourceEvent = new Event("adversaryCopiedFromSource");
 
+        var adversaryEditor = document.querySelector("#adversary-editor");
+        var adversaryEditorOverlay = document.querySelector("#adversary-editor-overlay");
+
         var expandAllDetails = false;
 
         function handleDetailsToggle(event) {
@@ -448,6 +486,35 @@
                 }
             }
         }
+
+        document.querySelector("#add-feature").addEventListener("click", function() {
+            var featuresFieldset = adversaryEditor.querySelector("#adversary-features");
+            var featureCount = featuresFieldset.querySelectorAll(".feature").length;
+            // TODO: Abstract this, use in createAdversaryElement as well
+            var featureElement = document.createElement("div");
+            featureElement.className = "feature";
+            featureElement.innerHTML = `<label for="adversary-feature-${featureCount}">Name:</label><input type="text" id="adversary-feature-${featureCount}"><label for="adversary-feature-${featureCount}-text">Description:</label><textarea id="adversary-feature-${featureCount}-text" rows="4" cols="50"></textarea>`;
+            featuresFieldset.appendChild(featureElement);
+            // TODO: Allow deletion (but could also do this by deleting all text for a feature)
+        });
+
+        document.querySelector("#cancel-adversary-edit").addEventListener("click", function() {
+            adversaryEditor.adversary = undefined;
+            adversaryEditorOverlay.classList.add("hidden");
+        });
+
+        document.querySelector("#save-adversary-edit").addEventListener("click", function() {
+            console.log("TODO: Save edit");
+            // 0. When showing/populating the editor, the adversary should be attached to the
+            //    #adversary-editor element as a property that can be accessed here.
+            // 1. Update the adversary object with the values from the editor.
+            // 2. Trigger a redraw of the adversary (missing this).
+            // 3. In the case where this is a new adversary, perhaps it would already have
+            //    been added to the encounter, but is just blank? So refreshing would still
+            //    work? If not, just create the element afterward. Also add to customAdversaries
+            //    in the state, which can be searched/referenced/etc just like the SRD.
+            // 4. Finally, clear the adversary property from #adversary-editor and hide the editor.
+        });
 
         function createFearTracker(encounter, saveState) {
             // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
@@ -832,6 +899,9 @@
                 // TODO: Hook up to Add Feature, Save, and Cancel button
 
                 actionsMenu.remove();
+                adversaryEditorOverlay.classList.remove("hidden");
+                adversaryEditor.adversary = adversary;
+                adversaryEditor.querySelector("#adversary-name").select();
             };
             actionsMenu.appendChild(editAction);
 
