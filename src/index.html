@@ -305,66 +305,66 @@
             <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
             <div id="adversary-form">
                 <fieldset>
-                        <legend>Basics</legend>
-                        <label for="adversary-name">Name:</label>
-                        <input type="text" id="adversary-name" size="30" required />
-                        <br>
-                        <label for="adversary-tier">Tier:</label>
-                        <input type="number" id="adversary-tier" min="1" max="4" value="1" required />
-                        <label for="adversary-type">Type:</label>
-                        <select id="adversary-type">
-                            <option value="Bruiser">Bruiser</option>
-                            <option value="Horde">Horde</option>
-                            <option value="Leader">Leader</option>
-                            <option value="Minion">Minion</option>
-                            <option value="Ranged">Ranged</option>
-                            <option value="Skulk">Skulk</option>
-                            <option value="Social">Social</option>
-                            <option value="Solo">Solo</option>
-                            <option value="Standard">Standard</option>
-                            <option value="Support">Support</option>
-                        </select>
-                        <br>
-                        <label for="adversary-description">Description:</label>
-                        <textarea id="adversary-description" cols="30" rows="3"></textarea>
-                        <br>
-                        <label for="adversary-motives">Motives & Tactics:</label>
-                        <textarea id="adversary-motives" cols="30" rows="2"></textarea>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Stats</legend>
-                        <label for="adversary-difficulty">Difficulty:</label>
-                        <input type="number" id="adversary-difficulty" min="0" max="20" value="12" required />
-                        <br>
-                        <label for="adversary-major-threshold">Major Threshold:</label>
-                        <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
-                        /
-                        <label for="adversary-severe-threshold">Severe Threshold:</label>
-                        <input type="number" id="adversary-severe-threshold" min="0" max="20" value="14" />
-                        <br>
-                        <label for="adversary-hp">HP:</label>
-                        <input type="number" id="adversary-hp" min="1" max="20" value="5" required />
-                        <label for="adversary-stress">Stress:</label>
-                        <input type="number" id="adversary-stress" min="0" max="20" value="2" required />
-                        <br>
-                        <label for="adversary-experience">Experience:</label>
-                        <input type="text" id="adversary-experience" />
-                    </fieldset>
-                    <fieldset>
-                        <legend>Attack</legend>
-                        <label for="adversary-attack-modifier">Modifier:</label>
-                        <!-- <input type="number" id="adversary-attack-modifier" min="-10" max="20" value="0" /> -->
-                        <input type="text" id="adversary-attack-modifier" size="3" />
-                        <label for="adversary-attack-description">Description:</label>
-                        <input type="text" id="adversary-attack-description" />
-                        <br>
-                        <label for="adversary-attack-range">Range:</label>
-                        <select id="adversary-attack-range">
-                            <option value="Melee">Melee</option>
-                            <option value="Very Close">Very Close</option>
-                            <option value="Close">Close</option>
-                            <option value="Far">Far</option>
-                        </select>
+                    <legend>Basics</legend>
+                    <label for="adversary-name">Name:</label>
+                    <input type="text" id="adversary-name" size="30" required />
+                    <br>
+                    <label for="adversary-tier">Tier:</label>
+                    <input type="number" id="adversary-tier" min="1" max="4" value="1" required />
+                    <label for="adversary-type">Type:</label>
+                    <select id="adversary-type">
+                        <option value="Bruiser">Bruiser</option>
+                        <option value="Horde">Horde</option>
+                        <option value="Leader">Leader</option>
+                        <option value="Minion">Minion</option>
+                        <option value="Ranged">Ranged</option>
+                        <option value="Skulk">Skulk</option>
+                        <option value="Social">Social</option>
+                        <option value="Solo">Solo</option>
+                        <option value="Standard">Standard</option>
+                        <option value="Support">Support</option>
+                    </select>
+                    <br>
+                    <label for="adversary-description">Description:</label>
+                    <textarea id="adversary-description" cols="30" rows="3"></textarea>
+                    <br>
+                    <label for="adversary-motives">Motives & Tactics:</label>
+                    <textarea id="adversary-motives" cols="30" rows="2"></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>Stats</legend>
+                    <label for="adversary-difficulty">Difficulty:</label>
+                    <input type="number" id="adversary-difficulty" min="0" max="20" value="12" required />
+                    <br>
+                    <label for="adversary-major-threshold">Major Threshold:</label>
+                    <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
+                    /
+                    <label for="adversary-severe-threshold">Severe Threshold:</label>
+                    <input type="number" id="adversary-severe-threshold" min="0" max="20" value="14" />
+                    <br>
+                    <label for="adversary-hp">HP:</label>
+                    <input type="number" id="adversary-hp" min="1" max="20" value="5" required />
+                    <label for="adversary-stress">Stress:</label>
+                    <input type="number" id="adversary-stress" min="0" max="20" value="2" required />
+                    <br>
+                    <label for="adversary-experience">Experience:</label>
+                    <input type="text" id="adversary-experience" />
+                </fieldset>
+                <fieldset>
+                    <legend>Attack</legend>
+                    <label for="adversary-attack-modifier">Modifier:</label>
+                    <!-- <input type="number" id="adversary-attack-modifier" min="-10" max="20" value="0" /> -->
+                    <input type="text" id="adversary-attack-modifier" size="3" />
+                    <label for="adversary-attack-description">Description:</label>
+                    <input type="text" id="adversary-attack-description" />
+                    <br>
+                    <label for="adversary-attack-range">Range:</label>
+                    <select id="adversary-attack-range">
+                        <option value="Melee">Melee</option>
+                        <option value="Very Close">Very Close</option>
+                        <option value="Close">Close</option>
+                        <option value="Far">Far</option>
+                    </select>
                     <label for="adversary-attack-damage">Damage:</label>
                     <input type="text" id="adversary-attack-damage" size="12" /> <!-- TODO: Hint at format and phy/mag -->
                 </fieldset>
@@ -375,7 +375,7 @@
                 </fieldset>
                 <button id="cancel-adversary-edit">Cancel</button>
                 <button type="submit" id="save-adversary-edit">Save</button>
-                </div>
+            </div>
         </div>
 
         <div id="repo-info">
@@ -723,6 +723,7 @@
 
             if (adversary.features && adversary.features.length > 0) {
                 var featuresContainer = document.createElement("details");
+                featuresContainer.open = expandAllDetails;
                 featuresContainer.className = "featuresExpander";
                 featuresContainer.innerHTML = `<summary>FEATURES</summary>`;
                 var featuresDiv = document.createElement("div");
@@ -841,6 +842,7 @@
             adversaryDiv.appendChild(conditionsDiv);
 
             var modificationsContainer = document.createElement("details");
+            modificationsContainer.open = expandAllDetails;
             modificationsContainer.innerHTML = `<summary>Modifications</summary>`;
             var modificationsDiv = document.createElement("div");
             modificationsDiv.className = "modifications";
@@ -966,6 +968,7 @@
             };
             actionsMenu.appendChild(copyFromSourceAction);
 
+            // TODO: Maybe move this back to a button for quicker delete?
             var deleteAction = document.createElement("li");
             deleteAction.innerHTML = `<button class="menu-action">Remove</button>`;
             deleteAction.title = "Remove this adversary from the encounter";
@@ -1131,7 +1134,6 @@
                 var encounterDiv = document.createElement("div");
                 encounterDiv.className = "encounter";
                 encounterDiv.innerHTML = `<h2>${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)</h2><p>${encounter.description}</p>`;
-                // TODO: Add action menu button like with adversaries to allow editing, deleting, etc.
 
                 var fearDiv = createFearTracker(encounter, saveState);
                 encounterDiv.appendChild(fearDiv);
