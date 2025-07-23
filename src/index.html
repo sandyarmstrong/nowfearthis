@@ -250,32 +250,24 @@
 
             #adversary-editor-overlay {
                 position: fixed;
+                z-index: 1000; /* Ensure it is above other content */
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
                 background-color: rgba(0, 0, 0, 0.5);
-                z-index: 1000; /* Ensure it is above other content */
             }
             #adversary-editor {
-                position: fixed;
-                width: 25em;
-                top: 100px;
+                position: absolute;
+                z-index: 1001; /* Ensure it is above the overlay */
+                width: 27em;
+                top: 50px;
                 left: 50%;
                 transform: translateX(-50%);
                 background-color: var(--clr-surface-tonal-a10);
                 padding: 20px;
                 border-radius: 10px;
                 box-shadow: 10px 10px 10px black;
-            }
-            #adversary-editor h2 {
-                text-align: center;
-                padding: 0px;
-                margin: 0px;
-            }
-            #adversary-features {
-                overflow-y: scroll;
-                max-height: 20em;
             }
         </style>
     </head>
@@ -308,12 +300,11 @@
 
         <div id="encounters"></div>
 
-        <div id="adversary-editor-overlay" class="hidden">
-            <div id="adversary-editor">
-                <h2>Edit Adversary</h2>
-                <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
-                <div id="adversary-form">
-                    <fieldset>
+        <div id="adversary-editor-overlay" class="hidden"></div>
+        <div id="adversary-editor" class="hidden">
+            <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
+            <div id="adversary-form">
+                <fieldset>
                         <legend>Basics</legend>
                         <label for="adversary-name">Name:</label>
                         <input type="text" id="adversary-name" size="30" required />
@@ -374,17 +365,17 @@
                             <option value="Close">Close</option>
                             <option value="Far">Far</option>
                         </select>
-                        <label for="adversary-attack-damage">Damage:</label>
-                        <input type="text" id="adversary-attack-damage" size="12" /> <!-- TODO: Hint at format and phy/mag -->
-                    </fieldset>
-                    <fieldset id="adversary-features">
-                        <legend>Features</legend>
-                        <button id="add-feature">+ Add Feature</button> <!-- TODO: Position this statically up top? -->
-                    </fieldset>
-                    <button id="cancel-adversary-edit">Cancel</button>
-                    <button type="submit" id="save-adversary-edit">Save</button>
+                    <label for="adversary-attack-damage">Damage:</label>
+                    <input type="text" id="adversary-attack-damage" size="12" /> <!-- TODO: Hint at format and phy/mag -->
+                </fieldset>
+                <fieldset>
+                    <legend>Features</legend>
+                    <button id="add-feature">+ Add Feature</button> <!-- TODO: Position this statically up top? -->
+                    <div id="adversary-features"></div>
+                </fieldset>
+                <button id="cancel-adversary-edit">Cancel</button>
+                <button type="submit" id="save-adversary-edit">Save</button>
                 </div>
-            </div>
         </div>
 
         <div id="repo-info">
@@ -475,32 +466,70 @@
 
         var expandAllDetails = false;
 
-        function handleDetailsToggle(event) {
-            var opened = event.target.open
-            if (expandAllDetails != opened) {
-                expandAllDetails = opened;
-                for (const element of document.getElementsByTagName("details")) {
-                    if (element.open != expandAllDetails) {
-                        element.open = expandAllDetails;
-                    }
+        function hideEditor() {
+            adversaryEditor.adversary = undefined;
+            adversaryEditor.classList.add("hidden");
+            adversaryEditorOverlay.classList.add("hidden");
+        }
+
+        function createFeatureEditorElement(feature, idSuffix)  {
+            var featureElement = document.createElement("div");
+            featureElement.className = "feature";
+            featureElement.innerHTML = `<label for="adversary-feature-name-${idSuffix}">Name:</label><input type="text" class="adversary-feature-name" id="adversary-feature-name-${idSuffix}" value="${feature?.name ?? ""}"><label for="adversary-feature-text-${idSuffix}">Description:</label><textarea id="adversary-feature-text-${idSuffix}" class="adversary-feature-text" rows="4" cols="50">${feature?.text ?? ""}</textarea>`;
+            return featureElement;
+        }
+
+        function showEditor(adversary, onShown) {
+            // Basics
+            var editor = document.getElementById("adversary-editor");
+            editor.querySelector("#adversary-name").value = adversary.name;
+            editor.querySelector("#adversary-tier").value = adversary.tier;
+            editor.querySelector("#adversary-type").value = adversary.type; // TODO: Case mangling as needed
+            editor.querySelector("#adversary-description").value = adversary.description || "";
+            editor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
+
+            // Stats
+            editor.querySelector("#adversary-difficulty").value = adversary.difficulty;
+            editor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
+            editor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
+            editor.querySelector("#adversary-hp").value = adversary.hp.slots;
+            editor.querySelector("#adversary-stress").value = adversary.stress.slots;
+            editor.querySelector("#adversary-experience").value = adversary.experience || "";
+
+            // Attack
+            editor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || ""; // TODO: Should input be number, then conversion?
+            editor.querySelector("#adversary-attack-description").value = adversary.attackDescription || "";
+            editor.querySelector("#adversary-attack-range").value = adversary.attackRange || ""; // TODO: Case mangling as needed
+            editor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
+
+            // Features
+            var featuresContainer = editor.querySelector("#adversary-features");
+            featuresContainer.innerHTML = ""; // Clear any existing children
+            if (adversary.features && adversary.features.length > 0) {
+                for (var i = 0; i < adversary.features.length; i++) {
+                    var feature = adversary.features[i];
+                    var featureElement = createFeatureEditorElement(feature, i)
+                    featuresContainer.appendChild(featureElement);
                 }
             }
+
+            onShown(); // Do whatever cleanup the caller needs
+            adversaryEditorOverlay.classList.remove("hidden");
+            adversaryEditor.classList.remove("hidden");
+            adversaryEditor.adversary = adversary; // TODO: Set encounter too?
+            adversaryEditor.querySelector("#adversary-name").select();
+            window.scrollTo(0, 0);
         }
 
         document.querySelector("#add-feature").addEventListener("click", function() {
-            var featuresFieldset = adversaryEditor.querySelector("#adversary-features");
-            var featureCount = featuresFieldset.querySelectorAll(".feature").length;
-            // TODO: Abstract this, use in createAdversaryElement as well
-            var featureElement = document.createElement("div");
-            featureElement.className = "feature";
-            featureElement.innerHTML = `<label for="adversary-feature-name-${featureCount}">Name:</label><input type="text" class="adversary-feature-name" id="adversary-feature-name-${featureCount}"><label for="adversary-feature-text-${featureCount}">Description:</label><textarea class="adversary-feature-text" id="adversary-feature-text-${featureCount}" rows="4" cols="50"></textarea>`;
-            featuresFieldset.appendChild(featureElement);
+            var featureContainer = adversaryEditor.querySelector("#adversary-features");
+            var featureElement = createFeatureEditorElement(null, featureContainer.children.length);
+            featureContainer.appendChild(featureElement);
             // TODO: Allow deletion (but could also do this by deleting all text for a feature)
         });
 
         document.querySelector("#cancel-adversary-edit").addEventListener("click", function() {
-            adversaryEditor.adversary = undefined;
-            adversaryEditorOverlay.classList.add("hidden");
+            hideEditor();
         });
 
         document.querySelector("#save-adversary-edit").addEventListener("click", function() {
@@ -557,9 +586,20 @@
             if (adversaryEditor.saveState) {
                 adversaryEditor.saveState();
             }
-            adversaryEditor.adversary = undefined;
-            adversaryEditorOverlay.classList.add("hidden");
+            hideEditor();
         });
+
+        function handleDetailsToggle(event) {
+            var opened = event.target.open
+            if (expandAllDetails != opened) {
+                expandAllDetails = opened;
+                for (const element of document.getElementsByTagName("details")) {
+                    if (element.open != expandAllDetails) {
+                        element.open = expandAllDetails;
+                    }
+                }
+            }
+        }
 
         function createFearTracker(encounter, saveState) {
             // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
@@ -904,49 +944,7 @@
             editAction.innerHTML = `<button class="menu-action">Edit</button>`;
             editAction.title = "Edit this adversary";
             editAction.onclick = function() {
-                // Basics
-                var editor = document.getElementById("adversary-editor");
-                editor.querySelector("#adversary-name").value = adversary.name;
-                editor.querySelector("#adversary-tier").value = adversary.tier;
-                editor.querySelector("#adversary-type").value = adversary.type; // TODO: Case mangling as needed
-                editor.querySelector("#adversary-description").value = adversary.description || "";
-                editor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
-
-                // Stats
-                editor.querySelector("#adversary-difficulty").value = adversary.difficulty;
-                editor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
-                editor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
-                editor.querySelector("#adversary-hp").value = adversary.hp.slots;
-                editor.querySelector("#adversary-stress").value = adversary.stress.slots;
-                editor.querySelector("#adversary-experience").value = adversary.experience || "";
-
-                // Attack
-                editor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || ""; // TODO: Should input be number, then conversion?
-                editor.querySelector("#adversary-attack-description").value = adversary.attackDescription || "";
-                editor.querySelector("#adversary-attack-range").value = adversary.attackRange || ""; // TODO: Case mangling as needed
-                editor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
-
-                // Features
-                editor.querySelectorAll(".feature").forEach(function(featureElement) {
-                    featureElement.remove();
-                });
-                if (adversary.features && adversary.features.length > 0) {
-                    var featuresFieldset = editor.querySelector("#adversary-features");
-
-                    for (var i = 0; i < adversary.features.length; i++) {
-                        var feature = adversary.features[i];
-                        var featureElement = document.createElement("div");
-                        featureElement.className = "feature";
-                        featureElement.innerHTML = `<label for="adversary-feature-name-${i}">Name:</label><input type="text" class="adversary-feature-name" id="adversary-feature-name-${i}" value="${feature.name}"><label for="adversary-feature-text-${i}">Description:</label><textarea id="adversary-feature-text-${i}" class="adversary-feature-text" rows="4" cols="50">${feature.text}</textarea>`;
-                        featuresFieldset.appendChild(featureElement);
-                    }
-                }
-                // TODO: Hook up to Add Feature, Save, and Cancel button
-
-                actionsMenu.remove();
-                adversaryEditorOverlay.classList.remove("hidden");
-                adversaryEditor.adversary = adversary; // TODO: Save encounter too?
-                adversaryEditor.querySelector("#adversary-name").select();
+                showEditor(adversary, () => actionsMenu.remove());
             };
             actionsMenu.appendChild(editAction);
 
