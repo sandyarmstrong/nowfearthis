@@ -97,6 +97,26 @@
                 background-color: var(--button-bg-active-color);
             }
 
+            button {
+                /* font-size: 1.5em;
+                line-height: 1em; */
+                padding: 5px;
+                border-radius: 8px;
+                color: var(--button-text-color);
+                border: 0px;
+                background-color: var(--button-bg-color);
+            }
+            button:hover {
+                background-color: var(--button-bg-hover-color);
+            }
+            button:active {
+                background-color: var(--button-bg-active-color);
+            }
+            button:disabled {
+                background-color: var(--clr-surface-a50);
+                opacity: 0.7;;
+            }
+
             .adversary {
                 position: relative; /* For action button */
                 display: inline-block;
@@ -188,44 +208,27 @@
                 list-style: none;
                 display: inline;
                 padding: 0px;
+                font-size: smaller;
             }
             ul.conditions-list li {
-                display: inline;
+                display: inline-block;
+                background-color: var(--clr-surface-a40);
+                border-radius: 3px;
                 margin-right: 5px;
+                margin-bottom: 5px;
+                padding: 2px;
             }
-
-            ul.modifications-list {
-                margin: 5px 0px;
-            }
-
-            button {
-                /* font-size: 1.5em;
-                line-height: 1em; */
-                padding: 5px;
-                border-radius: 8px;
-                color: var(--button-text-color);
-                border: 0px;
-                background-color: var(--button-bg-color);
-            }
-            button:hover {
-                background-color: var(--button-bg-hover-color);
-            }
-            button:active {
-                background-color: var(--button-bg-active-color);
-            }
-            button:disabled {
-                background-color: var(--clr-surface-a50);
-                opacity: 0.7;;
-            }
-
             button.inline-delete {
                 background-color: transparent;
                 color: var(--clr-primary-a50);
                 border: 0px;
                 border-radius: 3px;
-                padding: 2px 4px;
-                margin: 0px 1px;
+                padding: 0px;
+                margin-left: 5px;
                 font-size: smaller;
+            }
+            button.inline-delete:hover {
+                background-color: var(--clr-primary-a30);
             }
 
             button.inline-add {
@@ -619,6 +622,8 @@
             hideEditor();
         });
 
+        // TODO: This is annoying if you are scrolled down, and every adversary above changes expansion,
+        //       messing with your scroll position. Fix scroll position or just don't do this.
         function handleFeaturesToggle(event) {
             const opened = event.target.open;
             if (expandAllFeatures != opened) {
@@ -755,13 +760,17 @@
 
         function updateConditionsDisplay(container, instance, saveState) {
             container.innerHTML = "";
-            if (!instance.conditions || instance.conditions.length === 0) {
+
+            if ((!instance.conditions || instance.conditions.length == 0) &&
+                (!instance.modifications || instance.modifications.length === 0)) {
                 return;
             }
-            container.innerHTML = "Conditions: ";
+
+            const conditionsList = document.createElement("ul");
+            conditionsList.className = "conditions-list";
+            container.appendChild(conditionsList);
+
             if (instance.conditions && instance.conditions.length > 0) {
-                const conditionsList = document.createElement("ul");
-                conditionsList.className = "conditions-list";
                 for (let i = 0; i < instance.conditions.length; i++) {
                     const condition = instance.conditions[i];
 
@@ -774,7 +783,7 @@
 
                     const removeButton = document.createElement("button");
                     removeButton.className = "inline-delete";
-                    removeButton.innerText = "X";
+                    removeButton.innerText = "❌";
                     removeButton.title = "Remove condition";
                     removeButton.onclick = function(event) {
                         instance.conditions = instance.conditions.filter(function(c) {
@@ -785,26 +794,14 @@
                     };
                     conditionItem.appendChild(removeButton);
                 }
-                container.appendChild(conditionsList);
-            } else {
-                container.innerText += " None";
             }
-        }
 
-        function updateModificationsDisplay(container, instance, saveState) {
-            container.innerHTML = "";
-            if (!instance.modifications || instance.modifications.length === 0) {
-                return;
-            }
-            container.innerHTML = "Modifications:";
             if (instance.modifications && instance.modifications.length > 0) {
-                const modificationsList = document.createElement("ul");
-                modificationsList.className = "modifications-list";
                 for (let i = 0; i < instance.modifications.length; i++) {
                     const modification = instance.modifications[i];
 
                     const modificationItem = document.createElement("li");
-                    modificationsList.appendChild(modificationItem);
+                    conditionsList.appendChild(modificationItem);
 
                     const modificationText = document.createElement("span");
                     modificationText.innerText = `${modification.modificationName} (${modification.propertyName} ${modification.modification})`;
@@ -812,18 +809,17 @@
 
                     const removeButton = document.createElement("button");
                     removeButton.className = "inline-delete";
-                    removeButton.innerText = "X";
+                    removeButton.innerText = "❌";
                     removeButton.title = "Remove modification";
                     removeButton.onclick = function(event) {
                         instance.modifications = instance.modifications.filter(function(m) {
                             return m !== modification;
                         });
-                        updateModificationsDisplay(container, instance, saveState);
+                        updateConditionsDisplay(container, instance, saveState);
                         saveState();
                     };
                     modificationItem.appendChild(removeButton);
                 }
-                container.appendChild(modificationsList);
             }
         }
 
@@ -987,14 +983,7 @@
                 addConditionsDiv.appendChild(addConditionButton);
                 instanceDiv.appendChild(conditionsDiv);
 
-                const modificationsDiv = document.createElement("div");
-                modificationsDiv.className = "modifications";
-                instanceDiv.appendChild(modificationsDiv);
-                const modificationsDisplayDiv = document.createElement("div");
-                modificationsDiv.appendChild(modificationsDisplayDiv);
                 // modificationsContainer.addEventListener("toggle", handleFeaturesToggle);
-
-                updateModificationsDisplay(modificationsDisplayDiv, instance, saveState);
 
                 // TODO: This UI is pretty big, taking up a lot of space if
                 //       there are a lot of adversaries, even if there are no modifications.
@@ -1033,7 +1022,7 @@
                         addModificationNameInput.value = "";
                         addModificationPropertyInput.value = "";
                         addModificationValueInput.value = "";
-                        updateModificationsDisplay(modificationsDisplayDiv, instance, saveState);
+                        updateConditionsDisplay(conditionsDisplayDiv, instance, saveState);
                         saveState();
                     }
                 };
@@ -1054,7 +1043,7 @@
 
                 const removeInstanceButton = document.createElement("button");
                 removeInstanceButton.className = "action-top";
-                removeInstanceButton.style = "background-color: black";
+                removeInstanceButton.style = "background-color: var(--clr-surface-tonal-a0)";
                 removeInstanceButton.innerText = "🗑️";
                 removeInstanceButton.onclick = function(event) {
                     event.target.parentElement.remove();
