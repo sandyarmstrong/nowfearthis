@@ -675,10 +675,10 @@
             return fearDiv;
         }
 
-        function updateResource(container) {
+        function updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName, saveState) {
             const elements = [];
-            const slots = container.state.adversary[container.state.adversarySlotsPropertyName];
-            const marked = container.state.instance[container.state.instanceMarkedPropertyName];
+            const slots = adversary[adversarySlotsPropertyName];
+            const marked = instance[instanceMarkedPropertyName];
 
             for (let i = 0; i < slots; i++) {
                 const slot = document.createElement("input");
@@ -687,15 +687,12 @@
                     slot.checked = true;
                 }
                 slot.onclick = function(event) {
-                    const container = event.target.parentElement;
-                    const state = container.state;
                     if (event.target.checked) {
-                        state.instance[state.instanceMarkedPropertyName]++;
+                        instance[instanceMarkedPropertyName]++;
                     } else {
-                        state.instance[state.instanceMarkedPropertyName]--;
+                        instance[instanceMarkedPropertyName]--;
                     }
-                    updateResource(container);
-                    state.saveState();
+                    updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName, saveState);
                 };
                 elements.push(slot);
             }
@@ -780,17 +777,11 @@
                     removeButton.className = "inline-delete";
                     removeButton.innerText = "X";
                     removeButton.title = "Remove condition";
-                    removeButton.state = {
-                        container: container,
-                        instance: instance,
-                        condition: condition
-                    };
                     removeButton.onclick = function(event) {
-                        const state = event.target.state;
-                        state.instance.conditions = state.instance.conditions.filter(function(c) {
-                            return c !== state.condition;
+                        instance.conditions = instance.conditions.filter(function(c) {
+                            return c !== condition;
                         });
-                        updateConditionsDisplay(state.container, state.instance, saveState);
+                        updateConditionsDisplay(container, instance, saveState);
                         saveState();
                     };
                     conditionItem.appendChild(removeButton);
@@ -824,17 +815,11 @@
                     removeButton.className = "inline-delete";
                     removeButton.innerText = "X";
                     removeButton.title = "Remove modification";
-                    removeButton.state = {
-                        container: container,
-                        instance: instance,
-                        modification: modification
-                    };
                     removeButton.onclick = function(event) {
-                        const state = event.target.state;
                         instance.modifications = instance.modifications.filter(function(m) {
-                            return m !== state.modification;
+                            return m !== modification;
                         });
-                        updateModificationsDisplay(state.container, state.instance, saveState);
+                        updateModificationsDisplay(container, instance, saveState);
                         saveState();
                     };
                     modificationItem.appendChild(removeButton);
@@ -948,14 +933,7 @@
                 hpDiv.innerHTML = "HP:";
                 const hpSlotsDiv = document.createElement("div");
                 hpSlotsDiv.className = "slots";
-                hpSlotsDiv.state = {
-                    instance: instance,
-                    adversary: adversary,
-                    adversarySlotsPropertyName: "hp",
-                    instanceMarkedPropertyName: "hpMarked",
-                    saveState: saveState
-                };
-                updateResource(hpSlotsDiv);
+                updateResource(hpSlotsDiv, adversary, "hp", instance, "hpMarked", saveState);
                 hpDiv.appendChild(hpSlotsDiv);
                 instanceDiv.appendChild(hpDiv);
 
@@ -964,14 +942,7 @@
                 stressDiv.innerHTML = "Stress:";
                 const stressSlotsDiv = document.createElement("div");
                 stressSlotsDiv.className = "slots";
-                stressSlotsDiv.state = {
-                    instance: instance,
-                    adversary: adversary,
-                    adversarySlotsPropertyName: "stress",
-                    instanceMarkedPropertyName: "stressMarked",
-                    saveState: saveState
-                };
-                updateResource(stressSlotsDiv);
+                updateResource(stressSlotsDiv, adversary, "stress", instance, "stressMarked", saveState);
                 stressDiv.appendChild(stressSlotsDiv);
                 instanceDiv.appendChild(stressDiv);
 
@@ -993,33 +964,23 @@
                 addConditionButton.className = "inline-add";
                 addConditionButton.innerText = "+";
                 addConditionButton.title = "Add condition";
-                addConditionButton.state = {
-                    container: conditionsDisplayDiv,
-                    input: addConditionInput,
-                    instance: instance,
-                    saveState: saveState
-                };
-                addConditionInput.state = {
-                    addButton: addConditionButton
-                };
                 addConditionButton.onclick = function(event) {
-                    const state = event.target.state;
-                    const condition = state.input.value.trim();
-                    if (condition && (!state.instance.conditions || !state.instance.conditions.includes(condition))) {
-                        if (!state.instance.conditions) {
-                            state.instance.conditions = [];
+                    const condition = addConditionInput.value.trim();
+                    if (condition && (!instance.conditions || !instance.conditions.includes(condition))) {
+                        if (!instance.conditions) {
+                            instance.conditions = [];
                         }
-                        state.instance.conditions.push(condition);
-                        state.input.value = "";
-                        updateConditionsDisplay(state.container, state.instance, state.saveState);
-                        state.saveState();
+                        instance.conditions.push(condition);
+                        addConditionInput.value = "";
+                        updateConditionsDisplay(conditionsDisplayDiv, instance, saveState);
+                        saveState();
                     }
                 };
                 addConditionInput.addEventListener("keyup", function(event) {
                     if (event.keyCode === 13) { // Enter key
                         event.preventDefault();
                         console.log(event.target);
-                        event.target.state.addButton.click();
+                        addConditionButton.click();
                     }
                 });
                 addConditionsDiv.appendChild(addConditionInput);
@@ -1056,33 +1017,24 @@
                 addModificationButton.className = "inline-add";
                 addModificationButton.innerText = "+";
                 addModificationButton.title = "Add modification";
-                addModificationButton.state = {
-                    container: modificationsDisplayDiv,
-                    addModificationNameInput: addModificationNameInput,
-                    addModificationPropertyInput: addModificationPropertyInput,
-                    addModificationValueInput: addModificationValueInput,
-                    instance: instance,
-                    saveState: saveState
-                };
                 addModificationButton.onclick = function(event) {
-                    const state = event.target.state;
-                    const modificationName = state.addModificationNameInput.value.trim();
-                    const propertyName = state.addModificationPropertyInput.value.trim();
-                    const modificationValue = state.addModificationValueInput.value.trim();
+                    const modificationName = addModificationNameInput.value.trim();
+                    const propertyName = addModificationPropertyInput.value.trim();
+                    const modificationValue = addModificationValueInput.value.trim();
                     if (modificationName && propertyName && modificationValue) {
-                        if (!state.instance.modifications) {
-                            state.instance.modifications = [];
+                        if (!instance.modifications) {
+                            instance.modifications = [];
                         }
-                        state.instance.modifications.push({
+                        instance.modifications.push({
                             modificationName: modificationName,
                             propertyName: propertyName,
                             modification: modificationValue
                         });
-                        state.addModificationNameInput.value = "";
-                        state.addModificationPropertyInput.value = "";
-                        state.addModificationValueInput.value = "";
-                        updateModificationsDisplay(state.container, state.instance, state.saveState);
-                        state.saveState();
+                        addModificationNameInput.value = "";
+                        addModificationPropertyInput.value = "";
+                        addModificationValueInput.value = "";
+                        updateModificationsDisplay(modificationsDisplayDiv, instance, saveState);
+                        saveState();
                     }
                 };
                 addModificationsDiv.appendChild(addModificationNameInput);
