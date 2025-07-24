@@ -164,6 +164,19 @@
                 font-weight: bold;
             }
 
+            .instance {
+                position: relative; /* For action button */
+                margin-top: 10px;
+                background-color: var(--stats-bg-color);
+                border-radius: 3px;
+            }
+            .instance h4 {
+                margin: 0px;
+            }
+            .add-conditions, .add-modifications {
+                margin: 5px 0px;
+            }
+
             .slots {
                 display: inline-block
             }
@@ -420,7 +433,7 @@
                     "description": "A group of bandits ambushes the party in a dense forest.",
                     "adversaries": [
                         {
-                            "name": "Bandit #1",
+                            "name": "Bandit",
                             "originalName": "Jagged Knife Bandit",
                             "source": "SRD",
                             "tier": 1,
@@ -428,25 +441,33 @@
                             "difficulty": 12,
                             "majorThreshold": 8,
                             "severeThreshold": 14,
-                            "hp": {
-                                "slots": 5,
-                                "marked": 3
-                            },
-                            "stress": {
-                                "slots": 3,
-                                "marked": 0
-                            },
-                            "modifications": [
+                            "hp": 5,
+                            "stress": 3,
+                            "instances": [
                                 {
-                                    "modificationName": "Distracted",
-                                    "propertyName": "difficulty",
-                                    "modification": "-2" // - or + to modify, or just a number to hard-set, mods are applied in order
+                                    "name": "Bandit #1",
+                                    "hpMarked": 3,
+                                    "stressMarked": 0,
+                                    "conditions": [
+                                        "Restrained",
+                                        "Vulnerable"
+                                    ],
+                                    "modifications": [
+                                        {
+                                            "modificationName": "Distracted",
+                                            "propertyName": "difficulty",
+                                            "modification": "-2"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Bandit #3",
+                                    "hpMarked": 0,
+                                    "stressMarked": 0,
+                                    "conditions": [],
+                                    "modifications": []
                                 }
                             ],
-                            "conditions": [
-                                "Restrained",
-                                "Vulnerable"
-                            ]
                         }
                     ]
                 }
@@ -464,7 +485,8 @@
         var adversaryEditor = document.querySelector("#adversary-editor");
         var adversaryEditorOverlay = document.querySelector("#adversary-editor-overlay");
 
-        var expandAllDetails = false;
+        var expandAllFeatures = false;
+        var expandAllInstanceEditors = false;
 
         function hideEditor() {
             adversaryEditor.adversary = undefined;
@@ -492,8 +514,8 @@
             editor.querySelector("#adversary-difficulty").value = adversary.difficulty;
             editor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
             editor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
-            editor.querySelector("#adversary-hp").value = adversary.hp.slots;
-            editor.querySelector("#adversary-stress").value = adversary.stress.slots;
+            editor.querySelector("#adversary-hp").value = adversary.hp;
+            editor.querySelector("#adversary-stress").value = adversary.stress;
             editor.querySelector("#adversary-experience").value = adversary.experience || "";
 
             // Attack
@@ -559,8 +581,18 @@
                 adversary.difficulty = parseInt(adversaryEditor.querySelector("#adversary-difficulty").value);
                 adversary.majorThreshold = parseInt(adversaryEditor.querySelector("#adversary-major-threshold").value);
                 adversary.severeThreshold = parseInt(adversaryEditor.querySelector("#adversary-severe-threshold").value);
-                adversary.hp.slots = parseInt(adversaryEditor.querySelector("#adversary-hp").value);
-                adversary.stress.slots = parseInt(adversaryEditor.querySelector("#adversary-stress").value);
+                adversary.hp = parseInt(adversaryEditor.querySelector("#adversary-hp").value);
+                if (adversary.instances) {
+                    adversary.instances.forEach(function(instance) {
+                        instance.hpMarked = Math.min(instance.hpMarked, adversary.hp);
+                    });
+                }
+                adversary.stress = parseInt(adversaryEditor.querySelector("#adversary-stress").value);
+                if (adversary.instances) {
+                    adversary.instances.forEach(function(instance) {
+                        instance.stressMarked = Math.min(instance.stressMarked, adversary.stress);
+                    });
+                }
                 adversary.experience = adversaryEditor.querySelector("#adversary-experience").value.trim();
 
                 // Attack
@@ -589,13 +621,13 @@
             hideEditor();
         });
 
-        function handleDetailsToggle(event) {
+        function handleFeaturesToggle(event) {
             var opened = event.target.open
-            if (expandAllDetails != opened) {
-                expandAllDetails = opened;
-                for (const element of document.getElementsByTagName("details")) {
-                    if (element.open != expandAllDetails) {
-                        element.open = expandAllDetails;
+            if (expandAllFeatures != opened) {
+                expandAllFeatures = opened;
+                for (const element of document.getElementsByClassName("featuresExpander")) {
+                    if (element.open != expandAllFeatures) {
+                        element.open = expandAllFeatures;
                     }
                 }
             }
@@ -644,28 +676,172 @@
             return fearDiv;
         }
 
-        function updateResource(container, resource, saveState) {
+        function updateResource(container) {
             var elements = [];
+            var slots = container.state.adversary[container.state.adversarySlotsPropertyName];
+            var marked = container.state.instance[container.state.instanceMarkedPropertyName];
 
-            for (var i = 0; i < resource.slots; i++) {
+            for (var i = 0; i < slots; i++) {
                 var slot = document.createElement("input");
                 slot.type = "checkbox";
-                if (i < resource.marked) {
+                if (i < marked) {
                     slot.checked = true;
                 }
                 slot.onclick = function(event) {
+                    var container = event.target.parentElement;
+                    var state = container.state;
                     if (event.target.checked) {
-                        resource.marked++;
+                        state.instance[state.instanceMarkedPropertyName]++;
                     } else {
-                        resource.marked--;
+                        state.instance[state.instanceMarkedPropertyName]--;
                     }
-                    updateResource(container, resource, saveState);
-                    saveState();
+                    updateResource(container);
+                    state.saveState();
                 };
                 elements.push(slot);
             }
 
             container.replaceChildren(...elements);
+        }
+
+        function setupAdversaryActionButton(adversaryElement, adversary) {
+            var actionsMenu = document.createElement("menu");
+            actionsMenu.className = "actions-menu";
+
+            var editAction = document.createElement("li");
+            editAction.innerHTML = `<button class="menu-action">Edit</button>`;
+            editAction.title = "Edit this adversary";
+            editAction.onclick = function() {
+                showEditor(adversary, () => actionsMenu.remove());
+            };
+            actionsMenu.appendChild(editAction);
+
+            var copyAction = document.createElement("li");
+            copyAction.innerHTML = `<button class="menu-action">Copy</button>`;
+            copyAction.title = "Copy this adversary, including all changed state";
+            copyAction.onclick = function() {
+                adversaryElement.dispatchEvent(adversaryCopiedEvent);
+                actionsMenu.remove();
+            };
+            actionsMenu.appendChild(copyAction);
+
+            var copyFromSourceAction = document.createElement("li");
+            copyFromSourceAction.innerHTML = `<button class="menu-action">Copy From Source</button>`;
+            copyFromSourceAction.title = "Copy this adversary from the source, ignoring all changes";
+            copyFromSourceAction.onclick = function() {
+                adversaryElement.dispatchEvent(adversaryCopiedFromSourceEvent);
+                actionsMenu.remove();
+            };
+            actionsMenu.appendChild(copyFromSourceAction);
+
+            // TODO: Maybe move this back to a button for quicker delete?
+            var deleteAction = document.createElement("li");
+            deleteAction.innerHTML = `<button class="menu-action">Remove</button>`;
+            deleteAction.title = "Remove this adversary from the encounter";
+            deleteAction.onclick = function() {
+                adversaryElement.dispatchEvent(adversaryRemovedEvent);
+                actionsMenu.remove();
+            };
+            actionsMenu.appendChild(deleteAction);
+
+            var actionsButton = document.createElement("button");
+            actionsButton.className = "action-top";
+            actionsButton.innerText = "…";
+            actionsButton.title = "Adversary management actions";
+            actionsButton.onclick = function() {
+                if (actionsMenu.parentElement) {
+                    actionsMenu.remove();
+                } else {
+                    adversaryElement.appendChild(actionsMenu);
+                }
+            };
+            adversaryElement.appendChild(actionsButton);
+        }
+
+        function updateConditionsDisplay(container, instance, saveState) {
+            container.innerHTML = "";
+            if (!instance.conditions || instance.conditions.length === 0) {
+                return;
+            }
+            container.innerHTML = "Conditions: ";
+            if (instance.conditions && instance.conditions.length > 0) {
+                var conditionsList = document.createElement("ul");
+                conditionsList.className = "conditions-list";
+                for (var i = 0; i < instance.conditions.length; i++) {
+                    var condition = instance.conditions[i];
+
+                    var conditionItem = document.createElement("li");
+                    conditionsList.appendChild(conditionItem);
+
+                    var conditionText = document.createElement("span");
+                    conditionText.innerText = condition;
+                    conditionItem.appendChild(conditionText);
+
+                    var removeButton = document.createElement("button");
+                    removeButton.className = "inline-delete";
+                    removeButton.innerText = "X";
+                    removeButton.title = "Remove condition";
+                    removeButton.state = {
+                        container: container,
+                        instance: instance,
+                        condition: condition
+                    };
+                    removeButton.onclick = function(event) {
+                        var state = event.target.state;
+                        state.instance.conditions = state.instance.conditions.filter(function(c) {
+                            return c !== state.condition;
+                        });
+                        updateConditionsDisplay(state.container, state.instance, saveState);
+                        saveState();
+                    };
+                    conditionItem.appendChild(removeButton);
+                }
+                container.appendChild(conditionsList);
+            } else {
+                container.innerText += " None";
+            }
+        }
+
+        function updateModificationsDisplay(container, instance, saveState) {
+            container.innerHTML = "";
+            if (!instance.modifications || instance.modifications.length === 0) {
+                return;
+            }
+            container.innerHTML = "Modifications:";
+            if (instance.modifications && instance.modifications.length > 0) {
+                var modificationsList = document.createElement("ul");
+                modificationsList.className = "modifications-list";
+                for (var i = 0; i < instance.modifications.length; i++) {
+                    var modification = instance.modifications[i];
+
+                    var modificationItem = document.createElement("li");
+                    modificationsList.appendChild(modificationItem);
+
+                    var modificationText = document.createElement("span");
+                    modificationText.innerText = `${modification.modificationName} (${modification.propertyName} ${modification.modification})`;
+                    modificationItem.appendChild(modificationText);
+
+                    var removeButton = document.createElement("button");
+                    removeButton.className = "inline-delete";
+                    removeButton.innerText = "X";
+                    removeButton.title = "Remove modification";
+                    removeButton.state = {
+                        container: container,
+                        instance: instance,
+                        modification: modification
+                    };
+                    removeButton.onclick = function(event) {
+                        var state = event.target.state;
+                        instance.modifications = instance.modifications.filter(function(m) {
+                            return m !== state.modification;
+                        });
+                        updateModificationsDisplay(state.container, state.instance, saveState);
+                        saveState();
+                    };
+                    modificationItem.appendChild(removeButton);
+                }
+                container.appendChild(modificationsList);
+            }
         }
 
         function createAdversaryElement(encounter, adversary, saveState) {
@@ -723,13 +899,13 @@
 
             if (adversary.features && adversary.features.length > 0) {
                 var featuresContainer = document.createElement("details");
-                featuresContainer.open = expandAllDetails;
+                featuresContainer.open = expandAllFeatures;
                 featuresContainer.className = "featuresExpander";
                 featuresContainer.innerHTML = `<summary>FEATURES</summary>`;
                 var featuresDiv = document.createElement("div");
                 featuresDiv.className = "features";
                 featuresContainer.appendChild(featuresDiv);
-                featuresContainer.addEventListener("toggle", handleDetailsToggle);
+                featuresContainer.addEventListener("toggle", handleFeaturesToggle);
 
                 for (var i = 0; i < adversary.features.length; i++) {
                     var featureElement = document.createElement("p");
@@ -749,247 +925,215 @@
                 adversaryDiv.appendChild(featuresContainer);
             }
 
-            var hpDiv = document.createElement("div");
-            hpDiv.className = "slotInfo";
-            hpDiv.innerHTML = "HP:";
-            var hpSlotsDiv = document.createElement("div");
-            hpSlotsDiv.className = "slots";
-            updateResource(hpSlotsDiv, adversary.hp, saveState);
-            hpDiv.appendChild(hpSlotsDiv);
-            adversaryDiv.appendChild(hpDiv);
-
-            var stressDiv = document.createElement("div");
-            stressDiv.className = "slotInfo";
-            stressDiv.innerHTML = "Stress:";
-            var stressSlotsDiv = document.createElement("div");
-            stressSlotsDiv.className = "slots";
-            updateResource(stressSlotsDiv, adversary.stress, saveState);
-            stressDiv.appendChild(stressSlotsDiv);
-            adversaryDiv.appendChild(stressDiv);
-
-            // TODO: Parse modifications and reflect them in the stats
-            var conditionsDiv = document.createElement("div");
-            conditionsDiv.className = "conditions";
-            var conditionsDisplayDiv = document.createElement("div");
-            conditionsDiv.appendChild(conditionsDisplayDiv)
-
-            function updateConditionsDisplay() {
-                conditionsDisplayDiv.innerHTML = "Conditions: ";
-                if (adversary.conditions && adversary.conditions.length > 0) {
-                    var conditionsList = document.createElement("ul");
-                    conditionsList.className = "conditions-list";
-                    for (var i = 0; i < adversary.conditions.length; i++) {
-                        var condition = adversary.conditions[i];
-
-                        var conditionItem = document.createElement("li");
-                        conditionsList.appendChild(conditionItem);
-
-                        var conditionText = document.createElement("span");
-                        conditionText.innerText = condition;
-                        conditionItem.appendChild(conditionText);
-
-                        var removeButton = document.createElement("button");
-                        removeButton.className = "inline-delete";
-                        removeButton.innerText = "X";
-                        removeButton.title = "Remove condition";
-                        removeButton.condition = condition;
-                        removeButton.onclick = function(event) {
-                            adversary.conditions = adversary.conditions.filter(function(c) {
-                                return c !== event.target.condition;
-                            });
-                            updateConditionsDisplay();
-                            saveState();
-                        };
-                        conditionItem.appendChild(removeButton);
+            if (adversary.instances == null || adversary.instances.length == 0) {
+                adversary.instances = [
+                    {
+                        name: adversary.name + " #1",
+                        markedHp: 0,
+                        markedStress: 0
                     }
-                    conditionsDisplayDiv.appendChild(conditionsList);
-                } else {
-                    conditionsDisplayDiv.innerText += " None";
-                }
+                ];
             }
 
-            updateConditionsDisplay();
+            for (var i = 0; i < adversary.instances.length; i++) {
+                var instance = adversary.instances[i];
 
-            var addConditionsDiv = document.createElement("div");
-            var addConditionInput = document.createElement("input");
-            addConditionInput.type = "text";
-            addConditionInput.setAttribute("list", "srd-conditions");
-            var addConditionButton = document.createElement("button");
-            addConditionButton.className = "inline-add";
-            addConditionButton.innerText = "+";
-            addConditionButton.title = "Add condition";
-            addConditionButton.onclick = function() {
-                var condition = addConditionInput.value.trim();
-                if (condition && (!adversary.conditions || !adversary.conditions.includes(condition))) {
-                    if (!adversary.conditions) {
-                        adversary.conditions = [];
+                // TODO: Extract to a function so we can use when adding a new instance?
+                var instanceDiv = document.createElement("div");
+                instanceDiv.className = "instance";
+                instanceDiv.innerHTML = `<h4>${instance.name}</h4>`;
+                adversaryDiv.appendChild(instanceDiv);
+
+                var hpDiv = document.createElement("div");
+                hpDiv.className = "slotInfo";
+                hpDiv.innerHTML = "HP:";
+                var hpSlotsDiv = document.createElement("div");
+                hpSlotsDiv.className = "slots";
+                hpSlotsDiv.state = {
+                    instance: instance,
+                    adversary: adversary,
+                    adversarySlotsPropertyName: "hp",
+                    instanceMarkedPropertyName: "hpMarked",
+                    saveState: saveState
+                };
+                updateResource(hpSlotsDiv);
+                hpDiv.appendChild(hpSlotsDiv);
+                instanceDiv.appendChild(hpDiv);
+
+                var stressDiv = document.createElement("div");
+                stressDiv.className = "slotInfo";
+                stressDiv.innerHTML = "Stress:";
+                var stressSlotsDiv = document.createElement("div");
+                stressSlotsDiv.className = "slots";
+                stressSlotsDiv.state = {
+                    instance: instance,
+                    adversary: adversary,
+                    adversarySlotsPropertyName: "stress",
+                    instanceMarkedPropertyName: "stressMarked",
+                    saveState: saveState
+                };
+                updateResource(stressSlotsDiv);
+                stressDiv.appendChild(stressSlotsDiv);
+                instanceDiv.appendChild(stressDiv);
+
+                // TODO: Parse modifications and reflect them in the stats
+                var conditionsDiv = document.createElement("div");
+                conditionsDiv.className = "conditions";
+                var conditionsDisplayDiv = document.createElement("div");
+                conditionsDiv.appendChild(conditionsDisplayDiv);
+
+                updateConditionsDisplay(conditionsDisplayDiv, instance, saveState);
+
+                var addConditionsDiv = document.createElement("div");
+                addConditionsDiv.className = "add-conditions";
+                var addConditionInput = document.createElement("input");
+                addConditionInput.type = "text";
+                addConditionInput.placeholder = "Condition Name";
+                addConditionInput.setAttribute("list", "srd-conditions");
+                var addConditionButton = document.createElement("button");
+                addConditionButton.className = "inline-add";
+                addConditionButton.innerText = "+";
+                addConditionButton.title = "Add condition";
+                addConditionButton.state = {
+                    container: conditionsDisplayDiv,
+                    input: addConditionInput,
+                    instance: instance,
+                    saveState: saveState
+                };
+                addConditionInput.state = {
+                    addButton: addConditionButton
+                };
+                addConditionButton.onclick = function(event) {
+                    var state = event.target.state;
+                    var condition = state.input.value.trim();
+                    if (condition && (!state.instance.conditions || !state.instance.conditions.includes(condition))) {
+                        if (!state.instance.conditions) {
+                            state.instance.conditions = [];
+                        }
+                        state.instance.conditions.push(condition);
+                        state.input.value = "";
+                        updateConditionsDisplay(state.container, state.instance, state.saveState);
+                        state.saveState();
                     }
-                    adversary.conditions.push(condition);
-                    addConditionInput.value = "";
-                    updateConditionsDisplay();
-                    saveState();
-                }
-            };
-            addConditionInput.addEventListener("keyup", function(event) {
-                if (event.keyCode === 13) { // Enter key
-                    event.preventDefault();
-                    addConditionButton.click();
-                }
-            });
-            addConditionsDiv.appendChild(addConditionInput);
-            addConditionsDiv.appendChild(addConditionButton);
-            conditionsDiv.appendChild(addConditionsDiv);
-            adversaryDiv.appendChild(conditionsDiv);
-
-            var modificationsContainer = document.createElement("details");
-            modificationsContainer.open = expandAllDetails;
-            modificationsContainer.innerHTML = `<summary>Modifications</summary>`;
-            var modificationsDiv = document.createElement("div");
-            modificationsDiv.className = "modifications";
-            modificationsContainer.appendChild(modificationsDiv);
-            var modificationsDisplayDiv = document.createElement("div");
-            modificationsDiv.appendChild(modificationsDisplayDiv);
-            modificationsContainer.addEventListener("toggle", handleDetailsToggle);
-
-            function updateModificationsDisplay() {
-                modificationsDisplayDiv.innerHTML = "";
-                if (adversary.modifications && adversary.modifications.length > 0) {
-                    var modificationsList = document.createElement("ul");
-                    modificationsList.className = "modifications-list";
-                    for (var i = 0; i < adversary.modifications.length; i++) {
-                        var modification = adversary.modifications[i];
-
-                        var modificationItem = document.createElement("li");
-                        modificationsList.appendChild(modificationItem);
-
-                        var modificationText = document.createElement("span");
-                        modificationText.innerText = `${modification.modificationName} (${modification.propertyName} ${modification.modification})`;
-                        modificationItem.appendChild(modificationText);
-
-                        var removeButton = document.createElement("button");
-                        removeButton.className = "inline-delete";
-                        removeButton.innerText = "X";
-                        removeButton.title = "Remove modification";
-                        removeButton.modification = modification;
-                        removeButton.onclick = function(event) {
-                            adversary.modifications = adversary.modifications.filter(function(m) {
-                                return m !== event.target.modification;
-                            });
-                            updateModificationsDisplay();
-                            saveState();
-                        };
-                        modificationItem.appendChild(removeButton);
+                };
+                addConditionInput.addEventListener("keyup", function(event) {
+                    if (event.keyCode === 13) { // Enter key
+                        event.preventDefault();
+                        console.log(event.target);
+                        event.target.state.addButton.click();
                     }
-                    modificationsDisplayDiv.appendChild(modificationsList);
-                }
+                });
+                addConditionsDiv.appendChild(addConditionInput);
+                addConditionsDiv.appendChild(addConditionButton);
+                instanceDiv.appendChild(conditionsDiv);
+
+                var modificationsDiv = document.createElement("div");
+                modificationsDiv.className = "modifications";
+                instanceDiv.appendChild(modificationsDiv);
+                var modificationsDisplayDiv = document.createElement("div");
+                modificationsDiv.appendChild(modificationsDisplayDiv);
+                // modificationsContainer.addEventListener("toggle", handleFeaturesToggle);
+
+                updateModificationsDisplay(modificationsDisplayDiv, instance, saveState);
+
+                // TODO: This UI is pretty big, taking up a lot of space if
+                //       there are a lot of adversaries, even if there are no modifications.
+                //       Could make the input into a modal instead. Could also consider
+                //       displaying modifications directly in the stats, with details
+                //       on hover (but then how to delete?).
+                var addModificationsDiv = document.createElement("div");
+                addModificationsDiv.className = "add-modifications";
+                var addModificationNameInput = document.createElement("input");
+                addModificationNameInput.type = "text";
+                addModificationNameInput.placeholder = "Modification Name";
+                var addModificationPropertyInput = document.createElement("input");
+                addModificationPropertyInput.type = "text";
+                addModificationPropertyInput.placeholder = "Target Property";
+                addModificationPropertyInput.setAttribute("list", "modifiable-properties");
+                var addModificationValueInput = document.createElement("input");
+                addModificationValueInput.type = "text";
+                addModificationValueInput.placeholder = "Modifier (e.g. -2, +3, 10)";
+                var addModificationButton = document.createElement("button");
+                addModificationButton.className = "inline-add";
+                addModificationButton.innerText = "+";
+                addModificationButton.title = "Add modification";
+                addModificationButton.state = {
+                    container: modificationsDisplayDiv,
+                    addModificationNameInput: addModificationNameInput,
+                    addModificationPropertyInput: addModificationPropertyInput,
+                    addModificationValueInput: addModificationValueInput,
+                    instance: instance,
+                    saveState: saveState
+                };
+                addModificationButton.onclick = function(event) {
+                    var state = event.target.state;
+                    var modificationName = state.addModificationNameInput.value.trim();
+                    var propertyName = state.addModificationPropertyInput.value.trim();
+                    var modificationValue = state.addModificationValueInput.value.trim();
+                    if (modificationName && propertyName && modificationValue) {
+                        if (!state.instance.modifications) {
+                            state.instance.modifications = [];
+                        }
+                        state.instance.modifications.push({
+                            modificationName: modificationName,
+                            propertyName: propertyName,
+                            modification: modificationValue
+                        });
+                        state.addModificationNameInput.value = "";
+                        state.addModificationPropertyInput.value = "";
+                        state.addModificationValueInput.value = "";
+                        updateModificationsDisplay(state.container, state.instance, state.saveState);
+                        state.saveState();
+                    }
+                };
+                addModificationsDiv.appendChild(addModificationNameInput);
+                addModificationsDiv.appendChild(addModificationPropertyInput);
+                addModificationsDiv.appendChild(addModificationValueInput);
+                addModificationsDiv.appendChild(addModificationButton);
+
+                var addConditionsAndModifications = document.createElement("details");
+                addConditionsAndModifications.className = "modificationsExpander";
+                // TODO: Should we have the same toggle all behavior for these as we have for Features?
+                //       Could feel weird if there are a lot of instances...
+                addConditionsAndModifications.innerHTML = `<summary>Add Conditions/Modifications</summary>`;
+                addConditionsAndModifications.appendChild(addConditionsDiv);
+                addConditionsAndModifications.appendChild(addModificationsDiv);
+                instanceDiv.appendChild(addConditionsAndModifications);
+
+                var removeInstanceButton = document.createElement("button");
+                removeInstanceButton.className = "action-top";
+                removeInstanceButton.style = "background-color: black";
+                removeInstanceButton.innerText = "🗑️";
+                removeInstanceButton.onclick = function(event) {
+                    event.target.parentElement.remove();
+                    // TODO: Actually delete instance from adversary.instance, and saveState
+                    // TODO: What happens when you delete the last instance? Delete adversary? Or prevent clicking it?
+                };
+                instanceDiv.appendChild(removeInstanceButton);
             }
 
-            updateModificationsDisplay();
-
-            // TODO: This UI is pretty big, taking up a lot of space if
-            //       there are a lot of adversaries, even if there are no modifications.
-            //       Could make the input into a modal instead. Could also consider
-            //       displaying modifications directly in the stats, with details
-            //       on hover (but then how to delete?).
-            var addModificationsDiv = document.createElement("div");
-            var addModificationNameInput = document.createElement("input");
-            addModificationNameInput.type = "text";
-            addModificationNameInput.placeholder = "Name";
-            var addModificationPropertyInput = document.createElement("input");
-            addModificationPropertyInput.type = "text";
-            addModificationPropertyInput.placeholder = "Target Property";
-            addModificationPropertyInput.setAttribute("list", "modifiable-properties");
-            var addModificationValueInput = document.createElement("input");
-            addModificationValueInput.type = "text";
-            addModificationValueInput.placeholder = "Modifier (e.g. -2, +3, 10)";
-            var addModificationButton = document.createElement("button");
-            addModificationButton.className = "inline-add";
-            addModificationButton.innerText = "+";
-            addModificationButton.title = "Add modification";
-            addModificationButton.onclick = function() {
-                var modificationName = addModificationNameInput.value.trim();
-                var propertyName = addModificationPropertyInput.value.trim();
-                var modificationValue = addModificationValueInput.value.trim();
-                if (modificationName && propertyName && modificationValue) {
-                    if (!adversary.modifications) {
-                        adversary.modifications = [];
-                    }
-                    adversary.modifications.push({
-                        modificationName: modificationName,
-                        propertyName: propertyName,
-                        modification: modificationValue
-                    });
-                    addModificationNameInput.value = "";
-                    addModificationPropertyInput.value = "";
-                    addModificationValueInput.value = "";
-                    updateModificationsDisplay();
-                    saveState();
+            var addInstanceButton = document.createElement("button");
+            addInstanceButton.className = "action";
+            addInstanceButton.innerText = "+ Add";
+            addInstanceButton.title = "Add another instance of this adversary";
+            addInstanceButton.onclick = function() {
+                var newInstance = {
+                    // TODO: Review naming, this doesn't work well if you add several, delete several, add again.
+                    //       May need to parse the names to find the largest, like we do for adversary display names.
+                    name: adversary.name + " #" + (adversary.instances.length + 1),
+                    markedHp: 0,
+                    markedStress: 0
+                };
+                if (!adversary.instances) {
+                    adversary.instances = [];
                 }
+                adversary.instances.push(newInstance);
+                // TODO: Refresh display (same as we need on edit?)
+                saveState();
             };
-            addModificationsDiv.appendChild(addModificationNameInput);
-            addModificationsDiv.appendChild(addModificationPropertyInput);
-            addModificationsDiv.appendChild(addModificationValueInput);
-            addModificationsDiv.appendChild(addModificationButton);
-            modificationsDiv.appendChild(addModificationsDiv);
-            adversaryDiv.appendChild(modificationsContainer);
+            adversaryDiv.appendChild(addInstanceButton);
 
-            // var addInstanceButton = document.createElement("button");
-            // addInstanceButton.className = "action";
-            // addInstanceButton.innerText = "+ Add";
-            // addInstanceButton.title = "Add another instance of this adversary";
-            // adversaryDiv.appendChild(addInstanceButton);
-
-            var actionsMenu = document.createElement("menu");
-            actionsMenu.className = "actions-menu";
-
-            var editAction = document.createElement("li");
-            editAction.innerHTML = `<button class="menu-action">Edit</button>`;
-            editAction.title = "Edit this adversary";
-            editAction.onclick = function() {
-                showEditor(adversary, () => actionsMenu.remove());
-            };
-            actionsMenu.appendChild(editAction);
-
-            var copyAction = document.createElement("li");
-            copyAction.innerHTML = `<button class="menu-action">Copy</button>`;
-            copyAction.title = "Copy this adversary, including all changed state";
-            copyAction.onclick = function() {
-                adversaryDiv.dispatchEvent(adversaryCopiedEvent);
-                actionsMenu.remove();
-            };
-            actionsMenu.appendChild(copyAction);
-
-            var copyFromSourceAction = document.createElement("li");
-            copyFromSourceAction.innerHTML = `<button class="menu-action">Copy From Source</button>`;
-            copyFromSourceAction.title = "Copy this adversary from the source, ignoring all changes";
-            copyFromSourceAction.onclick = function() {
-                adversaryDiv.dispatchEvent(adversaryCopiedFromSourceEvent);
-                actionsMenu.remove();
-            };
-            actionsMenu.appendChild(copyFromSourceAction);
-
-            // TODO: Maybe move this back to a button for quicker delete?
-            var deleteAction = document.createElement("li");
-            deleteAction.innerHTML = `<button class="menu-action">Remove</button>`;
-            deleteAction.title = "Remove this adversary from the encounter";
-            deleteAction.onclick = function() {
-                adversaryDiv.dispatchEvent(adversaryRemovedEvent);
-                actionsMenu.remove();
-            };
-            actionsMenu.appendChild(deleteAction);
-
-            var actionsButton = document.createElement("button");
-            actionsButton.className = "action-top";
-            actionsButton.innerText = "…";
-            actionsButton.title = "Adversary management actions";
-            actionsButton.onclick = function() {
-                if (actionsMenu.parentElement) {
-                    actionsMenu.remove();
-                } else {
-                    adversaryDiv.appendChild(actionsMenu);
-                }
-            };
-            adversaryDiv.appendChild(actionsButton);
+            setupAdversaryActionButton(adversaryDiv, adversary);
 
             return adversaryDiv;
         }
@@ -1049,14 +1193,8 @@
                 description: srdAdversary.description,
                 motivesAndTactics: srdAdversary.motives_and_tactics,
                 difficulty: parseInt(srdAdversary.difficulty),
-                hp: {
-                    slots: parseInt(srdAdversary.hp),
-                    marked: 0
-                },
-                stress: {
-                    slots: parseInt(srdAdversary.stress),
-                    marked: 0
-                },
+                hp: parseInt(srdAdversary.hp),
+                stress: parseInt(srdAdversary.stress),
                 majorThreshold: parseInt(thresholds[0]),
                 severeThreshold: parseInt(thresholds[1]),
                 attackModifier: srdAdversary.atk,
