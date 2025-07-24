@@ -422,7 +422,7 @@
         //       - How to handle naming? Wouldn't want to name the whole statblock
         //         "Jagged Knife Bandit #1" anymore.
         //       - Are there modifications that can change number of HP/Stress slots?
-        var sampleState = {
+        const sampleState = {
             "encounters": [
                 {
                     "name": "Forest Ambush",
@@ -482,11 +482,11 @@
         const adversaryCopiedEvent = new Event("adversaryCopied");
         const adversaryCopiedFromSourceEvent = new Event("adversaryCopiedFromSource");
 
-        var adversaryEditor = document.querySelector("#adversary-editor");
-        var adversaryEditorOverlay = document.querySelector("#adversary-editor-overlay");
+        const adversaryEditor = document.getElementById("adversary-editor")
+        const adversaryEditorOverlay = document.getElementById("adversary-editor-overlay");
 
-        var expandAllFeatures = false;
-        var expandAllInstanceEditors = false;
+        let expandAllFeatures = false;
+        let expandAllInstanceEditors = false;
 
         function hideEditor() {
             adversaryEditor.adversary = undefined;
@@ -495,7 +495,7 @@
         }
 
         function createFeatureEditorElement(feature, idSuffix)  {
-            var featureElement = document.createElement("div");
+            const featureElement = document.createElement("div");
             featureElement.className = "feature";
             featureElement.innerHTML = `<label for="adversary-feature-name-${idSuffix}">Name:</label><input type="text" class="adversary-feature-name" id="adversary-feature-name-${idSuffix}" value="${feature?.name ?? ""}"><label for="adversary-feature-text-${idSuffix}">Description:</label><textarea id="adversary-feature-text-${idSuffix}" class="adversary-feature-text" rows="4" cols="50">${feature?.text ?? ""}</textarea>`;
             return featureElement;
@@ -503,34 +503,33 @@
 
         function showEditor(adversary, onShown) {
             // Basics
-            var editor = document.getElementById("adversary-editor");
-            editor.querySelector("#adversary-name").value = adversary.name;
-            editor.querySelector("#adversary-tier").value = adversary.tier;
-            editor.querySelector("#adversary-type").value = adversary.type; // TODO: Case mangling as needed
-            editor.querySelector("#adversary-description").value = adversary.description || "";
-            editor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
+            adversaryEditor.querySelector("#adversary-name").value = adversary.name;
+            adversaryEditor.querySelector("#adversary-tier").value = adversary.tier;
+            adversaryEditor.querySelector("#adversary-type").value = adversary.type; // TODO: Case mangling as needed
+            adversaryEditor.querySelector("#adversary-description").value = adversary.description || "";
+            adversaryEditor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
 
             // Stats
-            editor.querySelector("#adversary-difficulty").value = adversary.difficulty;
-            editor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
-            editor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
-            editor.querySelector("#adversary-hp").value = adversary.hp;
-            editor.querySelector("#adversary-stress").value = adversary.stress;
-            editor.querySelector("#adversary-experience").value = adversary.experience || "";
+            adversaryEditor.querySelector("#adversary-difficulty").value = adversary.difficulty;
+            adversaryEditor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
+            adversaryEditor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
+            adversaryEditor.querySelector("#adversary-hp").value = adversary.hp;
+            adversaryEditor.querySelector("#adversary-stress").value = adversary.stress;
+            adversaryEditor.querySelector("#adversary-experience").value = adversary.experience || "";
 
             // Attack
-            editor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || ""; // TODO: Should input be number, then conversion?
-            editor.querySelector("#adversary-attack-description").value = adversary.attackDescription || "";
-            editor.querySelector("#adversary-attack-range").value = adversary.attackRange || ""; // TODO: Case mangling as needed
-            editor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
+            adversaryEditor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || ""; // TODO: Should input be number, then conversion?
+            adversaryEditor.querySelector("#adversary-attack-description").value = adversary.attackDescription || "";
+            adversaryEditor.querySelector("#adversary-attack-range").value = adversary.attackRange || ""; // TODO: Case mangling as needed
+            adversaryEditor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
 
             // Features
-            var featuresContainer = editor.querySelector("#adversary-features");
+            const featuresContainer = adversaryEditor.querySelector("#adversary-features");
             featuresContainer.innerHTML = ""; // Clear any existing children
             if (adversary.features && adversary.features.length > 0) {
-                for (var i = 0; i < adversary.features.length; i++) {
-                    var feature = adversary.features[i];
-                    var featureElement = createFeatureEditorElement(feature, i)
+                for (let i = 0; i < adversary.features.length; i++) {
+                    const feature = adversary.features[i];
+                    const featureElement = createFeatureEditorElement(feature, i);
                     featuresContainer.appendChild(featureElement);
                 }
             }
@@ -544,8 +543,8 @@
         }
 
         document.querySelector("#add-feature").addEventListener("click", function() {
-            var featureContainer = adversaryEditor.querySelector("#adversary-features");
-            var featureElement = createFeatureEditorElement(null, featureContainer.children.length);
+            const featureContainer = adversaryEditor.querySelector("#adversary-features");
+            const featureElement = createFeatureEditorElement(null, featureContainer.children.length);
             featureContainer.appendChild(featureElement);
             // TODO: Allow deletion (but could also do this by deleting all text for a feature)
         });
@@ -567,7 +566,7 @@
 
             // TODO: Validation? Use a form?
 
-            var adversary = adversaryEditor.adversary;
+            const adversary = adversaryEditor.adversary;
             if (adversary) {
                 // Basics
                 adversary.name = adversaryEditor.querySelector("#adversary-name").value.trim();
@@ -603,9 +602,9 @@
 
                 // Features
                 adversary.features = [];
-                var featureElements = adversaryEditor.querySelectorAll("#adversary-features .feature");
+                const featureElements = adversaryEditor.querySelectorAll("#adversary-features .feature");
                 featureElements.forEach(function(featureElement) {
-                    var feature = {
+                    const feature = {
                         name: featureElement.querySelector(".adversary-feature-name").value.trim(),
                         text: featureElement.querySelector(".adversary-feature-text").value.trim()
                     };
@@ -622,7 +621,7 @@
         });
 
         function handleFeaturesToggle(event) {
-            var opened = event.target.open
+            const opened = event.target.open;
             if (expandAllFeatures != opened) {
                 expandAllFeatures = opened;
                 for (const element of document.getElementsByClassName("featuresExpander")) {
@@ -637,9 +636,9 @@
             // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
             // TODO: Roller for getting fear on rests?
             // TODO: Replace this with a stylized number input?
-            var fearDiv = document.createElement("div");
+            const fearDiv = document.createElement("div");
 
-            var fearValue = document.createElement("span");
+            const fearValue = document.createElement("span");
 
             function updateFearDisplay() {
                 fearValue.innerText = "💀".repeat(encounter.currentFear);
@@ -647,7 +646,7 @@
             }
             updateFearDisplay();
 
-            var useFearButton = document.createElement("button");
+            const useFearButton = document.createElement("button");
             useFearButton.innerText = "-";
             useFearButton.title = "Use 1 Fear";
             useFearButton.onclick = function() {
@@ -658,7 +657,7 @@
                 }
             };
 
-            var gainFearButton = document.createElement("button");
+            const gainFearButton = document.createElement("button");
             gainFearButton.innerText = "+";
             gainFearButton.title = "Gain 1 Fear (max 12)";
             gainFearButton.onclick = function() {
@@ -677,19 +676,19 @@
         }
 
         function updateResource(container) {
-            var elements = [];
-            var slots = container.state.adversary[container.state.adversarySlotsPropertyName];
-            var marked = container.state.instance[container.state.instanceMarkedPropertyName];
+            const elements = [];
+            const slots = container.state.adversary[container.state.adversarySlotsPropertyName];
+            const marked = container.state.instance[container.state.instanceMarkedPropertyName];
 
-            for (var i = 0; i < slots; i++) {
-                var slot = document.createElement("input");
+            for (let i = 0; i < slots; i++) {
+                const slot = document.createElement("input");
                 slot.type = "checkbox";
                 if (i < marked) {
                     slot.checked = true;
                 }
                 slot.onclick = function(event) {
-                    var container = event.target.parentElement;
-                    var state = container.state;
+                    const container = event.target.parentElement;
+                    const state = container.state;
                     if (event.target.checked) {
                         state.instance[state.instanceMarkedPropertyName]++;
                     } else {
@@ -705,10 +704,10 @@
         }
 
         function setupAdversaryActionButton(adversaryElement, adversary) {
-            var actionsMenu = document.createElement("menu");
+            const actionsMenu = document.createElement("menu");
             actionsMenu.className = "actions-menu";
 
-            var editAction = document.createElement("li");
+            const editAction = document.createElement("li");
             editAction.innerHTML = `<button class="menu-action">Edit</button>`;
             editAction.title = "Edit this adversary";
             editAction.onclick = function() {
@@ -716,7 +715,7 @@
             };
             actionsMenu.appendChild(editAction);
 
-            var copyAction = document.createElement("li");
+            const copyAction = document.createElement("li");
             copyAction.innerHTML = `<button class="menu-action">Copy</button>`;
             copyAction.title = "Copy this adversary, including all changed state";
             copyAction.onclick = function() {
@@ -725,7 +724,7 @@
             };
             actionsMenu.appendChild(copyAction);
 
-            var copyFromSourceAction = document.createElement("li");
+            const copyFromSourceAction = document.createElement("li");
             copyFromSourceAction.innerHTML = `<button class="menu-action">Copy From Source</button>`;
             copyFromSourceAction.title = "Copy this adversary from the source, ignoring all changes";
             copyFromSourceAction.onclick = function() {
@@ -735,7 +734,7 @@
             actionsMenu.appendChild(copyFromSourceAction);
 
             // TODO: Maybe move this back to a button for quicker delete?
-            var deleteAction = document.createElement("li");
+            const deleteAction = document.createElement("li");
             deleteAction.innerHTML = `<button class="menu-action">Remove</button>`;
             deleteAction.title = "Remove this adversary from the encounter";
             deleteAction.onclick = function() {
@@ -744,7 +743,7 @@
             };
             actionsMenu.appendChild(deleteAction);
 
-            var actionsButton = document.createElement("button");
+            const actionsButton = document.createElement("button");
             actionsButton.className = "action-top";
             actionsButton.innerText = "…";
             actionsButton.title = "Adversary management actions";
@@ -765,19 +764,19 @@
             }
             container.innerHTML = "Conditions: ";
             if (instance.conditions && instance.conditions.length > 0) {
-                var conditionsList = document.createElement("ul");
+                const conditionsList = document.createElement("ul");
                 conditionsList.className = "conditions-list";
-                for (var i = 0; i < instance.conditions.length; i++) {
-                    var condition = instance.conditions[i];
+                for (let i = 0; i < instance.conditions.length; i++) {
+                    const condition = instance.conditions[i];
 
-                    var conditionItem = document.createElement("li");
+                    const conditionItem = document.createElement("li");
                     conditionsList.appendChild(conditionItem);
 
-                    var conditionText = document.createElement("span");
+                    const conditionText = document.createElement("span");
                     conditionText.innerText = condition;
                     conditionItem.appendChild(conditionText);
 
-                    var removeButton = document.createElement("button");
+                    const removeButton = document.createElement("button");
                     removeButton.className = "inline-delete";
                     removeButton.innerText = "X";
                     removeButton.title = "Remove condition";
@@ -787,7 +786,7 @@
                         condition: condition
                     };
                     removeButton.onclick = function(event) {
-                        var state = event.target.state;
+                        const state = event.target.state;
                         state.instance.conditions = state.instance.conditions.filter(function(c) {
                             return c !== state.condition;
                         });
@@ -809,19 +808,19 @@
             }
             container.innerHTML = "Modifications:";
             if (instance.modifications && instance.modifications.length > 0) {
-                var modificationsList = document.createElement("ul");
+                const modificationsList = document.createElement("ul");
                 modificationsList.className = "modifications-list";
-                for (var i = 0; i < instance.modifications.length; i++) {
-                    var modification = instance.modifications[i];
+                for (let i = 0; i < instance.modifications.length; i++) {
+                    const modification = instance.modifications[i];
 
-                    var modificationItem = document.createElement("li");
+                    const modificationItem = document.createElement("li");
                     modificationsList.appendChild(modificationItem);
 
-                    var modificationText = document.createElement("span");
+                    const modificationText = document.createElement("span");
                     modificationText.innerText = `${modification.modificationName} (${modification.propertyName} ${modification.modification})`;
                     modificationItem.appendChild(modificationText);
 
-                    var removeButton = document.createElement("button");
+                    const removeButton = document.createElement("button");
                     removeButton.className = "inline-delete";
                     removeButton.innerText = "X";
                     removeButton.title = "Remove modification";
@@ -831,7 +830,7 @@
                         modification: modification
                     };
                     removeButton.onclick = function(event) {
-                        var state = event.target.state;
+                        const state = event.target.state;
                         instance.modifications = instance.modifications.filter(function(m) {
                             return m !== state.modification;
                         });
@@ -847,7 +846,7 @@
         function createAdversaryElement(encounter, adversary, saveState) {
             // TODO: Allow reordering?
 
-            var warning = "";
+            let warning = "";
             if (adversary.tier > encounter.playerTier) {
                 warning += "⚠️ above player tier";
             }
@@ -855,11 +854,11 @@
                 warning += "⚠️ below player tier"
             }
 
-            var adversaryDiv = document.createElement("div");
+            const adversaryDiv = document.createElement("div");
             adversaryDiv.className = "adversary";
             adversaryDiv.innerHTML = `<h3>${adversary.name}</h3> <p class="source">(${adversary.originalName}, ${adversary.source})</p>`;
 
-            var tierAndType = document.createElement("p");
+            const tierAndType = document.createElement("p");
             tierAndType.className = "tier";
             tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type}`;
             if (warning) {
@@ -868,22 +867,22 @@
             adversaryDiv.appendChild(tierAndType);
 
             if (adversary.description) {
-                var description = document.createElement("p");
+                const description = document.createElement("p");
                 description.className =  "description";
                 description.innerText = adversary.description;
                 adversaryDiv.appendChild(description);
             }
 
             if (adversary.motivesAndTactics) {
-                var motives = document.createElement("p");
+                const motives = document.createElement("p");
                 motives.className =  "motives";
                 motives.innerHTML = `<span class="motivesLabel">Motives & Tactics:</span> ${adversary.motivesAndTactics}`;
                 adversaryDiv.appendChild(motives);
             }
 
-            var stats = document.createElement("p");
+            const stats = document.createElement("p");
             stats.className = "stats";
-            var thresholds = "None";
+            let thresholds = "None";
             if (Number.isInteger(adversary.majorThreshold) && Number.isInteger(adversary.severeThreshold)) {
                 thresholds = `${adversary.majorThreshold}/${adversary.severeThreshold}`;
             }
@@ -898,26 +897,26 @@
             adversaryDiv.appendChild(stats);
 
             if (adversary.features && adversary.features.length > 0) {
-                var featuresContainer = document.createElement("details");
+                const featuresContainer = document.createElement("details");
                 featuresContainer.open = expandAllFeatures;
                 featuresContainer.className = "featuresExpander";
                 featuresContainer.innerHTML = `<summary>FEATURES</summary>`;
-                var featuresDiv = document.createElement("div");
+                const featuresDiv = document.createElement("div");
                 featuresDiv.className = "features";
                 featuresContainer.appendChild(featuresDiv);
                 featuresContainer.addEventListener("toggle", handleFeaturesToggle);
 
-                for (var i = 0; i < adversary.features.length; i++) {
-                    var featureElement = document.createElement("p");
+                for (let i = 0; i < adversary.features.length; i++) {
+                    const featureElement = document.createElement("p");
                     featureElement.className = "feature"; // TODO: Make sure to style with that indent on following lines
                     featuresDiv.appendChild(featureElement);
 
-                    var label = document.createElement("span");
+                    const label = document.createElement("span");
                     label.className = "featureLabel";
                     label.innerText = `${adversary.features[i].name}:`;
                     featureElement.appendChild(label);
 
-                    var description = document.createElement("span");
+                    const description = document.createElement("span");
                     description.innerText = ` ${adversary.features[i].text}`;
                     featureElement.appendChild(description);
                 }
@@ -929,25 +928,25 @@
                 adversary.instances = [
                     {
                         name: adversary.name + " #1",
-                        markedHp: 0,
-                        markedStress: 0
+                        hpMarked: 0,
+                        stressMarked: 0
                     }
                 ];
             }
 
-            for (var i = 0; i < adversary.instances.length; i++) {
-                var instance = adversary.instances[i];
+            for (let i = 0; i < adversary.instances.length; i++) {
+                const instance = adversary.instances[i];
 
                 // TODO: Extract to a function so we can use when adding a new instance?
-                var instanceDiv = document.createElement("div");
+                const instanceDiv = document.createElement("div");
                 instanceDiv.className = "instance";
                 instanceDiv.innerHTML = `<h4>${instance.name}</h4>`;
                 adversaryDiv.appendChild(instanceDiv);
 
-                var hpDiv = document.createElement("div");
+                const hpDiv = document.createElement("div");
                 hpDiv.className = "slotInfo";
                 hpDiv.innerHTML = "HP:";
-                var hpSlotsDiv = document.createElement("div");
+                const hpSlotsDiv = document.createElement("div");
                 hpSlotsDiv.className = "slots";
                 hpSlotsDiv.state = {
                     instance: instance,
@@ -960,10 +959,10 @@
                 hpDiv.appendChild(hpSlotsDiv);
                 instanceDiv.appendChild(hpDiv);
 
-                var stressDiv = document.createElement("div");
+                const stressDiv = document.createElement("div");
                 stressDiv.className = "slotInfo";
                 stressDiv.innerHTML = "Stress:";
-                var stressSlotsDiv = document.createElement("div");
+                const stressSlotsDiv = document.createElement("div");
                 stressSlotsDiv.className = "slots";
                 stressSlotsDiv.state = {
                     instance: instance,
@@ -977,20 +976,20 @@
                 instanceDiv.appendChild(stressDiv);
 
                 // TODO: Parse modifications and reflect them in the stats
-                var conditionsDiv = document.createElement("div");
+                const conditionsDiv = document.createElement("div");
                 conditionsDiv.className = "conditions";
-                var conditionsDisplayDiv = document.createElement("div");
+                const conditionsDisplayDiv = document.createElement("div");
                 conditionsDiv.appendChild(conditionsDisplayDiv);
 
                 updateConditionsDisplay(conditionsDisplayDiv, instance, saveState);
 
-                var addConditionsDiv = document.createElement("div");
+                const addConditionsDiv = document.createElement("div");
                 addConditionsDiv.className = "add-conditions";
-                var addConditionInput = document.createElement("input");
+                const addConditionInput = document.createElement("input");
                 addConditionInput.type = "text";
                 addConditionInput.placeholder = "Condition Name";
                 addConditionInput.setAttribute("list", "srd-conditions");
-                var addConditionButton = document.createElement("button");
+                const addConditionButton = document.createElement("button");
                 addConditionButton.className = "inline-add";
                 addConditionButton.innerText = "+";
                 addConditionButton.title = "Add condition";
@@ -1004,8 +1003,8 @@
                     addButton: addConditionButton
                 };
                 addConditionButton.onclick = function(event) {
-                    var state = event.target.state;
-                    var condition = state.input.value.trim();
+                    const state = event.target.state;
+                    const condition = state.input.value.trim();
                     if (condition && (!state.instance.conditions || !state.instance.conditions.includes(condition))) {
                         if (!state.instance.conditions) {
                             state.instance.conditions = [];
@@ -1027,10 +1026,10 @@
                 addConditionsDiv.appendChild(addConditionButton);
                 instanceDiv.appendChild(conditionsDiv);
 
-                var modificationsDiv = document.createElement("div");
+                const modificationsDiv = document.createElement("div");
                 modificationsDiv.className = "modifications";
                 instanceDiv.appendChild(modificationsDiv);
-                var modificationsDisplayDiv = document.createElement("div");
+                const modificationsDisplayDiv = document.createElement("div");
                 modificationsDiv.appendChild(modificationsDisplayDiv);
                 // modificationsContainer.addEventListener("toggle", handleFeaturesToggle);
 
@@ -1041,19 +1040,19 @@
                 //       Could make the input into a modal instead. Could also consider
                 //       displaying modifications directly in the stats, with details
                 //       on hover (but then how to delete?).
-                var addModificationsDiv = document.createElement("div");
+                const addModificationsDiv = document.createElement("div");
                 addModificationsDiv.className = "add-modifications";
-                var addModificationNameInput = document.createElement("input");
+                const addModificationNameInput = document.createElement("input");
                 addModificationNameInput.type = "text";
                 addModificationNameInput.placeholder = "Modification Name";
-                var addModificationPropertyInput = document.createElement("input");
+                const addModificationPropertyInput = document.createElement("input");
                 addModificationPropertyInput.type = "text";
                 addModificationPropertyInput.placeholder = "Target Property";
                 addModificationPropertyInput.setAttribute("list", "modifiable-properties");
-                var addModificationValueInput = document.createElement("input");
+                const addModificationValueInput = document.createElement("input");
                 addModificationValueInput.type = "text";
                 addModificationValueInput.placeholder = "Modifier (e.g. -2, +3, 10)";
-                var addModificationButton = document.createElement("button");
+                const addModificationButton = document.createElement("button");
                 addModificationButton.className = "inline-add";
                 addModificationButton.innerText = "+";
                 addModificationButton.title = "Add modification";
@@ -1066,10 +1065,10 @@
                     saveState: saveState
                 };
                 addModificationButton.onclick = function(event) {
-                    var state = event.target.state;
-                    var modificationName = state.addModificationNameInput.value.trim();
-                    var propertyName = state.addModificationPropertyInput.value.trim();
-                    var modificationValue = state.addModificationValueInput.value.trim();
+                    const state = event.target.state;
+                    const modificationName = state.addModificationNameInput.value.trim();
+                    const propertyName = state.addModificationPropertyInput.value.trim();
+                    const modificationValue = state.addModificationValueInput.value.trim();
                     if (modificationName && propertyName && modificationValue) {
                         if (!state.instance.modifications) {
                             state.instance.modifications = [];
@@ -1091,7 +1090,7 @@
                 addModificationsDiv.appendChild(addModificationValueInput);
                 addModificationsDiv.appendChild(addModificationButton);
 
-                var addConditionsAndModifications = document.createElement("details");
+                const addConditionsAndModifications = document.createElement("details");
                 addConditionsAndModifications.className = "modificationsExpander";
                 // TODO: Should we have the same toggle all behavior for these as we have for Features?
                 //       Could feel weird if there are a lot of instances...
@@ -1100,7 +1099,7 @@
                 addConditionsAndModifications.appendChild(addModificationsDiv);
                 instanceDiv.appendChild(addConditionsAndModifications);
 
-                var removeInstanceButton = document.createElement("button");
+                const removeInstanceButton = document.createElement("button");
                 removeInstanceButton.className = "action-top";
                 removeInstanceButton.style = "background-color: black";
                 removeInstanceButton.innerText = "🗑️";
@@ -1112,17 +1111,17 @@
                 instanceDiv.appendChild(removeInstanceButton);
             }
 
-            var addInstanceButton = document.createElement("button");
+            const addInstanceButton = document.createElement("button");
             addInstanceButton.className = "action";
             addInstanceButton.innerText = "+ Add";
             addInstanceButton.title = "Add another instance of this adversary";
             addInstanceButton.onclick = function() {
-                var newInstance = {
+                const newInstance = {
                     // TODO: Review naming, this doesn't work well if you add several, delete several, add again.
                     //       May need to parse the names to find the largest, like we do for adversary display names.
                     name: adversary.name + " #" + (adversary.instances.length + 1),
-                    markedHp: 0,
-                    markedStress: 0
+                    hpMarked: 0,
+                    stressMarked: 0
                 };
                 if (!adversary.instances) {
                     adversary.instances = [];
@@ -1139,7 +1138,7 @@
         }
 
         function addAdversary(container, encounter, adversary, refreshBattlePoints, saveState) {
-            var adversaryElement = createAdversaryElement(encounter, adversary, saveState);
+            const adversaryElement = createAdversaryElement(encounter, adversary, saveState);
 
             adversaryElement.addEventListener("adversaryRemoved", function(event) {
                 encounter.adversaries = encounter.adversaries.filter(function(a) {
@@ -1150,7 +1149,7 @@
                 saveState();
             });
             adversaryElement.addEventListener("adversaryCopied", function(event) {
-                var newAdversary = JSON.parse(JSON.stringify(adversary)); // Deep copy
+                const newAdversary = JSON.parse(JSON.stringify(adversary)); // Deep copy
                 newAdversary.name += " (copy)"; // TODO: Decide naming
                 if (!encounter.adversaries) {
                     encounter.adversaries = [];
@@ -1165,10 +1164,10 @@
                     console.warn("Copying from non-SRD sources is not supported yet.");
                     return;
                 }
-                var sourceAdversary = srdAdversaries.find(function(a) {
+                const sourceAdversary = srdAdversaries.find(function(a) {
                     return a.name === adversary.originalName;
                 });
-                var newAdversary = convertFromSRD(sourceAdversary);
+                const newAdversary = convertFromSRD(sourceAdversary);
                 newAdversary.name += " (copy)"; // TODO: Decide naming
                 if (!encounter.adversaries) {
                     encounter.adversaries = [];
@@ -1183,7 +1182,7 @@
         }
 
         function convertFromSRD(srdAdversary) {
-            var thresholds = srdAdversary.thresholds.split("/");
+            const thresholds = srdAdversary.thresholds.split("/");
             return {
                 name: srdAdversary.name,
                 originalName: srdAdversary.name,
@@ -1208,9 +1207,9 @@
 
         function calculateBattlePoints(encounter)
         {
-            var currentBattlePoints = 0;
-            for (var j = 0; j < encounter.adversaries.length; j++) {
-                var adversary = encounter.adversaries[j];
+            let currentBattlePoints = 0;
+            for (let j = 0; j < encounter.adversaries.length; j++) {
+                const adversary = encounter.adversaries[j];
                 // TODO: Deal with tier differences
                 switch(adversary.type.toLowerCase()) {
                     case "minion":
@@ -1247,18 +1246,18 @@
 
             adversaryEditor.saveState = saveState; // TODO: Reset ever?
 
-            var encountersDiv = document.getElementById("encounters");
+            const encountersDiv = document.getElementById("encounters");
             encountersDiv.innerHTML = ""; // Clear any existing content
 
-            var saveEncountersButton = document.createElement("button");
+            const saveEncountersButton = document.createElement("button");
             saveEncountersButton.innerText = "Save Encounters";
             encountersDiv.appendChild(saveEncountersButton);
 
             saveEncountersButton.addEventListener("click", function() {
-                var json = JSON.stringify(state, null, "    ");
-                var blob = new Blob([json], { type: "application/json" });
-                var url = URL.createObjectURL(blob);
-                var a = document.createElement("a");
+                const json = JSON.stringify(state, null, "    ");
+                const blob = new Blob([json], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
                 a.href = url;
                 a.download = "encounters.json";
                 a.click();
@@ -1267,24 +1266,24 @@
 
             // TODO: Actually, show one encounter at a time, and allow switching between them,
             //       as well as adding or deleting encounters.
-            for (var i = 0; i < state.encounters.length; i++) {
-                var encounter = state.encounters[i];
-                var encounterDiv = document.createElement("div");
+            for (let i = 0; i < state.encounters.length; i++) {
+                const encounter = state.encounters[i];
+                const encounterDiv = document.createElement("div");
                 encounterDiv.className = "encounter";
                 encounterDiv.innerHTML = `<h2>${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)</h2><p>${encounter.description}</p>`;
 
-                var fearDiv = createFearTracker(encounter, saveState);
+                const fearDiv = createFearTracker(encounter, saveState);
                 encounterDiv.appendChild(fearDiv);
 
-                var battlePointsDiv = document.createElement("div");
+                const battlePointsDiv = document.createElement("div");
                 battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> <span name="remaining-suffix"></span>) <span title="TODO: Click for summary from BUILDING BALANCED ENCOUNTERS">ℹ️</span></p>`;
                 encounterDiv.appendChild(battlePointsDiv);
 
                 function refreshBattlePoints() {
-                    var currentBattlePoints = calculateBattlePoints(encounter);
+                    const currentBattlePoints = calculateBattlePoints(encounter);
 
                     // Round to nearest 0.1 for display
-                    var remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
+                    const remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
 
                     if (remainingBattlePoints < 0) {
                         battlePointsDiv.querySelector("[name='current-battle-points']").innerText = `⚠️ ${Math.abs(remainingBattlePoints)}`;
@@ -1299,36 +1298,36 @@
                 // TODO: Better would be a list of adversaries to choose from,
                 //       with filtering based on tier/type + text search.
                 //       Rows should include name, source, battle points.
-                var addAdversaryDiv = document.createElement("div");
-                var srdSearch = document.createElement("input");
+                const addAdversaryDiv = document.createElement("div");
+                const srdSearch = document.createElement("input");
                 srdSearch.type = "search";
                 srdSearch.placeholder = "Search SRD Adversaries";
                 srdSearch.setAttribute("list", "srd-adversaries");
                 addAdversaryDiv.appendChild(srdSearch);
                 encounterDiv.appendChild(addAdversaryDiv);
 
-                var adversariesDiv = document.createElement("div");
-                for (var j = 0; j < encounter.adversaries.length; j++) {
+                const adversariesDiv = document.createElement("div");
+                for (let j = 0; j < encounter.adversaries.length; j++) {
                     addAdversary(adversariesDiv, encounter, encounter.adversaries[j], refreshBattlePoints, saveState);
                 }
                 encounterDiv.appendChild(adversariesDiv);
 
-                var addAdversaryButton = document.createElement("button");
+                const addAdversaryButton = document.createElement("button");
                 addAdversaryButton.innerText = "Add Adversary";
                 addAdversaryButton.onclick = function() {
-                    var selectedOption = srdSearch.value.trim();
+                    let selectedOption = srdSearch.value.trim();
                     if (!selectedOption) {
                         // TODO: Or some "custom" type?
                         selectedOption = "Jagged Knife Bandit";
                     }
-                    var srdAdversary = srdAdversaries.find(function(a) {
+                    const srdAdversary = srdAdversaries.find(function(a) {
                         return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
                     });
                     if (srdAdversary) {
-                        var adversary = convertFromSRD(srdAdversary);
-                        var maxDuplicateNumber = 0;
-                        for (var k = 0; k < encounter.adversaries.length; k++) {
-                            var existingAdversaryNameParts = encounter.adversaries[k].name.split(" #");
+                        const adversary = convertFromSRD(srdAdversary);
+                        let maxDuplicateNumber = 0;
+                        for (let k = 0; k < encounter.adversaries.length; k++) {
+                            const existingAdversaryNameParts = encounter.adversaries[k].name.split(" #");
                             if (existingAdversaryNameParts[0] === adversary.name) {
                                 if (existingAdversaryNameParts.length > 1) {
                                     maxDuplicateNumber = Math.max(parseInt(existingAdversaryNameParts[1]), maxDuplicateNumber);
@@ -1364,19 +1363,19 @@
         // TODO: Also, we want a broader search option, should be able
         //       to search by source, tier, and other arbitrary property text,
         //       and allow easier browsing.
-        var srdDatalist = document.createElement("datalist");
+        const srdDatalist = document.createElement("datalist");
         srdDatalist.id = "srd-adversaries";
-        for (var i = 0; i < srdAdversaries.length; i++) {
-            var option = document.createElement("option");
+        for (let i = 0; i < srdAdversaries.length; i++) {
+            const option = document.createElement("option");
             option.value = srdAdversaries[i].name;
             srdDatalist.appendChild(option);
         }
         document.body.appendChild(srdDatalist);
 
-        var persistedStateJson = localStorage.getItem("encounters-state");
+        const persistedStateJson = localStorage.getItem("encounters-state");
         if (persistedStateJson) {
             try {
-                var state = JSON.parse(persistedStateJson);
+                const state = JSON.parse(persistedStateJson);
                 displayEncounters(state);
             } catch (error) {
                 console.error("Error loading saved encounters:", error);
@@ -1387,14 +1386,14 @@
             displayEncounters(sampleState);
         }
 
-        var fileInput = document.getElementById("load-encounters");
+        const fileInput = document.getElementById("load-encounters");
         fileInput.addEventListener("change", function(event) {
-            var file = event.target.files[0];
+            const file = event.target.files[0];
             if (file) {
-                var reader = new FileReader();
+                const reader = new FileReader();
                 reader.onload = function(e) {
                     try {
-                        var state = JSON.parse(e.target.result);
+                        const state = JSON.parse(e.target.result);
                         displayEncounters(state);
                     } catch (error) {
                         console.error("Error loading encounters:", error);
