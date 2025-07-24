@@ -486,7 +486,6 @@
         const adversaryEditorOverlay = document.getElementById("adversary-editor-overlay");
 
         let expandAllFeatures = false;
-        let expandAllInstanceEditors = false;
 
         function hideEditor() {
             adversaryEditor.adversary = undefined;
@@ -909,7 +908,7 @@
                 adversaryDiv.appendChild(featuresContainer);
             }
 
-            if (adversary.instances == null || adversary.instances.length == 0) {
+            if (!adversary.instances || adversary.instances.length == 0) {
                 adversary.instances = [
                     {
                         name: adversary.name + " #1",
@@ -923,6 +922,7 @@
                 const instance = adversary.instances[i];
 
                 // TODO: Extract to a function so we can use when adding a new instance?
+                // TODO: How do you rename an instance?
                 const instanceDiv = document.createElement("div");
                 instanceDiv.className = "instance";
                 instanceDiv.innerHTML = `<h4>${instance.name}</h4>`;
@@ -1042,6 +1042,7 @@
                 addModificationsDiv.appendChild(addModificationValueInput);
                 addModificationsDiv.appendChild(addModificationButton);
 
+                // TODO: Change this to a modal, triggered by an Add button that is displayed inline at the end of the list?
                 const addConditionsAndModifications = document.createElement("details");
                 addConditionsAndModifications.className = "modificationsExpander";
                 // TODO: Should we have the same toggle all behavior for these as we have for Features?
