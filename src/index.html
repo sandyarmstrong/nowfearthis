@@ -316,7 +316,7 @@
         <div id="adversary-editor-overlay" class="hidden"></div>
         <div id="adversary-editor" class="hidden">
             <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
-            <div id="adversary-form">
+            <form id="adversary-form">
                 <fieldset>
                     <legend>Basics</legend>
                     <label for="adversary-name">Name:</label>
@@ -386,9 +386,9 @@
                     <button id="add-feature">+ Add Feature</button> <!-- TODO: Position this statically up top? -->
                     <div id="adversary-features"></div>
                 </fieldset>
-                <button id="cancel-adversary-edit">Cancel</button>
+                <button type="default" id="cancel-adversary-edit">Cancel</button>
                 <button type="submit" id="save-adversary-edit">Save</button>
-            </div>
+            </form>
         </div>
 
         <div id="repo-info">
@@ -553,7 +553,7 @@
             hideEditor();
         });
 
-        document.querySelector("#save-adversary-edit").addEventListener("click", function() {
+        document.querySelector("#adversary-form").addEventListener("submit", function() {
             // 0. When showing/populating the editor, the adversary should be attached to the
             //    #adversary-editor element as a property that can be accessed here.
             // 1. Update the adversary object with the values from the editor.
