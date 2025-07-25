@@ -360,6 +360,9 @@
                 <label for="encounter-player-count">Player Count:</label>
                 <input type="number" id="encounter-player-count" min="1" max="20" value="4" required />
                 <br>
+                <label for="encounter-target-battle-points">Target Battle Points:</label>
+                <input type="number" id="encounter-target-battle-points" min="1" max="99" value="14" required />
+                <br>
                 <button type="default" id="cancel-encounter-edit">Cancel</button>
                 <button type="submit" id="save-encounter-edit">Save Encounter</button>
             </form>
@@ -686,6 +689,7 @@
                     name: "sup",
                     playerTier: 1,
                     playerCount: 4,
+                    targetBattlePoints: 14,
                 };
                 encounterEditor.encounter = null;
             } else {
@@ -695,6 +699,7 @@
             encounterEditor.querySelector("#encounter-name").value = encounter.name;
             encounterEditor.querySelector("#encounter-tier").value = encounter.playerTier ?? 1;
             encounterEditor.querySelector("#encounter-player-count").value = encounter.playerCount ?? 4;
+            encounterEditor.querySelector("#encounter-target-battle-points").value = encounter.targetBattlePoints ?? 14;
 
             editorOverlay.classList.remove("hidden");
             encounterEditor.classList.remove("hidden");
@@ -718,6 +723,7 @@
             encounter.name = encounterEditor.querySelector("#encounter-name").value.trim();
             encounter.playerTier = parseInt(encounterEditor.querySelector("#encounter-tier").value);
             encounter.playerCount = parseInt(encounterEditor.querySelector("#encounter-player-count").value);
+            encounter.targetBattlePoints = parseInt(encounterEditor.querySelector("#encounter-target-battle-points").value);
 
             saveState();
             refreshDisplay();
@@ -1362,6 +1368,7 @@
             addAdversaryDiv.appendChild(srdSearch);
             encounterBar.appendChild(addAdversaryDiv);
 
+            // TODO: Should be able to initiate edit from here? Should this move to top bar?
             const battlePointsDiv = document.createElement("div");
             battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> <span name="remaining-suffix"></span>) <span title="TODO: Click for summary from BUILDING BALANCED ENCOUNTERS">ℹ️</span></p>`;
             encounterBar.appendChild(battlePointsDiv);
