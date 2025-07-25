@@ -66,6 +66,7 @@
             body {
                 background-color: var(--body-bg-color);
                 color: var(--text-color);
+                margin: 0px;
             }
             .hidden {
                 display: none;
@@ -76,11 +77,9 @@
             }
 
             #top-bar {
-                position: absolute;
                 top: 0px;
                 left: 0px;
                 right: 0px;
-                height: 40px;
                 background-color: var(--clr-surface-a10);
                 border-bottom: 1px solid var(--clr-surface-a20);
             }
@@ -128,6 +127,15 @@
             button:disabled {
                 background-color: var(--clr-surface-a50);
                 opacity: 0.7;;
+            }
+
+            #encounters {
+                margin: 10px;
+            }
+
+            .encounter-bar > * {
+                display: inline-block;
+                margin-right: 10px;
             }
 
             .adversary {
@@ -277,7 +285,7 @@
                 width: 100%;
             }
 
-            #adversary-editor-overlay {
+            #editor-overlay {
                 position: fixed;
                 z-index: 1000; /* Ensure it is above other content */
                 top: 0;
@@ -341,7 +349,21 @@
 
         <div id="encounters"></div>
 
-        <div id="adversary-editor-overlay" class="hidden"></div>
+        <div id="editor-overlay" class="hidden"></div>
+        <div id="encounter-editor" class="editor hidden">
+            <form id="encounter-form">
+                <label for="encounter-name">Name:</label>
+                <input type="text" id="encounter-name" required />
+                <br>
+                <label for="encounter-tier">Tier:</label>
+                <input type="number" id="encounter-tier" min="1" max="4" value="1" required />
+                <label for="encounter-player-count">Player Count:</label>
+                <input type="number" id="encounter-player-count" min="1" max="20" value="4" required />
+                <br>
+                <button type="default" id="cancel-encounter-edit">Cancel</button>
+                <button type="submit" id="save-encounter-edit">Save Encounter</button>
+            </form>
+        </div>
         <div id="adversary-editor" class="editor hidden">
             <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
             <form id="adversary-form">
@@ -517,15 +539,16 @@
         const adversaryCopiedEvent = new Event("adversaryCopied");
         const adversaryCopiedFromSourceEvent = new Event("adversaryCopiedFromSource");
 
-        const adversaryEditor = document.getElementById("adversary-editor")
-        const adversaryEditorOverlay = document.getElementById("adversary-editor-overlay");
+        const editorOverlay = document.getElementById("editor-overlay");
+        const encounterEditor = document.getElementById("encounter-editor");
+        const adversaryEditor = document.getElementById("adversary-editor");
 
         let expandAllFeatures = false;
 
-        function hideEditor() {
+        function hideAdversaryEditor() {
             adversaryEditor.adversary = undefined;
             adversaryEditor.classList.add("hidden");
-            adversaryEditorOverlay.classList.add("hidden");
+            editorOverlay.classList.add("hidden");
         }
 
         function createFeatureEditorElement(feature, idSuffix)  {
@@ -535,7 +558,7 @@
             return featureElement;
         }
 
-        function showEditor(adversary, onShown) {
+        function showAdversaryEditor(adversary, onShown) {
             // Basics
             adversaryEditor.querySelector("#adversary-name").value = adversary.name;
             adversaryEditor.querySelector("#adversary-tier").value = adversary.tier;
@@ -569,7 +592,7 @@
             }
 
             onShown(); // Do whatever cleanup the caller needs
-            adversaryEditorOverlay.classList.remove("hidden");
+            editorOverlay.classList.remove("hidden");
             adversaryEditor.classList.remove("hidden");
             adversaryEditor.adversary = adversary; // TODO: Set encounter too?
             adversaryEditor.querySelector("#adversary-name").select();
@@ -584,10 +607,11 @@
         });
 
         document.querySelector("#cancel-adversary-edit").addEventListener("click", function() {
-            hideEditor();
+            hideAdversaryEditor();
         });
 
-        document.querySelector("#adversary-form").addEventListener("submit", function() {
+        document.querySelector("#adversary-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent page refresh
             // 0. When showing/populating the editor, the adversary should be attached to the
             //    #adversary-editor element as a property that can be accessed here.
             // 1. Update the adversary object with the values from the editor.
@@ -646,12 +670,71 @@
                 });
             }
 
-            // TODO: Refresh display
+            saveState();
+            refreshDisplay();
+            hideAdversaryEditor();
+        });
 
-            if (adversaryEditor.saveState) {
-                adversaryEditor.saveState();
+        function hideEncounterEditor() {
+            encounterEditor.classList.add("hidden");
+            editorOverlay.classList.add("hidden");
+        }
+
+        function showEncounterEditor(encounter) {
+            if (!encounter) {
+                encounter = {
+                    name: "sup",
+                    playerTier: 1,
+                    playerCount: 4,
+                };
+                encounterEditor.encounter = null;
+            } else {
+                encounterEditor.encounter = encounter;
             }
-            hideEditor();
+
+            encounterEditor.querySelector("#encounter-name").value = encounter.name;
+            encounterEditor.querySelector("#encounter-tier").value = encounter.playerTier ?? 1;
+            encounterEditor.querySelector("#encounter-player-count").value = encounter.playerCount ?? 4;
+
+            editorOverlay.classList.remove("hidden");
+            encounterEditor.classList.remove("hidden");
+            encounterEditor.querySelector("#encounter-name").select();
+            window.scrollTo(0, 0); // TODO: This kind of sucks if you're editing an adversary that you had to scroll down for
+        }
+
+        document.querySelector("#encounter-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent page refresh
+
+            let encounter = encounterEditor.encounter;
+            if (!encounter) {
+                if (!state.encounters) {
+                    state.encounters = [];
+                }
+                encounter = {}
+                state.encounters.push(encounter);
+                selectedEncounterIndex = state.encounters.length - 1;
+            }
+
+            encounter.name = encounterEditor.querySelector("#encounter-name").value.trim();
+            encounter.playerTier = parseInt(encounterEditor.querySelector("#encounter-tier").value);
+            encounter.playerCount = parseInt(encounterEditor.querySelector("#encounter-player-count").value);
+
+            saveState();
+            refreshDisplay();
+            hideEncounterEditor();
+        });
+
+        document.querySelector("#cancel-encounter-edit").addEventListener("click", function() {
+            hideEncounterEditor();
+        });
+
+        document.querySelector("#add-encounter").addEventListener("click", function() {
+            showEncounterEditor();
+        });
+
+        document.querySelector("#edit-encounter").addEventListener("click", function() {
+            const encounter = state.encounters[selectedEncounterIndex];
+            showEncounterEditor(encounter);
         });
 
         // TODO: This is annoying if you are scrolled down, and every adversary above changes expansion,
@@ -668,13 +751,17 @@
             }
         }
 
-        function createFearTracker(encounter, saveState) {
+        function createFearTracker(encounter) {
             // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
             // TODO: Roller for getting fear on rests?
             // TODO: Replace this with a stylized number input?
             const fearDiv = document.createElement("div");
 
             const fearValue = document.createElement("span");
+
+            if (encounter.currentFear === undefined) {
+                encounter.currentFear = 0;
+            }
 
             function updateFearDisplay() {
                 fearValue.innerText = "💀".repeat(encounter.currentFear);
@@ -711,7 +798,7 @@
             return fearDiv;
         }
 
-        function updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName, saveState) {
+        function updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName) {
             const elements = [];
             const slots = adversary[adversarySlotsPropertyName];
             const marked = instance[instanceMarkedPropertyName];
@@ -732,7 +819,7 @@
                     } else {
                         instance[instanceMarkedPropertyName]--;
                     }
-                    updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName, saveState);
+                    updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName);
                 };
                 elements.push(slot);
             }
@@ -748,7 +835,7 @@
             editAction.innerHTML = `<button class="menu-action">Edit</button>`;
             editAction.title = "Edit this adversary";
             editAction.onclick = function() {
-                showEditor(adversary, () => actionsMenu.remove());
+                showAdversaryEditor(adversary, () => actionsMenu.remove());
             };
             actionsMenu.appendChild(editAction);
 
@@ -794,7 +881,7 @@
             adversaryElement.appendChild(actionsButton);
         }
 
-        function updateConditionsDisplay(container, instance, saveState) {
+        function updateConditionsDisplay(container, instance) {
             container.innerHTML = "";
 
             if ((!instance.conditions || instance.conditions.length == 0) &&
@@ -825,7 +912,7 @@
                         instance.conditions = instance.conditions.filter(function(c) {
                             return c !== condition;
                         });
-                        updateConditionsDisplay(container, instance, saveState);
+                        updateConditionsDisplay(container, instance);
                         saveState();
                     };
                     conditionItem.appendChild(removeButton);
@@ -851,7 +938,7 @@
                         instance.modifications = instance.modifications.filter(function(m) {
                             return m !== modification;
                         });
-                        updateConditionsDisplay(container, instance, saveState);
+                        updateConditionsDisplay(container, instance);
                         saveState();
                     };
                     modificationItem.appendChild(removeButton);
@@ -859,7 +946,7 @@
             }
         }
 
-        function createAdversaryElement(encounter, adversary, saveState) {
+        function createAdversaryElement(encounter, adversary) {
             // TODO: Allow reordering?
 
             let warning = "";
@@ -966,7 +1053,7 @@
                 hpDiv.innerHTML = "HP:";
                 const hpSlotsDiv = document.createElement("div");
                 hpSlotsDiv.className = "slots";
-                updateResource(hpSlotsDiv, adversary, "hp", instance, "hpMarked", saveState);
+                updateResource(hpSlotsDiv, adversary, "hp", instance, "hpMarked");
                 hpDiv.appendChild(hpSlotsDiv);
                 instanceDiv.appendChild(hpDiv);
 
@@ -975,7 +1062,7 @@
                 stressDiv.innerHTML = "Stress:";
                 const stressSlotsDiv = document.createElement("div");
                 stressSlotsDiv.className = "slots";
-                updateResource(stressSlotsDiv, adversary, "stress", instance, "stressMarked", saveState);
+                updateResource(stressSlotsDiv, adversary, "stress", instance, "stressMarked");
                 stressDiv.appendChild(stressSlotsDiv);
                 instanceDiv.appendChild(stressDiv);
 
@@ -985,7 +1072,7 @@
                 const conditionsDisplayDiv = document.createElement("div");
                 conditionsDiv.appendChild(conditionsDisplayDiv);
 
-                updateConditionsDisplay(conditionsDisplayDiv, instance, saveState);
+                updateConditionsDisplay(conditionsDisplayDiv, instance);
 
                 const addConditionsDiv = document.createElement("div");
                 addConditionsDiv.className = "add-conditions";
@@ -1005,7 +1092,7 @@
                         }
                         instance.conditions.push(condition);
                         addConditionInput.value = "";
-                        updateConditionsDisplay(conditionsDisplayDiv, instance, saveState);
+                        updateConditionsDisplay(conditionsDisplayDiv, instance);
                         saveState();
                     }
                 };
@@ -1059,7 +1146,7 @@
                         addModificationNameInput.value = "";
                         addModificationPropertyInput.value = "";
                         addModificationValueInput.value = "";
-                        updateConditionsDisplay(conditionsDisplayDiv, instance, saveState);
+                        updateConditionsDisplay(conditionsDisplayDiv, instance);
                         saveState();
                     }
                 };
@@ -1106,9 +1193,8 @@
                     adversary.instances = [];
                 }
                 adversary.instances.push(newInstance);
-                // TODO: Refresh display (same as we need on edit?)
-                // TODO: refreshBattlePoints
                 saveState();
+                refreshDisplay();
             };
             adversaryDiv.appendChild(addInstanceButton);
 
@@ -1117,8 +1203,8 @@
             return adversaryDiv;
         }
 
-        function addAdversary(container, encounter, adversary, refreshBattlePoints, saveState) {
-            const adversaryElement = createAdversaryElement(encounter, adversary, saveState);
+        function addAdversary(container, encounter, adversary, refreshBattlePoints) {
+            const adversaryElement = createAdversaryElement(encounter, adversary);
 
             adversaryElement.addEventListener("adversaryRemoved", function(event) {
                 encounter.adversaries = encounter.adversaries.filter(function(a) {
@@ -1135,7 +1221,7 @@
                     encounter.adversaries = [];
                 }
                 encounter.adversaries.push(newAdversary);
-                addAdversary(container, encounter, newAdversary, refreshBattlePoints, saveState);
+                addAdversary(container, encounter, newAdversary, refreshBattlePoints);
                 saveState();
             });
             adversaryElement.addEventListener("adversaryCopiedFromSource", function(event) {
@@ -1153,7 +1239,7 @@
                     encounter.adversaries = [];
                 }
                 encounter.adversaries.push(newAdversary);
-                addAdversary(container, encounter, newAdversary, refreshBattlePoints, saveState);
+                addAdversary(container, encounter, newAdversary, refreshBattlePoints);
                 saveState();
             });
 
@@ -1230,9 +1316,6 @@
         }
 
         function refreshDisplay() {
-            // TODO: Should be able to remove this now
-            adversaryEditor.saveState = saveState; // TODO: Reset ever?
-
             encounterSelector.innerHTML = ""; // Clear any existing options
             for (let i = 0; i < state.encounters.length; i++) {
                 const encounter = state.encounters[i];
@@ -1262,13 +1345,26 @@
             encountersDiv.innerHTML = ""; // Clear any existing content
             const encounterDiv = document.createElement("div");
             encounterDiv.className = "encounter";
+            encountersDiv.appendChild(encounterDiv);
 
-            const fearDiv = createFearTracker(encounter, saveState);
-            encounterDiv.appendChild(fearDiv);
+            const encounterBar = document.createElement("div");
+            encounterBar.className = "encounter-bar";
+            encounterDiv.appendChild(encounterBar);
+
+            // TODO: Better would be a list of adversaries to choose from,
+            //       with filtering based on tier/type + text search.
+            //       Rows should include name, source, battle points.
+            const addAdversaryDiv = document.createElement("div");
+            const srdSearch = document.createElement("input");
+            srdSearch.type = "search";
+            srdSearch.placeholder = "Search SRD Adversaries";
+            srdSearch.setAttribute("list", "srd-adversaries");
+            addAdversaryDiv.appendChild(srdSearch);
+            encounterBar.appendChild(addAdversaryDiv);
 
             const battlePointsDiv = document.createElement("div");
             battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> <span name="remaining-suffix"></span>) <span title="TODO: Click for summary from BUILDING BALANCED ENCOUNTERS">ℹ️</span></p>`;
-            encounterDiv.appendChild(battlePointsDiv);
+            encounterBar.appendChild(battlePointsDiv);
 
             function refreshBattlePoints() {
                 const currentBattlePoints = calculateBattlePoints(encounter);
@@ -1286,20 +1382,12 @@
             }
             refreshBattlePoints();
 
-            // TODO: Better would be a list of adversaries to choose from,
-            //       with filtering based on tier/type + text search.
-            //       Rows should include name, source, battle points.
-            const addAdversaryDiv = document.createElement("div");
-            const srdSearch = document.createElement("input");
-            srdSearch.type = "search";
-            srdSearch.placeholder = "Search SRD Adversaries";
-            srdSearch.setAttribute("list", "srd-adversaries");
-            addAdversaryDiv.appendChild(srdSearch);
-            encounterDiv.appendChild(addAdversaryDiv);
+            const fearDiv = createFearTracker(encounter);
+            encounterBar.appendChild(fearDiv);
 
             const adversariesDiv = document.createElement("div");
             for (let j = 0; j < encounter.adversaries.length; j++) {
-                addAdversary(adversariesDiv, encounter, encounter.adversaries[j], refreshBattlePoints, saveState);
+                addAdversary(adversariesDiv, encounter, encounter.adversaries[j], refreshBattlePoints);
             }
             encounterDiv.appendChild(adversariesDiv);
 
@@ -1331,7 +1419,7 @@
                         encounter.adversaries = [];
                     }
                     encounter.adversaries.push(adversary);
-                    addAdversary(adversariesDiv, encounter, adversary, refreshBattlePoints, saveState);
+                    addAdversary(adversariesDiv, encounter, adversary, refreshBattlePoints);
                     saveState();
                 }
             };
@@ -1343,8 +1431,6 @@
                     addAdversaryButton.click();
                 }
             });
-
-            encountersDiv.appendChild(encounterDiv);
         }
 
         // TODO: This is probably a silly way to do this, we
@@ -1362,7 +1448,8 @@
         }
         document.body.appendChild(srdDatalist);
 
-        let selectedEncounterIndex = localStorage.getItem("selected-encounter-index");
+        console.log("fetching state...");
+        let selectedEncounterIndex = parseInt(localStorage.getItem("selected-encounter-index"));
         if (!selectedEncounterIndex) {
             selectedEncounterIndex = 0;
         }
@@ -1414,7 +1501,7 @@
         const encounterSelector = document.getElementById("current-encounter");
         encounterSelector.addEventListener("change", function() {
             selectedEncounterIndex = parseInt(encounterSelector.value);
-            console.log("Selected encounter: " + selectedEncounterIndex + " (" + state.encounters[encounterSelector.value].name + ")");
+            saveState();
             refreshDisplay();
         });
 
