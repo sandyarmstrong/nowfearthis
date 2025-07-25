@@ -458,23 +458,6 @@
     </body>
 
     <script>
-        // TODO: Consider moving hp/stress/conditions/modifications state to something
-        //       like adversaries[n].instances[] so that we can behave like the Quickstart
-        //       and have one statblock for muliple identical enemies. But need to decide
-        //       how to display conditions and especially modifications in that case.
-        //
-        //       Do this sooner rather than later, even if only one instance is supported,
-        //       to avoid breaking state compatibility.
-        //
-        //       Also, some questions:
-        //       - Presumably, there would be a + button to add a new instance right in
-        //         the statblock. But what if a user adds the same adversary type from
-        //         the search? Should this use the same statblock or start a new "group"?
-        //         I think I prefer the latter, let users decide if they prefer shared
-        //         or separate statblocks, and they might have use for grouping anyway.
-        //       - How to handle naming? Wouldn't want to name the whole statblock
-        //         "Jagged Knife Bandit #1" anymore.
-        //       - Are there modifications that can change number of HP/Stress slots?
         const sampleState = {
             "encounters": [
                 {
@@ -597,7 +580,7 @@
             onShown(); // Do whatever cleanup the caller needs
             editorOverlay.classList.remove("hidden");
             adversaryEditor.classList.remove("hidden");
-            adversaryEditor.adversary = adversary; // TODO: Set encounter too?
+            adversaryEditor.adversary = adversary;
             adversaryEditor.querySelector("#adversary-name").select();
             window.scrollTo(0, 0); // TODO: This kind of sucks if you're editing an adversary that you had to scroll down for
         }
@@ -615,17 +598,6 @@
 
         document.querySelector("#adversary-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent page refresh
-            // 0. When showing/populating the editor, the adversary should be attached to the
-            //    #adversary-editor element as a property that can be accessed here.
-            // 1. Update the adversary object with the values from the editor.
-            // 2. Trigger a redraw of the adversary (missing this).
-            // 3. In the case where this is a new adversary, perhaps it would already have
-            //    been added to the encounter, but is just blank? So refreshing would still
-            //    work? If not, just create the element afterward. Also add to customAdversaries
-            //    in the state, which can be searched/referenced/etc just like the SRD.
-            // 4. Finally, clear the adversary property from #adversary-editor and hide the editor.
-
-            // TODO: Validation? Use a form?
 
             const adversary = adversaryEditor.adversary;
             if (adversary) {
@@ -1017,7 +989,7 @@
 
                 for (let i = 0; i < adversary.features.length; i++) {
                     const featureElement = document.createElement("p");
-                    featureElement.className = "feature"; // TODO: Make sure to style with that indent on following lines
+                    featureElement.className = "feature";
                     featuresDiv.appendChild(featureElement);
 
                     const label = document.createElement("span");
