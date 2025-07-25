@@ -273,7 +273,7 @@
                 height: 100%;
                 background-color: rgba(0, 0, 0, 0.5);
             }
-            #adversary-editor {
+            .editor {
                 position: absolute;
                 z-index: 1001; /* Ensure it is above the overlay */
                 width: 27em;
@@ -317,7 +317,7 @@
         <div id="encounters"></div>
 
         <div id="adversary-editor-overlay" class="hidden"></div>
-        <div id="adversary-editor" class="hidden">
+        <div id="adversary-editor" class="editor hidden">
             <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
             <form id="adversary-form">
                 <fieldset>
@@ -541,7 +541,7 @@
             adversaryEditor.classList.remove("hidden");
             adversaryEditor.adversary = adversary; // TODO: Set encounter too?
             adversaryEditor.querySelector("#adversary-name").select();
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0); // TODO: This kind of sucks if you're editing an adversary that you had to scroll down for
         }
 
         document.querySelector("#add-feature").addEventListener("click", function() {
@@ -683,6 +683,10 @@
             const elements = [];
             const slots = adversary[adversarySlotsPropertyName];
             const marked = instance[instanceMarkedPropertyName];
+
+            // TODO: Reduce opacity or something when HP is fully marked?
+            // TODO: Add "Vulnerable (stress full)" condition when stress is fully marked?
+            //       Would have to make sure it couldn't be deleted otherwise though.
 
             for (let i = 0; i < slots; i++) {
                 const slot = document.createElement("input");
@@ -904,6 +908,7 @@
                 adversaryDiv.appendChild(featuresContainer);
             }
 
+            // TODO: Should this happen earlier instead of here?
             if (!adversary.instances || adversary.instances.length == 0) {
                 adversary.instances = [
                     {
@@ -1070,6 +1075,7 @@
                 }
                 adversary.instances.push(newInstance);
                 // TODO: Refresh display (same as we need on edit?)
+                // TODO: refreshBattlePoints
                 saveState();
             };
             adversaryDiv.appendChild(addInstanceButton);
@@ -1125,7 +1131,7 @@
 
         function convertFromSRD(srdAdversary) {
             const thresholds = srdAdversary.thresholds.split("/");
-            return {
+            const adversary = {
                 name: srdAdversary.name,
                 originalName: srdAdversary.name,
                 source: "SRD",
@@ -1143,8 +1149,16 @@
                 attackRange: srdAdversary.range,
                 attackDamage: srdAdversary.damage,
                 experience: srdAdversary.experience,
-                features: srdAdversary.feats // array of name/text
             };
+            if (srdAdversary.feats && srdAdversary.feats.length > 0) {
+                adversary.features = srdAdversary.feats.map(function(feat) {
+                    return {
+                        name: feat.name,
+                        text: feat.text
+                    };
+                });
+            }
+            return adversary;
         }
 
         function calculateBattlePoints(encounter)
@@ -1152,31 +1166,33 @@
             let currentBattlePoints = 0;
             for (let j = 0; j < encounter.adversaries.length; j++) {
                 const adversary = encounter.adversaries[j];
+                let adversaryPoints = 0;
                 // TODO: Deal with tier differences
                 switch(adversary.type.toLowerCase()) {
                     case "minion":
-                        currentBattlePoints += 1 / encounter.playerCount;
+                        adversaryPoints = 1 / encounter.playerCount;
                         break;
                     case "social":
                     case "support":
-                        currentBattlePoints += 1;
+                        adversaryPoints = 1;
                         break;
                     case "horde":
                     case "ranged":
                     case "skulk":
                     case "standard":
-                        currentBattlePoints += 2;
+                        adversaryPoints = 2;
                         break;
                     case "leader":
-                        currentBattlePoints += 3;
+                        adversaryPoints = 3;
                         break;
                     case "bruiser":
-                        currentBattlePoints += 4;
+                        adversaryPoints = 4;
                         break;
                     case "solo":
-                        currentBattlePoints += 5;
+                        adversaryPoints = 5;
                         break;
                 }
+                currentBattlePoints += adversaryPoints * adversary.instances.length;
             }
             return currentBattlePoints;
         }
