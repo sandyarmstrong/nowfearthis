@@ -1177,7 +1177,10 @@
                 removeInstanceButton.innerText = "🗑️";
                 removeInstanceButton.onclick = function(event) {
                     event.target.parentElement.remove();
-                    // TODO: Actually delete instance from adversary.instance, and saveState
+                    adversary.instances = adversary.instances.filter(function(i) {
+                        return i !== instance;
+                    });
+                    saveState();
                     // TODO: What happens when you delete the last instance? Delete adversary? Or prevent clicking it?
                 };
                 instanceDiv.appendChild(removeInstanceButton);
