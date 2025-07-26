@@ -550,8 +550,11 @@
                     "playerCount": 3
                 }
             ],
-            "customAdversaries": [], // Yay homebrew, allow searching this, adding, modifying
-            "environments": [] // Big TODO
+            "environments": [], // Big TODO
+            "custom": { // Yay homebrew, allow searching this, adding, modifying
+                "adversaries": [],
+                "environments": []
+            }
         };
 
         // TODO: Change all code that puts user data directly into innerHTML
@@ -559,6 +562,7 @@
         const adversaryRemovedEvent = new Event("adversaryRemoved");
         const adversaryCopiedEvent = new Event("adversaryCopied");
         const adversaryCopiedFromSourceEvent = new Event("adversaryCopiedFromSource");
+        const adversarySavedToCustomEvent = new Event("adversarySavedToCustom");
 
         const editorOverlay = document.getElementById("editor-overlay");
         const encounterEditor = document.getElementById("encounter-editor");
@@ -914,6 +918,15 @@
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(copyFromSourceAction);
+
+            const saveCustomAction = document.createElement("li");
+            saveCustomAction.innerHTML = `<button class="menu-action">Save to Custom Adversaries</button>`;
+            saveCustomAction.title = "Save this adversary to your custom adversaries for later use";
+            saveCustomAction.onclick = function() {
+                adversaryElement.dispatchEvent(adversarySavedToCustomEvent);
+                actionsMenu.remove();
+            };
+            actionsMenu.appendChild(saveCustomAction);
 
             const topActions = document.createElement("div");
             topActions.className = "top-actions";
@@ -1323,6 +1336,21 @@
                 addAdversary(container, encounter, newAdversary, refreshBattlePoints);
                 saveState();
             });
+            adversaryElement.addEventListener("adversarySavedToCustom", function(event) {
+                adversary.source = "Custom";
+                adversary.originalName = adversary.name;
+                const newCustomAdversary = JSON.parse(JSON.stringify(adversary));
+                delete newCustomAdversary.instances;
+                if (!encounter.custom) {
+                    encounter.custom = {};
+                }
+                if (!encounter.custom.adversaries) {
+                    encounter.custom.adversaries = [];
+                }
+                encounter.custom.adversaries.push(newCustomAdversary); // TODO: Allow deleting from this list
+                saveState();
+            });
+            // TODO: Allow importing/exporting custom adversaries/environments independent from encounters
 
             container.appendChild(adversaryElement);
             refreshBattlePoints();
