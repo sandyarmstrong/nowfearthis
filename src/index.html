@@ -656,7 +656,9 @@
                         name: featureElement.querySelector(".adversary-feature-name").value.trim(),
                         text: featureElement.querySelector(".adversary-feature-text").value.trim()
                     };
-                    adversary.features.push(feature);
+                    if (feature.name || feature.text) { // TODO: Require both?
+                        adversary.features.push(feature);
+                    }
                 });
             }
 
@@ -679,10 +681,10 @@
         function showEncounterEditor(encounter) {
             if (!encounter) {
                 encounter = {
-                    name: "sup",
+                    name: "New Encounter",
                     playerTier: 1,
                     playerCount: 4,
-                    targetBattlePoints: 14,
+                    targetBattlePoints: 14, // TODO: Automatically adjust when playerCount changes?
                 };
                 encounterEditor.encounter = null;
             } else {
@@ -1071,6 +1073,8 @@
             }
 
             // TODO: Should this happen earlier instead of here?
+            // TODO: This is currently confusing, deleting last instance then refreshing seems to bring one back,
+            //       but actually it's this (which isn't saved to the state)
             if (!adversary.instances || adversary.instances.length == 0) {
                 adversary.instances = [
                     {
@@ -1142,7 +1146,6 @@
                 addConditionInput.addEventListener("keyup", function(event) {
                     if (event.keyCode === 13) { // Enter key
                         event.preventDefault();
-                        console.log(event.target);
                         addConditionButton.click();
                     }
                 });
