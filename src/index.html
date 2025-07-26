@@ -537,6 +537,12 @@
             editorOverlay.classList.add("hidden");
         }
 
+        adversaryEditor.addEventListener("keyup", function(event) {
+            if (event.keyCode === 27) { // Escape key
+                hideAdversaryEditor();
+            }
+        });
+
         function createFeatureEditorElement(feature, idSuffix)  {
             const featureElement = document.createElement("div");
             featureElement.className = "feature";
@@ -654,6 +660,12 @@
             encounterEditor.classList.add("hidden");
             editorOverlay.classList.add("hidden");
         }
+
+        encounterEditor.addEventListener("keyup", function(event) {
+            if (event.keyCode === 27) { // Escape key
+                hideEncounterEditor();
+            }
+        });
 
         function showEncounterEditor(encounter) {
             if (!encounter) {
