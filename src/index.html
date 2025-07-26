@@ -843,6 +843,7 @@
                     } else {
                         instance[instanceMarkedPropertyName]--;
                     }
+                    saveState();
                     updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName);
                 };
                 elements.push(slot);
