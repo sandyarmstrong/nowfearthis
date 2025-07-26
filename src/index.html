@@ -1088,12 +1088,19 @@
             for (let i = 0; i < adversary.instances.length; i++) {
                 const instance = adversary.instances[i];
 
-                // TODO: Extract to a function so we can use when adding a new instance?
-                // TODO: How do you rename an instance?
                 const instanceDiv = document.createElement("div");
                 instanceDiv.className = "instance";
-                instanceDiv.innerHTML = `<h4>${instance.name}</h4>`;
                 adversaryDiv.appendChild(instanceDiv);
+
+                const instanceName = document.createElement("input")
+                instanceName.type = "text";
+                instanceName.size = 30;
+                instanceName.value = instance.name;
+                instanceName.addEventListener("input", function(event) {
+                    instance.name = event.target.value;
+                    saveState();
+                });
+                instanceDiv.appendChild(instanceName);
 
                 const hpDiv = document.createElement("div");
                 hpDiv.className = "slotInfo";
