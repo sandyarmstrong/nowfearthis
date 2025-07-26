@@ -138,6 +138,10 @@
                 margin-right: 10px;
             }
 
+            .inactive {
+                opacity: 0.3;
+            }
+
             .adversary {
                 position: relative; /* For action button */
                 display: inline-block;
@@ -759,6 +763,7 @@
         }
 
         function createFearTracker(encounter) {
+            const maxFear = 12;
             // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
             // TODO: Roller for getting fear on rests?
             // TODO: Replace this with a stylized number input?
@@ -771,8 +776,18 @@
             }
 
             function updateFearDisplay() {
-                fearValue.innerText = "💀".repeat(encounter.currentFear);
+                fearValue.innerHTML = "";
                 fearValue.title = `${encounter.currentFear} Fear | Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}`;
+
+                for (let i = 0; i < maxFear; i++) {
+                    const fearIcon = document.createElement("span");
+                    fearIcon.className = "fear-icon";
+                    if (i >= encounter.currentFear) {
+                        fearIcon.classList.add("inactive");
+                    }
+                    fearIcon.innerText = "💀";
+                    fearValue.appendChild(fearIcon);
+                }
             }
             updateFearDisplay();
 
@@ -791,7 +806,7 @@
             gainFearButton.innerText = "+";
             gainFearButton.title = "Gain 1 Fear (max 12)";
             gainFearButton.onclick = function() {
-                if (encounter.currentFear < 12) {
+                if (encounter.currentFear < maxFear) {
                     encounter.currentFear++;
                     updateFearDisplay();
                     saveState();
@@ -799,8 +814,8 @@
             };
 
             fearDiv.appendChild(useFearButton);
-            fearDiv.appendChild(gainFearButton);
             fearDiv.appendChild(fearValue);
+            fearDiv.appendChild(gainFearButton);
 
             return fearDiv;
         }
