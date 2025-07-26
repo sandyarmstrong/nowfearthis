@@ -368,7 +368,16 @@
                 <br>
                 <label for="encounter-target-battle-points">Target Battle Points:</label>
                 <input type="number" id="encounter-target-battle-points" min="1" max="99" value="14" required />
-                <br>
+                <span id="encounter-recommended-battle-points"></span>
+                <p>When planning a battle, start with <strong>[(3 x the number of PCs in combat) + 2]</strong> Battle Points and make the following adjustments:</p>
+                <ul>
+                    <li><strong>-1</strong> for an easier or shorter fight</li>
+                    <li><strong>-2</strong> if you're using 2 or more Solo adversaries</li>
+                    <li><strong>-2</strong> if you add +1d4 (or a static +2) to all adversaries' damage rolls</li>
+                    <li><strong>+1</strong> if you choose an adversary from a lower tier</li>
+                    <li><strong>+1</strong> if you don't include any Bruisers, Hordes, Leaders, or Solos</li>
+                    <li><strong>+2</strong> for a harder or longer fight</li>
+                </ul>
                 <button type="default" id="cancel-encounter-edit">Cancel</button>
                 <button type="submit" id="save-encounter-edit">Save Encounter</button>
             </form>
@@ -678,6 +687,12 @@
             }
         });
 
+        function updateEditorBattlePointsRecommendation() {
+            const playerCount = parseInt(document.querySelector("#encounter-player-count").value);
+            const recommendedBattlePoints = (3 * playerCount) + 2;
+            document.querySelector("#encounter-recommended-battle-points").innerText = `(Base recommendation: ${recommendedBattlePoints})`;
+        }
+
         function showEncounterEditor(encounter) {
             if (!encounter) {
                 encounter = {
@@ -695,6 +710,8 @@
             encounterEditor.querySelector("#encounter-tier").value = encounter.playerTier ?? 1;
             encounterEditor.querySelector("#encounter-player-count").value = encounter.playerCount ?? 4;
             encounterEditor.querySelector("#encounter-target-battle-points").value = encounter.targetBattlePoints ?? 14;
+
+            updateEditorBattlePointsRecommendation();
 
             editorOverlay.classList.remove("hidden");
             encounterEditor.classList.remove("hidden");
@@ -748,6 +765,10 @@
                 }
                 refreshDisplay();
             }
+        });
+
+        document.querySelector("#encounter-player-count").addEventListener("change", function() {
+            updateEditorBattlePointsRecommendation();
         });
 
         // TODO: This is annoying if you are scrolled down, and every adversary above changes expansion,
