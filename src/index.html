@@ -261,12 +261,14 @@
             button.action {
                 float: right;
             }
-            button.action-top {
+            .top-actions {
                 position: absolute;
                 right: 5px;
                 top: 5px;
-
-                padding: 2px 4px;
+            }
+            .top-actions button {
+                padding: 2px;
+                margin-left: 3px;
                 border-radius: 4px;
                 font-size: smaller;
             }
@@ -583,7 +585,10 @@
                 }
             }
 
-            onShown(); // Do whatever cleanup the caller needs
+            if (onShown) {
+                onShown();
+            }
+
             editorOverlay.classList.remove("hidden");
             adversaryEditor.classList.remove("hidden");
             adversaryEditor.adversary = adversary;
@@ -833,14 +838,6 @@
             const actionsMenu = document.createElement("menu");
             actionsMenu.className = "actions-menu";
 
-            const editAction = document.createElement("li");
-            editAction.innerHTML = `<button class="menu-action">Edit</button>`;
-            editAction.title = "Edit this adversary";
-            editAction.onclick = function() {
-                showAdversaryEditor(adversary, () => actionsMenu.remove());
-            };
-            actionsMenu.appendChild(editAction);
-
             const copyAction = document.createElement("li");
             copyAction.innerHTML = `<button class="menu-action">Copy</button>`;
             copyAction.title = "Copy this adversary, including all changed state";
@@ -859,19 +856,48 @@
             };
             actionsMenu.appendChild(copyFromSourceAction);
 
-            // TODO: Maybe move this back to a button for quicker delete?
-            const deleteAction = document.createElement("li");
-            deleteAction.innerHTML = `<button class="menu-action">Remove</button>`;
-            deleteAction.title = "Remove this adversary from the encounter";
-            deleteAction.onclick = function() {
-                adversaryElement.dispatchEvent(adversaryRemovedEvent);
-                actionsMenu.remove();
+            const topActions = document.createElement("div");
+            topActions.className = "top-actions";
+            adversaryElement.appendChild(topActions);
+
+            const addInstanceButton = document.createElement("button");
+            addInstanceButton.innerText = "➕";
+            addInstanceButton.title = "Add another instance of this adversary";
+            addInstanceButton.onclick = function() {
+                const newInstance = {
+                    // TODO: Review naming, this doesn't work well if you add several, delete several, add again.
+                    //       May need to parse the names to find the largest, like we do for adversary display names.
+                    name: adversary.name + " #" + (adversary.instances.length + 1),
+                    hpMarked: 0,
+                    stressMarked: 0
+                };
+                if (!adversary.instances) {
+                    adversary.instances = [];
+                }
+                adversary.instances.push(newInstance);
+                saveState();
+                refreshDisplay();
             };
-            actionsMenu.appendChild(deleteAction);
+            topActions.appendChild(addInstanceButton);
+
+            const editButton = document.createElement("button");
+            editButton.innerText = "✏️";
+            editButton.title = "Edit this adversary";
+            editButton.onclick = function() {
+                showAdversaryEditor(adversary);
+            };
+            topActions.appendChild(editButton);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.innerText = "🗑️";
+            deleteButton.title = "Remove this adversary from the encounter";
+            deleteButton.onclick = function() {
+                adversaryElement.dispatchEvent(adversaryRemovedEvent);
+            };
+            topActions.appendChild(deleteButton);
 
             const actionsButton = document.createElement("button");
-            actionsButton.className = "action-top";
-            actionsButton.innerText = "…";
+            actionsButton.innerText = "🎭";
             actionsButton.title = "Adversary management actions";
             actionsButton.onclick = function() {
                 if (actionsMenu.parentElement) {
@@ -880,7 +906,7 @@
                     adversaryElement.appendChild(actionsMenu);
                 }
             };
-            adversaryElement.appendChild(actionsButton);
+            topActions.appendChild(actionsButton);
         }
 
         function updateConditionsDisplay(container, instance) {
@@ -1167,41 +1193,25 @@
                 addConditionsAndModifications.appendChild(addModificationsDiv);
                 instanceDiv.appendChild(addConditionsAndModifications);
 
+                const instanceTopActions = document.createElement("div");
+                instanceTopActions.className = "top-actions";
+                instanceDiv.appendChild(instanceTopActions);
+
                 const removeInstanceButton = document.createElement("button");
                 removeInstanceButton.className = "action-top";
                 removeInstanceButton.style = "background-color: var(--clr-surface-tonal-a0)";
                 removeInstanceButton.innerText = "🗑️";
+                removeInstanceButton.title = "Remove this instance of the adversary";
                 removeInstanceButton.onclick = function(event) {
-                    event.target.parentElement.remove();
+                    event.target.closest(".instance").remove();
                     adversary.instances = adversary.instances.filter(function(i) {
                         return i !== instance;
                     });
                     saveState();
                     // TODO: What happens when you delete the last instance? Delete adversary? Or prevent clicking it?
                 };
-                instanceDiv.appendChild(removeInstanceButton);
+                instanceTopActions.appendChild(removeInstanceButton);
             }
-
-            const addInstanceButton = document.createElement("button");
-            addInstanceButton.className = "action";
-            addInstanceButton.innerText = "+ Add";
-            addInstanceButton.title = "Add another instance of this adversary";
-            addInstanceButton.onclick = function() {
-                const newInstance = {
-                    // TODO: Review naming, this doesn't work well if you add several, delete several, add again.
-                    //       May need to parse the names to find the largest, like we do for adversary display names.
-                    name: adversary.name + " #" + (adversary.instances.length + 1),
-                    hpMarked: 0,
-                    stressMarked: 0
-                };
-                if (!adversary.instances) {
-                    adversary.instances = [];
-                }
-                adversary.instances.push(newInstance);
-                saveState();
-                refreshDisplay();
-            };
-            adversaryDiv.appendChild(addInstanceButton);
 
             setupAdversaryActionButton(adversaryDiv, adversary);
 
