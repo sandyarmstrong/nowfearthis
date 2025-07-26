@@ -113,8 +113,6 @@
             }
 
             button {
-                /* font-size: 1.5em;
-                line-height: 1em; */
                 padding: 5px;
                 border-radius: 8px;
                 color: var(--button-text-color);
@@ -129,8 +127,23 @@
             }
             button:disabled {
                 background-color: var(--clr-surface-a50);
-                opacity: 0.7;;
+                opacity: 0.7;
             }
+
+            button.instance-action {
+                background-color: var(--clr-surface-tonal-a0);
+            }
+            button.instance-action:hover {
+                background-color: var(--clr-surface-tonal-a10);
+            }
+            button.instance-action:active {
+                background-color: var(--clr-surface-tonal-a20);
+            }
+            button.instance-action:disabled {
+                background-color: var(--clr-surface-tonal-a30);
+                opacity: 0.7;
+            }
+
 
             #encounter {
                 margin: 10px;
@@ -1252,8 +1265,7 @@
                 instanceDiv.appendChild(instanceTopActions);
 
                 const removeInstanceButton = document.createElement("button");
-                removeInstanceButton.className = "action-top";
-                removeInstanceButton.style = "background-color: var(--clr-surface-tonal-a0)";
+                removeInstanceButton.className = "instance-action";
                 removeInstanceButton.innerText = "🗑️";
                 removeInstanceButton.title = "Remove this instance of the adversary";
                 removeInstanceButton.onclick = function(event) {
