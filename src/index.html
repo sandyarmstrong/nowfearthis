@@ -727,6 +727,18 @@
             showEncounterEditor(encounter);
         });
 
+        document.querySelector("#delete-encounter").addEventListener("click", function() {
+            if (state.encounters && state.encounters.length > 0) {
+                state.encounters.splice(selectedEncounterIndex, 1);
+                selectedEncounterIndex = Math.min(selectedEncounterIndex, state.encounters.length - 1);
+                saveState();
+                if (state.encounters.length === 0) {
+                    showEncounterEditor();
+                }
+                refreshDisplay();
+            }
+        });
+
         // TODO: This is annoying if you are scrolled down, and every adversary above changes expansion,
         //       messing with your scroll position. Fix scroll position or just don't do this.
         function handleFeaturesToggle(event) {
