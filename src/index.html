@@ -77,13 +77,16 @@
             }
 
             #top-bar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
                 top: 0px;
                 left: 0px;
                 right: 0px;
                 background-color: var(--clr-surface-a10);
                 border-bottom: 1px solid var(--clr-surface-a20);
             }
-            #top-bar > * {
+            .top-bar-group > * {
                 display: inline-block;
             }
             input#load-encounters {
@@ -337,19 +340,22 @@
         </datalist>
 
         <div id="top-bar">
-            <select id="current-encounter">
-                <option value="Forest Ambush">Forest Ambush</option>
-                <option value="Searching the Mines">Searching the Mines</option>
-            </select>
-            <button id="edit-encounter" title="Edit Encounter">✏️</button>
-            <button id="delete-encounter" title="Delete Encounter">🗑️</button>
-            <!-- TODO: Separator-->
-            <button id="add-encounter" title="Create New Encounter">➕ Create New Encounter</button>
-            <!-- TODO: Space, these should be on the right -->
-            <button id="save-encounters" title="Save Encounters">💾</button>
-            <div id="load-encounters-container">
-                <label for="load-encounters" title="Load Encounters (replaces existing encounters)">📂</label>
-                <input type="file" id="load-encounters" accept=".json" />
+            <div class="top-bar-group">
+                <select id="current-encounter">
+                    <option value="Forest Ambush">Forest Ambush</option>
+                    <option value="Searching the Mines">Searching the Mines</option>
+                </select>
+                <button id="edit-encounter" title="Edit Encounter">✏️</button>
+                <button id="delete-encounter" title="Delete Encounter">🗑️</button>
+                <!-- TODO: Separator-->
+                <button id="add-encounter" title="Create New Encounter">➕ Create New Encounter</button>
+            </div>
+            <div class="top-bar-group">
+                <button id="save-encounters" title="Save Encounters">💾</button>
+                <div id="load-encounters-container">
+                    <label for="load-encounters" title="Load Encounters (replaces existing encounters)">📂</label>
+                    <input type="file" id="load-encounters" accept=".json" />
+                </div>
             </div>
         </div>
 
