@@ -129,7 +129,7 @@
                 opacity: 0.7;;
             }
 
-            #encounters {
+            #encounter {
                 margin: 10px;
             }
 
@@ -347,7 +347,7 @@
             </div>
         </div>
 
-        <div id="encounters"></div>
+        <div id="encounter"></div>
 
         <div id="editor-overlay" class="hidden"></div>
         <div id="encounter-editor" class="editor hidden">
@@ -1313,20 +1313,20 @@
                 encounterSelector.value = validatedEncounterIndex;
             }
 
-            // TODO: Deal with no encounters scenario
+            const encounterDiv = document.getElementById("encounter");
+            encounterDiv.className = "encounter";
+            encounterDiv.innerHTML = ""; // Clear any existing content
+
             const encounter = state.encounters[selectedEncounterIndex];
+            if (!encounter) {
+                encounterDiv.innerHTML = "<p>No encounters found. Please create a new encounter.</p>";
+                return;
+            }
 
             // TODO: Validate various fields
             if (!encounter.adversaries) {
                 encounter.adversaries = [];
             }
-
-            // TODO: No need for encountersDiv vs encounterDiv now
-            const encountersDiv = document.getElementById("encounters");
-            encountersDiv.innerHTML = ""; // Clear any existing content
-            const encounterDiv = document.createElement("div");
-            encounterDiv.className = "encounter";
-            encountersDiv.appendChild(encounterDiv);
 
             const encounterBar = document.createElement("div");
             encounterBar.className = "encounter-bar";
