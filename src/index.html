@@ -462,9 +462,9 @@
                     <legend>Attack</legend>
                     <label for="adversary-attack-modifier">Modifier:</label>
                     <!-- <input type="number" id="adversary-attack-modifier" min="-10" max="20" value="0" /> -->
-                    <input type="text" id="adversary-attack-modifier" size="3" />
+                    <input type="text" id="adversary-attack-modifier" size="4" placeholder="e.g. +3" />
                     <label for="adversary-attack-description">Description:</label>
-                    <input type="text" id="adversary-attack-description" />
+                    <input type="text" id="adversary-attack-description" placeholder="e.g. Mace" />
                     <br>
                     <label for="adversary-attack-range">Range:</label>
                     <select id="adversary-attack-range">
@@ -474,11 +474,11 @@
                         <option value="Far">Far</option>
                     </select>
                     <label for="adversary-attack-damage">Damage:</label>
-                    <input type="text" id="adversary-attack-damage" size="12" /> <!-- TODO: Hint at format and phy/mag -->
+                    <input type="text" id="adversary-attack-damage" size="12" placeholder="e.g. 1d10+3 phy" />
                 </fieldset>
                 <fieldset>
                     <legend>Features</legend>
-                    <button id="add-feature">+ Add Feature</button> <!-- TODO: Position this statically up top? -->
+                    <button id="add-feature">+ Add Feature</button>
                     <div id="adversary-features"></div>
                 </fieldset>
                 <button type="button" id="cancel-adversary-edit">Cancel</button>
@@ -573,13 +573,17 @@
         let expandAllFeatures = false;
 
         function hideAdversaryEditor() {
-            const adversaryElement = adversaryEditor.adversaryElement;
+            const adversary = adversaryEditor.adversary;
             adversaryEditor.adversary = undefined;
-            adversaryEditor.adversaryElement = undefined;
             adversaryEditor.classList.add("hidden");
             editorOverlay.classList.add("hidden");
-            if (adversaryElement) {
-                adversaryElement.scrollIntoView({ behavior: "instant", block: "center" });
+            if (adversary) {
+                const adversaryElements = Array.from(document.querySelectorAll(".adversary"));
+                for (let i = 0; i < adversaryElements.length; i++) {
+                    if (adversaryElements[i].adversary == adversary) {
+                        adversaryElements[i].scrollIntoView({ behavior: "instant", block: "center" });
+                    }
+                }
             }
         }
 
@@ -596,7 +600,7 @@
             return featureElement;
         }
 
-        function showAdversaryEditor(adversary, adversaryElement) {
+        function showAdversaryEditor(adversary) {
             // Basics
             adversaryEditor.querySelector("#adversary-name").value = adversary.name;
             adversaryEditor.querySelector("#adversary-tier").value = adversary.tier;
@@ -632,9 +636,8 @@
             editorOverlay.classList.remove("hidden");
             adversaryEditor.classList.remove("hidden");
             adversaryEditor.adversary = adversary;
-            adversaryEditor.adversaryElement = adversaryElement;
             adversaryEditor.querySelector("#adversary-name").select();
-            window.scrollTo(0, 0); // TODO: This kind of sucks if you're editing an adversary that you had to scroll down for
+            window.scrollTo(0, 0);
         }
 
         document.querySelector("#add-feature").addEventListener("click", function() {
@@ -744,7 +747,7 @@
             editorOverlay.classList.remove("hidden");
             encounterEditor.classList.remove("hidden");
             encounterEditor.querySelector("#encounter-name").select();
-            window.scrollTo(0, 0); // TODO: This kind of sucks if you're editing an adversary that you had to scroll down for
+            window.scrollTo(0, 0);
         }
 
         document.querySelector("#encounter-form").addEventListener("submit", function(event) {
@@ -974,7 +977,7 @@
             editButton.innerText = "✏️";
             editButton.title = "Edit this adversary";
             editButton.onclick = function() {
-                showAdversaryEditor(adversary, adversaryElement);
+                showAdversaryEditor(adversary);
             };
             topActions.appendChild(editButton);
 
@@ -1076,6 +1079,7 @@
 
             const adversaryDiv = document.createElement("div");
             adversaryDiv.className = "adversary";
+            adversaryDiv.adversary = adversary;
             adversaryDiv.innerHTML = `<h3 title="Source: ${adversary.originalName}, ${adversary.source} ">${adversary.name}</h3>`;
 
             const battlePoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount) * adversary.instances.length;
