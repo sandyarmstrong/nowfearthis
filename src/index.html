@@ -1061,22 +1061,19 @@
 
             let warning = "";
             if (adversary.tier > encounter.playerTier) {
-                warning += "⚠️ above player tier";
-            }
-            else if (adversary.tier < encounter.playerTier) {
-                warning += "⚠️ below player tier"
+                warning += ", ⚠️ above player tier";
+            } else if (adversary.tier < encounter.playerTier) {
+                warning += ", ⚠️ below player tier"
             }
 
             const adversaryDiv = document.createElement("div");
             adversaryDiv.className = "adversary";
-            adversaryDiv.innerHTML = `<h3 title="Source: ${adversary.originalName}, ${adversary.source}">${adversary.name}</h3>`;
+            adversaryDiv.innerHTML = `<h3 title="Source: ${adversary.originalName}, ${adversary.source} ">${adversary.name}</h3>`;
 
+            const battlePoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount) * adversary.instances.length;
             const tierAndType = document.createElement("p");
             tierAndType.className = "tier";
-            tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type}`;
-            if (warning) {
-                tierAndType.innerHTML += ` <span class="warning">(${warning})</span>`;
-            }
+            tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type} (${battlePoints} pts${warning})`;
             adversaryDiv.appendChild(tierAndType);
 
             if (adversary.description) {
@@ -1421,37 +1418,37 @@
             return adversary;
         }
 
+        function getStatBlockBattlePoints(adversaryType, playerCount) {
+            switch(adversaryType.toLowerCase()) {
+                case "minion":
+                    return 1 / playerCount;
+                case "social":
+                case "support":
+                    return 1;
+                case "horde":
+                case "ranged":
+                case "skulk":
+                case "standard":
+                    return 2;
+                case "leader":
+                    return 3;
+                case "bruiser":
+                    return 4;
+                case "solo":
+                    return 5;
+                default:
+                    console.warn("Unknown adversary type:", adversaryType);
+                    return 0;
+            }
+        }
+
         function calculateBattlePoints(encounter)
         {
             let currentBattlePoints = 0;
             for (let j = 0; j < encounter.adversaries.length; j++) {
                 const adversary = encounter.adversaries[j];
-                let adversaryPoints = 0;
+                const adversaryPoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount);
                 // TODO: Deal with tier differences
-                switch(adversary.type.toLowerCase()) {
-                    case "minion":
-                        adversaryPoints = 1 / encounter.playerCount;
-                        break;
-                    case "social":
-                    case "support":
-                        adversaryPoints = 1;
-                        break;
-                    case "horde":
-                    case "ranged":
-                    case "skulk":
-                    case "standard":
-                        adversaryPoints = 2;
-                        break;
-                    case "leader":
-                        adversaryPoints = 3;
-                        break;
-                    case "bruiser":
-                        adversaryPoints = 4;
-                        break;
-                    case "solo":
-                        adversaryPoints = 5;
-                        break;
-                }
                 currentBattlePoints += adversaryPoints * adversary.instances.length;
             }
             return currentBattlePoints;
