@@ -567,9 +567,14 @@
         let expandAllFeatures = false;
 
         function hideAdversaryEditor() {
+            const adversaryElement = adversaryEditor.adversaryElement;
             adversaryEditor.adversary = undefined;
+            adversaryEditor.adversaryElement = undefined;
             adversaryEditor.classList.add("hidden");
             editorOverlay.classList.add("hidden");
+            if (adversaryElement) {
+                adversaryElement.scrollIntoView({ behavior: "instant", block: "center" });
+            }
         }
 
         adversaryEditor.addEventListener("keyup", function(event) {
@@ -585,7 +590,7 @@
             return featureElement;
         }
 
-        function showAdversaryEditor(adversary, onShown) {
+        function showAdversaryEditor(adversary, adversaryElement) {
             // Basics
             adversaryEditor.querySelector("#adversary-name").value = adversary.name;
             adversaryEditor.querySelector("#adversary-tier").value = adversary.tier;
@@ -618,13 +623,10 @@
                 }
             }
 
-            if (onShown) {
-                onShown();
-            }
-
             editorOverlay.classList.remove("hidden");
             adversaryEditor.classList.remove("hidden");
             adversaryEditor.adversary = adversary;
+            adversaryEditor.adversaryElement = adversaryElement;
             adversaryEditor.querySelector("#adversary-name").select();
             window.scrollTo(0, 0); // TODO: This kind of sucks if you're editing an adversary that you had to scroll down for
         }
@@ -962,7 +964,7 @@
             editButton.innerText = "✏️";
             editButton.title = "Edit this adversary";
             editButton.onclick = function() {
-                showAdversaryEditor(adversary);
+                showAdversaryEditor(adversary, adversaryElement);
             };
             topActions.appendChild(editButton);
 
