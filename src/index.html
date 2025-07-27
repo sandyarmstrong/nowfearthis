@@ -1134,19 +1134,6 @@
                 adversaryDiv.appendChild(featuresContainer);
             }
 
-            // TODO: Should this happen earlier instead of here?
-            // TODO: This is currently confusing, deleting last instance then refreshing seems to bring one back,
-            //       but actually it's this (which isn't saved to the state)
-            if (!adversary.instances || adversary.instances.length == 0) {
-                adversary.instances = [
-                    {
-                        name: adversary.name + " #1",
-                        hpMarked: 0,
-                        stressMarked: 0
-                    }
-                ];
-            }
-
             for (let i = 0; i < adversary.instances.length; i++) {
                 const instance = adversary.instances[i];
 
@@ -1294,7 +1281,7 @@
                         return i !== instance;
                     });
                     saveState();
-                    // TODO: What happens when you delete the last instance? Delete adversary? Or prevent clicking it?
+                    refreshDisplay();
                 };
                 instanceTopActions.appendChild(removeInstanceButton);
             }
@@ -1341,6 +1328,17 @@
                     console.warn("Only 'SRD' and 'Custom' sources are supported");
                     return;
                 }
+
+                if (!newAdversary.instances || newAdversary.instances.length == 0) {
+                    newAdversary.instances = [
+                        {
+                            name: newAdversary.name + " #1",
+                            hpMarked: 0,
+                            stressMarked: 0
+                        }
+                    ];
+                }
+
                 if (!encounter.adversaries) {
                     encounter.adversaries = [];
                 }
@@ -1575,6 +1573,16 @@
                 // TODO: Else, custom with given name?
 
                 if (adversary) {
+                    if (!adversary.instances || adversary.instances.length == 0) {
+                        adversary.instances = [
+                            {
+                                name: adversary.name + " #1",
+                                hpMarked: 0,
+                                stressMarked: 0
+                            }
+                        ];
+                    }
+
                     if (!encounter.adversaries) {
                         encounter.adversaries = [];
                     }
