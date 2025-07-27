@@ -734,7 +734,7 @@
             editorOverlay.classList.remove("hidden");
 
             conditionsEditor.querySelector(".instance-name").innerText = instance.name;
-            updateConditionsDisplay(conditionsEditor.querySelector(".conditions"), instance);
+            updateConditionsDisplay(conditionsEditor.querySelector(".conditions"), instance, false);
 
             conditionsEditor.querySelector("#condition-name").select();
             window.scrollTo(0, 0);
@@ -785,7 +785,7 @@
                 instance.conditions.push(condition);
                 addConditionInput.value = "";
                 saveState();
-                updateConditionsDisplay(conditionsDiv, instance);
+                updateConditionsDisplay(conditionsDiv, instance, false);
             }
         });
 
@@ -823,7 +823,7 @@
                 addModificationPropertyInput.value = "";
                 addModificationValueInput.value = "";
                 saveState();
-                updateConditionsDisplay(conditionsDiv, instance);
+                updateConditionsDisplay(conditionsDiv, instance, false);
             }
         });
 
@@ -1122,13 +1122,8 @@
             topActions.appendChild(actionsButton);
         }
 
-        function updateConditionsDisplay(container, instance) {
+        function updateConditionsDisplay(container, instance, showAddButton) {
             container.innerHTML = "";
-
-            if ((!instance.conditions || instance.conditions.length == 0) &&
-                (!instance.modifications || instance.modifications.length === 0)) {
-                return;
-            }
 
             const conditionsList = document.createElement("ul");
             conditionsList.className = "conditions-list";
@@ -1153,7 +1148,7 @@
                         instance.conditions = instance.conditions.filter(function(c) {
                             return c !== condition;
                         });
-                        updateConditionsDisplay(container, instance);
+                        updateConditionsDisplay(container, instance, showAddButton);
                         saveState();
                     };
                     conditionItem.appendChild(removeButton);
@@ -1179,11 +1174,22 @@
                         instance.modifications = instance.modifications.filter(function(m) {
                             return m !== modification;
                         });
-                        updateConditionsDisplay(container, instance);
+                        updateConditionsDisplay(container, instance, showAddButton);
                         saveState();
                     };
                     modificationItem.appendChild(removeButton);
                 }
+            }
+
+            if (showAddButton) {
+                const editConditions = document.createElement("button");
+                editConditions.className = "add-conditions-button"
+                editConditions.innerText = "Add Conditions";
+                editConditions.title = "Add conditions or modifications to this adversary instance";
+                editConditions.onclick = function(event) {
+                    showConditionsEditor(instance);
+                }
+                conditionsList.appendChild(editConditions);
             }
         }
 
@@ -1306,16 +1312,7 @@
                 const conditionsDiv = document.createElement("div");
                 conditionsDiv.className = "conditions";
                 instanceDiv.appendChild(conditionsDiv);
-                updateConditionsDisplay(conditionsDiv, instance);
-
-                const editConditions = document.createElement("button");
-                editConditions.className = "add-conditions-button"
-                editConditions.innerText = "Add Conditions";
-                editConditions.title = "Add conditions or modifications to this adversary instance";
-                editConditions.onclick = function(event) {
-                    showConditionsEditor(instance);
-                }
-                instanceDiv.appendChild(editConditions);
+                updateConditionsDisplay(conditionsDiv, instance, true);
 
                 const instanceTopActions = document.createElement("div");
                 instanceTopActions.className = "top-actions";
