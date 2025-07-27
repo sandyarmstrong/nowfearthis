@@ -873,6 +873,8 @@
             const marked = instance[instanceMarkedPropertyName];
 
             // TODO: Reduce opacity or something when HP is fully marked?
+            //       - Would also need to do it on initial/refresh layout
+            //       - Would also need to differentiate between HP and Stress
             // TODO: Add "Vulnerable (stress full)" condition when stress is fully marked?
             //       Would have to make sure it couldn't be deleted otherwise though.
 
@@ -1313,6 +1315,7 @@
                 saveState();
             });
             adversaryElement.addEventListener("adversaryCopiedFromSource", function(event) {
+                // TODO: This is mostly a dupe of addAdversaryButton.onclick
                 let newAdversary = null;
                 if (adversary.source == "SRD") {
                     const sourceAdversary = srdAdversaries.find(function(a) {
