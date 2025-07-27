@@ -541,10 +541,10 @@
                                 }
                             ],
                         }
-                    ]
+                    ],
+                    "environments": [], // Big TODO
                 }
             ],
-            "environments": [], // Big TODO
             "custom": { // Yay homebrew, allow searching this, adding, modifying
                 "adversaries": [],
                 "environments": []
@@ -1313,15 +1313,21 @@
                 saveState();
             });
             adversaryElement.addEventListener("adversaryCopiedFromSource", function(event) {
-                // TODO: Support non-SRD sources
-                if (adversary.source !== "SRD") {
-                    console.warn("Copying from non-SRD sources is not supported yet.");
+                let newAdversary = null;
+                if (adversary.source == "SRD") {
+                    const sourceAdversary = srdAdversaries.find(function(a) {
+                        return a.name === adversary.originalName;
+                    });
+                    newAdversary = convertFromSRD(sourceAdversary);
+                } else if (adversary.source == "Custom" && state.custom && state.custom.adversaries) { // TODO: Case-insensive?
+                    const sourceAdversary = state.custom.adversaries.find(function(a) {
+                        return a.name === adversary.originalName;
+                    });
+                    newAdversary = JSON.parse(JSON.stringify(sourceAdversary));
+                } else {
+                    console.warn("Only 'SRD' and 'Custom' sources are supported");
                     return;
                 }
-                const sourceAdversary = srdAdversaries.find(function(a) {
-                    return a.name === adversary.originalName;
-                });
-                const newAdversary = convertFromSRD(sourceAdversary);
                 newAdversary.name += " (copy)"; // TODO: Decide naming
                 if (!encounter.adversaries) {
                     encounter.adversaries = [];
@@ -1332,17 +1338,18 @@
             });
             adversaryElement.addEventListener("adversarySavedToCustom", function(event) {
                 adversary.source = "Custom";
-                adversary.originalName = adversary.name;
+                adversary.originalName = adversary.name; // TODO: Enforce unique names (easy here, hard if we offer import)
                 const newCustomAdversary = JSON.parse(JSON.stringify(adversary));
                 delete newCustomAdversary.instances;
-                if (!encounter.custom) {
-                    encounter.custom = {};
+                if (!state.custom) {
+                    state.custom = {};
                 }
-                if (!encounter.custom.adversaries) {
-                    encounter.custom.adversaries = [];
+                if (!state.custom.adversaries) {
+                    state.custom.adversaries = [];
                 }
-                encounter.custom.adversaries.push(newCustomAdversary); // TODO: Allow deleting from this list
+                state.custom.adversaries.push(newCustomAdversary); // TODO: Allow deleting from this list
                 saveState();
+                refreshDisplay(); // To add to search
             });
             // TODO: Allow importing/exporting custom adversaries/environments independent from encounters
 
@@ -1445,6 +1452,25 @@
                 return;
             }
 
+            // Clear custom entries from search
+            for (let i = adversaryDatalist.children.length - 1; i >= 0; i--) {
+                const option = adversaryDatalist.children[i];
+                if (!option.isSRD) {
+                    option.remove();
+                }
+            }
+
+            // Add custom entries
+            // TODO: Sort alpha by name, mixing sources
+            // TODO: This is not encounter-specific data, should it not be refreshed here?
+            if (state.custom && state.custom.adversaries && state.custom.adversaries.length > 0) {
+                state.custom.adversaries.forEach(function(adversary) {
+                    const option = document.createElement("option");
+                    option.value = adversary.name;
+                    adversaryDatalist.appendChild(option);
+                });
+            }
+
             // TODO: Validate various fields
             if (!encounter.adversaries) {
                 encounter.adversaries = [];
@@ -1460,8 +1486,8 @@
             const addAdversaryDiv = document.createElement("div");
             const srdSearch = document.createElement("input");
             srdSearch.type = "search";
-            srdSearch.placeholder = "Search SRD Adversaries";
-            srdSearch.setAttribute("list", "srd-adversaries");
+            srdSearch.placeholder = "Search Adversaries";
+            srdSearch.setAttribute("list", "searchable-adversaries");
             addAdversaryDiv.appendChild(srdSearch);
             encounterBar.appendChild(addAdversaryDiv);
 
@@ -1503,11 +1529,23 @@
                     // TODO: Or some "custom" type?
                     selectedOption = "Jagged Knife Bandit";
                 }
+                let adversary = null;
                 const srdAdversary = srdAdversaries.find(function(a) {
                     return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
                 });
                 if (srdAdversary) {
-                    const adversary = convertFromSRD(srdAdversary);
+                    adversary = convertFromSRD(srdAdversary);
+                } else if (state.custom && state.custom.adversaries) {
+                    adversary = state.custom.adversaries.find(function(a) {
+                        return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base'}) === 0;
+                    });
+                    if (adversary) {
+                        adversary = JSON.parse(JSON.stringify(adversary)); // Deep copy
+                    }
+                }
+                // TODO: Else, custom with given name?
+
+                if (adversary) {
                     let maxDuplicateNumber = 0;
                     for (let k = 0; k < encounter.adversaries.length; k++) {
                         const existingAdversaryNameParts = encounter.adversaries[k].name.split(" #");
@@ -1536,21 +1574,6 @@
                 }
             });
         }
-
-        // TODO: This is probably a silly way to do this, we
-        //       don't actually want all these DOM elements.
-        //       But it's an easy way to get that autocomplete for now.
-        // TODO: Also, we want a broader search option, should be able
-        //       to search by source, tier, and other arbitrary property text,
-        //       and allow easier browsing.
-        const srdDatalist = document.createElement("datalist");
-        srdDatalist.id = "srd-adversaries";
-        for (let i = 0; i < srdAdversaries.length; i++) {
-            const option = document.createElement("option");
-            option.value = srdAdversaries[i].name;
-            srdDatalist.appendChild(option);
-        }
-        document.body.appendChild(srdDatalist);
 
         console.log("fetching state...");
         let selectedEncounterIndex = parseInt(localStorage.getItem("selected-encounter-index"));
@@ -1613,6 +1636,22 @@
             localStorage.setItem("encounters-state", JSON.stringify(state));
             localStorage.setItem("selected-encounter-index", selectedEncounterIndex)
         }
+
+        // TODO: This is probably a silly way to do this, we
+        //       don't actually want all these DOM elements.
+        //       But it's an easy way to get that autocomplete for now.
+        // TODO: Also, we want a broader search option, should be able
+        //       to search by source, tier, and other arbitrary property text,
+        //       and allow easier browsing.
+        const adversaryDatalist = document.createElement("datalist");
+        adversaryDatalist.id = "searchable-adversaries";
+        for (let i = 0; i < srdAdversaries.length; i++) {
+            const option = document.createElement("option");
+            option.value = srdAdversaries[i].name;
+            option.isSRD = true;
+            adversaryDatalist.appendChild(option);
+        }
+        document.body.appendChild(adversaryDatalist);
 
         refreshDisplay();
     </script>
