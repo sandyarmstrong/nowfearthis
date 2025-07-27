@@ -152,6 +152,9 @@
                 margin: 10px;
             }
 
+            .encounter-bar p {
+                margin: 0px;
+            }
             .encounter-bar > * {
                 display: inline-block;
                 margin-right: 10px;
@@ -166,7 +169,7 @@
                 display: inline-block;
                 vertical-align: top;
                 /*
-                    22em is empirical width needed to fit full ATK line for Volcanic Dragon: Ashen Tyrant.
+                    22em is empirical width needed to fit full ATK line for "Volcanic Dragon: Ashen Tyrant".
                     Longest ATK line in SRD is "Fallen Warlord: Undefeated Champion",
                     which requires 27em (at 22em, both ATK and Experience lines overflow).
                     27em feels way too wide. Trying 23em, which is enough to stop Fallen Warlord's
@@ -1177,10 +1180,8 @@
                 // TODO: Parse modifications and reflect them in the stats
                 const conditionsDiv = document.createElement("div");
                 conditionsDiv.className = "conditions";
-                const conditionsDisplayDiv = document.createElement("div");
-                conditionsDiv.appendChild(conditionsDisplayDiv);
 
-                updateConditionsDisplay(conditionsDisplayDiv, instance);
+                updateConditionsDisplay(conditionsDiv, instance);
 
                 const addConditionsDiv = document.createElement("div");
                 addConditionsDiv.className = "add-conditions";
@@ -1200,7 +1201,7 @@
                         }
                         instance.conditions.push(condition);
                         addConditionInput.value = "";
-                        updateConditionsDisplay(conditionsDisplayDiv, instance);
+                        updateConditionsDisplay(conditionsDiv, instance);
                         saveState();
                     }
                 };
@@ -1253,7 +1254,7 @@
                         addModificationNameInput.value = "";
                         addModificationPropertyInput.value = "";
                         addModificationValueInput.value = "";
-                        updateConditionsDisplay(conditionsDisplayDiv, instance);
+                        updateConditionsDisplay(conditionsDiv, instance);
                         saveState();
                     }
                 };
