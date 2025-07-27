@@ -127,7 +127,7 @@
             }
             button:disabled {
                 background-color: var(--clr-surface-a50);
-                opacity: 0.7;
+                /* opacity: 0.7; */
             }
 
             button.instance-action {
@@ -557,6 +557,7 @@
         const adversaryCopiedEvent = new Event("adversaryCopied");
         const adversaryCopiedFromSourceEvent = new Event("adversaryCopiedFromSource");
         const adversarySavedToCustomEvent = new Event("adversarySavedToCustom");
+        const adversaryDeletedFromCustomEvent = new Event("adversaryDeletedFromCustom");
 
         const editorOverlay = document.getElementById("editor-overlay");
         const encounterEditor = document.getElementById("encounter-editor");
@@ -914,6 +915,7 @@
             actionsMenu.appendChild(copyFromSourceAction);
 
             const saveCustomAction = document.createElement("li");
+            // TODO: Disable when no changes have been made?
             saveCustomAction.innerHTML = `<button class="menu-action">Save to Custom Adversaries</button>`;
             saveCustomAction.title = "Save this adversary to your custom adversaries for later use";
             saveCustomAction.onclick = function() {
@@ -921,6 +923,15 @@
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(saveCustomAction);
+
+            const deleteCustomAction = document.createElement("li");
+            deleteCustomAction.innerHTML = `<button class="menu-action" ${adversary.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Adversaries</button>`;
+            deleteCustomAction.title = "Delete from your custom adversaries";
+            deleteCustomAction.onclick = function() {
+                adversaryElement.dispatchEvent(adversaryDeletedFromCustomEvent);
+                actionsMenu.remove();
+            };
+            actionsMenu.appendChild(deleteCustomAction);
 
             const topActions = document.createElement("div");
             topActions.className = "top-actions";
@@ -1347,11 +1358,28 @@
                 if (!state.custom.adversaries) {
                     state.custom.adversaries = [];
                 }
-                state.custom.adversaries.push(newCustomAdversary); // TODO: Allow deleting from this list
+                state.custom.adversaries.push(newCustomAdversary);
                 saveState();
                 refreshDisplay(); // To add to search
             });
-            // TODO: Allow importing/exporting custom adversaries/environments independent from encounters
+            adversaryElement.addEventListener("adversaryDeletedFromCustom", function(event) {
+                if (adversary.source !== "Custom") {
+                    console.warn("Trying to delete a non-custom adversary from custom list");
+                    return;
+                }
+                if (!state.custom) {
+                    state.custom = {};
+                }
+                if (!state.custom.adversaries) {
+                    state.custom.adversaries = [];
+                }
+                state.custom.adversaries = state.custom.adversaries.filter(function(a) {
+                    return a.name !== adversary.originalName;
+                });
+                adversary.source = "Orphaned";
+                saveState();
+                refreshDisplay();
+            });
 
             container.appendChild(adversaryElement);
             refreshBattlePoints();
