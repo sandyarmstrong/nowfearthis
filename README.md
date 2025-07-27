@@ -12,4 +12,4 @@ For full license terms, see: https://darringtonpress.com/license/
 
 ## Additional Content
 
-Daggerheart SRD adversary JSON comes from the amazing https://github.com/seansbox/daggerheart-srd project.
+Daggerheart SRD JSON comes from the amazing https://github.com/seansbox/daggerheart-srd project.
