@@ -813,8 +813,9 @@
             // TODO: Roller for getting fear on rests?
             // TODO: Replace this with a stylized number input?
             const fearDiv = document.createElement("div");
-
             const fearValue = document.createElement("span");
+            const useFearButton = document.createElement("button");
+            const gainFearButton = document.createElement("button");
 
             if (encounter.currentFear === undefined) {
                 encounter.currentFear = 0;
@@ -833,10 +834,12 @@
                     fearIcon.innerText = "💀";
                     fearValue.appendChild(fearIcon);
                 }
+
+                useFearButton.disabled = encounter.currentFear <= 0;
+                gainFearButton.disabled = encounter.currentFear >= maxFear;
             }
             updateFearDisplay();
 
-            const useFearButton = document.createElement("button");
             useFearButton.innerText = "-";
             useFearButton.title = "Use 1 Fear";
             useFearButton.onclick = function() {
@@ -847,7 +850,6 @@
                 }
             };
 
-            const gainFearButton = document.createElement("button");
             gainFearButton.innerText = "+";
             gainFearButton.title = "Gain 1 Fear (max 12)";
             gainFearButton.onclick = function() {
