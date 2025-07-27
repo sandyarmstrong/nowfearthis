@@ -188,6 +188,11 @@
                 margin: 8px 0px;
                 color: var(--header-text-color);
             }
+            #conditions-editor h3 {
+                margin: 0px;
+                margin-bottom: 10px;
+                color: var(--header-text-color);
+            }
             .adversary p {
                 margin: 2px 0px;
             }
@@ -485,6 +490,21 @@
                 <button type="submit" id="save-adversary-edit">Save</button>
             </form>
         </div>
+        <div id="conditions-editor" class="editor hidden"> <!-- TODO: Position over adversary instead? -->
+            <h3 class="instance-name"></h3>
+            <div class="conditions"></div>
+            <div class="add-conditions">
+                <input type="text" placeholder="Condition Name" list="srd-conditions" id="condition-name">
+                <button class="inline-add" title="Add condition" id="add-condition">+</button>
+            </div>
+            <div class="add-modifications">
+                <input type="text" placeholder="Modification Name" id="modification-name">
+                <input type="text" placeholder="Target Property" list="modifiable-properties" id="modification-property">
+                <input type="text" placeholder="Modifier (e.g. -2, +3, 10)" id="modification-value">
+                <button class="inline-add" title="Add modification" id="add-modification">+</button>
+            </div>
+            <button id="done-adding-conditions">Done</button>
+        </div>
 
         <div id="repo-info">
             <p>Fright Night is free and open source and works entirely offline. Please <a href="https://github.com/sandyarmstrong/frightnight/issues">report any bugs or feature requests</a>.</p>
@@ -569,6 +589,7 @@
         const editorOverlay = document.getElementById("editor-overlay");
         const encounterEditor = document.getElementById("encounter-editor");
         const adversaryEditor = document.getElementById("adversary-editor");
+        const conditionsEditor = document.getElementById("conditions-editor");
 
         let expandAllFeatures = false;
 
@@ -705,6 +726,105 @@
             saveState();
             refreshDisplay();
             hideAdversaryEditor();
+        });
+
+        function showConditionsEditor(instance) {
+            conditionsEditor.instance = instance;
+            conditionsEditor.classList.remove("hidden");
+            editorOverlay.classList.remove("hidden");
+
+            conditionsEditor.querySelector(".instance-name").innerText = instance.name;
+            updateConditionsDisplay(conditionsEditor.querySelector(".conditions"), instance);
+
+            conditionsEditor.querySelector("#condition-name").select();
+            window.scrollTo(0, 0);
+        }
+
+        function hideConditionsEditor() {
+            const instance = conditionsEditor.instance;
+            conditionsEditor.instance = undefined;
+            conditionsEditor.classList.add("hidden");
+            editorOverlay.classList.add("hidden");
+
+            refreshDisplay(); // TODO: A more efficient way to update just the conditions div, maybe a callback?
+
+            if (instance) {
+                const instanceElements = Array.from(document.querySelectorAll(".instance"));
+                for (let i = 0; i < instanceElements.length; i++) {
+                    if (instanceElements[i].instance == instance) {
+                        instanceElements[i].scrollIntoView({ behavior: "instant", block: "center" });
+                    }
+                }
+            }
+        }
+
+        conditionsEditor.addEventListener("keyup", function(event) {
+            if (event.keyCode === 27) { // Escape key
+                hideConditionsEditor();
+            }
+        });
+
+        document.querySelector("#done-adding-conditions").addEventListener("click", function(event) {
+            hideConditionsEditor();
+        });
+
+        document.querySelector("#add-condition").addEventListener("click", function(event) {
+            const instance = conditionsEditor.instance;
+            if (!instance) {
+                return;
+            }
+
+            const addConditionInput = conditionsEditor.querySelector("#condition-name");
+            const conditionsDiv = conditionsEditor.querySelector(".conditions");
+
+            const condition = addConditionInput.value.trim();
+            if (condition && (!instance.conditions || !instance.conditions.includes(condition))) {
+                if (!instance.conditions) {
+                    instance.conditions = [];
+                }
+                instance.conditions.push(condition);
+                addConditionInput.value = "";
+                saveState();
+                updateConditionsDisplay(conditionsDiv, instance);
+            }
+        });
+
+        document.querySelector("#condition-name").addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) { // Enter key
+                event.preventDefault();
+                document.querySelector("#add-condition").click();
+            }
+        });
+
+        document.querySelector("#add-modification").addEventListener("click", function(evenet) {
+            const instance = conditionsEditor.instance;
+            if (!instance) {
+                return;
+            }
+
+            const addModificationNameInput = conditionsEditor.querySelector("#modification-name");
+            const addModificationPropertyInput = conditionsEditor.querySelector("#modification-property");
+            const addModificationValueInput = conditionsEditor.querySelector("#modification-value");
+            const conditionsDiv = conditionsEditor.querySelector(".conditions");
+
+            const modificationName = addModificationNameInput.value.trim();
+            const propertyName = addModificationPropertyInput.value.trim();
+            const modificationValue = addModificationValueInput.value.trim();
+            if (modificationName && propertyName && modificationValue) {
+                if (!instance.modifications) {
+                    instance.modifications = [];
+                }
+                instance.modifications.push({
+                    modificationName: modificationName,
+                    propertyName: propertyName,
+                    modification: modificationValue
+                });
+                addModificationNameInput.value = "";
+                addModificationPropertyInput.value = "";
+                addModificationValueInput.value = "";
+                saveState();
+                updateConditionsDisplay(conditionsDiv, instance);
+            }
         });
 
         function hideEncounterEditor() {
@@ -1151,6 +1271,7 @@
 
                 const instanceDiv = document.createElement("div");
                 instanceDiv.className = "instance";
+                instanceDiv.instance = instance;
                 adversaryDiv.appendChild(instanceDiv);
 
                 const instanceName = document.createElement("input")
@@ -1184,98 +1305,17 @@
                 // TODO: Parse modifications and reflect them in the stats
                 const conditionsDiv = document.createElement("div");
                 conditionsDiv.className = "conditions";
-
+                instanceDiv.appendChild(conditionsDiv);
                 updateConditionsDisplay(conditionsDiv, instance);
 
-                const addConditionsDiv = document.createElement("div");
-                addConditionsDiv.className = "add-conditions";
-                const addConditionInput = document.createElement("input");
-                addConditionInput.type = "text";
-                addConditionInput.placeholder = "Condition Name";
-                addConditionInput.setAttribute("list", "srd-conditions");
-                const addConditionButton = document.createElement("button");
-                addConditionButton.className = "inline-add";
-                addConditionButton.innerText = "+";
-                addConditionButton.title = "Add condition";
-                addConditionButton.onclick = function(event) {
-                    const condition = addConditionInput.value.trim();
-                    if (condition && (!instance.conditions || !instance.conditions.includes(condition))) {
-                        if (!instance.conditions) {
-                            instance.conditions = [];
-                        }
-                        instance.conditions.push(condition);
-                        addConditionInput.value = "";
-                        updateConditionsDisplay(conditionsDiv, instance);
-                        saveState();
-                    }
-                };
-                addConditionInput.addEventListener("keyup", function(event) {
-                    if (event.keyCode === 13) { // Enter key
-                        event.preventDefault();
-                        addConditionButton.click();
-                    }
-                });
-                addConditionsDiv.appendChild(addConditionInput);
-                addConditionsDiv.appendChild(addConditionButton);
-                instanceDiv.appendChild(conditionsDiv);
-
-                // modificationsContainer.addEventListener("toggle", handleFeaturesToggle);
-
-                // TODO: This UI is pretty big, taking up a lot of space if
-                //       there are a lot of adversaries, even if there are no modifications.
-                //       Could make the input into a modal instead. Could also consider
-                //       displaying modifications directly in the stats, with details
-                //       on hover (but then how to delete?).
-                const addModificationsDiv = document.createElement("div");
-                addModificationsDiv.className = "add-modifications";
-                const addModificationNameInput = document.createElement("input");
-                addModificationNameInput.type = "text";
-                addModificationNameInput.placeholder = "Modification Name";
-                const addModificationPropertyInput = document.createElement("input");
-                addModificationPropertyInput.type = "text";
-                addModificationPropertyInput.placeholder = "Target Property";
-                addModificationPropertyInput.setAttribute("list", "modifiable-properties");
-                const addModificationValueInput = document.createElement("input");
-                addModificationValueInput.type = "text";
-                addModificationValueInput.placeholder = "Modifier (e.g. -2, +3, 10)";
-                const addModificationButton = document.createElement("button");
-                addModificationButton.className = "inline-add";
-                addModificationButton.innerText = "+";
-                addModificationButton.title = "Add modification";
-                addModificationButton.onclick = function(event) {
-                    const modificationName = addModificationNameInput.value.trim();
-                    const propertyName = addModificationPropertyInput.value.trim();
-                    const modificationValue = addModificationValueInput.value.trim();
-                    if (modificationName && propertyName && modificationValue) {
-                        if (!instance.modifications) {
-                            instance.modifications = [];
-                        }
-                        instance.modifications.push({
-                            modificationName: modificationName,
-                            propertyName: propertyName,
-                            modification: modificationValue
-                        });
-                        addModificationNameInput.value = "";
-                        addModificationPropertyInput.value = "";
-                        addModificationValueInput.value = "";
-                        updateConditionsDisplay(conditionsDiv, instance);
-                        saveState();
-                    }
-                };
-                addModificationsDiv.appendChild(addModificationNameInput);
-                addModificationsDiv.appendChild(addModificationPropertyInput);
-                addModificationsDiv.appendChild(addModificationValueInput);
-                addModificationsDiv.appendChild(addModificationButton);
-
-                // TODO: Change this to a modal, triggered by an Add button that is displayed inline at the end of the list?
-                const addConditionsAndModifications = document.createElement("details");
-                addConditionsAndModifications.className = "modificationsExpander";
-                // TODO: Should we have the same toggle all behavior for these as we have for Features?
-                //       Could feel weird if there are a lot of instances...
-                addConditionsAndModifications.innerHTML = `<summary>Add Conditions/Modifications</summary>`;
-                addConditionsAndModifications.appendChild(addConditionsDiv);
-                addConditionsAndModifications.appendChild(addModificationsDiv);
-                instanceDiv.appendChild(addConditionsAndModifications);
+                const editConditions = document.createElement("button");
+                editConditions.className = "add-conditions-button"
+                editConditions.innerText = "Add Conditions";
+                editConditions.title = "Add conditions or modifications to this adversary instance";
+                editConditions.onclick = function(event) {
+                    showConditionsEditor(instance);
+                }
+                instanceDiv.appendChild(editConditions);
 
                 const instanceTopActions = document.createElement("div");
                 instanceTopActions.className = "top-actions";
