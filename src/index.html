@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>Now Fear This</title>
         <script src="adversaries.js"></script>
-        <script src="environments.js"></script>
+        <!-- <script src="environments.js"></script> -->
         <style>
             :root {
                 /* --body-bg-color: rgb(13, 17, 23);
@@ -1108,7 +1108,7 @@
             actionsMenu.className = "actions-menu";
 
             const copyAction = document.createElement("li");
-            copyAction.innerHTML = `<button class="menu-action">Copy</button>`;
+            copyAction.innerHTML = `<button class="menu-action">Duplicate</button>`;
             copyAction.title = "Copy this adversary, including all changed state";
             copyAction.onclick = function() {
                 adversaryElement.dispatchEvent(adversaryCopiedEvent);
