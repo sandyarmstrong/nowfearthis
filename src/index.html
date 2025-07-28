@@ -467,6 +467,7 @@
                         <option value="Standard">Standard</option>
                         <option value="Support">Support</option>
                     </select>
+                    <!-- TODO: For Hordes (and others?), allow editing countPerHp -->
                     <br>
                     <label for="adversary-description">Description:</label>
                     <textarea id="adversary-description" cols="30" rows="3"></textarea>
@@ -1277,6 +1278,11 @@
                 warning += ", ⚠️ below player tier"
             }
 
+            let typeSuffix = "";
+            if (adversary.countPerHp > 1) {
+                typeSuffix = ` (${adversary.countPerHp}/HP)`;
+            }
+
             const adversaryDiv = document.createElement("div");
             adversaryDiv.className = "adversary";
             adversaryDiv.adversary = adversary;
@@ -1285,7 +1291,7 @@
             const battlePoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount) * adversary.instances.length;
             const tierAndType = document.createElement("p");
             tierAndType.className = "tier";
-            tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type} (${battlePoints} pts${warning})`;
+            tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type}${typeSuffix} (${battlePoints} pts${warning})`;
             adversaryDiv.appendChild(tierAndType);
 
             if (adversary.description) {
@@ -1304,10 +1310,9 @@
 
             const stats = document.createElement("p");
             stats.className = "stats";
-            let thresholds = "None";
-            if (Number.isInteger(adversary.majorThreshold) && Number.isInteger(adversary.severeThreshold)) {
-                thresholds = `${adversary.majorThreshold}/${adversary.severeThreshold}`;
-            }
+            let majorThreshold = adversary.majorThreshold || "None";
+            let severeThreshold = adversary.severeThreshold || "None";
+            thresholds = `${majorThreshold}/${severeThreshold}`;
             stats.innerHTML = `<span class="statLabel">Difficulty:</span> ${adversary.difficulty} <span class="divider">|</span> <span class="statLabel">Thresholds:</span> ${thresholds}`;
             if (adversary.attackDescription) {
                 stats.innerHTML += `<br><span class="statLabel">ATK:</span> ${adversary.attackModifier} <span class="divider">|</span> <span class="statLabel">${adversary.attackDescription}:</span> ${adversary.attackRange} <span class="divider">|</span> ${adversary.attackDamage}`;
@@ -1440,7 +1445,7 @@
                     const sourceAdversary = srdAdversaries.find(function(a) {
                         return a.name === adversary.originalName;
                     });
-                    newAdversary = convertFromSRD(sourceAdversary);
+                    newAdversary = JSON.parse(JSON.stringify(sourceAdversary));
                 } else if (adversary.source == "Custom" && state.custom && state.custom.adversaries) { // TODO: Case-insensive?
                     const sourceAdversary = state.custom.adversaries.find(function(a) {
                         return a.name === adversary.originalName;
@@ -1504,38 +1509,6 @@
 
             container.appendChild(adversaryElement);
             refreshBattlePoints();
-        }
-
-        function convertFromSRD(srdAdversary) {
-            const thresholds = srdAdversary.thresholds.split("/");
-            const adversary = {
-                name: srdAdversary.name,
-                originalName: srdAdversary.name,
-                source: "SRD",
-                tier: parseInt(srdAdversary.tier),
-                type: srdAdversary.type,
-                description: srdAdversary.description,
-                motivesAndTactics: srdAdversary.motives_and_tactics,
-                difficulty: parseInt(srdAdversary.difficulty),
-                hp: parseInt(srdAdversary.hp),
-                stress: parseInt(srdAdversary.stress),
-                majorThreshold: parseInt(thresholds[0]),
-                severeThreshold: parseInt(thresholds[1]),
-                attackModifier: srdAdversary.atk,
-                attackDescription: srdAdversary.attack,
-                attackRange: srdAdversary.range,
-                attackDamage: srdAdversary.damage,
-                experience: srdAdversary.experience,
-            };
-            if (srdAdversary.feats && srdAdversary.feats.length > 0) {
-                adversary.features = srdAdversary.feats.map(function(feat) {
-                    return {
-                        name: feat.name,
-                        text: feat.text
-                    };
-                });
-            }
-            return adversary;
         }
 
         function getStatBlockBattlePoints(adversaryType, playerCount) {
@@ -1679,19 +1652,16 @@
                     // TODO: Or some "custom" type?
                     selectedOption = "Jagged Knife Bandit";
                 }
-                let adversary = null;
-                const srdAdversary = srdAdversaries.find(function(a) {
+                let adversary = srdAdversaries.find(function(a) {
                     return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
                 });
-                if (srdAdversary) {
-                    adversary = convertFromSRD(srdAdversary);
-                } else if (state.custom && state.custom.adversaries) {
+                if (!adversary && state.custom && state.custom.adversaries) {
                     adversary = state.custom.adversaries.find(function(a) {
                         return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base'}) === 0;
                     });
-                    if (adversary) {
-                        adversary = JSON.parse(JSON.stringify(adversary)); // Deep copy
-                    }
+                }
+                if (adversary) {
+                    adversary = JSON.parse(JSON.stringify(adversary)); // Deep copy
                 }
                 // TODO: Else, custom with given name?
 
@@ -1826,7 +1796,7 @@
             const addButton = document.createElement("button");
             addButton.innerText = "➕ Add";
             addButton.addEventListener("click", function(event) {
-                const adversary = convertFromSRD(tr.adversary);
+                const adversary = JSON.parse(JSON.stringify(tr.adversary));
                 if (!adversary.instances || adversary.instances.length == 0) {
                     adversary.instances = [
                         {
@@ -1865,7 +1835,6 @@
             const rows = browsingTableBody.querySelectorAll("tr");
             rows.forEach(function(row) {
                 // TODO: Actually have to apply all filters on each change
-                // TODO: Hordes are not well-supported here or anywhere else in the app yet
                 if (selectedType == "Any type" || row.adversary.type == selectedType) {
                     row.style.display = "";
                 } else {

@@ -1,21 +1,25 @@
-﻿// Courtesy of https://github.com/seansbox/daggerheart-srd/blob/52688eccc7d2bd9f5ef7a3f2d3f28f1532935387/.build/json/adversaries.json
+// Courtesy of https://raw.githubusercontent.com/seansbox/daggerheart-srd/refs/heads/main/.build/json/adversaries.json
 const srdAdversaries = [
   {
     "name": "Acid Burrower",
-    "tier": "1",
+    "originalName": "Acid Burrower",
+    "source": "SRD",
+    "tier": 1,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A horse-sized insect with digging claws and acidic blood.",
-    "motives_and_tactics": "Burrow, drag away, feed, reposition",
-    "difficulty": "14",
-    "thresholds": "8/15",
-    "hp": "8",
-    "stress": "3",
-    "atk": "+3",
-    "attack": "Claws",
-    "range": "Very Close",
-    "damage": "1d12+2 phy",
+    "motivesAndTactics": "Burrow, drag away, feed, reposition",
+    "difficulty": 14,
+    "hp": 8,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 15,
+    "attackModifier": "+3",
+    "attackDescription": "Claws",
+    "attackRange": "Very Close",
+    "attackDamage": "1d12+2 phy",
     "experience": "Tremor Sense +2",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (3) - Passive",
         "text": "The Burrower can be spotlighted up to three times per GM turn. Spend Fear as usual to spotlight them."
@@ -26,7 +30,7 @@ const srdAdversaries = [
       },
       {
         "name": "Spit Acid - Action",
-        "text": "Make an attack against all targets in front of the Burrower within Close range. Targets the Burrower succeeds against take 2d6 physical damage and must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can’t mark an Armor Slot, they must mark an additional HP and you gain a Fear."
+        "text": "Make an attack against all targets in front of the Burrower within Close range. Targets the Burrower succeeds against take 2d6 physical damage and must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP and you gain a Fear."
       },
       {
         "name": "Acid Bath - Reaction",
@@ -36,23 +40,27 @@ const srdAdversaries = [
   },
   {
     "name": "Bear",
-    "tier": "1",
+    "originalName": "Bear",
+    "source": "SRD",
+    "tier": 1,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A large bear with thick fur and powerful claws.",
-    "motives_and_tactics": "Climb, defend territory, pummel, track",
-    "difficulty": "14",
-    "thresholds": "9/17",
-    "hp": "7",
-    "stress": "2",
-    "atk": "+1",
-    "attack": "Claws",
-    "range": "Melee",
-    "damage": "1d8+3 phy",
+    "motivesAndTactics": "Climb, defend territory, pummel, track",
+    "difficulty": 14,
+    "hp": 7,
+    "stress": 2,
+    "majorThreshold": 9,
+    "severeThreshold": 17,
+    "attackModifier": "+1",
+    "attackDescription": "Claws",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+3 phy",
     "experience": "Ambusher +3, Keen Senses +2",
-    "feats": [
+    "features": [
       {
         "name": "Overwhelming Force - Passive",
-        "text": "Targets who mark HP from the Bear’s standard attack are knocked back to Very Close range."
+        "text": "Targets who mark HP from the Bear\u2019s standard attack are knocked back to Very Close range."
       },
       {
         "name": "Bite - Action",
@@ -66,27 +74,31 @@ const srdAdversaries = [
   },
   {
     "name": "Cave Ogre",
-    "tier": "1",
+    "originalName": "Cave Ogre",
+    "source": "SRD",
+    "tier": 1,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A massive humanoid who sees all sapient life as food.",
-    "motives_and_tactics": "Bite off heads, feast, rip limbs, stomp, throw enemies",
-    "difficulty": "13",
-    "thresholds": "8/15",
-    "hp": "8",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Club",
-    "range": "Very Close",
-    "damage": "1d10+2 phy",
+    "motivesAndTactics": "Bite off heads, feast, rip limbs, stomp, throw enemies",
+    "difficulty": 13,
+    "hp": 8,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 15,
+    "attackModifier": "+1",
+    "attackDescription": "Club",
+    "attackRange": "Very Close",
+    "attackDamage": "1d10+2 phy",
     "experience": "Throw +2",
-    "feats": [
+    "features": [
       {
         "name": "Ramp Up - Passive",
         "text": "You must spend a Fear to spotlight the Ogre. While spotlighted, they can make their standard attack against all targets within range."
       },
       {
         "name": "Bone Breaker - Passive",
-        "text": "The Ogre’s attacks deal direct damage."
+        "text": "The Ogre\u2019s attacks deal direct damage."
       },
       {
         "name": "Hail of Boulders - Action",
@@ -100,19 +112,24 @@ const srdAdversaries = [
   },
   {
     "name": "Construct",
-    "tier": "1",
+    "originalName": "Construct",
+    "source": "SRD",
+    "tier": 1,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A roughly humanoid being of stone and steel, assembled and animated by magic.",
-    "motives_and_tactics": "Destroy environment, serve creator, smash target, trample groups",
-    "difficulty": "13",
-    "thresholds": "7/15",
-    "hp": "9",
-    "stress": "4",
-    "atk": "+4",
-    "attack": "Fist Slam",
-    "range": "Melee",
-    "damage": "1d20 phy",
-    "feats": [
+    "motivesAndTactics": "Destroy environment, serve creator, smash target, trample groups",
+    "difficulty": 13,
+    "hp": 9,
+    "stress": 4,
+    "majorThreshold": 7,
+    "severeThreshold": 15,
+    "attackModifier": "+4",
+    "attackDescription": "Fist Slam",
+    "attackRange": "Melee",
+    "attackDamage": "1d20 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Relentless (2) - Passive",
         "text": "The Construct can be spotlighted up to two times per GM turn. Spend Fear as usual to spotlight them."
@@ -123,11 +140,11 @@ const srdAdversaries = [
       },
       {
         "name": "Trample - Action",
-        "text": "Mark a Stress to make an attack against all targets in the Construct’s path when they move. Targets the Construct succeeds against take 1d8 physical damage."
+        "text": "Mark a Stress to make an attack against all targets in the Construct\u2019s path when they move. Targets the Construct succeeds against take 1d8 physical damage."
       },
       {
         "name": "Overload - Reaction",
-        "text": "Before rolling damage for the Construct’s attack, you can mark a Stress to gain a +10 bonus to the damage roll. The Construct can then take the spotlight again."
+        "text": "Before rolling damage for the Construct\u2019s attack, you can mark a Stress to gain a +10 bonus to the damage roll. The Construct can then take the spotlight again."
       },
       {
         "name": "Death Quake - Reaction",
@@ -137,20 +154,24 @@ const srdAdversaries = [
   },
   {
     "name": "Courtier",
-    "tier": "1",
+    "originalName": "Courtier",
+    "source": "SRD",
+    "tier": 1,
     "type": "Social",
+    "countPerHp": 1,
     "description": "An ambitious and ostentatiously dressed socialite.",
-    "motives_and_tactics": "Discreet, gain favor, maneuver, scheme",
-    "difficulty": "12",
-    "thresholds": "4/8",
-    "hp": "3",
-    "stress": "4",
-    "atk": "-4",
-    "attack": "Daggers",
-    "range": "Melee",
-    "damage": "1d4+2 phy",
+    "motivesAndTactics": "Discreet, gain favor, maneuver, scheme",
+    "difficulty": 12,
+    "hp": 3,
+    "stress": 4,
+    "majorThreshold": 4,
+    "severeThreshold": 8,
+    "attackModifier": "-4",
+    "attackDescription": "Daggers",
+    "attackRange": "Melee",
+    "attackDamage": "1d4+2 phy",
     "experience": "Socialize +3",
-    "feats": [
+    "features": [
       {
         "name": "Mockery - Action",
         "text": "Mark a Stress to say something mocking and force a target within Close range to make a Presence Reaction Roll (14) to see if they can save face. On a failure, the target must mark 2 Stress and is Vulnerable until the scene ends."
@@ -163,20 +184,24 @@ const srdAdversaries = [
   },
   {
     "name": "Deeproot Defender",
-    "tier": "1",
+    "originalName": "Deeproot Defender",
+    "source": "SRD",
+    "tier": 1,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A burly vegetable-person with grasping vines.",
-    "motives_and_tactics": "Ambush, grab, protect, pummel",
-    "difficulty": "10",
-    "thresholds": "8/14",
-    "hp": "7",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Vines",
-    "range": "Close",
-    "damage": "1d8+3 phy",
+    "motivesAndTactics": "Ambush, grab, protect, pummel",
+    "difficulty": 10,
+    "hp": 7,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 14,
+    "attackModifier": "+2",
+    "attackDescription": "Vines",
+    "attackRange": "Close",
+    "attackDamage": "1d8+3 phy",
     "experience": "Huge +3",
-    "feats": [
+    "features": [
       {
         "name": "Ground Slam - Action",
         "text": "Slam the ground, knocking all targets within Very Close range back to Far range. Each target knocked back by this must mark a Stress."
@@ -189,20 +214,24 @@ const srdAdversaries = [
   },
   {
     "name": "Dire Wolf",
-    "tier": "1",
+    "originalName": "Dire Wolf",
+    "source": "SRD",
+    "tier": 1,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A large wolf with menacing teeth, seldom encountered alone.",
-    "motives_and_tactics": "Defend territory, harry, protect pack, surround, trail",
-    "difficulty": "12",
-    "thresholds": "5/9",
-    "hp": "4",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Claws",
-    "range": "Melee",
-    "damage": "1d6+2 phy",
+    "motivesAndTactics": "Defend territory, harry, protect pack, surround, trail",
+    "difficulty": 12,
+    "hp": 4,
+    "stress": 3,
+    "majorThreshold": 5,
+    "severeThreshold": 9,
+    "attackModifier": "+2",
+    "attackDescription": "Claws",
+    "attackRange": "Melee",
+    "attackDamage": "1d6+2 phy",
     "experience": "Keen Senses +3",
-    "feats": [
+    "features": [
       {
         "name": "Pack Tactics - Passive",
         "text": "If the Wolf makes a successful standard attack and another Dire Wolf is within Melee range of the target, deal 1d6+5 physical damage instead of their standard damage and you gain a Fear."
@@ -215,20 +244,24 @@ const srdAdversaries = [
   },
   {
     "name": "Giant Mosquitoes",
-    "tier": "1",
-    "type": "Horde (5/HP)",
+    "originalName": "Giant Mosquitoes",
+    "source": "SRD",
+    "tier": 1,
+    "type": "Horde",
+    "countPerHp": 5,
     "description": "Dozens of fist-sized mosquitoes, flying together for protection.",
-    "motives_and_tactics": "Fly away, harass, steal blood",
-    "difficulty": "10",
-    "thresholds": "5/9",
-    "hp": "6",
-    "stress": "3",
-    "atk": "-2",
-    "attack": "Proboscis",
-    "range": "Melee",
-    "damage": "1d8+3 phy",
+    "motivesAndTactics": "Fly away, harass, steal blood",
+    "difficulty": 10,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 5,
+    "severeThreshold": 9,
+    "attackModifier": "-2",
+    "attackDescription": "Proboscis",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+3 phy",
     "experience": "Camouflage +2",
-    "feats": [
+    "features": [
       {
         "name": "Horde (1d4+1) - Passive",
         "text": "When the Mosquitoes have marked half or more of their HP, their standard attack deals 1d4+1 physical damage instead."
@@ -239,26 +272,30 @@ const srdAdversaries = [
       },
       {
         "name": "Bloodseeker - Reaction",
-        "text": "When the Mosquitoes’ attack causes a target to mark HP, you can mark a Stress to force the target to mark an additional HP."
+        "text": "When the Mosquitoes\u2019 attack causes a target to mark HP, you can mark a Stress to force the target to mark an additional HP."
       }
     ]
   },
   {
     "name": "Giant Rat",
-    "tier": "1",
+    "originalName": "Giant Rat",
+    "source": "SRD",
+    "tier": 1,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A cat-sized rodent skilled at scavenging and survival.",
-    "motives_and_tactics": "Burrow, hunger, scavenge, wear down",
-    "difficulty": "10",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "-4",
-    "attack": "Claws",
-    "range": "Melee",
-    "damage": "1 phy",
+    "motivesAndTactics": "Burrow, hunger, scavenge, wear down",
+    "difficulty": 10,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "-4",
+    "attackDescription": "Claws",
+    "attackRange": "Melee",
+    "attackDamage": "1 phy",
     "experience": "Keen Senses +3",
-    "feats": [
+    "features": [
       {
         "name": "Minion (3) - Passive",
         "text": "The Rat is defeated when they take any damage. For every 3 damage a PC deals to the Rat, defeat an additional Minion within range the attack would succeed against."
@@ -271,20 +308,24 @@ const srdAdversaries = [
   },
   {
     "name": "Giant Scorpion",
-    "tier": "1",
+    "originalName": "Giant Scorpion",
+    "source": "SRD",
+    "tier": 1,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A human-sized insect with tearing claws and a stinging tail.",
-    "motives_and_tactics": "Ambush, feed, grapple, poison",
-    "difficulty": "13",
-    "thresholds": "7/13",
-    "hp": "6",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Pincers",
-    "range": "Melee",
-    "damage": "1d12+2 phy",
+    "motivesAndTactics": "Ambush, feed, grapple, poison",
+    "difficulty": 13,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 7,
+    "severeThreshold": 13,
+    "attackModifier": "+1",
+    "attackDescription": "Pincers",
+    "attackRange": "Melee",
+    "attackDamage": "1d12+2 phy",
     "experience": "Camouflage +2",
-    "feats": [
+    "features": [
       {
         "name": "Double Strike - Action",
         "text": "Mark a Stress to make a standard attack against two targets within Melee range."
@@ -301,22 +342,27 @@ const srdAdversaries = [
   },
   {
     "name": "Glass Snake",
-    "tier": "1",
+    "originalName": "Glass Snake",
+    "source": "SRD",
+    "tier": 1,
     "type": "Standard",
+    "countPerHp": 1,
     "description": "A clear serpent with a massive head that leaves behind a glass shard trail wherever they go.",
-    "motives_and_tactics": "Climb, feed, keep distance, scare",
-    "difficulty": "14",
-    "thresholds": "6/10",
-    "hp": "5",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Glass Fangs",
-    "range": "Very Close",
-    "damage": "1d8+2 phy",
-    "feats": [
+    "motivesAndTactics": "Climb, feed, keep distance, scare",
+    "difficulty": 14,
+    "hp": 5,
+    "stress": 3,
+    "majorThreshold": 6,
+    "severeThreshold": 10,
+    "attackModifier": "+2",
+    "attackDescription": "Glass Fangs",
+    "attackRange": "Very Close",
+    "attackDamage": "1d8+2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Armor-Shredding Shards - Passive",
-        "text": "On a successful attack within Melee range against the Snake, the attacker must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can’t mark an Armor Slot, they must mark an additional HP."
+        "text": "On a successful attack within Melee range against the Snake, the attacker must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Spinning Serpent - Action",
@@ -330,20 +376,24 @@ const srdAdversaries = [
   },
   {
     "name": "Harrier",
-    "tier": "1",
+    "originalName": "Harrier",
+    "source": "SRD",
+    "tier": 1,
     "type": "Standard",
+    "countPerHp": 1,
     "description": "A nimble fighter armed with javelins.",
-    "motives_and_tactics": "Flank, harry, kite, profit",
-    "difficulty": "12",
-    "thresholds": "5/9",
-    "hp": "3",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Javelin",
-    "range": "Close",
-    "damage": "1d6+2 phy",
+    "motivesAndTactics": "Flank, harry, kite, profit",
+    "difficulty": 12,
+    "hp": 3,
+    "stress": 3,
+    "majorThreshold": 5,
+    "severeThreshold": 9,
+    "attackModifier": "+1",
+    "attackDescription": "Javelin",
+    "attackRange": "Close",
+    "attackDamage": "1d6+2 phy",
     "experience": "Camouflage +2",
-    "feats": [
+    "features": [
       {
         "name": "Maintain Distance - Passive",
         "text": "After making a standard attack, the Harrier can move anywhere within Far range."
@@ -356,20 +406,24 @@ const srdAdversaries = [
   },
   {
     "name": "Archer Guard",
-    "tier": "1",
+    "originalName": "Archer Guard",
+    "source": "SRD",
+    "tier": 1,
     "type": "Ranged",
-    "description": "A tall guard bearing a longbow and quiver with arrows fletched in the settlement’s colors.",
-    "motives_and_tactics": "Arrest, close gates, make it through the day, pin down",
-    "difficulty": "10",
-    "thresholds": "4/8",
-    "hp": "3",
-    "stress": "2",
-    "atk": "+1",
-    "attack": "Longbow",
-    "range": "Far",
-    "damage": "1d8+3 phy",
+    "countPerHp": 1,
+    "description": "A tall guard bearing a longbow and quiver with arrows fletched in the settlement\u2019s colors.",
+    "motivesAndTactics": "Arrest, close gates, make it through the day, pin down",
+    "difficulty": 10,
+    "hp": 3,
+    "stress": 2,
+    "majorThreshold": 4,
+    "severeThreshold": 8,
+    "attackModifier": "+1",
+    "attackDescription": "Longbow",
+    "attackRange": "Far",
+    "attackDamage": "1d8+3 phy",
     "experience": "Local Knowledge +3",
-    "feats": [
+    "features": [
       {
         "name": "Hobbling Shot - Action",
         "text": "Make an attack against a target within Far range. On a success, mark a Stress to deal 1d12+3 physical damage. If the target marks HP from this attack, they have disadvantage on Agility Rolls until they clear at least 1 HP."
@@ -378,20 +432,24 @@ const srdAdversaries = [
   },
   {
     "name": "Bladed Guard",
-    "tier": "1",
+    "originalName": "Bladed Guard",
+    "source": "SRD",
+    "tier": 1,
     "type": "Standard",
-    "description": "An armored guard bearing a sword and shield painted in the settlement’s colors.",
-    "motives_and_tactics": "Arrest, close gates, make it through the day, pin down",
-    "difficulty": "12",
-    "thresholds": "5/9",
-    "hp": "5",
-    "stress": "2",
-    "atk": "+1",
-    "attack": "Longsword",
-    "range": "Melee",
-    "damage": "1d6+1 phy",
+    "countPerHp": 1,
+    "description": "An armored guard bearing a sword and shield painted in the settlement\u2019s colors.",
+    "motivesAndTactics": "Arrest, close gates, make it through the day, pin down",
+    "difficulty": 12,
+    "hp": 5,
+    "stress": 2,
+    "majorThreshold": 5,
+    "severeThreshold": 9,
+    "attackModifier": "+1",
+    "attackDescription": "Longsword",
+    "attackRange": "Melee",
+    "attackDamage": "1d6+1 phy",
     "experience": "Local Knowledge +3",
-    "feats": [
+    "features": [
       {
         "name": "Shield Wall - Passive",
         "text": "A creature who tries to move within Very Close range of the Guard must succeed on an Agility Roll. If additional Bladed Guards are standing in a line alongside the first, and each is within Melee range of another guard in the line, the Difficulty increases by the total number of guards in the line."
@@ -404,20 +462,24 @@ const srdAdversaries = [
   },
   {
     "name": "Head Guard",
-    "tier": "1",
+    "originalName": "Head Guard",
+    "source": "SRD",
+    "tier": 1,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A seasoned guard with a mace, a whistle, and a bellowing voice.",
-    "motives_and_tactics": "Arrest, close gates, pin down, seek glory",
-    "difficulty": "15",
-    "thresholds": "7/13",
-    "hp": "7",
-    "stress": "3",
-    "atk": "+4",
-    "attack": "Mace",
-    "range": "Melee",
-    "damage": "1d10+4 phy",
+    "motivesAndTactics": "Arrest, close gates, pin down, seek glory",
+    "difficulty": 15,
+    "hp": 7,
+    "stress": 3,
+    "majorThreshold": 7,
+    "severeThreshold": 13,
+    "attackModifier": "+4",
+    "attackDescription": "Mace",
+    "attackRange": "Melee",
+    "attackDamage": "1d10+4 phy",
     "experience": "Commander +2, Local Knowledge +2",
-    "feats": [
+    "features": [
       {
         "name": "Rally Guards - Action",
         "text": "Spend 2 Fear to spotlight the Head Guard and up to 2d4 allies within Far range."
@@ -434,20 +496,24 @@ const srdAdversaries = [
   },
   {
     "name": "Jagged Knife Bandit",
-    "tier": "1",
+    "originalName": "Jagged Knife Bandit",
+    "source": "SRD",
+    "tier": 1,
     "type": "Standard",
-    "description": "A cunning criminal in a cloak bearing one of the gang’s iconic knives.",
-    "motives_and_tactics": "Escape, profit, steal, throw smoke",
-    "difficulty": "12",
-    "thresholds": "8/14",
-    "hp": "5",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Daggers",
-    "range": "Melee",
-    "damage": "1d8+1 phy",
+    "countPerHp": 1,
+    "description": "A cunning criminal in a cloak bearing one of the gang\u2019s iconic knives.",
+    "motivesAndTactics": "Escape, profit, steal, throw smoke",
+    "difficulty": 12,
+    "hp": 5,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 14,
+    "attackModifier": "+1",
+    "attackDescription": "Daggers",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+1 phy",
     "experience": "Thief +2",
-    "feats": [
+    "features": [
       {
         "name": "Climber - Passive",
         "text": "The Bandit climbs just as easily as they run."
@@ -460,20 +526,24 @@ const srdAdversaries = [
   },
   {
     "name": "Jagged Knife Hexer",
-    "tier": "1",
+    "originalName": "Jagged Knife Hexer",
+    "source": "SRD",
+    "tier": 1,
     "type": "Support",
+    "countPerHp": 1,
     "description": "A staff-wielding bandit in a cloak adorned with magical paraphernalia, using curses to vex their foes.",
-    "motives_and_tactics": "Command, hex, profit",
-    "difficulty": "13",
-    "thresholds": "5/9",
-    "hp": "4",
-    "stress": "4",
-    "atk": "+2",
-    "attack": "Staff",
-    "range": "Far",
-    "damage": "1d6+2 mag",
+    "motivesAndTactics": "Command, hex, profit",
+    "difficulty": 13,
+    "hp": 4,
+    "stress": 4,
+    "majorThreshold": 5,
+    "severeThreshold": 9,
+    "attackModifier": "+2",
+    "attackDescription": "Staff",
+    "attackRange": "Far",
+    "attackDamage": "1d6+2 mag",
     "experience": "Magical Knowledge +2",
-    "feats": [
+    "features": [
       {
         "name": "Curse - Action",
         "text": "Choose a target within Far range and temporarily Curse them. While the target is Cursed, you can mark a Stress so that target rolls with Hope to make the roll be with Fear instead."
@@ -486,22 +556,26 @@ const srdAdversaries = [
   },
   {
     "name": "Jagged Knife Kneebreaker",
-    "tier": "1",
+    "originalName": "Jagged Knife Kneebreaker",
+    "source": "SRD",
+    "tier": 1,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "An imposing brawler carrying a large club.",
-    "motives_and_tactics": "Grapple, intimidate, profit, steal",
-    "difficulty": "12",
-    "thresholds": "7/14",
-    "hp": "7",
-    "stress": "4",
-    "atk": "-3",
-    "attack": "Club",
-    "range": "Melee",
-    "damage": "1d4+6 phy",
+    "motivesAndTactics": "Grapple, intimidate, profit, steal",
+    "difficulty": 12,
+    "hp": 7,
+    "stress": 4,
+    "majorThreshold": 7,
+    "severeThreshold": 14,
+    "attackModifier": "-3",
+    "attackDescription": "Club",
+    "attackRange": "Melee",
+    "attackDamage": "1d4+6 phy",
     "experience": "Thief +2, Unveiled Threats +3",
-    "feats": [
+    "features": [
       {
-        "name": "I’ve Got ‘Em - Passive",
+        "name": "I\u2019ve Got \u2018Em - Passive",
         "text": "Creatures Restrained by the Kneebreaker take double damage from attacks by other adversaries."
       },
       {
@@ -512,20 +586,24 @@ const srdAdversaries = [
   },
   {
     "name": "Jagged Knife Lackey",
-    "tier": "1",
+    "originalName": "Jagged Knife Lackey",
+    "source": "SRD",
+    "tier": 1,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A thief with simple clothes and small daggers, eager to prove themselves.",
-    "motives_and_tactics": "Escape, profit, throw smoke",
-    "difficulty": "9",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "-2",
-    "attack": "Daggers",
-    "range": "Melee",
-    "damage": "2 phy",
+    "motivesAndTactics": "Escape, profit, throw smoke",
+    "difficulty": 9,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "-2",
+    "attackDescription": "Daggers",
+    "attackRange": "Melee",
+    "attackDamage": "2 phy",
     "experience": "Thief +2",
-    "feats": [
+    "features": [
       {
         "name": "Minion (3) - Passive",
         "text": "The Lackey is defeated when they take any damage. For every 3 damage a PC deals to the Lackey, defeat an additional Minion within range the attack would succeed against."
@@ -538,20 +616,24 @@ const srdAdversaries = [
   },
   {
     "name": "Jagged Knife Lieutenant",
-    "tier": "1",
+    "originalName": "Jagged Knife Lieutenant",
+    "source": "SRD",
+    "tier": 1,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A seasoned bandit in quality leathers with a strong voice and cunning eyes.",
-    "motives_and_tactics": "Bully, command, profit, reinforce",
-    "difficulty": "13",
-    "thresholds": "7/14",
-    "hp": "6",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Javelin",
-    "range": "Close",
-    "damage": "1d8+3 phy",
+    "motivesAndTactics": "Bully, command, profit, reinforce",
+    "difficulty": 13,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 7,
+    "severeThreshold": 14,
+    "attackModifier": "+2",
+    "attackDescription": "Javelin",
+    "attackRange": "Close",
+    "attackDamage": "1d8+3 phy",
     "experience": "Local Knowledge +2",
-    "feats": [
+    "features": [
       {
         "name": "Tactician - Action",
         "text": "When you spotlight the Lieutenant, mark a Stress to also spotlight two allies within Close range."
@@ -572,46 +654,54 @@ const srdAdversaries = [
   },
   {
     "name": "Jagged Knife Shadow",
-    "tier": "1",
+    "originalName": "Jagged Knife Shadow",
+    "source": "SRD",
+    "tier": 1,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A nimble scoundrel bearing a wicked knife and utilizing shadow magic to isolate targets.",
-    "motives_and_tactics": "Ambush, conceal, divide, profit",
-    "difficulty": "12",
-    "thresholds": "4/8",
-    "hp": "3",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Daggers",
-    "range": "Melee",
-    "damage": "1d4+4 phy",
+    "motivesAndTactics": "Ambush, conceal, divide, profit",
+    "difficulty": 12,
+    "hp": 3,
+    "stress": 3,
+    "majorThreshold": 4,
+    "severeThreshold": 8,
+    "attackModifier": "+1",
+    "attackDescription": "Daggers",
+    "attackRange": "Melee",
+    "attackDamage": "1d4+4 phy",
     "experience": "Intrusion +3",
-    "feats": [
+    "features": [
       {
         "name": "Backstab - Passive",
         "text": "When the Shadow succeeds on a standard attack that has advantage, they deal 1d6+6 physical damage instead of their standard damage."
       },
       {
         "name": "Cloaked - Action",
-        "text": "Become Hidden until after the Shadow’s next attack. Attacks made while Hidden from this feature have advantage."
+        "text": "Become Hidden until after the Shadow\u2019s next attack. Attacks made while Hidden from this feature have advantage."
       }
     ]
   },
   {
     "name": "Jagged Knife Sniper",
-    "tier": "1",
+    "originalName": "Jagged Knife Sniper",
+    "source": "SRD",
+    "tier": 1,
     "type": "Ranged",
+    "countPerHp": 1,
     "description": "A lanky bandit striking from cover with a shortbow.",
-    "motives_and_tactics": "Ambush, hide, profit, reposition",
-    "difficulty": "13",
-    "thresholds": "4/7",
-    "hp": "3",
-    "stress": "2",
-    "atk": "-1",
-    "attack": "Shortbow",
-    "range": "Far",
-    "damage": "1d10+2 phy",
+    "motivesAndTactics": "Ambush, hide, profit, reposition",
+    "difficulty": 13,
+    "hp": 3,
+    "stress": 2,
+    "majorThreshold": 4,
+    "severeThreshold": 7,
+    "attackModifier": "-1",
+    "attackDescription": "Shortbow",
+    "attackRange": "Far",
+    "attackDamage": "1d10+2 phy",
     "experience": "Stealth +2",
-    "feats": [
+    "features": [
       {
         "name": "Unseen Strike - Passive",
         "text": "If the Sniper is Hidden when they make a successful standard attack against a target, they deal 1d10+4 physical damage instead of their standard damage."
@@ -620,20 +710,24 @@ const srdAdversaries = [
   },
   {
     "name": "Merchant",
-    "tier": "1",
+    "originalName": "Merchant",
+    "source": "SRD",
+    "tier": 1,
     "type": "Social",
+    "countPerHp": 1,
     "description": "A finely dressed trader with a keen eye for financial gain.",
-    "motives_and_tactics": "Buy low and sell high, create demand, inflate prices, seek profit",
-    "difficulty": "12",
-    "thresholds": "4/8",
-    "hp": "3",
-    "stress": "3",
-    "atk": "-4",
-    "attack": "Club",
-    "range": "Melee",
-    "damage": "1d4+1 phy",
+    "motivesAndTactics": "Buy low and sell high, create demand, inflate prices, seek profit",
+    "difficulty": 12,
+    "hp": 3,
+    "stress": 3,
+    "majorThreshold": 4,
+    "severeThreshold": 8,
+    "attackModifier": "-4",
+    "attackDescription": "Club",
+    "attackRange": "Melee",
+    "attackDamage": "1d4+1 phy",
     "experience": "Shrewd Negotiator +3",
-    "feats": [
+    "features": [
       {
         "name": "Preferential Treatment - Passive",
         "text": "A PC who succeeds on a Presence Roll against the Merchant gains a discount on purchases. A PC who fails on a Presence Roll against the Merchant must pay more and has disadvantage on future Presence Rolls against the Merchant."
@@ -646,19 +740,24 @@ const srdAdversaries = [
   },
   {
     "name": "Minor Chaos Elemental",
-    "tier": "1",
+    "originalName": "Minor Chaos Elemental",
+    "source": "SRD",
+    "tier": 1,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A coruscating mass of uncontrollable magic.",
-    "motives_and_tactics": "Confound, destabilize, transmogrify",
-    "difficulty": "14",
-    "thresholds": "7/14",
-    "hp": "7",
-    "stress": "3",
-    "atk": "+3",
-    "attack": "Warp Blast",
-    "range": "Close",
-    "damage": "1d12+6 mag",
-    "feats": [
+    "motivesAndTactics": "Confound, destabilize, transmogrify",
+    "difficulty": 14,
+    "hp": 7,
+    "stress": 3,
+    "majorThreshold": 7,
+    "severeThreshold": 14,
+    "attackModifier": "+3",
+    "attackDescription": "Warp Blast",
+    "attackRange": "Close",
+    "attackDamage": "1d12+6 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Arcane Master - Passive",
         "text": "The Elemental is resistant to magic damage."
@@ -683,19 +782,24 @@ const srdAdversaries = [
   },
   {
     "name": "Minor Fire Elemental",
-    "tier": "1",
+    "originalName": "Minor Fire Elemental",
+    "source": "SRD",
+    "tier": 1,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A living flame the size of a large bonfire.",
-    "motives_and_tactics": "Encircle enemies, grow in size, intimidate, start fires",
-    "difficulty": "13",
-    "thresholds": "7/15",
-    "hp": "9",
-    "stress": "3",
-    "atk": "+3",
-    "attack": "Elemental Blast",
-    "range": "Far",
-    "damage": "1d10+4 mag",
-    "feats": [
+    "motivesAndTactics": "Encircle enemies, grow in size, intimidate, start fires",
+    "difficulty": 13,
+    "hp": 9,
+    "stress": 3,
+    "majorThreshold": 7,
+    "severeThreshold": 15,
+    "attackModifier": "+3",
+    "attackDescription": "Elemental Blast",
+    "attackRange": "Far",
+    "attackDamage": "1d10+4 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Relentless (2) - Passive",
         "text": "The Elemental can be spotlighted up to two times per GM turn. Spend Fear as usual to spotlight them."
@@ -720,19 +824,24 @@ const srdAdversaries = [
   },
   {
     "name": "Minor Demon",
-    "tier": "1",
+    "originalName": "Minor Demon",
+    "source": "SRD",
+    "tier": 1,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A crimson-hued creature from the Circles Below, consumed by rage against all mortals.",
-    "motives_and_tactics": "Act erratically, corral targets, relish pain, torment",
-    "difficulty": "14",
-    "thresholds": "8/15",
-    "hp": "8",
-    "stress": "4",
-    "atk": "+3",
-    "attack": "Claws",
-    "range": "Melee",
-    "damage": "1d8+6 phy",
-    "feats": [
+    "motivesAndTactics": "Act erratically, corral targets, relish pain, torment",
+    "difficulty": 14,
+    "hp": 8,
+    "stress": 4,
+    "majorThreshold": 8,
+    "severeThreshold": 15,
+    "attackModifier": "+3",
+    "attackDescription": "Claws",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+6 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Relentless (2) - Passive",
         "text": "The Demon can be spotlighted up to two times per GM turn. Spend Fear as usual to spotlight them."
@@ -747,7 +856,7 @@ const srdAdversaries = [
       },
       {
         "name": "Reaper - Reaction",
-        "text": "Before rolling damage for the Demon’s attack, you can mark a Stress to gain a bonus to the damage roll equal to the Demon’s current number of marked HP."
+        "text": "Before rolling damage for the Demon\u2019s attack, you can mark a Stress to gain a bonus to the damage roll equal to the Demon\u2019s current number of marked HP."
       },
       {
         "name": "Momentum - Reaction",
@@ -757,19 +866,24 @@ const srdAdversaries = [
   },
   {
     "name": "Minor Treant",
-    "tier": "1",
+    "originalName": "Minor Treant",
+    "source": "SRD",
+    "tier": 1,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "An ambulatory sapling rising up to defend their forest.",
-    "motives_and_tactics": "Crush, overwhelm, protect",
-    "difficulty": "10",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "-2",
-    "attack": "Cleaved Branch",
-    "range": "Melee",
-    "damage": "4 phy",
-    "feats": [
+    "motivesAndTactics": "Crush, overwhelm, protect",
+    "difficulty": 10,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "-2",
+    "attackDescription": "Cleaved Branch",
+    "attackRange": "Melee",
+    "attackDamage": "4 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (5) - Passive",
         "text": "The Treant is defeated when they take any damage. For every 5 damage a PC deals to the Treant, defeat an additional Minion within range the attack would succeed against."
@@ -782,27 +896,31 @@ const srdAdversaries = [
   },
   {
     "name": "Green Ooze",
-    "tier": "1",
+    "originalName": "Green Ooze",
+    "source": "SRD",
+    "tier": 1,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A moving mound of translucent green slime.",
-    "motives_and_tactics": "Camouflage, consume and multiply, creep up, envelop",
-    "difficulty": "8",
-    "thresholds": "5/10",
-    "hp": "5",
-    "stress": "2",
-    "atk": "+1",
-    "attack": "Ooze Appendage",
-    "range": "Melee",
-    "damage": "1d6+1 mag",
+    "motivesAndTactics": "Camouflage, consume and multiply, creep up, envelop",
+    "difficulty": 8,
+    "hp": 5,
+    "stress": 2,
+    "majorThreshold": 5,
+    "severeThreshold": 10,
+    "attackModifier": "+1",
+    "attackDescription": "Ooze Appendage",
+    "attackRange": "Melee",
+    "attackDamage": "1d6+1 mag",
     "experience": "Camouflage +3",
-    "feats": [
+    "features": [
       {
         "name": "Slow - Passive",
-        "text": "When you spotlight the Ooze and they don’t have a token on their stat block, they can’t act. Place a token on their stat block and describe what they’re preparing to do. When you spotlight the Ooze and they have a token on their stat block, clear the token and they can act."
+        "text": "When you spotlight the Ooze and they don\u2019t have a token on their stat block, they can\u2019t act. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Ooze and they have a token on their stat block, clear the token and they can act."
       },
       {
         "name": "Acidic Form - Passive",
-        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can’t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Envelope - Action",
@@ -816,48 +934,57 @@ const srdAdversaries = [
   },
   {
     "name": "Tiny Green Ooze",
-    "tier": "1",
+    "originalName": "Tiny Green Ooze",
+    "source": "SRD",
+    "tier": 1,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A small moving mound of translucent green slime.",
-    "motives_and_tactics": "Camouflage, creep up",
-    "difficulty": "14",
-    "thresholds": "4/None",
-    "hp": "2",
-    "stress": "1",
-    "atk": "-1",
-    "attack": "Ooze Appendage",
-    "range": "Melee",
-    "damage": "1d4+1 mag",
-    "feats": [
+    "motivesAndTactics": "Camouflage, creep up",
+    "difficulty": 14,
+    "hp": 2,
+    "stress": 1,
+    "majorThreshold": 4,
+    "severeThreshold": null,
+    "attackModifier": "-1",
+    "attackDescription": "Ooze Appendage",
+    "attackRange": "Melee",
+    "attackDamage": "1d4+1 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Acidic Form - Passive",
-        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can’t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
       }
     ]
   },
   {
     "name": "Red Ooze",
-    "tier": "1",
+    "originalName": "Red Ooze",
+    "source": "SRD",
+    "tier": 1,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A moving mound of translucent flaming red slime.",
-    "motives_and_tactics": "Camouflage, consume and multiply, ignite, start fires",
-    "difficulty": "10",
-    "thresholds": "6/11",
-    "hp": "5",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Ooze Appendage",
-    "range": "Melee",
-    "damage": "1d8+3 mag",
+    "motivesAndTactics": "Camouflage, consume and multiply, ignite, start fires",
+    "difficulty": 10,
+    "hp": 5,
+    "stress": 3,
+    "majorThreshold": 6,
+    "severeThreshold": 11,
+    "attackModifier": "+1",
+    "attackDescription": "Ooze Appendage",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+3 mag",
     "experience": "Camouflage +3",
-    "feats": [
+    "features": [
       {
         "name": "Creeping Fire - Passive",
         "text": "The Ooze can only move within Very Close range as their normal movement. They light any flammable object they touch on fire."
       },
       {
         "name": "Ignite - Action",
-        "text": "Make an attack against a target within Very Close range. On a success, the target takes 1d8 magic damage and is ignited until they’re extinguished with a successful Finesse Roll (14). While ignited, the target takes 1d4 magic damage when they make an action roll."
+        "text": "Make an attack against a target within Very Close range. On a success, the target takes 1d8 magic damage and is ignited until they\u2019re extinguished with a successful Finesse Roll (14). While ignited, the target takes 1d4 magic damage when they make an action roll."
       },
       {
         "name": "Split - Reaction",
@@ -867,19 +994,24 @@ const srdAdversaries = [
   },
   {
     "name": "Tiny Red Ooze",
-    "tier": "1",
+    "originalName": "Tiny Red Ooze",
+    "source": "SRD",
+    "tier": 1,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A small moving mound of translucent flaming red slime.",
-    "motives_and_tactics": "Blaze, camouflage",
-    "difficulty": "11",
-    "thresholds": "5/None",
-    "hp": "2",
-    "stress": "1",
-    "atk": "-1",
-    "attack": "Ooze Appendage",
-    "range": "Melee",
-    "damage": "1d4+2 mag",
-    "feats": [
+    "motivesAndTactics": "Blaze, camouflage",
+    "difficulty": 11,
+    "hp": 2,
+    "stress": 1,
+    "majorThreshold": 5,
+    "severeThreshold": null,
+    "attackModifier": "-1",
+    "attackDescription": "Ooze Appendage",
+    "attackRange": "Melee",
+    "attackDamage": "1d4+2 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Burning - Reaction",
         "text": "When a creature within Melee range deals damage to the Ooze, they take 1d6 direct magic damage."
@@ -888,50 +1020,58 @@ const srdAdversaries = [
   },
   {
     "name": "Petty Noble",
-    "tier": "1",
+    "originalName": "Petty Noble",
+    "source": "SRD",
+    "tier": 1,
     "type": "Social",
+    "countPerHp": 1,
     "description": "A richly dressed and adorned aristocrat brimming with hubris.",
-    "motives_and_tactics": "Abuse power, gather resources, mobilize minions",
-    "difficulty": "14",
-    "thresholds": "6/10",
-    "hp": "3",
-    "stress": "5",
-    "atk": "-3",
-    "attack": "Rapier",
-    "range": "Melee",
-    "damage": "1d6+1 phy",
+    "motivesAndTactics": "Abuse power, gather resources, mobilize minions",
+    "difficulty": 14,
+    "hp": 3,
+    "stress": 5,
+    "majorThreshold": 6,
+    "severeThreshold": 10,
+    "attackModifier": "-3",
+    "attackDescription": "Rapier",
+    "attackRange": "Melee",
+    "attackDamage": "1d6+1 phy",
     "experience": "Aristocrat +3",
-    "feats": [
+    "features": [
       {
         "name": "My Land, My Rules - Passive",
         "text": "All social actions made against the Noble on their land have disadvantage."
       },
       {
         "name": "Guards, Seize Them! - Action",
-        "text": "Once per scene, mark a Stress to summon 1d4 Bladed Guards, who appear at Far range to enforce the Noble’s will."
+        "text": "Once per scene, mark a Stress to summon 1d4 Bladed Guards, who appear at Far range to enforce the Noble\u2019s will."
       },
       {
         "name": "Exile - Action",
-        "text": "Spend a Fear and target a PC. The Noble proclaims that the target and their allies are exiled from the noble’s territory. While exiled, the target and their allies have disadvantage during social situations within the Noble’s domain."
+        "text": "Spend a Fear and target a PC. The Noble proclaims that the target and their allies are exiled from the noble\u2019s territory. While exiled, the target and their allies have disadvantage during social situations within the Noble\u2019s domain."
       }
     ]
   },
   {
     "name": "Pirate Captain",
-    "tier": "1",
+    "originalName": "Pirate Captain",
+    "source": "SRD",
+    "tier": 1,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A charismatic sea dog with an impressive hat, eager to raid and plunder.",
-    "motives_and_tactics": "Command, make 'em walk the plank, plunder, raid",
-    "difficulty": "14",
-    "thresholds": "7/14",
-    "hp": "7",
-    "stress": "5",
-    "atk": "+1",
-    "attack": "Cutlass",
-    "range": "Melee",
-    "damage": "1d12+2 phy",
+    "motivesAndTactics": "Command, make 'em walk the plank, plunder, raid",
+    "difficulty": 14,
+    "hp": 7,
+    "stress": 5,
+    "majorThreshold": 7,
+    "severeThreshold": 14,
+    "attackModifier": "+1",
+    "attackDescription": "Cutlass",
+    "attackRange": "Melee",
+    "attackDamage": "1d12+2 phy",
     "experience": "Commander +2, Sailor +3",
-    "feats": [
+    "features": [
       {
         "name": "Swashbuckler - Passive",
         "text": "When the Captain marks 2 or fewer HP from an attack within Melee range, the attacker must mark a Stress."
@@ -952,20 +1092,24 @@ const srdAdversaries = [
   },
   {
     "name": "Pirate Raiders",
-    "tier": "1",
-    "type": "Horde (3/HP)",
+    "originalName": "Pirate Raiders",
+    "source": "SRD",
+    "tier": 1,
+    "type": "Horde",
+    "countPerHp": 3,
     "description": "Seafaring scoundrels moving in a ravaging pack.",
-    "motives_and_tactics": "Gang up, plunder, overwhelm",
-    "difficulty": "12",
-    "thresholds": "5/11",
-    "hp": "4",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Cutlass",
-    "range": "Melee",
-    "damage": "1d8+2 phy",
+    "motivesAndTactics": "Gang up, plunder, overwhelm",
+    "difficulty": 12,
+    "hp": 4,
+    "stress": 3,
+    "majorThreshold": 5,
+    "severeThreshold": 11,
+    "attackModifier": "+1",
+    "attackDescription": "Cutlass",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+2 phy",
     "experience": "Sailor +3",
-    "feats": [
+    "features": [
       {
         "name": "Horde (1d4+1) - Passive",
         "text": "When the Raiders have marked half or more of their HP, their standard attack deals 1d4+1 physical damage instead."
@@ -978,20 +1122,24 @@ const srdAdversaries = [
   },
   {
     "name": "Pirate Tough",
-    "tier": "1",
+    "originalName": "Pirate Tough",
+    "source": "SRD",
+    "tier": 1,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A thickly muscled and tattooed pirate with melon-sized fists.",
-    "motives_and_tactics": "Plunder, raid, smash, terrorize",
-    "difficulty": "13",
-    "thresholds": "8/15",
-    "hp": "5",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Massive Fists",
-    "range": "Melee",
-    "damage": "2d6 phy",
+    "motivesAndTactics": "Plunder, raid, smash, terrorize",
+    "difficulty": 13,
+    "hp": 5,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 15,
+    "attackModifier": "+1",
+    "attackDescription": "Massive Fists",
+    "attackRange": "Melee",
+    "attackDamage": "2d6 phy",
     "experience": "Sailor +2",
-    "feats": [
+    "features": [
       {
         "name": "Swashbuckler - Passive",
         "text": "When the Tough marks 2 or fewer HP from an attack within Melee range, the attacker must mark a Stress."
@@ -1004,19 +1152,24 @@ const srdAdversaries = [
   },
   {
     "name": "Sellsword",
-    "tier": "1",
+    "originalName": "Sellsword",
+    "source": "SRD",
+    "tier": 1,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "An armed mercenary testing their luck.",
-    "motives_and_tactics": "Charge, lacerate, overwhelm, profit",
-    "difficulty": "10",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "+3",
-    "attack": "Longsword",
-    "range": "Melee",
-    "damage": "3 phy",
-    "feats": [
+    "motivesAndTactics": "Charge, lacerate, overwhelm, profit",
+    "difficulty": 10,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "+3",
+    "attackDescription": "Longsword",
+    "attackRange": "Melee",
+    "attackDamage": "3 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (4) - Passive",
         "text": "The Sellsword is defeated when they take any damage. For every 4 damage a PC deals to the Sellsword, defeat an additional Minion within range the attack would succeed against."
@@ -1029,19 +1182,24 @@ const srdAdversaries = [
   },
   {
     "name": "Skeleton Archer",
-    "tier": "1",
+    "originalName": "Skeleton Archer",
+    "source": "SRD",
+    "tier": 1,
     "type": "Ranged",
+    "countPerHp": 1,
     "description": "A fragile skeleton with a shortbow and arrows.",
-    "motives_and_tactics": "Perforate distracted targets, play dead, steal skin",
-    "difficulty": "9",
-    "thresholds": "4/7",
-    "hp": "3",
-    "stress": "2",
-    "atk": "+2",
-    "attack": "Shortbow",
-    "range": "Far",
-    "damage": "1d8+1 phy",
-    "feats": [
+    "motivesAndTactics": "Perforate distracted targets, play dead, steal skin",
+    "difficulty": 9,
+    "hp": 3,
+    "stress": 2,
+    "majorThreshold": 4,
+    "severeThreshold": 7,
+    "attackModifier": "+2",
+    "attackDescription": "Shortbow",
+    "attackRange": "Far",
+    "attackDamage": "1d8+1 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Opportunist - Passive",
         "text": "When two or more adversaries are within Very Close range of a creature, all damage they each deal to that creature is doubled."
@@ -1054,19 +1212,24 @@ const srdAdversaries = [
   },
   {
     "name": "Skeleton Dredge",
-    "tier": "1",
+    "originalName": "Skeleton Dredge",
+    "source": "SRD",
+    "tier": 1,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A clattering pile of bones.",
-    "motives_and_tactics": "Fall apart, overwhelm, play dead, steal skin",
-    "difficulty": "8",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "-1",
-    "attack": "Bone Claws",
-    "range": "Melee",
-    "damage": "1 phy",
-    "feats": [
+    "motivesAndTactics": "Fall apart, overwhelm, play dead, steal skin",
+    "difficulty": 8,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "-1",
+    "attackDescription": "Bone Claws",
+    "attackRange": "Melee",
+    "attackDamage": "1 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (4) - Passive",
         "text": "The Dredge is defeated when they take any damage. For every 4 damage a PC deals to the Dredge, defeat an additional Minion within range the attack would succeed against."
@@ -1079,19 +1242,24 @@ const srdAdversaries = [
   },
   {
     "name": "Skeleton Knight",
-    "tier": "1",
+    "originalName": "Skeleton Knight",
+    "source": "SRD",
+    "tier": 1,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A large armored skeleton with a huge blade.",
-    "motives_and_tactics": "Cut down the living, steal skin, wreak havoc",
-    "difficulty": "13",
-    "thresholds": "7/13",
-    "hp": "5",
-    "stress": "2",
-    "atk": "+2",
-    "attack": "Rusty Greatsword",
-    "range": "Melee",
-    "damage": "1d10+2 phy",
-    "feats": [
+    "motivesAndTactics": "Cut down the living, steal skin, wreak havoc",
+    "difficulty": 13,
+    "hp": 5,
+    "stress": 2,
+    "majorThreshold": 7,
+    "severeThreshold": 13,
+    "attackModifier": "+2",
+    "attackDescription": "Rusty Greatsword",
+    "attackRange": "Melee",
+    "attackDamage": "1d10+2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Terrifying - Passive",
         "text": "When the Knight makes a successful attack, all PCs within Close range lose a Hope and you gain a Fear."
@@ -1108,19 +1276,24 @@ const srdAdversaries = [
   },
   {
     "name": "Skeleton Warrior",
-    "tier": "1",
+    "originalName": "Skeleton Warrior",
+    "source": "SRD",
+    "tier": 1,
     "type": "Standard",
+    "countPerHp": 1,
     "description": "A dirt-covered skeleton armed with a rusted blade.",
-    "motives_and_tactics": "Feign death, gang up, steal skin",
-    "difficulty": "10",
-    "thresholds": "4/8",
-    "hp": "3",
-    "stress": "2",
-    "atk": "0",
-    "attack": "Sword",
-    "range": "Melee",
-    "damage": "1d6+2 phy",
-    "feats": [
+    "motivesAndTactics": "Feign death, gang up, steal skin",
+    "difficulty": 10,
+    "hp": 3,
+    "stress": 2,
+    "majorThreshold": 4,
+    "severeThreshold": 8,
+    "attackModifier": "0",
+    "attackDescription": "Sword",
+    "attackRange": "Melee",
+    "attackDamage": "1d6+2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Only Bones - Passive",
         "text": "The Warrior is resistant to physical damage."
@@ -1133,23 +1306,27 @@ const srdAdversaries = [
   },
   {
     "name": "Spellblade",
-    "tier": "1",
+    "originalName": "Spellblade",
+    "source": "SRD",
+    "tier": 1,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A mercenary combining swordplay and magic to deadly effect.",
-    "motives_and_tactics": "Blast, command, endure",
-    "difficulty": "14",
-    "thresholds": "8/14",
-    "hp": "6",
-    "stress": "3",
-    "atk": "+3",
-    "attack": "Empowered Longsword",
-    "range": "Melee",
-    "damage": "1d8+4 phy/mag",
+    "motivesAndTactics": "Blast, command, endure",
+    "difficulty": 14,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 14,
+    "attackModifier": "+3",
+    "attackDescription": "Empowered Longsword",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+4 phy/mag",
     "experience": "Magical Knowledge +2",
-    "feats": [
+    "features": [
       {
         "name": "Arcane Steel - Passive",
-        "text": "Damage dealt by the Spellblade’s standard attack is considered both physical and magic."
+        "text": "Damage dealt by the Spellblade\u2019s standard attack is considered both physical and magic."
       },
       {
         "name": "Suppressing Blast - Action",
@@ -1167,19 +1344,24 @@ const srdAdversaries = [
   },
   {
     "name": "Swarm of Rats",
-    "tier": "1",
-    "type": "Horde (10/HP)",
+    "originalName": "Swarm of Rats",
+    "source": "SRD",
+    "tier": 1,
+    "type": "Horde",
+    "countPerHp": 10,
     "description": "A skittering mass of ordinary rodents moving as one like a ravenous wave.",
-    "motives_and_tactics": "Consume, obscure, swarm",
-    "difficulty": "10",
-    "thresholds": "6/10",
-    "hp": "6",
-    "stress": "2",
-    "atk": "-3",
-    "attack": "Claws",
-    "range": "Melee",
-    "damage": "1d8+2 phy",
-    "feats": [
+    "motivesAndTactics": "Consume, obscure, swarm",
+    "difficulty": 10,
+    "hp": 6,
+    "stress": 2,
+    "majorThreshold": 6,
+    "severeThreshold": 10,
+    "attackModifier": "-3",
+    "attackDescription": "Claws",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Horde (1d4+1) - Passive",
         "text": "When the Swarm has marked half or more of their HP, their standard attack deals 1d4+1 physical damage instead."
@@ -1192,20 +1374,24 @@ const srdAdversaries = [
   },
   {
     "name": "Sylvan Soldier",
-    "tier": "1",
+    "originalName": "Sylvan Soldier",
+    "source": "SRD",
+    "tier": 1,
     "type": "Standard",
+    "countPerHp": 1,
     "description": "A faerie warrior adorned in armor made of leaves and bark.",
-    "motives_and_tactics": "Ambush, hide, overwhelm, protect, trail",
-    "difficulty": "11",
-    "thresholds": "6/11",
-    "hp": "4",
-    "stress": "2",
-    "atk": "0",
-    "attack": "Scythe",
-    "range": "Melee",
-    "damage": "1d8+1 phy",
+    "motivesAndTactics": "Ambush, hide, overwhelm, protect, trail",
+    "difficulty": 11,
+    "hp": 4,
+    "stress": 2,
+    "majorThreshold": 6,
+    "severeThreshold": 11,
+    "attackModifier": "0",
+    "attackDescription": "Scythe",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+1 phy",
     "experience": "Tracker +2",
-    "feats": [
+    "features": [
       {
         "name": "Pack Tactics - Passive",
         "text": "If the Soldier makes a standard attack and another Sylvan Soldier is within Melee range of the target, deal 1d8+5 physical damage instead of their standard damage."
@@ -1216,26 +1402,30 @@ const srdAdversaries = [
       },
       {
         "name": "Blend In - Reaction",
-        "text": "When the Soldier makes a successful attack, you can mark a Stress to become Hidden until the Soldier’s next attack or a PC succeeds on an Instinct Roll (14) to find them."
+        "text": "When the Soldier makes a successful attack, you can mark a Stress to become Hidden until the Soldier\u2019s next attack or a PC succeeds on an Instinct Roll (14) to find them."
       }
     ]
   },
   {
     "name": "Tangle Bramble Swarm",
-    "tier": "1",
-    "type": "Horde (3/HP)",
+    "originalName": "Tangle Bramble Swarm",
+    "source": "SRD",
+    "tier": 1,
+    "type": "Horde",
+    "countPerHp": 3,
     "description": "A cluster of animated, blood-drinking tumbleweeds, each the size of a large gourd.",
-    "motives_and_tactics": "Digest, entangle, immobilize",
-    "difficulty": "12",
-    "thresholds": "6/11",
-    "hp": "6",
-    "stress": "3",
-    "atk": "0",
-    "attack": "Thorns",
-    "range": "Melee",
-    "damage": "1d6+3 phy",
+    "motivesAndTactics": "Digest, entangle, immobilize",
+    "difficulty": 12,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 6,
+    "severeThreshold": 11,
+    "attackModifier": "0",
+    "attackDescription": "Thorns",
+    "attackRange": "Melee",
+    "attackDamage": "1d6+3 phy",
     "experience": "Camouflage +2",
-    "feats": [
+    "features": [
       {
         "name": "Horde (1d4+2) - Passive",
         "text": "When the Swarm has marked half or more of their HP, their standard attack deals 1d4+2 physical damage instead."
@@ -1252,19 +1442,24 @@ const srdAdversaries = [
   },
   {
     "name": "Tangle Bramble",
-    "tier": "1",
+    "originalName": "Tangle Bramble",
+    "source": "SRD",
+    "tier": 1,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "An animate, blood-drinking tumbleweed.",
-    "motives_and_tactics": "Consume, drain, entangle",
-    "difficulty": "11",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "-1",
-    "attack": "Thorns",
-    "range": "Melee",
-    "damage": "2 phy",
-    "feats": [
+    "motivesAndTactics": "Consume, drain, entangle",
+    "difficulty": 11,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "-1",
+    "attackDescription": "Thorns",
+    "attackRange": "Melee",
+    "attackDamage": "2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (4) - Passive",
         "text": "The Bramble is defeated when they take any damage. For every 4 damage a PC deals to the Tangle Bramble, defeat an additional Minion within range the attack would succeed against."
@@ -1275,25 +1470,30 @@ const srdAdversaries = [
       },
       {
         "name": "Drain and Multiply - Reaction",
-        "text": "When an attack from the Bramble causes a target to mark HP and there are three or more Tangle Bramble Minions within Close range, you can combine the Minions into a Tangle Bramble Swarm Horde. The Horde’s HP is equal to the number of Minions combined."
+        "text": "When an attack from the Bramble causes a target to mark HP and there are three or more Tangle Bramble Minions within Close range, you can combine the Minions into a Tangle Bramble Swarm Horde. The Horde\u2019s HP is equal to the number of Minions combined."
       }
     ]
   },
   {
     "name": "Weaponmaster",
-    "tier": "1",
+    "originalName": "Weaponmaster",
+    "source": "SRD",
+    "tier": 1,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A master-at-arms wielding a sword twice their size.",
-    "motives_and_tactics": "Act first, aim for the weakest, intimidate",
-    "difficulty": "14",
-    "thresholds": "8/15",
-    "hp": "6",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Claymore",
-    "range": "Very Close",
-    "damage": "1d12+2 phy",
-    "feats": [
+    "motivesAndTactics": "Act first, aim for the weakest, intimidate",
+    "difficulty": 14,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 15,
+    "attackModifier": "+2",
+    "attackDescription": "Claymore",
+    "attackRange": "Very Close",
+    "attackDamage": "1d12+2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Goading Strike - Action",
         "text": "Make a standard attack against a target. On a success, mark a Stress to Taunt the target until their next successful attack. The next time the Taunted target attacks, they have disadvantage against targets other than the Weaponmaster."
@@ -1310,23 +1510,27 @@ const srdAdversaries = [
   },
   {
     "name": "Brawny Zombie",
-    "tier": "1",
+    "originalName": "Brawny Zombie",
+    "source": "SRD",
+    "tier": 1,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A large corpse, decay-bloated and angry.",
-    "motives_and_tactics": "Crush, destroy, hurl debris, slam",
-    "difficulty": "10",
-    "thresholds": "8/15",
-    "hp": "7",
-    "stress": "4",
-    "atk": "+2",
-    "attack": "Slam",
-    "range": "Very Close",
-    "damage": "1d12+3 phy",
+    "motivesAndTactics": "Crush, destroy, hurl debris, slam",
+    "difficulty": 10,
+    "hp": 7,
+    "stress": 4,
+    "majorThreshold": 8,
+    "severeThreshold": 15,
+    "attackModifier": "+2",
+    "attackDescription": "Slam",
+    "attackRange": "Very Close",
+    "attackDamage": "1d12+3 phy",
     "experience": "Collateral Damage +2, Throw +4",
-    "feats": [
+    "features": [
       {
         "name": "Slow - Passive",
-        "text": "When you spotlight the Zombie and they don’t have a token on their stat block, they can’t act yet. Place a token on their stat block and describe what they’re preparing to do. When you spotlight the Zombie and they have a token on their stat block, clear the token and they can act."
+        "text": "When you spotlight the Zombie and they don\u2019t have a token on their stat block, they can\u2019t act yet. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Zombie and they have a token on their stat block, clear the token and they can act."
       },
       {
         "name": "Rend Asunder - Action",
@@ -1340,27 +1544,31 @@ const srdAdversaries = [
   },
   {
     "name": "Young Dryad",
-    "tier": "1",
+    "originalName": "Young Dryad",
+    "source": "SRD",
+    "tier": 1,
     "type": "Leader",
-    "description": "An imperious tree-person leading their forest’s defenses.",
-    "motives_and_tactics": "Command, nurture, prune the unwelcome",
-    "difficulty": "11",
-    "thresholds": "6/11",
-    "hp": "6",
-    "stress": "2",
-    "atk": "0",
-    "attack": "Scythe",
-    "range": "Melee",
-    "damage": "1d8+5 phy",
+    "countPerHp": 1,
+    "description": "An imperious tree-person leading their forest\u2019s defenses.",
+    "motivesAndTactics": "Command, nurture, prune the unwelcome",
+    "difficulty": 11,
+    "hp": 6,
+    "stress": 2,
+    "majorThreshold": 6,
+    "severeThreshold": 11,
+    "attackModifier": "0",
+    "attackDescription": "Scythe",
+    "attackRange": "Melee",
+    "attackDamage": "1d8+5 phy",
     "experience": "Leadership +3",
-    "feats": [
+    "features": [
       {
         "name": "Voice of the Forest - Action",
         "text": "Mark a Stress to spotlight 1d4 allies within range of a target they can attack without moving. On a success, their attacks deal half damage."
       },
       {
         "name": "Thorny Cage - Action",
-        "text": "Spend a Fear to form a cage around a target within Very Close range and Restrain them until they’re freed with a successful Strength Roll. When a creature makes an action roll against the cage, they must mark a Stress."
+        "text": "Spend a Fear to form a cage around a target within Very Close range and Restrain them until they\u2019re freed with a successful Strength Roll. When a creature makes an action roll against the cage, they must mark a Stress."
       },
       {
         "name": "Momentum - Reaction",
@@ -1370,20 +1578,24 @@ const srdAdversaries = [
   },
   {
     "name": "Patchwork Zombie Hulk",
-    "tier": "1",
+    "originalName": "Patchwork Zombie Hulk",
+    "source": "SRD",
+    "tier": 1,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A towering gestalt of corpses moving as one, with torso-sized limbs and fists as large as a grown halfling.",
-    "motives_and_tactics": "Absorb corpses, flail, hunger, terrify",
-    "difficulty": "13",
-    "thresholds": "8/15",
-    "hp": "10",
-    "stress": "3",
-    "atk": "+4",
-    "attack": "Too Many Arms",
-    "range": "Very Close",
-    "damage": "1d20 phy",
+    "motivesAndTactics": "Absorb corpses, flail, hunger, terrify",
+    "difficulty": 13,
+    "hp": 10,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 15,
+    "attackModifier": "+4",
+    "attackDescription": "Too Many Arms",
+    "attackRange": "Very Close",
+    "attackDamage": "1d20 phy",
     "experience": "Intimidation +2, Tear Things Apart +2",
-    "feats": [
+    "features": [
       {
         "name": "Destructive - Passive",
         "text": "When the Zombie takes Major or greater damage, they mark an additional HP."
@@ -1404,19 +1616,24 @@ const srdAdversaries = [
   },
   {
     "name": "Rotted Zombie",
-    "tier": "1",
+    "originalName": "Rotted Zombie",
+    "source": "SRD",
+    "tier": 1,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A decaying corpse ambling toward their prey.",
-    "motives_and_tactics": "Eat flesh, hunger, maul, surround",
-    "difficulty": "8",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "-3",
-    "attack": "Bite",
-    "range": "Melee",
-    "damage": "2 phy",
-    "feats": [
+    "motivesAndTactics": "Eat flesh, hunger, maul, surround",
+    "difficulty": 8,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "-3",
+    "attackDescription": "Bite",
+    "attackRange": "Melee",
+    "attackDamage": "2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (3) - Passive",
         "text": "The Zombie is defeated when they take any damage. For every 3 damage a PC deals to the Zombie, defeat an additional Minion within range the attack would succeed against."
@@ -1429,44 +1646,54 @@ const srdAdversaries = [
   },
   {
     "name": "Shambling Zombie",
-    "tier": "1",
+    "originalName": "Shambling Zombie",
+    "source": "SRD",
+    "tier": 1,
     "type": "Standard",
+    "countPerHp": 1,
     "description": "An animated corpse that moves shakily, driven only by hunger.",
-    "motives_and_tactics": "Devour, hungry, mob enemy, shred flesh",
-    "difficulty": "10",
-    "thresholds": "4/6",
-    "hp": "4",
-    "stress": "1",
-    "atk": "0",
-    "attack": "Bite",
-    "range": "Melee",
-    "damage": "1d6+1 phy",
-    "feats": [
+    "motivesAndTactics": "Devour, hungry, mob enemy, shred flesh",
+    "difficulty": 10,
+    "hp": 4,
+    "stress": 1,
+    "majorThreshold": 4,
+    "severeThreshold": 6,
+    "attackModifier": "0",
+    "attackDescription": "Bite",
+    "attackRange": "Melee",
+    "attackDamage": "1d6+1 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Too Many to Handle - Passive",
         "text": "When the Zombie is within Melee range of a creature and at least one other Zombie is within Close range, all attacks against that creature have advantage."
       },
       {
         "name": "Horrifying - Passive",
-        "text": "Targets who mark HP from the Zombie’s attacks must also mark a Stress."
+        "text": "Targets who mark HP from the Zombie\u2019s attacks must also mark a Stress."
       }
     ]
   },
   {
     "name": "Zombie Pack",
-    "tier": "1",
-    "type": "Horde (2/HP)",
+    "originalName": "Zombie Pack",
+    "source": "SRD",
+    "tier": 1,
+    "type": "Horde",
+    "countPerHp": 2,
     "description": "A group of shambling corpses instinctively moving together.",
-    "motives_and_tactics": "Consume flesh, hunger, maul",
-    "difficulty": "8",
-    "thresholds": "6/12",
-    "hp": "6",
-    "stress": "3",
-    "atk": "-1",
-    "attack": "Bite",
-    "range": "Melee",
-    "damage": "1d10+2 phy",
-    "feats": [
+    "motivesAndTactics": "Consume flesh, hunger, maul",
+    "difficulty": 8,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 6,
+    "severeThreshold": 12,
+    "attackModifier": "-1",
+    "attackDescription": "Bite",
+    "attackRange": "Melee",
+    "attackDamage": "1d10+2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Horde (1d4+2) - Passive",
         "text": "When the Zombies have marked half or more of their HP, their standard attack deals 1d4+2 physical damage instead."
@@ -1479,19 +1706,24 @@ const srdAdversaries = [
   },
   {
     "name": "Archer Squadron",
-    "tier": "2",
-    "type": "Horde (2/HP)",
+    "originalName": "Archer Squadron",
+    "source": "SRD",
+    "tier": 2,
+    "type": "Horde",
+    "countPerHp": 2,
     "description": "A group of trained archers bearing massive bows.",
-    "motives_and_tactics": "Stick together, survive, volley fire",
-    "difficulty": "13",
-    "thresholds": "8/16",
-    "hp": "4",
-    "stress": "3",
-    "atk": "0",
-    "attack": "Longbow",
-    "range": "Far",
-    "damage": "2d6+3 phy",
-    "feats": [
+    "motivesAndTactics": "Stick together, survive, volley fire",
+    "difficulty": 13,
+    "hp": 4,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 16,
+    "attackModifier": "0",
+    "attackDescription": "Longbow",
+    "attackRange": "Far",
+    "attackDamage": "2d6+3 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Horde (1d6+3) - Passive",
         "text": "When the Squadron has marked half or more of their HP, their standard attack deals 1d6+3 physical damage instead."
@@ -1508,23 +1740,27 @@ const srdAdversaries = [
   },
   {
     "name": "Assassin Poisoner",
-    "tier": "2",
+    "originalName": "Assassin Poisoner",
+    "source": "SRD",
+    "tier": 2,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A cunning scoundrel skilled in both poisons and ambushing.",
-    "motives_and_tactics": "Anticipate, get paid, kill, taint food and water",
-    "difficulty": "14",
-    "thresholds": "8/16",
-    "hp": "4",
-    "stress": "4",
-    "atk": "+3",
-    "attack": "Poisoned Throwing Dagger",
-    "range": "Close",
-    "damage": "2d8+1 phy",
+    "motivesAndTactics": "Anticipate, get paid, kill, taint food and water",
+    "difficulty": 14,
+    "hp": 4,
+    "stress": 4,
+    "majorThreshold": 8,
+    "severeThreshold": 16,
+    "attackModifier": "+3",
+    "attackDescription": "Poisoned Throwing Dagger",
+    "attackRange": "Close",
+    "attackDamage": "2d8+1 phy",
     "experience": "Intrusion +2",
-    "feats": [
+    "features": [
       {
         "name": "Grindeloth Venom - Passive",
-        "text": "Targets who mark HP from the Assassin’s attacks are Vulnerable until they clear a HP."
+        "text": "Targets who mark HP from the Assassin\u2019s attacks are Vulnerable until they clear a HP."
       },
       {
         "name": "Out of Nowhere - Passive",
@@ -1538,20 +1774,24 @@ const srdAdversaries = [
   },
   {
     "name": "Apprentice Assassin",
-    "tier": "2",
+    "originalName": "Apprentice Assassin",
+    "source": "SRD",
+    "tier": 2,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A young trainee eager to prove themselves.",
-    "motives_and_tactics": "Act reckless, kill, prove their worth, show off",
-    "difficulty": "13",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "-1",
-    "attack": "Thrown Dagger",
-    "range": "Very Close",
-    "damage": "4 phy",
+    "motivesAndTactics": "Act reckless, kill, prove their worth, show off",
+    "difficulty": 13,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "-1",
+    "attackDescription": "Thrown Dagger",
+    "attackRange": "Very Close",
+    "attackDamage": "4 phy",
     "experience": "Intrusion +2",
-    "feats": [
+    "features": [
       {
         "name": "Minion (6) - Passive",
         "text": "The Assassin is defeated when they take any damage. For every 6 damage a PC deals to the Assassin, defeat an additional Minion within range the attack would succeed against."
@@ -1564,27 +1804,31 @@ const srdAdversaries = [
   },
   {
     "name": "Master Assassin",
-    "tier": "2",
+    "originalName": "Master Assassin",
+    "source": "SRD",
+    "tier": 2,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A seasoned killer with a threatening voice and a deadly blade.",
-    "motives_and_tactics": "Ambush, get out alive, kill, prepare for all scenarios",
-    "difficulty": "15",
-    "thresholds": "12/25",
-    "hp": "7",
-    "stress": "5",
-    "atk": "+5",
-    "attack": "Serrated Dagger",
-    "range": "Close",
-    "damage": "2d10+2 phy",
+    "motivesAndTactics": "Ambush, get out alive, kill, prepare for all scenarios",
+    "difficulty": 15,
+    "hp": 7,
+    "stress": 5,
+    "majorThreshold": 12,
+    "severeThreshold": 25,
+    "attackModifier": "+5",
+    "attackDescription": "Serrated Dagger",
+    "attackRange": "Close",
+    "attackDamage": "2d10+2 phy",
     "experience": "Command +3, Intrusion +3",
-    "feats": [
+    "features": [
       {
-        "name": "Won’t See It Coming - Passive",
-        "text": "The Assassin deals direct damage while they’re Hidden."
+        "name": "Won\u2019t See It Coming - Passive",
+        "text": "The Assassin deals direct damage while they\u2019re Hidden."
       },
       {
         "name": "Strike as One - Action",
-        "text": "Mark a Stress to spotlight a number of other Assassins equal to the Assassin’s unmarked Stress."
+        "text": "Mark a Stress to spotlight a number of other Assassins equal to the Assassin\u2019s unmarked Stress."
       },
       {
         "name": "The Subtle Blade - Reaction",
@@ -1598,20 +1842,24 @@ const srdAdversaries = [
   },
   {
     "name": "Battle Box",
-    "tier": "2",
+    "originalName": "Battle Box",
+    "source": "SRD",
+    "tier": 2,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A cube-shaped construct with a different rune on each of their six sides.",
-    "motives_and_tactics": "Change tactics, trample foes, wait in disguise",
-    "difficulty": "15",
-    "thresholds": "10/20",
-    "hp": "8",
-    "stress": "6",
-    "atk": "+2",
-    "attack": "Slam",
-    "range": "Melee",
-    "damage": "2d6+3 phy",
+    "motivesAndTactics": "Change tactics, trample foes, wait in disguise",
+    "difficulty": 15,
+    "hp": 8,
+    "stress": 6,
+    "majorThreshold": 10,
+    "severeThreshold": 20,
+    "attackModifier": "+2",
+    "attackDescription": "Slam",
+    "attackRange": "Melee",
+    "attackDamage": "2d6+3 phy",
     "experience": "Camouflage +2",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (2) - Passive",
         "text": "The Box can be spotlighted up to two times per turn. Spend Fear as usual to spotlight them."
@@ -1622,7 +1870,7 @@ const srdAdversaries = [
       },
       {
         "name": "Overcharge - Reaction",
-        "text": "Before rolling damage for the Box’s attack, you can mark a Stress to add a d6 to the damage roll. Additionally, you gain a Fear."
+        "text": "Before rolling damage for the Box\u2019s attack, you can mark a Stress to add a d6 to the damage roll. Additionally, you gain a Fear."
       },
       {
         "name": "Death Quake - Reaction",
@@ -1632,22 +1880,27 @@ const srdAdversaries = [
   },
   {
     "name": "Chaos Skull",
-    "tier": "2",
+    "originalName": "Chaos Skull",
+    "source": "SRD",
+    "tier": 2,
     "type": "Ranged",
+    "countPerHp": 1,
     "description": "A floating humanoid skull animated by scintillating magic.",
-    "motives_and_tactics": "Cackle, consume magic, serve creator",
-    "difficulty": "15",
-    "thresholds": "8/16",
-    "hp": "5",
-    "stress": "4",
-    "atk": "+2",
-    "attack": "Energy Blast",
-    "range": "Close",
-    "damage": "2d8+3 mag",
-    "feats": [
+    "motivesAndTactics": "Cackle, consume magic, serve creator",
+    "difficulty": 15,
+    "hp": 5,
+    "stress": 4,
+    "majorThreshold": 8,
+    "severeThreshold": 16,
+    "attackModifier": "+2",
+    "attackDescription": "Energy Blast",
+    "attackRange": "Close",
+    "attackDamage": "2d8+3 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Levitation - Passive",
-        "text": "The Skull levitates several feet off the ground and can’t be Restrained."
+        "text": "The Skull levitates several feet off the ground and can\u2019t be Restrained."
       },
       {
         "name": "Wards - Passive",
@@ -1665,19 +1918,24 @@ const srdAdversaries = [
   },
   {
     "name": "Conscript",
-    "tier": "2",
+    "originalName": "Conscript",
+    "source": "SRD",
+    "tier": 2,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A poorly trained civilian pressed into war.",
-    "motives_and_tactics": "Follow orders, gang up, survive",
-    "difficulty": "12",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "0",
-    "attack": "Spears",
-    "range": "Very Close",
-    "damage": "6 phy",
-    "feats": [
+    "motivesAndTactics": "Follow orders, gang up, survive",
+    "difficulty": 12,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "0",
+    "attackDescription": "Spears",
+    "attackRange": "Very Close",
+    "attackDamage": "6 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (6) - Passive",
         "text": "The Conscript is defeated when they take any damage. For every 6 damage a PC deals to the Conscript, defeat an additional Minion within range the attack would succeed against."
@@ -1690,42 +1948,50 @@ const srdAdversaries = [
   },
   {
     "name": "Courtesan",
-    "tier": "2",
+    "originalName": "Courtesan",
+    "source": "SRD",
+    "tier": 2,
     "type": "Social",
+    "countPerHp": 1,
     "description": "An accomplished manipulator and master of the social arts.",
-    "motives_and_tactics": "Entice, maneuver, secure patrons",
-    "difficulty": "13",
-    "thresholds": "7/13",
-    "hp": "3",
-    "stress": "4",
-    "atk": "-3",
-    "attack": "Dagger",
-    "range": "Melee",
-    "damage": "1d4+3 phy",
+    "motivesAndTactics": "Entice, maneuver, secure patrons",
+    "difficulty": 13,
+    "hp": 3,
+    "stress": 4,
+    "majorThreshold": 7,
+    "severeThreshold": 13,
+    "attackModifier": "-3",
+    "attackDescription": "Dagger",
+    "attackRange": "Melee",
+    "attackDamage": "1d4+3 phy",
     "experience": "Manipulation +3, Socialite +3",
-    "feats": [
+    "features": [
       {
         "name": "Searing Glance - Reaction",
-        "text": "When a PC within Close range makes a Presence Roll, you can mark a Stress to cast a gaze toward the aftermath. On the target’s failure, they must mark 2 Stress and are Vulnerable until the scene ends or they succeed on a social action against the Courtesan. On the target’s success, they must mark a Stress."
+        "text": "When a PC within Close range makes a Presence Roll, you can mark a Stress to cast a gaze toward the aftermath. On the target\u2019s failure, they must mark 2 Stress and are Vulnerable until the scene ends or they succeed on a social action against the Courtesan. On the target\u2019s success, they must mark a Stress."
       }
     ]
   },
   {
     "name": "Cult Adept",
-    "tier": "2",
+    "originalName": "Cult Adept",
+    "source": "SRD",
+    "tier": 2,
     "type": "Support",
+    "countPerHp": 1,
     "description": "An experienced mage wielding shadow and fear.",
-    "motives_and_tactics": "Curry favor, hinder foes, uncover knowledge",
-    "difficulty": "14",
-    "thresholds": "9/18",
-    "hp": "4",
-    "stress": "6",
-    "atk": "+2",
-    "attack": "Rune-Covered Rod",
-    "range": "Far",
-    "damage": "2d4+3 mag",
+    "motivesAndTactics": "Curry favor, hinder foes, uncover knowledge",
+    "difficulty": 14,
+    "hp": 4,
+    "stress": 6,
+    "majorThreshold": 9,
+    "severeThreshold": 18,
+    "attackModifier": "+2",
+    "attackDescription": "Rune-Covered Rod",
+    "attackRange": "Far",
+    "attackDamage": "2d4+3 mag",
     "experience": "Fallen Lore +2, Rituals +2",
-    "feats": [
+    "features": [
       {
         "name": "Enervating Blast - Action",
         "text": "Spend a Fear to make a standard attack against a target within range. On a success, the target must mark a Stress."
@@ -1746,21 +2012,26 @@ const srdAdversaries = [
   },
   {
     "name": "Cult Fang",
-    "tier": "2",
+    "originalName": "Cult Fang",
+    "source": "SRD",
+    "tier": 2,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A professional killer-turned-cultist.",
-    "motives_and_tactics": "Capture sacrifices, isolate prey, rise in the ranks",
-    "difficulty": "15",
-    "thresholds": "9/17",
-    "hp": "4",
-    "stress": "4",
-    "atk": "+2",
-    "attack": "Long Knife",
-    "range": "Melee",
-    "damage": "2d8+4 phy",
-    "feats": [
+    "motivesAndTactics": "Capture sacrifices, isolate prey, rise in the ranks",
+    "difficulty": 15,
+    "hp": 4,
+    "stress": 4,
+    "majorThreshold": 9,
+    "severeThreshold": 17,
+    "attackModifier": "+2",
+    "attackDescription": "Long Knife",
+    "attackRange": "Melee",
+    "attackDamage": "2d8+4 phy",
+    "experience": null,
+    "features": [
       {
-        "name": "Shadow’s Embrace - Passive",
+        "name": "Shadow\u2019s Embrace - Passive",
         "text": "The Fang can climb and walk on vertical surfaces. Mark a Stress to move from one shadow to another within Far range."
       },
       {
@@ -1771,19 +2042,24 @@ const srdAdversaries = [
   },
   {
     "name": "Cult Initiate",
-    "tier": "2",
+    "originalName": "Cult Initiate",
+    "source": "SRD",
+    "tier": 2,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A low-ranking cultist in simple robes, eager to gain power.",
-    "motives_and_tactics": "Follow orders, gain power, seek forbidden knowledge",
-    "difficulty": "13",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "0",
-    "attack": "Ritual Dagger",
-    "range": "Melee",
-    "damage": "5 phy",
-    "feats": [
+    "motivesAndTactics": "Follow orders, gain power, seek forbidden knowledge",
+    "difficulty": 13,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "0",
+    "attackDescription": "Ritual Dagger",
+    "attackRange": "Melee",
+    "attackDamage": "5 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (6) - Passive",
         "text": "The Initiate is defeated when they take any damage. For every 6 damage a PC deals to the Initiate, defeat an additional Minion within range the attack would succeed against."
@@ -1796,20 +2072,24 @@ const srdAdversaries = [
   },
   {
     "name": "Demonic Hound Pack",
-    "tier": "2",
-    "type": "Horde (1/HP)",
+    "originalName": "Demonic Hound Pack",
+    "source": "SRD",
+    "tier": 2,
+    "type": "Horde",
+    "countPerHp": 1,
     "description": "Unnatural hounds lit from within by hellfire.",
-    "motives_and_tactics": "Cause fear, consume flesh, please masters",
-    "difficulty": "15",
-    "thresholds": "11/23",
-    "hp": "6",
-    "stress": "3",
-    "atk": "0",
-    "attack": "Claws and Fangs",
-    "range": "Melee",
-    "damage": "2d8+2 phy",
+    "motivesAndTactics": "Cause fear, consume flesh, please masters",
+    "difficulty": 15,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 11,
+    "severeThreshold": 23,
+    "attackModifier": "0",
+    "attackDescription": "Claws and Fangs",
+    "attackRange": "Melee",
+    "attackDamage": "2d8+2 phy",
     "experience": "Scent Tracking +3",
-    "feats": [
+    "features": [
       {
         "name": "Horde (2d4+1) - Passive",
         "text": "When the Pack has marked half or more of their HP, their standard attack deals 2d4+1 physical damage instead."
@@ -1826,19 +2106,24 @@ const srdAdversaries = [
   },
   {
     "name": "Electric Eels",
-    "tier": "2",
-    "type": "Horde (2/HP)",
+    "originalName": "Electric Eels",
+    "source": "SRD",
+    "tier": 2,
+    "type": "Horde",
+    "countPerHp": 2,
     "description": "A swarm of eels that encircle and electrocute.",
-    "motives_and_tactics": "Avoid larger predators, shock prey, tear apart",
-    "difficulty": "14",
-    "thresholds": "10/20",
-    "hp": "5",
-    "stress": "3",
-    "atk": "0",
-    "attack": "Shocking Bite",
-    "range": "Melee",
-    "damage": "2d6+4 phy",
-    "feats": [
+    "motivesAndTactics": "Avoid larger predators, shock prey, tear apart",
+    "difficulty": 14,
+    "hp": 5,
+    "stress": 3,
+    "majorThreshold": 10,
+    "severeThreshold": 20,
+    "attackModifier": "0",
+    "attackDescription": "Shocking Bite",
+    "attackRange": "Melee",
+    "attackDamage": "2d6+4 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Horde (2d4+1) - Passive",
         "text": "When the Eels have marked half or more of their HP, their standard attack deals 2d4+1 physical damage instead."
@@ -1851,45 +2136,54 @@ const srdAdversaries = [
   },
   {
     "name": "Elite Soldier",
-    "tier": "2",
+    "originalName": "Elite Soldier",
+    "source": "SRD",
+    "tier": 2,
     "type": "Standard",
+    "countPerHp": 1,
     "description": "An armored squire or experienced commoner looking to advance.",
-    "motives_and_tactics": "Gain glory, keep order, make alliances",
-    "difficulty": "15",
-    "thresholds": "9/18",
-    "hp": "4",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Spear",
-    "range": "Very Close",
-    "damage": "2d8+4 phy",
-    "feats": [
+    "motivesAndTactics": "Gain glory, keep order, make alliances",
+    "difficulty": 15,
+    "hp": 4,
+    "stress": 3,
+    "majorThreshold": 9,
+    "severeThreshold": 18,
+    "attackModifier": "+1",
+    "attackDescription": "Spear",
+    "attackRange": "Very Close",
+    "attackDamage": "2d8+4 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Reinforce - Action",
         "text": "Mark a Stress to move into Melee range of an ally and make a standard attack against a target within Very Close range. On a success, deal 2d10+2 physical damage and the ally can clear a Stress."
       },
       {
-        "name": "Vassal’s Loyalty - Reaction",
+        "name": "Vassal\u2019s Loyalty - Reaction",
         "text": "When the Soldier is within Very Close range of a knight or other noble who would take damage, you can mark a Stress to move into Melee range of them and take the damage instead."
       }
     ]
   },
   {
     "name": "Failed Experiment",
-    "tier": "2",
+    "originalName": "Failed Experiment",
+    "source": "SRD",
+    "tier": 2,
     "type": "Standard",
+    "countPerHp": 1,
     "description": "A magical necromantic experiment gone wrong, leaving them warped and ungainly.",
-    "motives_and_tactics": "Devour, hunt, track",
-    "difficulty": "13",
-    "thresholds": "12/23",
-    "hp": "3",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Bite and Claw",
-    "range": "Melee",
-    "damage": "2d6+5 phy",
+    "motivesAndTactics": "Devour, hunt, track",
+    "difficulty": 13,
+    "hp": 3,
+    "stress": 3,
+    "majorThreshold": 12,
+    "severeThreshold": 23,
+    "attackModifier": "+1",
+    "attackDescription": "Bite and Claw",
+    "attackRange": "Melee",
+    "attackDamage": "2d6+5 phy",
     "experience": "Copycat +3",
-    "feats": [
+    "features": [
       {
         "name": "Warped Fortitude - Passive",
         "text": "The Experiment is resistant to physical damage."
@@ -1906,20 +2200,24 @@ const srdAdversaries = [
   },
   {
     "name": "Giant Beastmaster",
-    "tier": "2",
+    "originalName": "Giant Beastmaster",
+    "source": "SRD",
+    "tier": 2,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A leather-clad warrior bearing a whip and massive bow.",
-    "motives_and_tactics": "Command, make a living, maneuver, pin down, protect companion animals",
-    "difficulty": "16",
-    "thresholds": "12/24",
-    "hp": "6",
-    "stress": "5",
-    "atk": "+2",
-    "attack": "Longbow",
-    "range": "Far",
-    "damage": "2d8+4 phy",
+    "motivesAndTactics": "Command, make a living, maneuver, pin down, protect companion animals",
+    "difficulty": 16,
+    "hp": 6,
+    "stress": 5,
+    "majorThreshold": 12,
+    "severeThreshold": 24,
+    "attackModifier": "+2",
+    "attackDescription": "Longbow",
+    "attackRange": "Far",
+    "attackDamage": "2d8+4 phy",
     "experience": "Animal Handling +3",
-    "feats": [
+    "features": [
       {
         "name": "Two as One - Passive",
         "text": "When the Beastmaster is spotlighted, you can also spotlight a Tier 1 animal adversary currently under their control."
@@ -1930,26 +2228,30 @@ const srdAdversaries = [
       },
       {
         "name": "Deadly Companion - Action",
-        "text": "Twice per scene, summon a Bear, Dire Wolf, or similar Tier 1 animal adversary under the Beastmaster’s control. The adversary appears at Close range and is immediately spotlighted."
+        "text": "Twice per scene, summon a Bear, Dire Wolf, or similar Tier 1 animal adversary under the Beastmaster\u2019s control. The adversary appears at Close range and is immediately spotlighted."
       }
     ]
   },
   {
     "name": "Giant Brawler",
-    "tier": "2",
+    "originalName": "Giant Brawler",
+    "source": "SRD",
+    "tier": 2,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "An especially muscular giant wielding a warhammer larger than a human.",
-    "motives_and_tactics": "Make a living, overwhelm, slam, topple",
-    "difficulty": "15",
-    "thresholds": "12/28",
-    "hp": "7",
-    "stress": "4",
-    "atk": "+2",
-    "attack": "Warhammer",
-    "range": "Very Close",
-    "damage": "2d12+3 phy",
+    "motivesAndTactics": "Make a living, overwhelm, slam, topple",
+    "difficulty": 15,
+    "hp": 7,
+    "stress": 4,
+    "majorThreshold": 12,
+    "severeThreshold": 28,
+    "attackModifier": "+2",
+    "attackDescription": "Warhammer",
+    "attackRange": "Very Close",
+    "attackDamage": "2d12+3 phy",
     "experience": "Intrusion +2",
-    "feats": [
+    "features": [
       {
         "name": "Battering Ram - Action",
         "text": "Mark a Stress to have the Brawler charge at an inanimate object within Close range they could feasibly smash (such as a wall, cart, or market stand) and destroy it. All targets within Very Close range of the object must succeed on an Agility Reaction Roll or take 2d4+3 physical damage from the shrapnel."
@@ -1966,19 +2268,24 @@ const srdAdversaries = [
   },
   {
     "name": "Giant Eagle",
-    "tier": "2",
+    "originalName": "Giant Eagle",
+    "source": "SRD",
+    "tier": 2,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A giant bird of prey with blood-stained talons.",
-    "motives_and_tactics": "Hunt prey, stay mobile, strike decisively",
-    "difficulty": "14",
-    "thresholds": "8/19",
-    "hp": "4",
-    "stress": "4",
-    "atk": "+1",
-    "attack": "Claws and Beak",
-    "range": "Very Close",
-    "damage": "2d6+3 phy",
-    "feats": [
+    "motivesAndTactics": "Hunt prey, stay mobile, strike decisively",
+    "difficulty": 14,
+    "hp": 4,
+    "stress": 4,
+    "majorThreshold": 8,
+    "severeThreshold": 19,
+    "attackModifier": "+1",
+    "attackDescription": "Claws and Beak",
+    "attackRange": "Very Close",
+    "attackDamage": "2d6+3 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Flight - Passive",
         "text": "While flying, the Eagle gains a +3 bonus to their Difficulty."
@@ -1989,29 +2296,34 @@ const srdAdversaries = [
       },
       {
         "name": "Take Off - Action",
-        "text": "Make an attack against a target within Very Close range. On a success, deal 2d4+3 physical damage and the target must succeed on an Agility Reaction Roll or become temporarily Restrained within the Eagle’s massive talons. If the target is Restrained, the Eagle immediately lifts them to the air to Very Far range above the battlefield while holding them."
+        "text": "Make an attack against a target within Very Close range. On a success, deal 2d4+3 physical damage and the target must succeed on an Agility Reaction Roll or become temporarily Restrained within the Eagle\u2019s massive talons. If the target is Restrained, the Eagle immediately lifts them to the air to Very Far range above the battlefield while holding them."
       },
       {
         "name": "Deadly Drop - Action",
-        "text": "While flying, the Eagle can drop a Restrained target they are holding. When dropped, the target is no longer Restrained but starts falling. If their fall isn’t prevented during the PCs’ next action, the target takes 2d20 physical damage when they land."
+        "text": "While flying, the Eagle can drop a Restrained target they are holding. When dropped, the target is no longer Restrained but starts falling. If their fall isn\u2019t prevented during the PCs\u2019 next action, the target takes 2d20 physical damage when they land."
       }
     ]
   },
   {
     "name": "Giant Recruit",
-    "tier": "2",
+    "originalName": "Giant Recruit",
+    "source": "SRD",
+    "tier": 2,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A giant fighter undergoing borrowed armor.",
-    "motives_and_tactics": "Batter, make a living, overwhelm, terrify",
-    "difficulty": "13",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "2",
-    "atk": "+1",
-    "attack": "Warhammer",
-    "range": "Very Close",
-    "damage": "5 phy",
-    "feats": [
+    "motivesAndTactics": "Batter, make a living, overwhelm, terrify",
+    "difficulty": 13,
+    "hp": 1,
+    "stress": 2,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "+1",
+    "attackDescription": "Warhammer",
+    "attackRange": "Very Close",
+    "attackDamage": "5 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (7) - Passive",
         "text": "The Recruit is defeated when they take any damage. For every 7 damage a PC deals to the Recruit, defeat an additional Minion within range the attack would succeed against."
@@ -2024,31 +2336,35 @@ const srdAdversaries = [
   },
   {
     "name": "Gorgon",
-    "tier": "2",
+    "originalName": "Gorgon",
+    "source": "SRD",
+    "tier": 2,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A snake-headed, scaled humanoid with a gilded bow, enraged that their peace has been disturbed.",
-    "motives_and_tactics": "Corner, hit-and-run, petrify, seek vengeance",
-    "difficulty": "15",
-    "thresholds": "13/25",
-    "hp": "9",
-    "stress": "3",
-    "atk": "+4",
-    "attack": "Sinew Shortbow",
-    "range": "Far",
-    "damage": "2d20+3 mag",
+    "motivesAndTactics": "Corner, hit-and-run, petrify, seek vengeance",
+    "difficulty": 15,
+    "hp": 9,
+    "stress": 3,
+    "majorThreshold": 13,
+    "severeThreshold": 25,
+    "attackModifier": "+4",
+    "attackDescription": "Sinew Shortbow",
+    "attackRange": "Far",
+    "attackDamage": "2d20+3 mag",
     "experience": "Instinct +3",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (2) - Passive",
         "text": "The Gorgon can be spotlighted up to two times per GM turn. Spend Fear as usual to spotlight them."
       },
       {
         "name": "Suneater Arrows - Passive",
-        "text": "When the Gorgon makes a successful standard attack, the target Glows until the end of the scene and can’t become Hidden. Attack rolls made against a Glowing target have advantage."
+        "text": "When the Gorgon makes a successful standard attack, the target Glows until the end of the scene and can\u2019t become Hidden. Attack rolls made against a Glowing target have advantage."
       },
       {
         "name": "Crown of Serpents - Action",
-        "text": "Make an attack roll against a target within Melee range using the Gorgon’s protective snakes. On a success, mark Stress to deal 2d10+4 physical damage and the target must mark a Stress."
+        "text": "Make an attack roll against a target within Melee range using the Gorgon\u2019s protective snakes. On a success, mark Stress to deal 2d10+4 physical damage and the target must mark a Stress."
       },
       {
         "name": "Petrifying Gaze - Reaction",
@@ -2062,30 +2378,35 @@ const srdAdversaries = [
   },
   {
     "name": "Juvenile Flickerfly",
-    "tier": "2",
+    "originalName": "Juvenile Flickerfly",
+    "source": "SRD",
+    "tier": 2,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A horse-sized insect with iridescent scales and crystalline wings moving faster than the eye can see.",
-    "motives_and_tactics": "Collect shiny things, hunt, swoop",
-    "difficulty": "14",
-    "thresholds": "13/26",
-    "hp": "10",
-    "stress": "5",
-    "atk": "+3",
-    "attack": "Wing Slash",
-    "range": "Very Close",
-    "damage": "2d10+4 phy",
-    "feats": [
+    "motivesAndTactics": "Collect shiny things, hunt, swoop",
+    "difficulty": 14,
+    "hp": 10,
+    "stress": 5,
+    "majorThreshold": 13,
+    "severeThreshold": 26,
+    "attackModifier": "+3",
+    "attackDescription": "Wing Slash",
+    "attackRange": "Very Close",
+    "attackDamage": "2d10+4 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Relentless (3) - Passive",
         "text": "The Flickerfly can be spotlighted up to three times per GM turn. Spend Fear as usual to spotlight them."
       },
       {
         "name": "Peerless Accuracy - Passive",
-        "text": "Before the Flickerfly makes an attack, roll a d6. On a result of 4 or higher, the target’s Evasion is halved against this attack."
+        "text": "Before the Flickerfly makes an attack, roll a d6. On a result of 4 or higher, the target\u2019s Evasion is halved against this attack."
       },
       {
         "name": "Mind Dance - Action",
-        "text": "Mark a Stress to create a magically dazzling display that grapples the minds of nearby foes. All targets within Close range must make an Instinct Reaction Roll. For each target who failed, you gain a Fear and the Flickerfly learns one of the target’s fears."
+        "text": "Mark a Stress to create a magically dazzling display that grapples the minds of nearby foes. All targets within Close range must make an Instinct Reaction Roll. For each target who failed, you gain a Fear and the Flickerfly learns one of the target\u2019s fears."
       },
       {
         "name": "Hallucinatory Breath - Reaction: Countdown (Loop 1d6)",
@@ -2095,23 +2416,27 @@ const srdAdversaries = [
   },
   {
     "name": "Knight of the Realm",
-    "tier": "2",
+    "originalName": "Knight of the Realm",
+    "source": "SRD",
+    "tier": 2,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A decorated soldier with heavy armor and a powerful steed.",
-    "motives_and_tactics": "Run down, seek glory, show dominance",
-    "difficulty": "15",
-    "thresholds": "13/26",
-    "hp": "6",
-    "stress": "4",
-    "atk": "+4",
-    "attack": "Longsword",
-    "range": "Melee",
-    "damage": "2d10+4 phy",
+    "motivesAndTactics": "Run down, seek glory, show dominance",
+    "difficulty": 15,
+    "hp": 6,
+    "stress": 4,
+    "majorThreshold": 13,
+    "severeThreshold": 26,
+    "attackModifier": "+4",
+    "attackDescription": "Longsword",
+    "attackRange": "Melee",
+    "attackDamage": "2d10+4 phy",
     "experience": "Ancient Knowledge +3, High Society +2, Tactics +2",
-    "feats": [
+    "features": [
       {
         "name": "Chevalier - Passive",
-        "text": "While the Knight is on a mount, they gain a +2 bonus to their Difficulty. When they take Severe damage, they’re knocked from their mount and lose this benefit until they’re next spotlighted."
+        "text": "While the Knight is on a mount, they gain a +2 bonus to their Difficulty. When they take Severe damage, they\u2019re knocked from their mount and lose this benefit until they\u2019re next spotlighted."
       },
       {
         "name": "Heavily Armored - Passive",
@@ -2129,23 +2454,27 @@ const srdAdversaries = [
   },
   {
     "name": "Masked Thief",
-    "tier": "2",
+    "originalName": "Masked Thief",
+    "source": "SRD",
+    "tier": 2,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A cunning thief with acrobatic skill and a flair for the dramatic.",
-    "motives_and_tactics": "Evade, hide, pilfer, profit",
-    "difficulty": "14",
-    "thresholds": "8/17",
-    "hp": "4",
-    "stress": "5",
-    "atk": "+3",
-    "attack": "Backsword",
-    "range": "Melee",
-    "damage": "2d8+3 phy",
+    "motivesAndTactics": "Evade, hide, pilfer, profit",
+    "difficulty": 14,
+    "hp": 4,
+    "stress": 5,
+    "majorThreshold": 8,
+    "severeThreshold": 17,
+    "attackModifier": "+3",
+    "attackDescription": "Backsword",
+    "attackRange": "Melee",
+    "attackDamage": "2d8+3 phy",
     "experience": "Acrobatics +3",
-    "feats": [
+    "features": [
       {
         "name": "Quick Hands - Action",
-        "text": "Make an attack against a target within Melee range. On a success, deal 1d8+2 physical damage and the Thief steals one item or consumable from the target’s inventory."
+        "text": "Make an attack against a target within Melee range. On a success, deal 1d8+2 physical damage and the Thief steals one item or consumable from the target\u2019s inventory."
       },
       {
         "name": "Escape Plan - Action",
@@ -2155,53 +2484,61 @@ const srdAdversaries = [
   },
   {
     "name": "Merchant Baron",
-    "tier": "2",
+    "originalName": "Merchant Baron",
+    "source": "SRD",
+    "tier": 2,
     "type": "Social",
+    "countPerHp": 1,
     "description": "An accomplished merchant with a large operation under their command.",
-    "motives_and_tactics": "Abusive power, gather resources, mobilize minions",
-    "difficulty": "15",
-    "thresholds": "9/19",
-    "hp": "5",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Rapier",
-    "range": "Melee",
-    "damage": "1d6+2 phy",
+    "motivesAndTactics": "Abusive power, gather resources, mobilize minions",
+    "difficulty": 15,
+    "hp": 5,
+    "stress": 3,
+    "majorThreshold": 9,
+    "severeThreshold": 19,
+    "attackModifier": "+2",
+    "attackDescription": "Rapier",
+    "attackRange": "Melee",
+    "attackDamage": "1d6+2 phy",
     "experience": "Nobility +2, Trade +2",
-    "feats": [
+    "features": [
       {
         "name": "Everyone Has a Price - Action",
         "text": "Spend a Fear to offer a target a dangerous bargain for something they want or need. If used on a PC, they must make a Presence Reaction Roll (17). On a failure, they must mark 2 Stress or take the deal."
       },
       {
         "name": "The Best Muscle Money Can Buy - Action",
-        "text": "Once per scene, mark a Stress to summon 1d4+1 Tier 1 adversaries, who appear at Far range, to enforce the Baron’s will."
+        "text": "Once per scene, mark a Stress to summon 1d4+1 Tier 1 adversaries, who appear at Far range, to enforce the Baron\u2019s will."
       }
     ]
   },
   {
     "name": "Minotaur Wrecker",
-    "tier": "2",
+    "originalName": "Minotaur Wrecker",
+    "source": "SRD",
+    "tier": 2,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A massive bull-headed hybrid with a quick temper.",
-    "motives_and_tactics": "Consume, gore, navigate, overpower, pursue",
-    "difficulty": "16",
-    "thresholds": "14/27",
-    "hp": "7",
-    "stress": "5",
-    "atk": "+2",
-    "attack": "Battleaxe",
-    "range": "Very Close",
-    "damage": "2d8+5 phy",
+    "motivesAndTactics": "Consume, gore, navigate, overpower, pursue",
+    "difficulty": 16,
+    "hp": 7,
+    "stress": 5,
+    "majorThreshold": 14,
+    "severeThreshold": 27,
+    "attackModifier": "+2",
+    "attackDescription": "Battleaxe",
+    "attackRange": "Very Close",
+    "attackDamage": "2d8+5 phy",
     "experience": "Navigation +2",
-    "feats": [
+    "features": [
       {
         "name": "Ramp Up - Passive",
         "text": "You must spend a Fear to spotlight the Minotaur. While spotlighted, they can make their standard attack against all targets within range."
       },
       {
         "name": "Charging Bull - Action",
-        "text": "Mark a Stress to charge through a group within Close range and make an attack against all targets in the Minotaur’s path. Targets the Minotaur succeeds against take 2d6+8 physical damage and are knocked back to Very Far range. If a target is knocked into a solid object or another creature, they take an extra 1d6 damage (combine their damage)."
+        "text": "Mark a Stress to charge through a group within Close range and make an attack against all targets in the Minotaur\u2019s path. Targets the Minotaur succeeds against take 2d6+8 physical damage and are knocked back to Very Far range. If a target is knocked into a solid object or another creature, they take an extra 1d6 damage (combine their damage)."
       },
       {
         "name": "Gore - Action",
@@ -2211,20 +2548,24 @@ const srdAdversaries = [
   },
   {
     "name": "Mortal Hunter",
-    "tier": "2",
+    "originalName": "Mortal Hunter",
+    "source": "SRD",
+    "tier": 2,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "An undead figure wearing a heavy leather coat, with searching eyes and a cruelly cut demeanor.",
-    "motives_and_tactics": "Devour, hunt, track",
-    "difficulty": "16",
-    "thresholds": "15/27",
-    "hp": "6",
-    "stress": "4",
-    "atk": "+5",
-    "attack": "Tear at Flesh",
-    "range": "Very Close",
-    "damage": "2d12+1 phy",
+    "motivesAndTactics": "Devour, hunt, track",
+    "difficulty": 16,
+    "hp": 6,
+    "stress": 4,
+    "majorThreshold": 15,
+    "severeThreshold": 27,
+    "attackModifier": "+5",
+    "attackDescription": "Tear at Flesh",
+    "attackRange": "Very Close",
+    "attackDamage": "2d12+1 phy",
     "experience": "Bloodhound +3",
-    "feats": [
+    "features": [
       {
         "name": "Terrifying - Passive",
         "text": "When the Hunter makes a successful attack, all PCs within Far range lose a Hope and you gain a Fear."
@@ -2245,27 +2586,31 @@ const srdAdversaries = [
   },
   {
     "name": "Royal Advisor",
-    "tier": "2",
+    "originalName": "Royal Advisor",
+    "source": "SRD",
+    "tier": 2,
     "type": "Social",
+    "countPerHp": 1,
     "description": "A high-ranking courtier with the ear of the local nobility.",
-    "motives_and_tactics": "Curry favor, manufacture evidence, scheme",
-    "difficulty": "14",
-    "thresholds": "8/15",
-    "hp": "3",
-    "stress": "3",
-    "atk": "-3",
-    "attack": "Wand",
-    "range": "Far",
-    "damage": "1d4+3 phy",
+    "motivesAndTactics": "Curry favor, manufacture evidence, scheme",
+    "difficulty": 14,
+    "hp": 3,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 15,
+    "attackModifier": "-3",
+    "attackDescription": "Wand",
+    "attackRange": "Far",
+    "attackDamage": "1d4+3 phy",
     "experience": "Administration +3, Courtier +3",
-    "feats": [
+    "features": [
       {
         "name": "Devastating Retort - Passive",
         "text": "A PC who rolls less than 17 on an action roll targeting the Advisor must mark a Stress."
       },
       {
         "name": "Bend Ears - Action",
-        "text": "Mark a Stress to influence an NPC within Melee range with whispered words. That target’s opinion on one matter shifts toward the Advisor’s preference unless it is in direct opposition to the target’s motives."
+        "text": "Mark a Stress to influence an NPC within Melee range with whispered words. That target\u2019s opinion on one matter shifts toward the Advisor\u2019s preference unless it is in direct opposition to the target\u2019s motives."
       },
       {
         "name": "Scapegoat - Action",
@@ -2275,26 +2620,30 @@ const srdAdversaries = [
   },
   {
     "name": "Secret-Keeper",
-    "tier": "2",
+    "originalName": "Secret-Keeper",
+    "source": "SRD",
+    "tier": 2,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A clandestine leader with a direct channel to the Fallen Gods.",
-    "motives_and_tactics": "Amass great power, plot, take command",
-    "difficulty": "16",
-    "thresholds": "13/26",
-    "hp": "7",
-    "stress": "4",
-    "atk": "+3",
-    "attack": "Sigil-Laden Staff",
-    "range": "Far",
-    "damage": "2d12 mag",
+    "motivesAndTactics": "Amass great power, plot, take command",
+    "difficulty": 16,
+    "hp": 7,
+    "stress": 4,
+    "majorThreshold": 13,
+    "severeThreshold": 26,
+    "attackModifier": "+3",
+    "attackDescription": "Sigil-Laden Staff",
+    "attackRange": "Far",
+    "attackDamage": "2d12 mag",
     "experience": "Coercion +2, Fallen Lore +2",
-    "feats": [
+    "features": [
       {
         "name": "Seize Your Moment - Action",
         "text": "Spend 2 Fear to spotlight 1d4 allies. Attacks they make while spotlighted in this way deal half damage."
       },
       {
-        "name": "Our Master’s Will - Reaction",
+        "name": "Our Master\u2019s Will - Reaction",
         "text": "When you spotlight an ally within Far range, mark a Stress to gain a Fear."
       },
       {
@@ -2309,76 +2658,88 @@ const srdAdversaries = [
   },
   {
     "name": "Shark",
-    "tier": "2",
+    "originalName": "Shark",
+    "source": "SRD",
+    "tier": 2,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A large aquatic predator, always on the move.",
-    "motives_and_tactics": "Find the blood, isolate prey, target the weak",
-    "difficulty": "14",
-    "thresholds": "14/28",
-    "hp": "7",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Toothy Maw",
-    "range": "Very Close",
-    "damage": "2d12+1 phy",
+    "motivesAndTactics": "Find the blood, isolate prey, target the weak",
+    "difficulty": 14,
+    "hp": 7,
+    "stress": 3,
+    "majorThreshold": 14,
+    "severeThreshold": 28,
+    "attackModifier": "+2",
+    "attackDescription": "Toothy Maw",
+    "attackRange": "Very Close",
+    "attackDamage": "2d12+1 phy",
     "experience": "Sense of Smell +3",
-    "feats": [
+    "features": [
       {
         "name": "Terrifying - Passive",
         "text": "When the Shark makes a successful attack, all PCs within Far range lose a Hope and you gain a Fear."
       },
       {
         "name": "Rending Bite - Passive",
-        "text": "When the Shark makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can’t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Shark makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Blood in the Water - Reaction",
-        "text": "When a creature within Close range of the Shark marks HP from another creature’s attack, you can mark a Stress to immediately spotlight the Shark, moving them into Melee range of the target and making a standard attack."
+        "text": "When a creature within Close range of the Shark marks HP from another creature\u2019s attack, you can mark a Stress to immediately spotlight the Shark, moving them into Melee range of the target and making a standard attack."
       }
     ]
   },
   {
     "name": "Siren",
-    "tier": "2",
+    "originalName": "Siren",
+    "source": "SRD",
+    "tier": 2,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A half fish person with shimmering scales and an irresistible voice.",
-    "motives_and_tactics": "Consume, lure prey, subdue with song",
-    "difficulty": "14",
-    "thresholds": "9/18",
-    "hp": "5",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Distended Jaw Bite",
-    "range": "Melee",
-    "damage": "2d6+3 phy",
+    "motivesAndTactics": "Consume, lure prey, subdue with song",
+    "difficulty": 14,
+    "hp": 5,
+    "stress": 3,
+    "majorThreshold": 9,
+    "severeThreshold": 18,
+    "attackModifier": "+2",
+    "attackDescription": "Distended Jaw Bite",
+    "attackRange": "Melee",
+    "attackDamage": "2d6+3 phy",
     "experience": "Song Repertoire +3",
-    "feats": [
+    "features": [
       {
         "name": "Captive Audience - Passive",
         "text": "If the Siren makes a standard attack against a target Entranced by their song, the attack deals 2d10+1 damage instead of their standard damage."
       },
       {
         "name": "Enchanting Song - Action",
-        "text": "Spend a Fear to sing a song that affects all targets within Close range. Targets must succeed on an Instinct Reaction Roll or become Entranced until they mark 2 Stress. Other Sirens within Close range of the target can mark a Stress to each add a +1 bonus to the Difficulty of the reaction roll. While Entranced, a target can’t act and is Vulnerable."
+        "text": "Spend a Fear to sing a song that affects all targets within Close range. Targets must succeed on an Instinct Reaction Roll or become Entranced until they mark 2 Stress. Other Sirens within Close range of the target can mark a Stress to each add a +1 bonus to the Difficulty of the reaction roll. While Entranced, a target can\u2019t act and is Vulnerable."
       }
     ]
   },
   {
     "name": "Spectral Archer",
-    "tier": "2",
+    "originalName": "Spectral Archer",
+    "source": "SRD",
+    "tier": 2,
     "type": "Ranged",
+    "countPerHp": 1,
     "description": "A ghostly fighter with an ethereal bow, unable to move on while their charge is vulnerable.",
-    "motives_and_tactics": "Move through solid objects, stay out of the fray, rehash old battles",
-    "difficulty": "13",
-    "thresholds": "6/14",
-    "hp": "3",
-    "stress": "3",
-    "atk": "+3",
-    "attack": "Longbow",
-    "range": "Far",
-    "damage": "2d10+2 phy",
+    "motivesAndTactics": "Move through solid objects, stay out of the fray, rehash old battles",
+    "difficulty": 13,
+    "hp": 3,
+    "stress": 3,
+    "majorThreshold": 6,
+    "severeThreshold": 14,
+    "attackModifier": "+3",
+    "attackDescription": "Longbow",
+    "attackRange": "Far",
+    "attackDamage": "2d10+2 phy",
     "experience": "Ancient Knowledge +2",
-    "feats": [
+    "features": [
       {
         "name": "Ghost - Passive",
         "text": "The Archer has resistance to physical damage. Mark a Stress to move up to Close range through solid objects."
@@ -2391,20 +2752,24 @@ const srdAdversaries = [
   },
   {
     "name": "Spectral Captain",
-    "tier": "2",
+    "originalName": "Spectral Captain",
+    "source": "SRD",
+    "tier": 2,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A ghostly commander leading their troops beyond death.",
-    "motives_and_tactics": "Move through solid objects, rally troops, rehash old battles",
-    "difficulty": "16",
-    "thresholds": "13/26",
-    "hp": "6",
-    "stress": "4",
-    "atk": "+3",
-    "attack": "Longbow",
-    "range": "Far",
-    "damage": "2d10+3 phy",
+    "motivesAndTactics": "Move through solid objects, rally troops, rehash old battles",
+    "difficulty": 16,
+    "hp": 6,
+    "stress": 4,
+    "majorThreshold": 13,
+    "severeThreshold": 26,
+    "attackModifier": "+3",
+    "attackDescription": "Longbow",
+    "attackRange": "Far",
+    "attackDamage": "2d10+3 phy",
     "experience": "Ancient Knowledge +3",
-    "feats": [
+    "features": [
       {
         "name": "Ghost - Passive",
         "text": "The Captain has resistance to physical damage. Mark a Stress to move up to Close range through solid objects."
@@ -2415,7 +2780,7 @@ const srdAdversaries = [
       },
       {
         "name": "Hold Fast - Reaction",
-        "text": "When the Captain’s Spectral allies are forced to make a reaction roll, you can mark a Stress to give those allies a +2 bonus to the roll."
+        "text": "When the Captain\u2019s Spectral allies are forced to make a reaction roll, you can mark a Stress to give those allies a +2 bonus to the roll."
       },
       {
         "name": "Momentum - Reaction",
@@ -2425,20 +2790,24 @@ const srdAdversaries = [
   },
   {
     "name": "Spectral Guardian",
-    "tier": "2",
+    "originalName": "Spectral Guardian",
+    "source": "SRD",
+    "tier": 2,
     "type": "Standard",
+    "countPerHp": 1,
     "description": "A ghostly fighter with spears and swords, anchored by duty.",
-    "motives_and_tactics": "Move through solid objects, protect treasure, rehash old battles",
-    "difficulty": "15",
-    "thresholds": "7/15",
-    "hp": "4",
-    "stress": "3",
-    "atk": "+1",
-    "attack": "Spear",
-    "range": "Very Close",
-    "damage": "2d8+1 phy",
+    "motivesAndTactics": "Move through solid objects, protect treasure, rehash old battles",
+    "difficulty": 15,
+    "hp": 4,
+    "stress": 3,
+    "majorThreshold": 7,
+    "severeThreshold": 15,
+    "attackModifier": "+1",
+    "attackDescription": "Spear",
+    "attackRange": "Very Close",
+    "attackDamage": "2d8+1 phy",
     "experience": "Ancient Knowledge +2",
-    "feats": [
+    "features": [
       {
         "name": "Ghost - Passive",
         "text": "The Guardian has resistance to physical damage. Mark a Stress to move up to Close range through solid objects."
@@ -2451,20 +2820,24 @@ const srdAdversaries = [
   },
   {
     "name": "Spy",
-    "tier": "2",
+    "originalName": "Spy",
+    "source": "SRD",
+    "tier": 2,
     "type": "Social",
+    "countPerHp": 1,
     "description": "A skilled espionage agent with a knack for being in the right place to overhear secrets.",
-    "motives_and_tactics": "Cut and run, disguise appearance, eavesdrop",
-    "difficulty": "15",
-    "thresholds": "8/17",
-    "hp": "4",
-    "stress": "3",
-    "atk": "-2",
-    "attack": "Dagger",
-    "range": "Melee",
-    "damage": "2d6+3 phy",
+    "motivesAndTactics": "Cut and run, disguise appearance, eavesdrop",
+    "difficulty": 15,
+    "hp": 4,
+    "stress": 3,
+    "majorThreshold": 8,
+    "severeThreshold": 17,
+    "attackModifier": "-2",
+    "attackDescription": "Dagger",
+    "attackRange": "Melee",
+    "attackDamage": "2d6+3 phy",
     "experience": "Espionage +3",
-    "feats": [
+    "features": [
       {
         "name": "Gathering Secrets - Action",
         "text": "Spend a Fear to describe how the Spy knows a secret about a PC in the scene."
@@ -2477,20 +2850,24 @@ const srdAdversaries = [
   },
   {
     "name": "Stonewraith",
-    "tier": "2",
+    "originalName": "Stonewraith",
+    "source": "SRD",
+    "tier": 2,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A prowling hunter, like a slinking mountain lion, with a slate-gray stone body.",
-    "motives_and_tactics": "Defend territory, isolate prey, stalk",
-    "difficulty": "13",
-    "thresholds": "11/22",
-    "hp": "6",
-    "stress": "3",
-    "atk": "+3",
-    "attack": "Bite and Claws",
-    "range": "Melee",
-    "damage": "2d8+6 phy",
+    "motivesAndTactics": "Defend territory, isolate prey, stalk",
+    "difficulty": 13,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 11,
+    "severeThreshold": 22,
+    "attackModifier": "+3",
+    "attackDescription": "Bite and Claws",
+    "attackRange": "Melee",
+    "attackDamage": "2d8+6 phy",
     "experience": "Stonesense +3",
-    "feats": [
+    "features": [
       {
         "name": "Stonestrider - Passive",
         "text": "The Stonewraith can move through stone and earth as easily as air. While within stone or earth, they are Hidden and immune to all damage."
@@ -2511,31 +2888,35 @@ const srdAdversaries = [
   },
   {
     "name": "War Wizard",
-    "tier": "2",
+    "originalName": "War Wizard",
+    "source": "SRD",
+    "tier": 2,
     "type": "Ranged",
+    "countPerHp": 1,
     "description": "A battle-hardened mage trained in destructive magic.",
-    "motives_and_tactics": "Develop new spells, seek power, conquer",
-    "difficulty": "16",
-    "thresholds": "11/23",
-    "hp": "5",
-    "stress": "6",
-    "atk": "+4",
-    "attack": "Staff",
-    "range": "Far",
-    "damage": "2d10+4 mag",
+    "motivesAndTactics": "Develop new spells, seek power, conquer",
+    "difficulty": 16,
+    "hp": 5,
+    "stress": 6,
+    "majorThreshold": 11,
+    "severeThreshold": 23,
+    "attackModifier": "+4",
+    "attackDescription": "Staff",
+    "attackRange": "Far",
+    "attackDamage": "2d10+4 mag",
     "experience": "Magical Knowledge +2, Strategize +2",
-    "feats": [
+    "features": [
       {
         "name": "Battle Teleport - Passive",
         "text": "Before or after making a standard attack, you can mark a Stress to teleport to a location within Far range."
       },
       {
         "name": "Refresh Warding Sphere - Action",
-        "text": "Mark a Stress to refresh the Wizard’s “Warding Sphere” reaction."
+        "text": "Mark a Stress to refresh the Wizard\u2019s \u201cWarding Sphere\u201d reaction."
       },
       {
         "name": "Eruption - Action",
-        "text": "Spend a Fear and choose a point within Far range. A Very Close area around that point erupts into impassable terrain. All targets within that area must make an Agility Reaction Roll (14). Targets who fail take 2d10 physical damage and are thrown out of the area. Targets who succeed take half damage and aren’t moved."
+        "text": "Spend a Fear and choose a point within Far range. A Very Close area around that point erupts into impassable terrain. All targets within that area must make an Agility Reaction Roll (14). Targets who fail take 2d10 physical damage and are thrown out of the area. Targets who succeed take half damage and aren\u2019t moved."
       },
       {
         "name": "Arcane Artillery - Action",
@@ -2543,32 +2924,37 @@ const srdAdversaries = [
       },
       {
         "name": "Warding Sphere - Reaction",
-        "text": "When the Wizard takes damage from an attack within Close range, deal 2d6 magic damage to the attacker. This reaction can’t be used again until the Wizard refreshes it with their “Refresh Warding Sphere” action."
+        "text": "When the Wizard takes damage from an attack within Close range, deal 2d6 magic damage to the attacker. This reaction can\u2019t be used again until the Wizard refreshes it with their \u201cRefresh Warding Sphere\u201d action."
       }
     ]
   },
   {
     "name": "Adult Flickerfly",
-    "tier": "3",
+    "originalName": "Adult Flickerfly",
+    "source": "SRD",
+    "tier": 3,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A winged insect the size of a large house with iridescent scales and wings that move too fast to track.",
-    "motives_and_tactics": "Collect shiny things, hunt, nest, swoop",
-    "difficulty": "17",
-    "thresholds": "20/35",
-    "hp": "12",
-    "stress": "6",
-    "atk": "+3",
-    "attack": "Wing Slash",
-    "range": "Very Close",
-    "damage": "3d20 phy",
-    "feats": [
+    "motivesAndTactics": "Collect shiny things, hunt, nest, swoop",
+    "difficulty": 17,
+    "hp": 12,
+    "stress": 6,
+    "majorThreshold": 20,
+    "severeThreshold": 35,
+    "attackModifier": "+3",
+    "attackDescription": "Wing Slash",
+    "attackRange": "Very Close",
+    "attackDamage": "3d20 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Relentless (4) - Passive",
         "text": "The Flickerfly can be spotlighted up to four times per GM turn. Spend Fear as usual to spotlight them."
       },
       {
         "name": "Never Misses - Passive",
-        "text": "When the Flickerfly makes an attack, the target’s Evasion is halved against the attack."
+        "text": "When the Flickerfly makes an attack, the target\u2019s Evasion is halved against the attack."
       },
       {
         "name": "Deadly Flight - Passive",
@@ -2580,7 +2966,7 @@ const srdAdversaries = [
       },
       {
         "name": "Mind Dance - Action",
-        "text": "Mark a Stress to create a magically dazzling display that grapples the minds of nearby foes. All targets within Close range must make an Instinct Reaction Roll. For each target who failed, you gain a Fear and the Flickerfly learns one of the target’s fears."
+        "text": "Mark a Stress to create a magically dazzling display that grapples the minds of nearby foes. All targets within Close range must make an Instinct Reaction Roll. For each target who failed, you gain a Fear and the Flickerfly learns one of the target\u2019s fears."
       },
       {
         "name": "Hallucinatory Breath - Action: Countdown (Loop 1d6)",
@@ -2594,27 +2980,31 @@ const srdAdversaries = [
   },
   {
     "name": "Demon of Avarice",
-    "tier": "3",
+    "originalName": "Demon of Avarice",
+    "source": "SRD",
+    "tier": 3,
     "type": "Support",
+    "countPerHp": 1,
     "description": "A regal cloaked monstrosity with circular horns adorned with treasure.",
-    "motives_and_tactics": "Consume, fuel greed, sow dissent",
-    "difficulty": "17",
-    "thresholds": "15/29",
-    "hp": "6",
-    "stress": "5",
-    "atk": "+2",
-    "attack": "Hungry Maw",
-    "range": "Melee",
-    "damage": "3d6+5 mag",
+    "motivesAndTactics": "Consume, fuel greed, sow dissent",
+    "difficulty": 17,
+    "hp": 6,
+    "stress": 5,
+    "majorThreshold": 15,
+    "severeThreshold": 29,
+    "attackModifier": "+2",
+    "attackDescription": "Hungry Maw",
+    "attackRange": "Melee",
+    "attackDamage": "3d6+5 mag",
     "experience": "Manipulation +3",
-    "feats": [
+    "features": [
       {
         "name": "Money Talks - Passive",
-        "text": "Attacks against the Demon are made with disadvantage unless the attacker spends a handful of gold. This Demon starts with a number of handfuls equal to the number of PCs. When a target marks HP from the Demon’s standard attack, they can spend a handful of gold instead of marking HP (1 handful per HP). Add a handful of gold to the Demon for each handful of gold spent by PCs on this feature."
+        "text": "Attacks against the Demon are made with disadvantage unless the attacker spends a handful of gold. This Demon starts with a number of handfuls equal to the number of PCs. When a target marks HP from the Demon\u2019s standard attack, they can spend a handful of gold instead of marking HP (1 handful per HP). Add a handful of gold to the Demon for each handful of gold spent by PCs on this feature."
       },
       {
         "name": "Numbers Must Go Up - Passive",
-        "text": "Add a bonus to the Demon’s attack rolls equal to the number of handfuls of gold they have."
+        "text": "Add a bonus to the Demon\u2019s attack rolls equal to the number of handfuls of gold they have."
       },
       {
         "name": "Money is Time - Action",
@@ -2624,20 +3014,24 @@ const srdAdversaries = [
   },
   {
     "name": "Demon of Despair",
-    "tier": "3",
+    "originalName": "Demon of Despair",
+    "source": "SRD",
+    "tier": 3,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A cloaked one-creature with long limbs, seeping shadows.",
-    "motives_and_tactics": "Make fear contagious, stick to the shadows, undermine resolve",
-    "difficulty": "17",
-    "thresholds": "18/35",
-    "hp": "6",
-    "stress": "5",
-    "atk": "+3",
-    "attack": "Miasma Bolt",
-    "range": "Far",
-    "damage": "3d6+4 mag",
+    "motivesAndTactics": "Make fear contagious, stick to the shadows, undermine resolve",
+    "difficulty": 17,
+    "hp": 6,
+    "stress": 5,
+    "majorThreshold": 18,
+    "severeThreshold": 35,
+    "attackModifier": "+3",
+    "attackDescription": "Miasma Bolt",
+    "attackRange": "Far",
+    "attackDamage": "3d6+4 mag",
     "experience": "Manipulation +3",
-    "feats": [
+    "features": [
       {
         "name": "Depths of Despair - Passive",
         "text": "The Demon deals double damage to PCs with 0 Hope."
@@ -2658,20 +3052,24 @@ const srdAdversaries = [
   },
   {
     "name": "Demon of Hubris",
-    "tier": "3",
+    "originalName": "Demon of Hubris",
+    "source": "SRD",
+    "tier": 3,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A perfectly beautiful and infinitely cruel demon with a gleaming spear and elegant robes.",
-    "motives_and_tactics": "Condescend, declare premature victory, prove superiority",
-    "difficulty": "19",
-    "thresholds": "20/36",
-    "hp": "7",
-    "stress": "5",
-    "atk": "+4",
-    "attack": "Perfect Spear",
-    "range": "Very Close",
-    "damage": "3d10 phy",
+    "motivesAndTactics": "Condescend, declare premature victory, prove superiority",
+    "difficulty": 19,
+    "hp": 7,
+    "stress": 5,
+    "majorThreshold": 20,
+    "severeThreshold": 36,
+    "attackModifier": "+4",
+    "attackDescription": "Perfect Spear",
+    "attackRange": "Very Close",
+    "attackDamage": "3d10 phy",
     "experience": "Manipulation +2",
-    "feats": [
+    "features": [
       {
         "name": "Terrifying - Passive",
         "text": "When the Demon makes a successful attack, all PCs within Far range must lose a Hope and you gain a Fear."
@@ -2682,7 +3080,7 @@ const srdAdversaries = [
       },
       {
         "name": "Unparalleled Skill - Action",
-        "text": "Mark a Stress to deal the Demon’s standard attack damage to a target within Close range."
+        "text": "Mark a Stress to deal the Demon\u2019s standard attack damage to a target within Close range."
       },
       {
         "name": "The Root of Villainy - Action",
@@ -2696,23 +3094,27 @@ const srdAdversaries = [
   },
   {
     "name": "Demon of Jealousy",
-    "tier": "3",
+    "originalName": "Demon of Jealousy",
+    "source": "SRD",
+    "tier": 3,
     "type": "Ranged",
+    "countPerHp": 1,
     "description": "A fickle creature of spindly limbs and insatiable desires.",
-    "motives_and_tactics": "Join in on others’ success, take what belongs to others, hold grudges",
-    "difficulty": "17",
-    "thresholds": "17/30",
-    "hp": "6",
-    "stress": "6",
-    "atk": "+4",
-    "attack": "Psychic Assault",
-    "range": "Far",
-    "damage": "3d8+3 mag",
+    "motivesAndTactics": "Join in on others\u2019 success, take what belongs to others, hold grudges",
+    "difficulty": 17,
+    "hp": 6,
+    "stress": 6,
+    "majorThreshold": 17,
+    "severeThreshold": 30,
+    "attackModifier": "+4",
+    "attackDescription": "Psychic Assault",
+    "attackRange": "Far",
+    "attackDamage": "3d8+3 mag",
     "experience": "Manipulation +3",
-    "feats": [
+    "features": [
       {
         "name": "Unprotected Mind - Passive",
-        "text": "The Demon’s standard attack deals direct damage."
+        "text": "The Demon\u2019s standard attack deals direct damage."
       },
       {
         "name": "My Turn - Reaction",
@@ -2723,30 +3125,34 @@ const srdAdversaries = [
         "text": "When a creature within Close range takes damage from a different adversary, you can mark a Stress to add a d4 to the damage roll."
       },
       {
-        "name": "What’s Yours Is Mine - Reaction",
-        "text": "When a PC takes severe damage within Very Close range of the Demon, you can spend a Fear to cause the target to make a Finesse Reaction Roll. On a failure, the Demon seizes one item or consumable of their choice from the target’s inventory."
+        "name": "What\u2019s Yours Is Mine - Reaction",
+        "text": "When a PC takes severe damage within Very Close range of the Demon, you can spend a Fear to cause the target to make a Finesse Reaction Roll. On a failure, the Demon seizes one item or consumable of their choice from the target\u2019s inventory."
       }
     ]
   },
   {
     "name": "Demon of Wrath",
-    "tier": "3",
+    "originalName": "Demon of Wrath",
+    "source": "SRD",
+    "tier": 3,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A hulking demon with boulder-sized fists, driven by endless rage.",
-    "motives_and_tactics": "Fuel anger, impress rivals, wreak havoc",
-    "difficulty": "17",
-    "thresholds": "22/40",
-    "hp": "7",
-    "stress": "5",
-    "atk": "+3",
-    "attack": "Fists",
-    "range": "Very Close",
-    "damage": "3d8+1 mag",
+    "motivesAndTactics": "Fuel anger, impress rivals, wreak havoc",
+    "difficulty": 17,
+    "hp": 7,
+    "stress": 5,
+    "majorThreshold": 22,
+    "severeThreshold": 40,
+    "attackModifier": "+3",
+    "attackDescription": "Fists",
+    "attackRange": "Very Close",
+    "attackDamage": "3d8+1 mag",
     "experience": "Intimidation +2",
-    "feats": [
+    "features": [
       {
         "name": "Anger Unrelenting - Passive",
-        "text": "The Demon’s attacks deal direct damage."
+        "text": "The Demon\u2019s attacks deal direct damage."
       },
       {
         "name": "Battle Lust - Action",
@@ -2764,20 +3170,24 @@ const srdAdversaries = [
   },
   {
     "name": "Dire Bat",
-    "tier": "3",
+    "originalName": "Dire Bat",
+    "source": "SRD",
+    "tier": 3,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A winged pet endlessly loyal to their vampire owner.",
-    "motives_and_tactics": "Dive-bomb, hide, protect leader",
-    "difficulty": "14",
-    "thresholds": "16/30",
-    "hp": "5",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Claws and Teeth",
-    "range": "Melee",
-    "damage": "2d6+7 phy",
+    "motivesAndTactics": "Dive-bomb, hide, protect leader",
+    "difficulty": 14,
+    "hp": 5,
+    "stress": 3,
+    "majorThreshold": 16,
+    "severeThreshold": 30,
+    "attackModifier": "+2",
+    "attackDescription": "Claws and Teeth",
+    "attackRange": "Melee",
+    "attackDamage": "2d6+7 phy",
     "experience": "Bloodthirsty +3",
-    "feats": [
+    "features": [
       {
         "name": "Flying - Passive",
         "text": "While flying, the Bat gains a +3 bonus to their Difficulty."
@@ -2794,20 +3204,24 @@ const srdAdversaries = [
   },
   {
     "name": "Dryad",
-    "tier": "3",
+    "originalName": "Dryad",
+    "source": "SRD",
+    "tier": 3,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A nature spirit in the form of a humanoid tree.",
-    "motives_and_tactics": "Camouflage, drive out, preserve the forest",
-    "difficulty": "16",
-    "thresholds": "24/38",
-    "hp": "8",
-    "stress": "5",
-    "atk": "+4",
-    "attack": "Deadfall Shortbow",
-    "range": "Far",
-    "damage": "3d10+1 phy",
+    "motivesAndTactics": "Camouflage, drive out, preserve the forest",
+    "difficulty": 16,
+    "hp": 8,
+    "stress": 5,
+    "majorThreshold": 24,
+    "severeThreshold": 38,
+    "attackModifier": "+4",
+    "attackDescription": "Deadfall Shortbow",
+    "attackRange": "Far",
+    "attackDamage": "3d10+1 phy",
     "experience": "Forest Knowledge +4",
-    "feats": [
+    "features": [
       {
         "name": "Bramble Patch - Action",
         "text": "Mark a Stress to target a point within Far range. Create a patch of thorns that covers an area within Close range of that point. All targets within that area take 2d6+2 physical damage when they act. A target must succeed on a Finesse Roll or take more than 20 damage to the Dryad with an attack to leave the area."
@@ -2818,25 +3232,30 @@ const srdAdversaries = [
       },
       {
         "name": "We Are All One - Reaction",
-        "text": "When an ally dies within Close range, you can spend a Fear to clear 2 HP and 2 Stress as the fallen ally’s life force is returned to the forest."
+        "text": "When an ally dies within Close range, you can spend a Fear to clear 2 HP and 2 Stress as the fallen ally\u2019s life force is returned to the forest."
       }
     ]
   },
   {
     "name": "Elemental Spark",
-    "tier": "3",
+    "originalName": "Elemental Spark",
+    "source": "SRD",
+    "tier": 3,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A blazing mote of elemental fire.",
-    "motives_and_tactics": "Blast, consume, gain mass",
-    "difficulty": "15",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "+0",
-    "attack": "Burst of Fire",
-    "range": "Close",
-    "damage": "5 mag",
-    "feats": [
+    "motivesAndTactics": "Blast, consume, gain mass",
+    "difficulty": 15,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "+0",
+    "attackDescription": "Burst of Fire",
+    "attackRange": "Close",
+    "attackDamage": "5 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (9) - Passive",
         "text": "The Elemental is defeated when they take any damage. For every 9 damage a PC deals to the Elemental, defeat an additional Minion within range the attack would succeed against."
@@ -2849,26 +3268,31 @@ const srdAdversaries = [
   },
   {
     "name": "Greater Earth Elemental",
-    "tier": "3",
+    "originalName": "Greater Earth Elemental",
+    "source": "SRD",
+    "tier": 3,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A living landslide of boulders and dust, as large as a house.",
-    "motives_and_tactics": "Avalanche, knock over, pummel",
-    "difficulty": "17",
-    "thresholds": "22/40",
-    "hp": "10",
-    "stress": "4",
-    "atk": "+7",
-    "attack": "Boulder Fist",
-    "range": "Very Close",
-    "damage": "3d10+1 phy",
-    "feats": [
+    "motivesAndTactics": "Avalanche, knock over, pummel",
+    "difficulty": 17,
+    "hp": 10,
+    "stress": 4,
+    "majorThreshold": 22,
+    "severeThreshold": 40,
+    "attackModifier": "+7",
+    "attackDescription": "Boulder Fist",
+    "attackRange": "Very Close",
+    "attackDamage": "3d10+1 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Slow - Passive",
-        "text": "When you spotlight the Elemental and they don’t have a token on their stat block, they can’t act yet. Place a token on their stat block and describe what they’re preparing to do. When you spotlight the Elemental and they have a token on their stat block, clear the token and they can act."
+        "text": "When you spotlight the Elemental and they don\u2019t have a token on their stat block, they can\u2019t act yet. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Elemental and they have a token on their stat block, clear the token and they can act."
       },
       {
         "name": "Crushing Blows - Passive",
-        "text": "When the Elemental makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can’t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Elemental makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Immovable Object - Passive",
@@ -2886,22 +3310,27 @@ const srdAdversaries = [
   },
   {
     "name": "Greater Water Elemental",
-    "tier": "3",
+    "originalName": "Greater Water Elemental",
+    "source": "SRD",
+    "tier": 3,
     "type": "Support",
+    "countPerHp": 1,
     "description": "A huge living wave that crashes down upon enemies.",
-    "motives_and_tactics": "Deluge, disperse, drown",
-    "difficulty": "17",
-    "thresholds": "17/34",
-    "hp": "5",
-    "stress": "5",
-    "atk": "+3",
-    "attack": "Crashing Wave",
-    "range": "Very Close",
-    "damage": "3d4+1 mag",
-    "feats": [
+    "motivesAndTactics": "Deluge, disperse, drown",
+    "difficulty": 17,
+    "hp": 5,
+    "stress": 5,
+    "majorThreshold": 17,
+    "severeThreshold": 34,
+    "attackModifier": "+3",
+    "attackDescription": "Crashing Wave",
+    "attackRange": "Very Close",
+    "attackDamage": "3d4+1 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Water Jet - Action",
-        "text": "Mark a Stress to attack a target within Very Close range. On a success, deal 2d4+7 physical damage and the target’s next action has disadvantage. On a failure, the target must mark a Stress."
+        "text": "Mark a Stress to attack a target within Very Close range. On a success, deal 2d4+7 physical damage and the target\u2019s next action has disadvantage. On a failure, the target must mark a Stress."
       },
       {
         "name": "Drowning Embrace - Action",
@@ -2915,27 +3344,31 @@ const srdAdversaries = [
   },
   {
     "name": "Huge Green Ooze",
-    "tier": "3",
+    "originalName": "Huge Green Ooze",
+    "source": "SRD",
+    "tier": 3,
     "type": "Skulk",
+    "countPerHp": 1,
     "description": "A translucent green mound of acid taller than most humans.",
-    "motives_and_tactics": "Camouflage, creep up, envelop, multiply",
-    "difficulty": "15",
-    "thresholds": "15/30",
-    "hp": "7",
-    "stress": "4",
-    "atk": "+3",
-    "attack": "Ooze Appendage",
-    "range": "Melee",
-    "damage": "3d8+1 mag",
+    "motivesAndTactics": "Camouflage, creep up, envelop, multiply",
+    "difficulty": 15,
+    "hp": 7,
+    "stress": 4,
+    "majorThreshold": 15,
+    "severeThreshold": 30,
+    "attackModifier": "+3",
+    "attackDescription": "Ooze Appendage",
+    "attackRange": "Melee",
+    "attackDamage": "3d8+1 mag",
     "experience": "Blend In +3",
-    "feats": [
+    "features": [
       {
         "name": "Slow - Passive",
-        "text": "When you spotlight the Ooze and they don’t have a token on their stat block, they can’t act yet. Place a token on their stat block and describe what they’re preparing to do. When you spotlight the Ooze and they have a token on their stat block, clear the token and they can act."
+        "text": "When you spotlight the Ooze and they don\u2019t have a token on their stat block, they can\u2019t act yet. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Ooze and they have a token on their stat block, clear the token and they can act."
       },
       {
         "name": "Acidic Form - Passive",
-        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can’t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Envelop - Action",
@@ -2949,26 +3382,31 @@ const srdAdversaries = [
   },
   {
     "name": "Hydra",
-    "tier": "3",
+    "originalName": "Hydra",
+    "source": "SRD",
+    "tier": 3,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A quadrupedal scaled beast with multiple long-necked heads, each filled with menacing fangs.",
-    "motives_and_tactics": "Devour, regenerate, terrify",
-    "difficulty": "18",
-    "thresholds": "19/35",
-    "hp": "10",
-    "stress": "5",
-    "atk": "+3",
-    "attack": "Bite",
-    "range": "Close",
-    "damage": "2d12+2 phy",
-    "feats": [
+    "motivesAndTactics": "Devour, regenerate, terrify",
+    "difficulty": 18,
+    "hp": 10,
+    "stress": 5,
+    "majorThreshold": 19,
+    "severeThreshold": 35,
+    "attackModifier": "+3",
+    "attackDescription": "Bite",
+    "attackRange": "Close",
+    "attackDamage": "2d12+2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Many-Headed Menace - Passive",
         "text": "The Hydra begins with three heads and can have up to five. When the Hydra takes Major or greater damage, they lose a head."
       },
       {
         "name": "Relentless (X) - Passive",
-        "text": "The Hydra can be spotlighted X times per GM turn, where X is the Hydra’s number of heads. Spend Fear as usual to spotlight them."
+        "text": "The Hydra can be spotlighted X times per GM turn, where X is the Hydra\u2019s number of heads. Spend Fear as usual to spotlight them."
       },
       {
         "name": "Regeneration - Action",
@@ -2980,56 +3418,64 @@ const srdAdversaries = [
       },
       {
         "name": "Magical Weakness - Reaction",
-        "text": "When the Hydra takes magic damage, they become Dazed until the next roll with Fear. While Dazed, they can’t use their Regeneration action but are immune to magic damage."
+        "text": "When the Hydra takes magic damage, they become Dazed until the next roll with Fear. While Dazed, they can\u2019t use their Regeneration action but are immune to magic damage."
       }
     ]
   },
   {
     "name": "Monarch",
-    "tier": "3",
+    "originalName": "Monarch",
+    "source": "SRD",
+    "tier": 3,
     "type": "Social",
+    "countPerHp": 1,
     "description": "The sovereign ruler of a nation, unearthed in the privilege of tradition and wielding unmatched power in their domain.",
-    "motives_and_tactics": "Control vassals, destroy rivals, forge a legacy",
-    "difficulty": "16",
-    "thresholds": "16/32",
-    "hp": "6",
-    "stress": "5",
-    "atk": "+0",
-    "attack": "Warhammer",
-    "range": "Melee",
-    "damage": "3d6+3 phy",
+    "motivesAndTactics": "Control vassals, destroy rivals, forge a legacy",
+    "difficulty": 16,
+    "hp": 6,
+    "stress": 5,
+    "majorThreshold": 16,
+    "severeThreshold": 32,
+    "attackModifier": "+0",
+    "attackDescription": "Warhammer",
+    "attackRange": "Melee",
+    "attackDamage": "3d6+3 phy",
     "experience": "History +3, Nobility +3",
-    "feats": [
+    "features": [
       {
         "name": "Execute Them! - Action",
         "text": "Spend a Fear per PC in the party to have the group condemned for crimes real or imagined. A PC who succeeds on a Presence Roll can demand trial by combat or another special form of trial."
       },
       {
         "name": "Crossguard - Action",
-        "text": "Once per scene, mark a Stress to summon Tier X Minions, who appear at Close range to enforce the Monarch’s will."
+        "text": "Once per scene, mark a Stress to summon Tier X Minions, who appear at Close range to enforce the Monarch\u2019s will."
       },
       {
         "name": "Census Bell - Reaction: Long-Term Countdown (8)",
-        "text": "Spend a Fear to activate after the Monarch’s desire for war is first revealed. When it triggers, the Monarch has a reason to rally the nation to war and the support to act on that reason. You gain 1d4 Fear."
+        "text": "Spend a Fear to activate after the Monarch\u2019s desire for war is first revealed. When it triggers, the Monarch has a reason to rally the nation to war and the support to act on that reason. You gain 1d4 Fear."
       }
     ]
   },
   {
     "name": "Stag Knight",
-    "tier": "3",
+    "originalName": "Stag Knight",
+    "source": "SRD",
+    "tier": 3,
     "type": "Standard",
+    "countPerHp": 1,
     "description": "A knight with huge, majestic antlers wearing armor made of dangerous thorns.",
-    "motives_and_tactics": "Isolate, maneuver, protect the forest, weed the unwelcome",
-    "difficulty": "17",
-    "thresholds": "19/36",
-    "hp": "7",
-    "stress": "5",
-    "atk": "+3",
-    "attack": "Bramble Sword",
-    "range": "Melee",
-    "damage": "3d8+3 phy",
+    "motivesAndTactics": "Isolate, maneuver, protect the forest, weed the unwelcome",
+    "difficulty": 17,
+    "hp": 7,
+    "stress": 5,
+    "majorThreshold": 19,
+    "severeThreshold": 36,
+    "attackModifier": "+3",
+    "attackDescription": "Bramble Sword",
+    "attackRange": "Melee",
+    "attackDamage": "3d8+3 phy",
     "experience": "Forest Knowledge +3",
-    "feats": [
+    "features": [
       {
         "name": "From Above - Passive",
         "text": "When the Knight succeeds on a standard attack from above a target, they deal 3d12+3 physical damage instead of their standard damage."
@@ -3046,20 +3492,24 @@ const srdAdversaries = [
   },
   {
     "name": "Oak Treant",
-    "tier": "3",
+    "originalName": "Oak Treant",
+    "source": "SRD",
+    "tier": 3,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A sturdy animated old-growth tree.",
-    "motives_and_tactics": "Hide in plain sight, preserve the forest, root down, swing branches",
-    "difficulty": "17",
-    "thresholds": "22/40",
-    "hp": "7",
-    "stress": "4",
-    "atk": "+2",
-    "attack": "Branch",
-    "range": "Very Close",
-    "damage": "3d8+2 phy",
+    "motivesAndTactics": "Hide in plain sight, preserve the forest, root down, swing branches",
+    "difficulty": 17,
+    "hp": 7,
+    "stress": 4,
+    "majorThreshold": 22,
+    "severeThreshold": 40,
+    "attackModifier": "+2",
+    "attackDescription": "Branch",
+    "attackRange": "Very Close",
+    "attackDamage": "3d8+2 phy",
     "experience": "Forest Knowledge +3",
-    "feats": [
+    "features": [
       {
         "name": "Just a Tree - Passive",
         "text": "Before they make their first attack in a fight or after they become Hidden, the Treant is indistinguishable from other trees until they next act or a PC succeeds on an Instinct Roll to identify them."
@@ -3076,19 +3526,24 @@ const srdAdversaries = [
   },
   {
     "name": "Treant Sapling",
-    "tier": "3",
+    "originalName": "Treant Sapling",
+    "source": "SRD",
+    "tier": 3,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A small, sentient tree sapling.",
-    "motives_and_tactics": "Blend in, preserve the forest, pummel, surround",
-    "difficulty": "14",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "+0",
-    "attack": "Branches",
-    "range": "Melee",
-    "damage": "8 phy",
-    "feats": [
+    "motivesAndTactics": "Blend in, preserve the forest, pummel, surround",
+    "difficulty": 14,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "+0",
+    "attackDescription": "Branches",
+    "attackRange": "Melee",
+    "attackDamage": "8 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (6) - Passive",
         "text": "The Sapling is defeated when they take any damage. For every 6 damage a PC deals to the Sapling, defeat an additional Minion within range the attack would succeed against."
@@ -3101,20 +3556,24 @@ const srdAdversaries = [
   },
   {
     "name": "Head Vampire",
-    "tier": "3",
+    "originalName": "Head Vampire",
+    "source": "SRD",
+    "tier": 3,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A captivating undead dressed in aristocratic finery.",
-    "motives_and_tactics": "Create thralls, charm, command, fly, intimidate",
-    "difficulty": "17",
-    "thresholds": "22/42",
-    "hp": "6",
-    "stress": "6",
-    "atk": "+5",
-    "attack": "Rapier",
-    "range": "Melee",
-    "damage": "2d20+4 phy",
+    "motivesAndTactics": "Create thralls, charm, command, fly, intimidate",
+    "difficulty": 17,
+    "hp": 6,
+    "stress": 6,
+    "majorThreshold": 22,
+    "severeThreshold": 42,
+    "attackModifier": "+5",
+    "attackDescription": "Rapier",
+    "attackRange": "Melee",
+    "attackDamage": "2d20+4 phy",
     "experience": "Aristocrat +3",
-    "feats": [
+    "features": [
       {
         "name": "Terrifying - Passive",
         "text": "When the Vampire makes a successful attack, all PCs within Far range lose a Hope and you gain a Fear."
@@ -3139,20 +3598,24 @@ const srdAdversaries = [
   },
   {
     "name": "Vampire",
-    "tier": "3",
+    "originalName": "Vampire",
+    "source": "SRD",
+    "tier": 3,
     "type": "Standard",
-    "description": "An intelligent undead with blood-stained lips and a predator’s smile.",
-    "motives_and_tactics": "Bite, charm, deceive, feed, intimidate",
-    "difficulty": "16",
-    "thresholds": "18/35",
-    "hp": "5",
-    "stress": "4",
-    "atk": "+3",
-    "attack": "Rapier",
-    "range": "Melee",
-    "damage": "3d8 phy",
+    "countPerHp": 1,
+    "description": "An intelligent undead with blood-stained lips and a predator\u2019s smile.",
+    "motivesAndTactics": "Bite, charm, deceive, feed, intimidate",
+    "difficulty": 16,
+    "hp": 5,
+    "stress": 4,
+    "majorThreshold": 18,
+    "severeThreshold": 35,
+    "attackModifier": "+3",
+    "attackDescription": "Rapier",
+    "attackRange": "Melee",
+    "attackDamage": "3d8 phy",
     "experience": "Nocturnal Hunter +3",
-    "feats": [
+    "features": [
       {
         "name": "Draining Bite - Action",
         "text": "Make an attack against a target within Melee range. On a success, deal 4d physical damage. A target who marks HP from this attack loses a Hope and must mark a Stress. The Vampire then clears a HP."
@@ -3165,30 +3628,35 @@ const srdAdversaries = [
   },
   {
     "name": "Vault Guardian Sentinel",
-    "tier": "3",
+    "originalName": "Vault Guardian Sentinel",
+    "source": "SRD",
+    "tier": 3,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A dust-covered golden construct with boxy limbs and a huge mace for a hand.",
-    "motives_and_tactics": "Destroy at any cost, expunge, protect",
-    "difficulty": "17",
-    "thresholds": "21/40",
-    "hp": "6",
-    "stress": "3",
-    "atk": "+3",
-    "attack": "Charged Mace",
-    "range": "Very Close",
-    "damage": "2d12+1 phy",
-    "feats": [
+    "motivesAndTactics": "Destroy at any cost, expunge, protect",
+    "difficulty": 17,
+    "hp": 6,
+    "stress": 3,
+    "majorThreshold": 21,
+    "severeThreshold": 40,
+    "attackModifier": "+3",
+    "attackDescription": "Charged Mace",
+    "attackRange": "Very Close",
+    "attackDamage": "2d12+1 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Kinetic Slam - Passive",
-        "text": "Targets who take damage from the Sentinel’s standard attack are knocked back to Very Close range."
+        "text": "Targets who take damage from the Sentinel\u2019s standard attack are knocked back to Very Close range."
       },
       {
         "name": "Box In - Action",
-        "text": "Mark a Stress to choose a target within Very Close range to focus on. That target has disadvantage on attack rolls when they’re within Very Close range of the Sentinel. The Sentinel can only focus on one target at a time."
+        "text": "Mark a Stress to choose a target within Very Close range to focus on. That target has disadvantage on attack rolls when they\u2019re within Very Close range of the Sentinel. The Sentinel can only focus on one target at a time."
       },
       {
         "name": "Mana Bolt - Action",
-        "text": "Spend a Fear to lob explosive magic at a point within Far range. All targets within Very Close range of that point must make an Agility Reaction Roll. Targets who fail take 8d20 magic damage and are knocked back to Close range. Targets who succeed take half damage and aren’t knocked back."
+        "text": "Spend a Fear to lob explosive magic at a point within Far range. All targets within Very Close range of that point must make an Agility Reaction Roll. Targets who fail take 8d20 magic damage and are knocked back to Close range. Targets who succeed take half damage and aren\u2019t knocked back."
       },
       {
         "name": "Momentum - Reaction",
@@ -3198,22 +3666,27 @@ const srdAdversaries = [
   },
   {
     "name": "Vault Guardian Turret",
-    "tier": "3",
+    "originalName": "Vault Guardian Turret",
+    "source": "SRD",
+    "tier": 3,
     "type": "Ranged",
+    "countPerHp": 1,
     "description": "A massive hulking turret with reinforced armor and twelve piston-driven mechanical legs.",
-    "motives_and_tactics": "Concentrate fire, lock down, mark, protect",
-    "difficulty": "16",
-    "thresholds": "20/32",
-    "hp": "5",
-    "stress": "4",
-    "atk": "+3",
-    "attack": "Magitech Cannon",
-    "range": "Far",
-    "damage": "3d10+3 mag",
-    "feats": [
+    "motivesAndTactics": "Concentrate fire, lock down, mark, protect",
+    "difficulty": 16,
+    "hp": 5,
+    "stress": 4,
+    "majorThreshold": 20,
+    "severeThreshold": 32,
+    "attackModifier": "+3",
+    "attackDescription": "Magitech Cannon",
+    "attackRange": "Far",
+    "attackDamage": "3d10+3 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Slow Firing - Passive",
-        "text": "When you spotlight the Turret and they don’t have a token on their stat block, they can’t make a standard attack. Place a token on their stat block and describe what they’re preparing to do. When you spotlight the Turret and they have a token on their stat block, clear the token and they can attack."
+        "text": "When you spotlight the Turret and they don\u2019t have a token on their stat block, they can\u2019t make a standard attack. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Turret and they have a token on their stat block, clear the token and they can attack."
       },
       {
         "name": "Mark Target - Action",
@@ -3221,7 +3694,7 @@ const srdAdversaries = [
       },
       {
         "name": "Concentrate Fire - Reaction",
-        "text": "When another adversary deals damage to a target within Far range of the Turret, you can mark a Stress to add the Turret’s standard attack damage to the damage roll."
+        "text": "When another adversary deals damage to a target within Far range of the Turret, you can mark a Stress to add the Turret\u2019s standard attack damage to the damage roll."
       },
       {
         "name": "Detonation - Reaction",
@@ -3231,19 +3704,24 @@ const srdAdversaries = [
   },
   {
     "name": "Vault Guardian Gaoler",
-    "tier": "3",
+    "originalName": "Vault Guardian Gaoler",
+    "source": "SRD",
+    "tier": 3,
     "type": "Support",
+    "countPerHp": 1,
     "description": "A boxy, dust-covered construct with thick metallic swinging doors on their torso.",
-    "motives_and_tactics": "Carry away, entrap, protect, pummel",
-    "difficulty": "16",
-    "thresholds": "19/33",
-    "hp": "5",
-    "stress": "3",
-    "atk": "+2",
-    "attack": "Body Bash",
-    "range": "Very Close",
-    "damage": "3d6+2 phy",
-    "feats": [
+    "motivesAndTactics": "Carry away, entrap, protect, pummel",
+    "difficulty": 16,
+    "hp": 5,
+    "stress": 3,
+    "majorThreshold": 19,
+    "severeThreshold": 33,
+    "attackModifier": "+2",
+    "attackDescription": "Body Bash",
+    "attackRange": "Very Close",
+    "attackDamage": "3d6+2 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Blocking Shield - Passive",
         "text": "Creatures within Melee range of the Gaoler have disadvantage on attack rolls against them. Creatures trapped inside the Gaoler are immune to this feature."
@@ -3256,27 +3734,31 @@ const srdAdversaries = [
   },
   {
     "name": "Young Ice Dragon",
-    "tier": "3",
+    "originalName": "Young Ice Dragon",
+    "source": "SRD",
+    "tier": 3,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A glacier-blue dragon with four powerful limbs and frost-tinged wings.",
-    "motives_and_tactics": "Avalanche, defend lair, fly, freeze, defend what is mine, maul",
-    "difficulty": "18",
-    "thresholds": "21/41",
-    "hp": "10",
-    "stress": "6",
-    "atk": "+7",
-    "attack": "Bite and Claws",
-    "range": "Close",
-    "damage": "4d10 phy",
+    "motivesAndTactics": "Avalanche, defend lair, fly, freeze, defend what is mine, maul",
+    "difficulty": 18,
+    "hp": 10,
+    "stress": 6,
+    "majorThreshold": 21,
+    "severeThreshold": 41,
+    "attackModifier": "+7",
+    "attackDescription": "Bite and Claws",
+    "attackRange": "Close",
+    "attackDamage": "4d10 phy",
     "experience": "Protect What Is Mine +3",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (3) - Passive",
         "text": "The Dragon can be spotlighted up to three times per GM turn. Spend Fear as usual to spotlight them."
       },
       {
         "name": "Rend and Crush - Passive",
-        "text": "If a target damaged by the Dragon doesn’t mark an Armor Slot to reduce the damage, they must mark a Stress."
+        "text": "If a target damaged by the Dragon doesn\u2019t mark an Armor Slot to reduce the damage, they must mark a Stress."
       },
       {
         "name": "No Hope - Passive",
@@ -3302,20 +3784,24 @@ const srdAdversaries = [
   },
   {
     "name": "Arch-Necromancer",
-    "tier": "4",
+    "originalName": "Arch-Necromancer",
+    "source": "SRD",
+    "tier": 4,
     "type": "Leader",
+    "countPerHp": 1,
     "description": "A decaying mage adorned in dark, tattered robes.",
-    "motives_and_tactics": "Corrupt, decay, flee to fight another day, resurrect",
-    "difficulty": "21",
-    "thresholds": "33/66",
-    "hp": "9",
-    "stress": "8",
-    "atk": "+6",
-    "attack": "Necrotic Blast",
-    "range": "Far",
-    "damage": "4d12+8 mag",
+    "motivesAndTactics": "Corrupt, decay, flee to fight another day, resurrect",
+    "difficulty": 21,
+    "hp": 9,
+    "stress": 8,
+    "majorThreshold": 33,
+    "severeThreshold": 66,
+    "attackModifier": "+6",
+    "attackDescription": "Necrotic Blast",
+    "attackRange": "Far",
+    "attackDamage": "4d12+8 mag",
     "experience": "Forbidden Knowledge +3, Wisdom of Centuries +3",
-    "feats": [
+    "features": [
       {
         "name": "Dance of Death - Action",
         "text": "Mark a Stress to spotlight 1d4 allies. Attacks they make while spotlighted in this way deal half damage, or full damage if you spend a Fear."
@@ -3340,19 +3826,24 @@ const srdAdversaries = [
   },
   {
     "name": "Fallen Shock Troop",
-    "tier": "4",
+    "originalName": "Fallen Shock Troop",
+    "source": "SRD",
+    "tier": 4,
     "type": "Minion",
-    "description": "A cursed soul bound to the Fallen’s will.",
-    "motives_and_tactics": "Crush, dominate, earn relief, punish",
-    "difficulty": "18",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "+2",
-    "attack": "Cursed Axe",
-    "range": "Very Close",
-    "damage": "12 phy",
-    "feats": [
+    "countPerHp": 1,
+    "description": "A cursed soul bound to the Fallen\u2019s will.",
+    "motivesAndTactics": "Crush, dominate, earn relief, punish",
+    "difficulty": 18,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "+2",
+    "attackDescription": "Cursed Axe",
+    "attackRange": "Very Close",
+    "attackDamage": "12 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (12) - Passive",
         "text": "The Shock Troop is defeated when they take any damage. For every 12 damage a PC deals to the Shock Troop, defeat an additional Minion within range the attack would succeed against."
@@ -3369,20 +3860,24 @@ const srdAdversaries = [
   },
   {
     "name": "Fallen Sorcerer",
-    "tier": "4",
+    "originalName": "Fallen Sorcerer",
+    "source": "SRD",
+    "tier": 4,
     "type": "Support",
+    "countPerHp": 1,
     "description": "Warped mage bound by the bargains they made in life.",
-    "motives_and_tactics": "Acquire, dishearten, dominate, torment",
-    "difficulty": "19",
-    "thresholds": "26/42",
-    "hp": "6",
-    "stress": "5",
-    "atk": "+4",
-    "attack": "Corrupted Staff",
-    "range": "Far",
-    "damage": "4d6+10 mag",
+    "motivesAndTactics": "Acquire, dishearten, dominate, torment",
+    "difficulty": 19,
+    "hp": 6,
+    "stress": 5,
+    "majorThreshold": 26,
+    "severeThreshold": 42,
+    "attackModifier": "+4",
+    "attackDescription": "Corrupted Staff",
+    "attackRange": "Far",
+    "attackDamage": "4d6+10 mag",
     "experience": "Ancient Knowledge +2",
-    "feats": [
+    "features": [
       {
         "name": "Conflagration - Action",
         "text": "Spend a Fear to unleash an all-consuming firestorm and make an attack against all targets within Close range. Targets the Sorcerer succeeds against take 2d10+6 direct magic damage."
@@ -3403,20 +3898,24 @@ const srdAdversaries = [
   },
   {
     "name": "Fallen Warlord: Realm-Breaker",
-    "tier": "4",
+    "originalName": "Fallen Warlord: Realm-Breaker",
+    "source": "SRD",
+    "tier": 4,
     "type": "Solo",
-    "description": "A fallen God, wreathed in rage and resentment, bearing millennia of experience in breaking heroes’ spirits.",
-    "motives_and_tactics": "Corrupt, dominate, punish, break the weak",
-    "difficulty": "20",
-    "thresholds": "36/66",
-    "hp": "8",
-    "stress": "5",
-    "atk": "+7",
-    "attack": "Barbed Whip",
-    "range": "Close",
-    "damage": "4d8+7 phy",
+    "countPerHp": 1,
+    "description": "A fallen God, wreathed in rage and resentment, bearing millennia of experience in breaking heroes\u2019 spirits.",
+    "motivesAndTactics": "Corrupt, dominate, punish, break the weak",
+    "difficulty": 20,
+    "hp": 8,
+    "stress": 5,
+    "majorThreshold": 36,
+    "severeThreshold": 66,
+    "attackModifier": "+7",
+    "attackDescription": "Barbed Whip",
+    "attackRange": "Close",
+    "attackDamage": "4d8+7 phy",
     "experience": "Conquest +3, History +2, Intimidation +3",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (2) - Passive",
         "text": "The Realm-Breaker can be spotlighted up to two times per GM turn. Spend Fear as usual to spotlight them."
@@ -3445,20 +3944,24 @@ const srdAdversaries = [
   },
   {
     "name": "Fallen Warlord: Undefeated Champion",
-    "tier": "4",
+    "originalName": "Fallen Warlord: Undefeated Champion",
+    "source": "SRD",
+    "tier": 4,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "That which only the most feared have a chance to fear.",
-    "motives_and_tactics": "Dispatch merciless death, punish the defiant, secure victory at any cost",
-    "difficulty": "18",
-    "thresholds": "35/58",
-    "hp": "11",
-    "stress": "5",
-    "atk": "+8",
-    "attack": "Heart-Shattering Sword",
-    "range": "Very Close",
-    "damage": "4d12+13 phy",
+    "motivesAndTactics": "Dispatch merciless death, punish the defiant, secure victory at any cost",
+    "difficulty": 18,
+    "hp": 11,
+    "stress": 5,
+    "majorThreshold": 35,
+    "severeThreshold": 58,
+    "attackModifier": "+8",
+    "attackDescription": "Heart-Shattering Sword",
+    "attackRange": "Very Close",
+    "attackDamage": "4d12+13 phy",
     "experience": "Conquest +3, History +2, Intimidation +3",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (3) - Passive",
         "text": "The Undefeated Champion can be spotlighted up to three times per GM turn. Spend Fear as usual to spotlight them."
@@ -3491,19 +3994,24 @@ const srdAdversaries = [
   },
   {
     "name": "Hallowed Archer",
-    "tier": "4",
+    "originalName": "Hallowed Archer",
+    "source": "SRD",
+    "tier": 4,
     "type": "Ranged",
+    "countPerHp": 1,
     "description": "Spirit soldiers with sanctified bows.",
-    "motives_and_tactics": "Focus fire, obey, retribution, volley",
-    "difficulty": "19",
-    "thresholds": "25/45",
-    "hp": "3",
-    "stress": "2",
-    "atk": "+4",
-    "attack": "Sanctified Longbow",
-    "range": "Far",
-    "damage": "4d8+8 phy",
-    "feats": [
+    "motivesAndTactics": "Focus fire, obey, retribution, volley",
+    "difficulty": 19,
+    "hp": 3,
+    "stress": 2,
+    "majorThreshold": 25,
+    "severeThreshold": 45,
+    "attackModifier": "+4",
+    "attackDescription": "Sanctified Longbow",
+    "attackRange": "Far",
+    "attackDamage": "4d8+8 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Punish the Guilty - Passive",
         "text": "The Archer deals double damage to targets marked Guilty by a High Seraph."
@@ -3516,19 +4024,24 @@ const srdAdversaries = [
   },
   {
     "name": "Hallowed Soldier",
-    "tier": "4",
+    "originalName": "Hallowed Soldier",
+    "source": "SRD",
+    "tier": 4,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "Souls of the faithful, lifted up with divine weaponry.",
-    "motives_and_tactics": "Obey, outmaneuver, punish, swarm",
-    "difficulty": "18",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "2",
-    "atk": "+2",
-    "attack": "Sword and Shield",
-    "range": "Melee",
-    "damage": "10 phy",
-    "feats": [
+    "motivesAndTactics": "Obey, outmaneuver, punish, swarm",
+    "difficulty": 18,
+    "hp": 1,
+    "stress": 2,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "+2",
+    "attackDescription": "Sword and Shield",
+    "attackRange": "Melee",
+    "attackDamage": "10 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (13) - Passive",
         "text": "The Soldier is defeated when they take any damage. For every 13 damage a PC deals to the Soldier, defeat an additional Minion within range the attack would succeed against."
@@ -3545,20 +4058,24 @@ const srdAdversaries = [
   },
   {
     "name": "High Seraph",
-    "tier": "4",
+    "originalName": "High Seraph",
+    "source": "SRD",
+    "tier": 4,
     "type": "Leader",
-    "description": "A divine champion, head of a hallowed host of warriors who enforce their god’s will.",
-    "motives_and_tactics": "Enforce dogma, fly, pronounce judgment, smite",
-    "difficulty": "20",
-    "thresholds": "37/70",
-    "hp": "7",
-    "stress": "5",
-    "atk": "+8",
-    "attack": "Holy Sword",
-    "range": "Very Close",
-    "damage": "4d10+10 phy",
+    "countPerHp": 1,
+    "description": "A divine champion, head of a hallowed host of warriors who enforce their god\u2019s will.",
+    "motivesAndTactics": "Enforce dogma, fly, pronounce judgment, smite",
+    "difficulty": 20,
+    "hp": 7,
+    "stress": 5,
+    "majorThreshold": 37,
+    "severeThreshold": 70,
+    "attackModifier": "+8",
+    "attackDescription": "Holy Sword",
+    "attackRange": "Very Close",
+    "attackDamage": "4d10+10 phy",
     "experience": "Divine Knowledge +3",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (2) - Passive",
         "text": "The Seraph can be spotlighted up to three times per GM turn. Spend Fear as usual to spotlight them."
@@ -3569,7 +4086,7 @@ const srdAdversaries = [
       },
       {
         "name": "Judgment - Action",
-        "text": "Spend a Fear to make a target Guilty in the eyes of the Seraph’s god until the Seraph is defeated. While Guilty, the target doesn’t gain Hope on a result with Hope. When the Seraph succeeds on a standard attack against a Guilty target, they deal Severe damage instead of their standard damage. The Seraph can only mark one target at a time."
+        "text": "Spend a Fear to make a target Guilty in the eyes of the Seraph\u2019s god until the Seraph is defeated. While Guilty, the target doesn\u2019t gain Hope on a result with Hope. When the Seraph succeeds on a standard attack against a Guilty target, they deal Severe damage instead of their standard damage. The Seraph can only mark one target at a time."
       },
       {
         "name": "God Rays - Action",
@@ -3583,20 +4100,24 @@ const srdAdversaries = [
   },
   {
     "name": "Kraken",
-    "tier": "4",
+    "originalName": "Kraken",
+    "source": "SRD",
+    "tier": 4,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A legendary beast of the sea, bigger than the largest galleon, with sucker-laden tentacles and a terrifying maw.",
-    "motives_and_tactics": "Consume, crush, drown, grapple",
-    "difficulty": "20",
-    "thresholds": "35/70",
-    "hp": "11",
-    "stress": "8",
-    "atk": "+7",
-    "attack": "Tentacles",
-    "range": "Close",
-    "damage": "4d12+10 phy",
+    "motivesAndTactics": "Consume, crush, drown, grapple",
+    "difficulty": 20,
+    "hp": 11,
+    "stress": 8,
+    "majorThreshold": 35,
+    "severeThreshold": 70,
+    "attackModifier": "+7",
+    "attackDescription": "Tentacles",
+    "attackRange": "Close",
+    "attackDamage": "4d12+10 phy",
     "experience": "Swimming +3",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (3) - Passive",
         "text": "The Kraken can be spotlighted up to three times per GM turn. Spend Fear as usual to spotlight them."
@@ -3621,20 +4142,24 @@ const srdAdversaries = [
   },
   {
     "name": "Oracle of Doom",
-    "tier": "4",
+    "originalName": "Oracle of Doom",
+    "source": "SRD",
+    "tier": 4,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A towering immortal and incarnation of fate, cursed to only see bad outcomes.",
-    "motives_and_tactics": "Change environment, condemn, dishearten, toss aside",
-    "difficulty": "20",
-    "thresholds": "38/68",
-    "hp": "11",
-    "stress": "10",
-    "atk": "+8",
-    "attack": "Psychic Attack",
-    "range": "Far",
-    "damage": "4d8+9 mag",
+    "motivesAndTactics": "Change environment, condemn, dishearten, toss aside",
+    "difficulty": 20,
+    "hp": 11,
+    "stress": 10,
+    "majorThreshold": 38,
+    "severeThreshold": 68,
+    "attackModifier": "+8",
+    "attackDescription": "Psychic Attack",
+    "attackRange": "Far",
+    "attackDamage": "4d8+9 mag",
     "experience": "Boundless Knowledge +4",
-    "feats": [
+    "features": [
       {
         "name": "Terrifying - Passive",
         "text": "When the Oracle makes a successful attack, all PCs within Far range lose a Hope and you gain a Fear."
@@ -3649,7 +4174,7 @@ const srdAdversaries = [
       },
       {
         "name": "Summon Tormentors - Action",
-        "text": "Once per day, spend 2 Fear to summon 2d4 Tier 2 or below Minions relevant to one of the PC’s personal nightmares. They appear at Close range relative to that PC."
+        "text": "Once per day, spend 2 Fear to summon 2d4 Tier 2 or below Minions relevant to one of the PC\u2019s personal nightmares. They appear at Close range relative to that PC."
       },
       {
         "name": "Ominous Knowledge - Reaction",
@@ -3663,19 +4188,24 @@ const srdAdversaries = [
   },
   {
     "name": "Outer Realms Abomination",
-    "tier": "4",
+    "originalName": "Outer Realms Abomination",
+    "source": "SRD",
+    "tier": 4,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A chaotic mockery of life, constantly in flux.",
-    "motives_and_tactics": "Confuse, demolish, devour, undermine",
-    "difficulty": "19",
-    "thresholds": "35/71",
-    "hp": "7",
-    "stress": "5",
-    "atk": "+2d4",
-    "attack": "Massive Pseudopod",
-    "range": "Very Close",
-    "damage": "4d6+13 mag",
-    "feats": [
+    "motivesAndTactics": "Confuse, demolish, devour, undermine",
+    "difficulty": 19,
+    "hp": 7,
+    "stress": 5,
+    "majorThreshold": 35,
+    "severeThreshold": 71,
+    "attackModifier": "+2d4",
+    "attackDescription": "Massive Pseudopod",
+    "attackRange": "Very Close",
+    "attackDamage": "4d6+13 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Chaotic Form - Passive",
         "text": "When the Abomination attacks, roll 2d4 and use the result as their attack modifier."
@@ -3696,19 +4226,24 @@ const srdAdversaries = [
   },
   {
     "name": "Outer Realms Corrupter",
-    "tier": "4",
+    "originalName": "Outer Realms Corrupter",
+    "source": "SRD",
+    "tier": 4,
     "type": "Support",
+    "countPerHp": 1,
     "description": "A shifting, formless mass seemingly made of chromatic light.",
-    "motives_and_tactics": "Confuse, distract, overwhelm",
-    "difficulty": "19",
-    "thresholds": "27/47",
-    "hp": "4",
-    "stress": "3",
-    "atk": "+7",
-    "attack": "Corroding Pseudopod",
-    "range": "Very Close",
-    "damage": "4d8+5 mag",
-    "feats": [
+    "motivesAndTactics": "Confuse, distract, overwhelm",
+    "difficulty": 19,
+    "hp": 4,
+    "stress": 3,
+    "majorThreshold": 27,
+    "severeThreshold": 47,
+    "attackModifier": "+7",
+    "attackDescription": "Corroding Pseudopod",
+    "attackRange": "Very Close",
+    "attackDamage": "4d8+5 mag",
+    "experience": null,
+    "features": [
       {
         "name": "Will-Shattering Touch - Passive",
         "text": "When a PC takes damage from the Corrupter, they lose a Hope."
@@ -3721,19 +4256,24 @@ const srdAdversaries = [
   },
   {
     "name": "Outer Realms Thrall",
-    "tier": "4",
+    "originalName": "Outer Realms Thrall",
+    "source": "SRD",
+    "tier": 4,
     "type": "Minion",
+    "countPerHp": 1,
     "description": "A vaguely humanoid form stripped of memory and identity.",
-    "motives_and_tactics": "Destroy, disgust, disorient, intimidate",
-    "difficulty": "17",
-    "thresholds": "None",
-    "hp": "1",
-    "stress": "1",
-    "atk": "+3",
-    "attack": "Claws and Teeth",
-    "range": "Very Close",
-    "damage": "11 phy",
-    "feats": [
+    "motivesAndTactics": "Destroy, disgust, disorient, intimidate",
+    "difficulty": 17,
+    "hp": 1,
+    "stress": 1,
+    "majorThreshold": null,
+    "severeThreshold": null,
+    "attackModifier": "+3",
+    "attackDescription": "Claws and Teeth",
+    "attackRange": "Very Close",
+    "attackDamage": "11 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Minion (13) - Passive",
         "text": "The Thrall is defeated when they take any damage. For every 13 damage a PC deals to the Thrall, defeat an additional Minion within range the attack would succeed against."
@@ -3746,20 +4286,24 @@ const srdAdversaries = [
   },
   {
     "name": "Volcanic Dragon: Ashen Tyrant",
-    "tier": "4",
+    "originalName": "Volcanic Dragon: Ashen Tyrant",
+    "source": "SRD",
+    "tier": 4,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A legendary, lava-hardened dragon. No enemy has ever had the insolence to wound the dragon so.",
-    "motives_and_tactics": "Choke, fly, intimidate, kill or be killed",
-    "difficulty": "18",
-    "thresholds": "29/55",
-    "hp": "8",
-    "stress": "5",
-    "atk": "+10",
-    "attack": "Claws and Teeth",
-    "range": "Close",
-    "damage": "4d12+15 phy",
+    "motivesAndTactics": "Choke, fly, intimidate, kill or be killed",
+    "difficulty": 18,
+    "hp": 8,
+    "stress": 5,
+    "majorThreshold": 29,
+    "severeThreshold": 55,
+    "attackModifier": "+10",
+    "attackDescription": "Claws and Teeth",
+    "attackRange": "Close",
+    "attackDamage": "4d12+15 phy",
     "experience": "Hunt from Above +5",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (4) - Passive",
         "text": "The Ashen Tyrant can be spotlighted up to four times per GM turn. Spend Fear as usual to spotlight them."
@@ -3770,7 +4314,7 @@ const srdAdversaries = [
       },
       {
         "name": "Ashes to Ashes - Passive",
-        "text": "When a PC rolls a failure while within Close range of the Ashen Tyrant, they lose a Hope and you gain a Fear. If the PC can’t lose a Hope, they must mark a HP."
+        "text": "When a PC rolls a failure while within Close range of the Ashen Tyrant, they lose a Hope and you gain a Fear. If the PC can\u2019t lose a Hope, they must mark a HP."
       },
       {
         "name": "Desperate Rampage - Action",
@@ -3788,20 +4332,24 @@ const srdAdversaries = [
   },
   {
     "name": "Volcanic Dragon: Molten Scourge",
-    "tier": "4",
+    "originalName": "Volcanic Dragon: Molten Scourge",
+    "source": "SRD",
+    "tier": 4,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "Engaged by their wounds, the dragon bursts into molten lava.",
-    "motives_and_tactics": "Douse with lava, incinerate, repel invaders, respawn",
-    "difficulty": "20",
-    "thresholds": "30/58",
-    "hp": "7",
-    "stress": "5",
-    "atk": "+9",
-    "attack": "Lava-Coated Claws",
-    "range": "Close",
-    "damage": "4d12+4 phy",
+    "motivesAndTactics": "Douse with lava, incinerate, repel invaders, respawn",
+    "difficulty": 20,
+    "hp": 7,
+    "stress": 5,
+    "majorThreshold": 30,
+    "severeThreshold": 58,
+    "attackModifier": "+9",
+    "attackDescription": "Lava-Coated Claws",
+    "attackRange": "Close",
+    "attackDamage": "4d12+4 phy",
     "experience": "Hunt from Above +5",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (3) - Passive",
         "text": "Can be spotlighted up to three times per GM turn. Spend Fear as usual to spotlight them."
@@ -3816,7 +4364,7 @@ const srdAdversaries = [
       },
       {
         "name": "Eruption - Action",
-        "text": "Spend a Fear to erupt lava from beneath the Scourge’s scales, filling area within Very Close range with lava. All targets must make Agility Reaction Roll or take 4d6+6 physical damage and be knocked back to Close range. The area remains lava (6 HP damage on entry or action)."
+        "text": "Spend a Fear to erupt lava from beneath the Scourge\u2019s scales, filling area within Very Close range with lava. All targets must make Agility Reaction Roll or take 4d6+6 physical damage and be knocked back to Close range. The area remains lava (6 HP damage on entry or action)."
       },
       {
         "name": "Volcanic Breath - Reaction",
@@ -3826,20 +4374,24 @@ const srdAdversaries = [
   },
   {
     "name": "Volcanic Dragon: Obsidian Predator",
-    "tier": "4",
+    "originalName": "Volcanic Dragon: Obsidian Predator",
+    "source": "SRD",
+    "tier": 4,
     "type": "Solo",
+    "countPerHp": 1,
     "description": "A massive winged creature with obsidian scales and impossibly sharp claws.",
-    "motives_and_tactics": "Defend lair, dive-bomb, fly, hunt, intimidate",
-    "difficulty": "19",
-    "thresholds": "33/65",
-    "hp": "6",
-    "stress": "5",
-    "atk": "+8",
-    "attack": "Obsidian Claws",
-    "range": "Close",
-    "damage": "4d10+4 phy",
+    "motivesAndTactics": "Defend lair, dive-bomb, fly, hunt, intimidate",
+    "difficulty": 19,
+    "hp": 6,
+    "stress": 5,
+    "majorThreshold": 33,
+    "severeThreshold": 65,
+    "attackModifier": "+8",
+    "attackDescription": "Obsidian Claws",
+    "attackRange": "Close",
+    "attackDamage": "4d10+4 phy",
     "experience": "Hunt from Above +5",
-    "feats": [
+    "features": [
       {
         "name": "Relentless (2) - Passive",
         "text": "Can be spotlighted up to two times per GM turn. Spend Fear as usual to spotlight."
@@ -3868,26 +4420,31 @@ const srdAdversaries = [
   },
   {
     "name": "Perfected Zombie",
-    "tier": "4",
+    "originalName": "Perfected Zombie",
+    "source": "SRD",
+    "tier": 4,
     "type": "Bruiser",
+    "countPerHp": 1,
     "description": "A towering, muscular zombie with magically infused strength and skill.",
-    "motives_and_tactics": "Consume, hound, maim, terrify",
-    "difficulty": "20",
-    "thresholds": "40/70",
-    "hp": "9",
-    "stress": "4",
-    "atk": "+4",
-    "attack": "Greataxe",
-    "range": "Very Close",
-    "damage": "4d12+15 phy",
-    "feats": [
+    "motivesAndTactics": "Consume, hound, maim, terrify",
+    "difficulty": 20,
+    "hp": 9,
+    "stress": 4,
+    "majorThreshold": 40,
+    "severeThreshold": 70,
+    "attackModifier": "+4",
+    "attackDescription": "Greataxe",
+    "attackRange": "Very Close",
+    "attackDamage": "4d12+15 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Terrifying - Passive",
         "text": "On successful attack, all PCs in Far range lose Hope and you gain Fear."
       },
       {
         "name": "Fearsome Presence - Passive",
-        "text": "PCs can’t spend Hope to use features against the Zombie."
+        "text": "PCs can\u2019t spend Hope to use features against the Zombie."
       },
       {
         "name": "Perfect Strike - Action",
@@ -3901,19 +4458,24 @@ const srdAdversaries = [
   },
   {
     "name": "Zombie Legion",
-    "tier": "4",
-    "type": "Horde (3/HP)",
+    "originalName": "Zombie Legion",
+    "source": "SRD",
+    "tier": 4,
+    "type": "Horde",
+    "countPerHp": 3,
     "description": "A large pack of undead, still powerful despite their rotting flesh.",
-    "motives_and_tactics": "Consume brain, shred flesh, surround",
-    "difficulty": "17",
-    "thresholds": "25/45",
-    "hp": "8",
-    "stress": "5",
-    "atk": "+2",
-    "attack": "Tentacles",
-    "range": "Close",
-    "damage": "4d6+10 phy",
-    "feats": [
+    "motivesAndTactics": "Consume brain, shred flesh, surround",
+    "difficulty": 17,
+    "hp": 8,
+    "stress": 5,
+    "majorThreshold": 25,
+    "severeThreshold": 45,
+    "attackModifier": "+2",
+    "attackDescription": "Tentacles",
+    "attackRange": "Close",
+    "attackDamage": "4d6+10 phy",
+    "experience": null,
+    "features": [
       {
         "name": "Horde (2d6+5) - Passive",
         "text": "When Legion has half or more HP marked, standard attack deals 2d6+5 physical damage instead."
