@@ -351,13 +351,14 @@
                 border: 1px solid black;
             }
             .results table {
-                overflow: auto;
-                width: 100%;
+                overflow-y: auto;
+                /* width: 100%; */
+                max-width: 700px;
                 height: 15em;
                 display: block;
                 margin: 0 auto;
             }
-            .results tbody {
+            .results td.nowrap {
                 white-space: nowrap;
             }
             .results th, .results td {
@@ -536,20 +537,20 @@
         </div>
 
         <div id="browsing">
-            <input type="text" placeholder="Search" />
-            <select> <!-- TODO: Group this with adversary types? -->
-                <option>Adversaries/Environments</option>
-                <option>Adversaries</option>
-                <option>Environments</option>
+            <input id="browsing-search" type="text" placeholder="Search" />
+            <select id="browsing-source">
+                <option>Any source</option>
+                <option value="SRD">SRD</option>
+                <option value="Custom">Custom</option>
             </select>
-            <select>
-                <option>Any tier</option>
-                <option>Tier 1</option>
-                <option>Tier 2</option>
-                <option>Tier 3</option>
-                <option>Tier 4</option>
+            <select id="browsing-tier">
+                <option value="">Any tier</option>
+                <option value="1">Tier 1</option>
+                <option value="2">Tier 2</option>
+                <option value="3">Tier 3</option>
+                <option value="4">Tier 4</option>
             </select>
-            <select>
+            <select id="browsing-type">
                 <option>Any type</option>
                 <option value="Bruiser">Bruiser</option>
                 <option value="Horde">Horde</option>
@@ -561,6 +562,7 @@
                 <option value="Solo">Solo</option>
                 <option value="Standard">Standard</option>
                 <option value="Support">Support</option>
+                <!-- <option value="Environment">Environment</option> --> <!-- TODO: Implement -->
             </select>
             <div class="results">
                 <table>
@@ -569,6 +571,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Type</th>
                             <th scope="col">Description</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1662,6 +1665,7 @@
             encounterBar.appendChild(fearDiv);
 
             const adversariesDiv = document.createElement("div");
+            adversariesDiv.className = "adversaries";
             for (let j = 0; j < encounter.adversaries.length; j++) {
                 addAdversary(adversariesDiv, encounter, encounter.adversaries[j], refreshBattlePoints);
             }
@@ -1792,12 +1796,16 @@
         adversaryDatalist.id = "searchable-adversaries";
         const browsingTableBody = document.querySelector("#browsing tbody");
         for (let i = 0; i < srdAdversaries.length; i++) {
+            // Datalist for basic search (TODO: Are we keeping this mode?)
             const option = document.createElement("option");
             option.value = srdAdversaries[i].name;
             option.isSRD = true;
             adversaryDatalist.appendChild(option);
 
+            // Table for browsing
+            // TODO: Custom
             const tr = document.createElement("tr");
+            tr.adversary = srdAdversaries[i]; // TODO: Convert it here or on-demand?
             browsingTableBody.appendChild(tr);
 
             const nameTD = document.createElement("td");
@@ -1805,14 +1813,66 @@
             tr.appendChild(nameTD);
 
             const typeTD = document.createElement("td");
+            typeTD.className = "nowrap";
             typeTD.innerText = srdAdversaries[i].type;
             tr.appendChild(typeTD);
 
             const descriptionTD = document.createElement("td");
             descriptionTD.innerText = srdAdversaries[i].description;
             tr.appendChild(descriptionTD);
+
+            const addButtonTD = document.createElement("td");
+            addButtonTD.className = "nowrap";
+            const addButton = document.createElement("button");
+            addButton.innerText = "➕ Add";
+            addButton.addEventListener("click", function(event) {
+                const adversary = convertFromSRD(tr.adversary);
+                if (!adversary.instances || adversary.instances.length == 0) {
+                    adversary.instances = [
+                        {
+                            name: adversary.name + " #1",
+                            hpMarked: 0,
+                            stressMarked: 0
+                        }
+                    ];
+                }
+                addAdversary(
+                    document.querySelector("#encounter .adversaries"),
+                    state.encounters[selectedEncounterIndex],
+                    adversary,
+                    null); // TODO: Missing refreshBattlePoints. Actually this whole thing is gross.
+            });
+            addButtonTD.appendChild(addButton);
+            tr.appendChild(addButtonTD);
         }
         document.body.appendChild(adversaryDatalist);
+
+        document.querySelector("#browsing-tier").addEventListener("change", function(event) {
+            const selectedTier = parseInt(event.target.value) || "Any tier";
+            const rows = browsingTableBody.querySelectorAll("tr");
+            rows.forEach(function(row) {
+                // TODO: Actually have to apply all filters on each change
+                if (selectedTier == "Any tier" || row.adversary.tier == selectedTier) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+
+        document.querySelector("#browsing-type").addEventListener("change", function(event) {
+            const selectedType = event.target.value;
+            const rows = browsingTableBody.querySelectorAll("tr");
+            rows.forEach(function(row) {
+                // TODO: Actually have to apply all filters on each change
+                // TODO: Hordes are not well-supported here or anywhere else in the app yet
+                if (selectedType == "Any type" || row.adversary.type == selectedType) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
 
         refreshDisplay();
     </script>
