@@ -346,6 +346,31 @@
                 border-radius: 10px;
                 box-shadow: 10px 10px 10px black;
             }
+
+            .results th, .results td {
+                border: 1px solid black;
+            }
+            .results table {
+                overflow: auto;
+                width: 100%;
+                height: 15em;
+                display: block;
+                margin: 0 auto;
+            }
+            .results tbody {
+                white-space: nowrap;
+            }
+            .results th, .results td {
+                padding: 5px 10px;
+                border-top-width: 0;
+                border-left-width: 0;
+            }
+            .results th {
+                position: sticky;
+                top: 0;
+                vertical-align: bottom;
+                background: black; /* Need a background to avoid scrolled rows from showing through */
+            }
         </style>
     </head>
 
@@ -508,6 +533,48 @@
                 <button class="inline-add" title="Add modification" id="add-modification">+</button>
             </div>
             <button id="done-adding-conditions">Done</button>
+        </div>
+
+        <div id="browsing">
+            <input type="text" placeholder="Search" />
+            <select> <!-- TODO: Group this with adversary types? -->
+                <option>Adversaries/Environments</option>
+                <option>Adversaries</option>
+                <option>Environments</option>
+            </select>
+            <select>
+                <option>Any tier</option>
+                <option>Tier 1</option>
+                <option>Tier 2</option>
+                <option>Tier 3</option>
+                <option>Tier 4</option>
+            </select>
+            <select>
+                <option>Any type</option>
+                <option value="Bruiser">Bruiser</option>
+                <option value="Horde">Horde</option>
+                <option value="Leader">Leader</option>
+                <option value="Minion">Minion</option>
+                <option value="Ranged">Ranged</option>
+                <option value="Skulk">Skulk</option>
+                <option value="Social">Social</option>
+                <option value="Solo">Solo</option>
+                <option value="Standard">Standard</option>
+                <option value="Support">Support</option>
+            </select>
+            <div class="results">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="repo-info">
@@ -1723,11 +1790,27 @@
         //       and allow easier browsing.
         const adversaryDatalist = document.createElement("datalist");
         adversaryDatalist.id = "searchable-adversaries";
+        const browsingTableBody = document.querySelector("#browsing tbody");
         for (let i = 0; i < srdAdversaries.length; i++) {
             const option = document.createElement("option");
             option.value = srdAdversaries[i].name;
             option.isSRD = true;
             adversaryDatalist.appendChild(option);
+
+            const tr = document.createElement("tr");
+            browsingTableBody.appendChild(tr);
+
+            const nameTD = document.createElement("td");
+            nameTD.innerText = srdAdversaries[i].name;
+            tr.appendChild(nameTD);
+
+            const typeTD = document.createElement("td");
+            typeTD.innerText = srdAdversaries[i].type;
+            tr.appendChild(typeTD);
+
+            const descriptionTD = document.createElement("td");
+            descriptionTD.innerText = srdAdversaries[i].description;
+            tr.appendChild(descriptionTD);
         }
         document.body.appendChild(adversaryDatalist);
 
