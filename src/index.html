@@ -757,7 +757,7 @@
             adversaryEditor.querySelector("#adversary-experience").value = adversary.experience || "";
 
             // Attack
-            adversaryEditor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || ""; // TODO: Should input be number, then conversion?
+            adversaryEditor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || "";
             adversaryEditor.querySelector("#adversary-attack-description").value = adversary.attackDescription || "";
             adversaryEditor.querySelector("#adversary-attack-range").value = adversary.attackRange || ""; // TODO: Case mangling as needed
             adversaryEditor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
@@ -801,7 +801,7 @@
                 adversary.tier = parseInt(adversaryEditor.querySelector("#adversary-tier").value);
                 adversary.countPerHp = parseInt(adversaryEditor.querySelector("#adversary-count-per-hp").value);
                 adversary.type = adversaryEditor.querySelector("#adversary-type").value;
-                // TODO: Don't set optional fields if empty
+                // TODO: Don't set optional fields if empty?
                 adversary.description = adversaryEditor.querySelector("#adversary-description").value.trim();
                 adversary.motivesAndTactics = adversaryEditor.querySelector("#adversary-motives").value.trim();
 
@@ -1011,6 +1011,8 @@
             saveState();
             refreshDisplay();
             hideEncounterEditor();
+
+            updateBrowsingTier();
         });
 
         document.querySelector("#cancel-encounter-edit").addEventListener("click", function() {
@@ -1056,8 +1058,6 @@
             }
         }
 
-        // TODO: Set default browsing tier based on encounter player tier
-
         function adversaryMatchesSearch(adversary, searchText) {
             if (!searchText) {
                 return true;
@@ -1081,6 +1081,13 @@
             }
 
             return true;
+        }
+
+        function updateBrowsingTier() {
+            if (state.encounters && selectedEncounterIndex < state.encounters.length) {
+                // Update the tier dropdown based on the current encounter
+                document.querySelector("#browsing-tier").value = state.encounters[selectedEncounterIndex].playerTier || "";
+            }
         }
 
         function updateBrowsingTableFiltering() {
@@ -1246,8 +1253,12 @@
             nameTD.innerText = adversary.name;
             tr.appendChild(nameTD);
 
+            // TODO: Could add pts, but we'd have to recalc when player count changes
+            // const encounter = state.encounters[selectedEncounterIndex];
+            // const battlePoints = getStatBlockBattlePoints(adversary.type, encounter?.playerCount ?? 1);
             const typeTD = document.createElement("td");
             typeTD.className = "nowrap";
+            // typeTD.innerText = `${adversary.type} (${battlePoints} pts)`;
             typeTD.innerText = adversary.type;
             tr.appendChild(typeTD);
 
@@ -1791,9 +1802,6 @@
             encounterBar.className = "encounter-bar";
             encounterDiv.appendChild(encounterBar);
 
-            // TODO: Better would be a list of adversaries to choose from,
-            //       with filtering based on tier/type + text search.
-            //       Rows should include name, source, battle points.
             const addAdversaryDiv = document.createElement("div");
             const srdSearch = document.createElement("input");
             srdSearch.type = "search";
@@ -1924,6 +1932,7 @@
             selectedEncounterIndex = parseInt(encounterSelector.value);
             saveState();
             refreshDisplay();
+            updateBrowsingTier()
         });
 
         function saveState() {
