@@ -213,14 +213,21 @@
             }
             .adversary .stats {
                 background-color: var(--stats-bg-color);
-                border-radius: 3px;
+                border-top: 1px solid var(--clr-surface-a0);
+                border-bottom: 1px solid var(--clr-surface-a0);
+                padding: 5px;
             }
             .adversary .statLabel, .adversary .motivesLabel {
                 font-weight: bold;
             }
+            .adversary .experiences {
+                border-top: 1px dotted var(--clr-surface-a50);
+                margin-top: 2px;
+                padding-top: 2px;
+            }
             .adversary .divider {
-                font-size: larger;
                 margin: 0px 3px;
+                font-weight: bold;
             }
             .features {
                 margin-left: 0.75em;
@@ -1314,13 +1321,13 @@
             let majorThreshold = adversary.majorThreshold || "None";
             let severeThreshold = adversary.severeThreshold || "None";
             thresholds = `${majorThreshold}/${severeThreshold}`;
-            stats.innerHTML = `<span class="statLabel">Difficulty:</span> ${adversary.difficulty} <span class="divider">|</span> <span class="statLabel">Thresholds:</span> ${thresholds}`;
+            stats.innerHTML = `<div><span class="statLabel">Difficulty:</span> ${adversary.difficulty} <span class="divider">|</span> <span class="statLabel">Thresholds:</span> ${thresholds}</div>`;
             if (adversary.attackDescription) {
-                stats.innerHTML += `<br><span class="statLabel">ATK:</span> ${adversary.attackModifier} <span class="divider">|</span> <span class="statLabel">${adversary.attackDescription}:</span> ${adversary.attackRange} <span class="divider">|</span> ${adversary.attackDamage}`;
+                stats.innerHTML += `<div><span class="statLabel">ATK:</span> ${adversary.attackModifier} <span class="divider">|</span> <span class="statLabel">${adversary.attackDescription}:</span> ${adversary.attackRange} <span class="divider">|</span> ${adversary.attackDamage}</div>`;
             }
             if (adversary.experience) {
                 // TODO: <hr> is lame to style, but add some sort of divider above this (top border?)
-                stats.innerHTML += `<br><span class="statLabel experiences">Experience:</span> ${adversary.experience}`;
+                stats.innerHTML += `<div class="experiences"><span class="statLabel">Experience:</span> ${adversary.experience}</div>`;
             }
             adversaryDiv.appendChild(stats);
 
