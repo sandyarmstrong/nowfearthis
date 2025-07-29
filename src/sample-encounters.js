@@ -1,3 +1,4 @@
+// TODO: Regenerate once format shuffling is done
 const sampleEncounters ={
     "encounters": [
         {

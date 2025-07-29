@@ -9,7 +9,6 @@
         <link rel="manifest" href="site.webmanifest">
         <script src="adversaries.js"></script>
         <script src="sample-encounters.js"></script>
-        <!-- <script src="environments.js"></script> -->
         <style>
             :root {
                 /** Palette courtesy of https://colorffy.com/dark-theme-generator?colors=825aa2-121212 */
@@ -556,6 +555,11 @@
                 <option value="3">Tier 3</option>
                 <option value="4">Tier 4</option>
             </select>
+            <select id="browsing-category">
+                <option>Any category</option>
+                <option value="Adversary">Adversaries</option>
+                <option value="Environment">Environments</option>
+            </select>
             <select id="browsing-type">
                 <option>Any type</option>
                 <option>Bruiser</option>
@@ -568,7 +572,6 @@
                 <option>Solo</option>
                 <option>Standard</option>
                 <option>Support</option>
-                <!-- <option>Environment</option> --> <!-- TODO: Implement -->
             </select>
             <button id="browsing-reset-filters">Reset</button>
             <div class="results">
@@ -1017,6 +1020,7 @@
         function updateBrowsingTableFiltering() {
             const selectedSource = document.querySelector("#browsing-source").value;
             const selectedTier = parseInt(document.querySelector("#browsing-tier").value) || "Any tier";
+            const selectedCategory = document.querySelector("#browsing-category").value;
             const selectedType = document.querySelector("#browsing-type").value;
             const searchText = document.querySelector("#browsing-search").value;
 
@@ -1024,6 +1028,7 @@
             rows.forEach(function(row) {
                 if ((selectedSource == "Any source" || row.adversary.source == selectedSource) &&
                     (selectedTier == "Any tier" || row.adversary.tier == selectedTier) &&
+                    (selectedCategory == "Any category" || row.adversary.category == selectedCategory) &&
                     (selectedType == "Any type" || row.adversary.type == selectedType) &&
                     (!searchText || adversaryMatchesSearch(row.adversary, searchText))) {
                     row.style.display = "";
@@ -1045,10 +1050,14 @@
         document.querySelector("#browsing-type").addEventListener("change", function(event) {
             updateBrowsingTableFiltering();
         });
+        document.querySelector("#browsing-category").addEventListener("change", function(event) {
+            updateBrowsingTableFiltering();
+        });
         document.querySelector("#browsing-reset-filters").addEventListener("click", function(event) {
             document.querySelector("#browsing-search").value = "";
             document.querySelector("#browsing-source").value = "Any source";
             document.querySelector("#browsing-tier").value = "";
+            document.querySelector("#browsing-category").value = "Any category";
             document.querySelector("#browsing-type").value = "Any type";
             updateBrowsingTableFiltering();
         });
@@ -1388,6 +1397,8 @@
             }
         }
 
+        // TODO: Keep saying "adversary" everywhere, or pick a generic term like "statBlock"
+        //       that more accurately includes Environments as well?
         function createAdversaryElement(encounter, adversary) {
             // TODO: Allow reordering?
 
@@ -1408,6 +1419,7 @@
             adversaryDiv.adversary = adversary;
             adversaryDiv.innerHTML = `<h3 title="Source: ${adversary.originalName}, ${adversary.source} ">${adversary.name}</h3>`;
 
+            // TODO: Don't show parenthetical if Environment and no warning
             const battlePoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount) * adversary.instances.length;
             const tierAndType = document.createElement("p");
             tierAndType.className = "tier";
@@ -1658,7 +1670,7 @@
             let currentBattlePoints = 0;
             for (let j = 0; j < encounter.adversaries.length; j++) {
                 const adversary = encounter.adversaries[j];
-                const adversaryPoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount);
+                const adversaryPoints = adversary.category == "Adversary" ? getStatBlockBattlePoints(adversary.type, encounter.playerCount) : 0;
                 // TODO: Deal with tier differences
                 currentBattlePoints += adversaryPoints * adversary.instances.length;
             }
@@ -1707,7 +1719,7 @@
             }
 
             // Add custom entries
-            // TODO: Sort alpha by name, mixing sources
+            // TODO: Sort alpha by name, mixing sources (environments should also be mixed/sorted)
             // TODO: This is not encounter-specific data, should it not be refreshed here?
             if (state.custom && state.custom.adversaries && state.custom.adversaries.length > 0) {
                 state.custom.adversaries.forEach(function(adversary) {
