@@ -484,7 +484,8 @@
                         <option>Standard</option>
                         <option>Support</option>
                     </select>
-                    <!-- TODO: For Hordes (and others?), allow editing countPerHp -->
+                    <input type="number" id="adversary-count-per-hp" min="1" max="20" value="1" required />
+                    <label for="adversary-count-per-hp" id="adversary-count-per-hp-label">/HP</label>
                     <br>
                     <label for="adversary-description">Description:</label>
                     <textarea id="adversary-description" cols="30" rows="3"></textarea>
@@ -715,6 +716,22 @@
             return featureElement;
         }
 
+        function refreshCounterPerHpDisplay() {
+            const countPerHpInput = adversaryEditor.querySelector("#adversary-count-per-hp");
+            if (adversaryEditor.querySelector("#adversary-type").value === "Horde") {
+                countPerHpInput.classList.remove("hidden");
+                adversaryEditor.querySelector("#adversary-count-per-hp-label").classList.remove("hidden");
+            } else {
+                countPerHpInput.classList.add("hidden");
+                adversaryEditor.querySelector("#adversary-count-per-hp-label").classList.add("hidden");
+                adversaryEditor.querySelector("#adversary-count-per-hp").value = 1;
+            }
+        }
+
+        adversaryEditor.querySelector("#adversary-type").addEventListener("change", function() {
+            refreshCounterPerHpDisplay();
+        });
+
         function showAdversaryEditor(adversary) {
             // Basics
             adversaryEditor.querySelector("#adversary-name").value = adversary.name;
@@ -722,6 +739,9 @@
             adversaryEditor.querySelector("#adversary-type").value = adversary.type; // TODO: Case mangling as needed
             adversaryEditor.querySelector("#adversary-description").value = adversary.description || "";
             adversaryEditor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
+
+            adversaryEditor.querySelector("#adversary-count-per-hp").value = adversary.countPerHp || 1;
+            refreshCounterPerHpDisplay();
 
             // Stats
             adversaryEditor.querySelector("#adversary-difficulty").value = adversary.difficulty;
@@ -774,6 +794,7 @@
                 // Basics
                 adversary.name = adversaryEditor.querySelector("#adversary-name").value.trim();
                 adversary.tier = parseInt(adversaryEditor.querySelector("#adversary-tier").value);
+                adversary.countPerHp = parseInt(adversaryEditor.querySelector("#adversary-count-per-hp").value);
                 adversary.type = adversaryEditor.querySelector("#adversary-type").value;
                 // TODO: Don't set optional fields if empty
                 adversary.description = adversaryEditor.querySelector("#adversary-description").value.trim();
@@ -1364,7 +1385,7 @@
             }
 
             let typeSuffix = "";
-            if (adversary.countPerHp > 1) {
+            if (adversary.countPerHp > 1 || adversary.type === "Horde") {
                 typeSuffix = ` (${adversary.countPerHp}/HP)`;
             }
 
