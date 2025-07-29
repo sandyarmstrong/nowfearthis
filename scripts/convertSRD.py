@@ -44,7 +44,6 @@ def loadEntry(entry, category):
         'category': category,
         'description': entry.get('description'),
         'difficulty': difficulty,
-        'type': entryType, # Put 'type' last so 'countPerHp' can follow
     }
 
     # Category-specific fields
@@ -68,6 +67,7 @@ def loadEntry(entry, category):
             entryType = m.group(1)
             countPerHp = int(m.group(2))
 
+        item['type'] = entryType
         item['countPerHp'] = countPerHp
         item['motivesAndTactics'] = entry.get('motives_and_tactics')
         item['hp'] = int(entry.get('hp'))
@@ -81,6 +81,7 @@ def loadEntry(entry, category):
         item['experience'] = entry.get('experience', None)
         item['features'] = entry.get('feats')
     elif category == "Environment":
+        item['type'] = entryType
         item['impulses'] = entry.get('impulses')
         # Could be 'Any' or various abbreviations instead of exact name matches
         item['potentialAdversaries'] = entry.get('potential_adversaries')
