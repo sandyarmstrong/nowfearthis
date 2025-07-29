@@ -394,23 +394,23 @@
 
     <body>
         <datalist id="srd-conditions">
-            <option value="Hidden"></option>
-            <option value="Restrained"></option>
-            <option value="Vulnerable"></option>
-            <option value="Asleep"></option>
-            <option value="Stunned"></option>
-            <option value="Silenced"></option>
-            <option value="Corroded"></option>
-            <option value="Ranger's Focus"></option>
-            <option value="Cloaked"></option>
-            <option value="Dizzied"></option>
-            <option value="Enveloped"></option>
+            <option>Hidden</option>
+            <option>Restrained</option>
+            <option>Vulnerable</option>
+            <option>Asleep</option>
+            <option>Stunned</option>
+            <option>Silenced</option>
+            <option>Corroded</option>
+            <option>Ranger's Focus</option>
+            <option>Cloaked</option>
+            <option>Dizzied</option>
+            <option>Enveloped</option>
         </datalist>
 
         <datalist id="modifiable-properties">
-            <option value="difficulty"></option>
-            <option value="majorThreshold"></option>
-            <option value="severeThreshold"></option>
+            <option>difficulty</option>
+            <option>majorThreshold</option>
+            <option>severeThreshold</option>
         </datalist>
 
         <div id="top-bar">
@@ -473,16 +473,16 @@
                     <input type="number" id="adversary-tier" min="1" max="4" value="1" required />
                     <label for="adversary-type">Type:</label>
                     <select id="adversary-type">
-                        <option value="Bruiser">Bruiser</option>
-                        <option value="Horde">Horde</option>
-                        <option value="Leader">Leader</option>
-                        <option value="Minion">Minion</option>
-                        <option value="Ranged">Ranged</option>
-                        <option value="Skulk">Skulk</option>
-                        <option value="Social">Social</option>
-                        <option value="Solo">Solo</option>
-                        <option value="Standard">Standard</option>
-                        <option value="Support">Support</option>
+                        <option>Bruiser</option>
+                        <option>Horde</option>
+                        <option>Leader</option>
+                        <option>Minion</option>
+                        <option>Ranged</option>
+                        <option>Skulk</option>
+                        <option>Social</option>
+                        <option>Solo</option>
+                        <option>Standard</option>
+                        <option>Support</option>
                     </select>
                     <!-- TODO: For Hordes (and others?), allow editing countPerHp -->
                     <br>
@@ -521,10 +521,10 @@
                     <br>
                     <label for="adversary-attack-range">Range:</label>
                     <select id="adversary-attack-range">
-                        <option value="Melee">Melee</option>
-                        <option value="Very Close">Very Close</option>
-                        <option value="Close">Close</option>
-                        <option value="Far">Far</option>
+                        <option>Melee</option>
+                        <option>Very Close</option>
+                        <option>Close</option>
+                        <option>Far</option>
                     </select>
                     <label for="adversary-attack-damage">Damage:</label>
                     <input type="text" id="adversary-attack-damage" size="12" placeholder="e.g. 1d10+3 phy" />
@@ -555,12 +555,12 @@
         </div>
 
         <div id="browsing">
-            <!-- TODO: Add some UI to reset filters, or at least to clear search text? -->
+            <!-- TODO: Allow keyboard navigation of table and adding of adversaries directly from search input?-->
             <input id="browsing-search" type="text" placeholder="Search" />
             <select id="browsing-source">
                 <option>Any source</option>
-                <option value="SRD">SRD</option>
-                <option value="Custom">Custom</option>
+                <option>SRD</option>
+                <option>Custom</option>
             </select>
             <select id="browsing-tier">
                 <option value="">Any tier</option>
@@ -571,18 +571,19 @@
             </select>
             <select id="browsing-type">
                 <option>Any type</option>
-                <option value="Bruiser">Bruiser</option>
-                <option value="Horde">Horde</option>
-                <option value="Leader">Leader</option>
-                <option value="Minion">Minion</option>
-                <option value="Ranged">Ranged</option>
-                <option value="Skulk">Skulk</option>
-                <option value="Social">Social</option>
-                <option value="Solo">Solo</option>
-                <option value="Standard">Standard</option>
-                <option value="Support">Support</option>
-                <!-- <option value="Environment">Environment</option> --> <!-- TODO: Implement -->
+                <option>Bruiser</option>
+                <option>Horde</option>
+                <option>Leader</option>
+                <option>Minion</option>
+                <option>Ranged</option>
+                <option>Skulk</option>
+                <option>Social</option>
+                <option>Solo</option>
+                <option>Standard</option>
+                <option>Support</option>
+                <!-- <option>Environment</option> --> <!-- TODO: Implement -->
             </select>
+            <button id="browsing-reset-filters">Reset</button>
             <div class="results">
                 <table>
                     <thead>
@@ -1028,6 +1029,72 @@
                 }
             }
         }
+
+        // TODO: Set default browsing tier based on encounter player tier
+
+        function adversaryMatchesSearch(adversary, searchText) {
+            if (!searchText) {
+                return true;
+            }
+
+            const adversaryName = adversary.name.toLowerCase();
+            const adversaryDescription = adversary.description.toLowerCase();
+            const adversaryType = adversary.type.toLowerCase();
+
+            // All terms must match somewhere
+            const terms = searchText.toLowerCase().split(/\s+/);
+            for (const term of terms) {
+                if (!term) {
+                    continue; // Skip empty terms
+                }
+                if (!(adversaryName.includes(term) ||
+                    adversaryDescription.includes(term) ||
+                    adversaryType.includes(term))) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function updateBrowsingTableFiltering() {
+            const selectedSource = document.querySelector("#browsing-source").value;
+            const selectedTier = parseInt(document.querySelector("#browsing-tier").value) || "Any tier";
+            const selectedType = document.querySelector("#browsing-type").value;
+            const searchText = document.querySelector("#browsing-search").value;
+
+            const rows = browsingTableBody.querySelectorAll("tr");
+            rows.forEach(function(row) {
+                if ((selectedSource == "Any source" || row.adversary.source == selectedSource) &&
+                    (selectedTier == "Any tier" || row.adversary.tier == selectedTier) &&
+                    (selectedType == "Any type" || row.adversary.type == selectedType) &&
+                    (!searchText || adversaryMatchesSearch(row.adversary, searchText))) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        document.querySelector("#browsing-search").addEventListener("input", function(event) {
+            updateBrowsingTableFiltering();
+        });
+        document.querySelector("#browsing-source").addEventListener("change", function(event) {
+            updateBrowsingTableFiltering();
+        });
+        document.querySelector("#browsing-tier").addEventListener("change", function(event) {
+            updateBrowsingTableFiltering();
+        });
+        document.querySelector("#browsing-type").addEventListener("change", function(event) {
+            updateBrowsingTableFiltering();
+        });
+        document.querySelector("#browsing-reset-filters").addEventListener("click", function(event) {
+            document.querySelector("#browsing-search").value = "";
+            document.querySelector("#browsing-source").value = "Any source";
+            document.querySelector("#browsing-tier").value = "";
+            document.querySelector("#browsing-type").value = "Any type";
+            updateBrowsingTableFiltering();
+        });
 
         function createFearTracker(encounter) {
             const maxFear = 12;
@@ -1835,67 +1902,7 @@
         }
         document.body.appendChild(adversaryDatalist);
 
-        // TODO: Set default browsing tier based on encounter player tier
-        // TODO: Allow keyboard navigation of table and adding of adversaries directly from search input?
-        // TODO: Clear search input on refresh, or apply to browser if not clearing
-
-        function adversaryMatchesSearch(adversary, searchText) {
-            if (!searchText) {
-                return true;
-            }
-
-            const adversaryName = adversary.name.toLowerCase();
-            const adversaryDescription = adversary.description.toLowerCase();
-            const adversaryType = adversary.type.toLowerCase();
-
-            // All terms must match somewhere
-            const terms = searchText.toLowerCase().split(/\s+/);
-            for (const term of terms) {
-                if (!term) {
-                    continue; // Skip empty terms
-                }
-                if (!(adversaryName.includes(term) ||
-                    adversaryDescription.includes(term) ||
-                    adversaryType.includes(term))) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        function updateBrowsingTableFiltering() {
-            const selectedSource = document.querySelector("#browsing-source").value;
-            const selectedTier = parseInt(document.querySelector("#browsing-tier").value) || "Any tier";
-            const selectedType = document.querySelector("#browsing-type").value;
-            const searchText = document.querySelector("#browsing-search").value;
-
-            const rows = browsingTableBody.querySelectorAll("tr");
-            rows.forEach(function(row) {
-                if ((selectedSource == "Any source" || row.adversary.source == selectedSource) &&
-                    (selectedTier == "Any tier" || row.adversary.tier == selectedTier) &&
-                    (selectedType == "Any type" || row.adversary.type == selectedType) &&
-                    (!searchText || adversaryMatchesSearch(row.adversary, searchText))) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-            });
-        }
-
-        document.querySelector("#browsing-search").addEventListener("input", function(event) {
-            updateBrowsingTableFiltering();
-        });
-        document.querySelector("#browsing-source").addEventListener("change", function(event) {
-            updateBrowsingTableFiltering();
-        });
-        document.querySelector("#browsing-tier").addEventListener("change", function(event) {
-            updateBrowsingTableFiltering();
-        });
-        document.querySelector("#browsing-type").addEventListener("change", function(event) {
-            updateBrowsingTableFiltering();
-        });
-
         refreshDisplay();
+        updateBrowsingTableFiltering(); // TODO: Move into refreshDisplay?
     </script>
 </html>
