@@ -12,21 +12,6 @@
         <!-- <script src="environments.js"></script> -->
         <style>
             :root {
-                /* --body-bg-color: rgb(13, 17, 23);
-                --text-color: rgb(159, 177, 209);
-                --adversary-bg-color: rgb(22, 26, 32);
-                --adversary-border-color: rgb(50, 54, 59);
-                --adversary-text-color: var(--text-color);
-                --header-text-color: #c3d0e5; */
-
-                /* --body-bg-color: rgb(38,36,43);
-                --text-color: white; (95,114,176)
-                --adversary-bg-color: rgb(45,44,64);
-                --stats-bg-color: rgb(50,52,86);
-                --adversary-border-color: rgb(63,73,126);
-                --adversary-text-color: var(--text-color);
-                --header-text-color: white; */
-
                 /** Palette courtesy of https://colorffy.com/dark-theme-generator?colors=825aa2-121212 */
                 /** Base colors */
                 --clr-dark-a0: #000000;
@@ -106,7 +91,7 @@
                 margin: 10px 0px;
             }
             #load-encounters-container label {
-                /* TODO: When styling real buttons, don't forget to update this to match */
+                /* NOTE: When styling real buttons, don't forget to update this to match */
                 background-color: var(--button-bg-color);
                 color: var(--button-text-color);
                 padding: 5px;
@@ -151,7 +136,6 @@
                 background-color: var(--clr-surface-tonal-a30);
                 opacity: 0.7;
             }
-
 
             #encounter {
                 margin: 10px;
@@ -331,7 +315,6 @@
                 margin: 0px;
                 padding: 0px;
                 list-style-type: none;
-                /* TODO: Make this look like a menu, round some corners, etc */
             }
             .actions-menu button {
                 border-radius: 0px;
@@ -467,7 +450,6 @@
             </form>
         </div>
         <div id="adversary-editor" class="editor hidden">
-            <!-- Only advantage of Form that I can see is that it gives validation and submit-on-enter for free-->
             <form id="adversary-form">
                 <fieldset>
                     <legend>Basics</legend>
@@ -520,7 +502,6 @@
                 <fieldset>
                     <legend>Attack</legend>
                     <label for="adversary-attack-modifier">Modifier:</label>
-                    <!-- <input type="number" id="adversary-attack-modifier" min="-10" max="20" value="0" /> -->
                     <input type="text" id="adversary-attack-modifier" size="4" placeholder="e.g. +3" />
                     <label for="adversary-attack-description">Description:</label>
                     <input type="text" id="adversary-attack-description" placeholder="e.g. Mace" />
@@ -1457,7 +1438,6 @@
                 stats.innerHTML += `<div><span class="statLabel">ATK:</span> ${adversary.attackModifier} <span class="divider">|</span> <span class="statLabel">${adversary.attackDescription}:</span> ${adversary.attackRange} <span class="divider">|</span> ${adversary.attackDamage}</div>`;
             }
             if (adversary.experience) {
-                // TODO: <hr> is lame to style, but add some sort of divider above this (top border?)
                 stats.innerHTML += `<div class="experiences"><span class="statLabel">Experience:</span> ${adversary.experience}</div>`;
             }
             adversaryDiv.appendChild(stats);
@@ -1526,7 +1506,6 @@
                 stressDiv.appendChild(stressSlotsDiv);
                 instanceDiv.appendChild(stressDiv);
 
-                // TODO: Parse modifications and reflect them in the stats
                 const conditionsDiv = document.createElement("div");
                 conditionsDiv.className = "conditions";
                 instanceDiv.appendChild(conditionsDiv);
@@ -1568,7 +1547,7 @@
                 saveState();
             });
             adversaryElement.addEventListener("adversaryCopied", function(event) {
-                const newAdversary = JSON.parse(JSON.stringify(adversary)); // Deep copy
+                const newAdversary = JSON.parse(JSON.stringify(adversary));
                 newAdversary.name += " (copy)"; // TODO: Decide naming
                 if (!encounter.adversaries) {
                     encounter.adversaries = [];
@@ -1787,7 +1766,7 @@
                     });
                 }
                 if (adversary) {
-                    adversary = JSON.parse(JSON.stringify(adversary)); // Deep copy
+                    adversary = JSON.parse(JSON.stringify(adversary));
                 }
                 // TODO: Else, custom with given name?
 
