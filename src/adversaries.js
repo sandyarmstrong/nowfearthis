@@ -1,4 +1,4 @@
-// Courtesy of https://raw.githubusercontent.com/seansbox/daggerheart-srd/refs/heads/main/.build/json/adversaries.json
+﻿// Courtesy of https://raw.githubusercontent.com/seansbox/daggerheart-srd/refs/heads/main/.build/json/adversaries.json
 const srdAdversaries = [
   {
     "name": "Acid Burrower",
@@ -4633,7 +4633,7 @@ const srdAdversaries = [
     "difficulty": 11,
     "type": "Exploration",
     "impulses": "Draw in the curious, echo the past",
-    "potential_adversaries": "Beasts (Bear, Dire Wolf, Glass Snake), Grove Guardians (Minor Treant, Sylvan Soldier, Young Dryad)",
+    "potentialAdversaries": "Beasts (Bear, Dire Wolf, Glass Snake), Grove Guardians (Minor Treant, Sylvan Soldier, Young Dryad)",
     "features": [
       {
         "name": "Overgrown Battlefield - Passive",
@@ -4649,6 +4649,7 @@ const srdAdversaries = [
       },
       {
         "name": "Defiler - Action",
+        // TODO: This and others need updates from SRD fixes. Adversary name is wrong, missing question at the end, etc.
         "text": "Spend a Fear to summon a Minor Chaos Adversary drawn to the echoes of violence and discord. They appear within Far range of a chosen PC and immediately take the spotlight."
       }
     ]
@@ -4663,7 +4664,7 @@ const srdAdversaries = [
     "difficulty": "Special (see \u201cRelative Strength\u201d)",
     "type": "Event",
     "impulses": "Overwhelm, scatter, surround",
-    "potential_adversaries": "Any",
+    "potentialAdversaries": "Any",
     "features": [
       {
         "name": "Relative Strength - Passive",
@@ -4685,7 +4686,7 @@ const srdAdversaries = [
     "difficulty": "Special (see \u201cRelative Strength\u201d)",
     "type": "Event",
     "impulses": "Escape, group up, protect the most vulnerable",
-    "potential_adversaries": "Any",
+    "potentialAdversaries": "Any",
     "features": [
       {
         "name": "Relative Strength - Passive",
@@ -4707,7 +4708,7 @@ const srdAdversaries = [
     "difficulty": 10,
     "type": "Social",
     "impulses": "Buy low, sell high, tempt and tantalize with wares from near and far",
-    "potential_adversaries": "Guards (Bladed Guard, Head Guard), Masked Thief, Merchant",
+    "potentialAdversaries": "Guards (Bladed Guard, Head Guard), Masked Thief, Merchant",
     "features": [
       {
         "name": "Tip the Scales - Passive",
@@ -4737,7 +4738,7 @@ const srdAdversaries = [
     "difficulty": 12,
     "type": "Traversal",
     "impulses": "Cast the unwary down to a rocky doom, draw people in with promise of what lies at the top",
-    "potential_adversaries": "Construct, Deeproot Defender, Giant Scorpion, Glass Snake",
+    "potentialAdversaries": "Construct, Deeproot Defender, Giant Scorpion, Glass Snake",
     "features": [
       {
         "name": "The Climb - Passive",
@@ -4763,7 +4764,7 @@ const srdAdversaries = [
     "difficulty": 10,
     "type": "Social",
     "impulses": "Provide opportunities for adventurers, nurture community",
-    "potential_adversaries": "Guards (Bladed Guard, Head Guard), Mercenaries (Harrier, Sellsword, Spellblade, Weaponmaster), Merchant",
+    "potentialAdversaries": "Guards (Bladed Guard, Head Guard), Mercenaries (Harrier, Sellsword, Spellblade, Weaponmaster), Merchant",
     "features": [
       {
         "name": "What\u2019s the Talk of the Town? - Passive",
@@ -4797,7 +4798,7 @@ const srdAdversaries = [
     "difficulty": 12,
     "type": "Social",
     "impulses": "Drive the desperate to certain doom, profit off of ragged hope",
-    "potential_adversaries": "Jagged Knife Bandits (Hexer, Kneebreaker, Lackey, Lieutenant, Shadow, Sniper), Masked Thief, Merchant",
+    "potentialAdversaries": "Jagged Knife Bandits (Hexer, Kneebreaker, Lackey, Lieutenant, Shadow, Sniper), Masked Thief, Merchant",
     "features": [
       {
         "name": "Rumors Abound - Passive",
@@ -4831,7 +4832,7 @@ const srdAdversaries = [
     "difficulty": 10,
     "type": "Traversal",
     "impulses": "Bar crossing, carry away the unready, divide the land",
-    "potential_adversaries": "Beasts (Bear, Glass Snake), Jagged Knife Bandits (Hexer, Kneebreaker, Lackey, Lieutenant, Shadow, Sniper)",
+    "potentialAdversaries": "Beasts (Bear, Glass Snake), Jagged Knife Bandits (Hexer, Kneebreaker, Lackey, Lieutenant, Shadow, Sniper)",
     "features": [
       {
         "name": "Dangerous Crossing - Passive",
@@ -4857,7 +4858,7 @@ const srdAdversaries = [
     "difficulty": 14,
     "type": "Event",
     "impulses": "Profane the land, unite the Mortal Realm with the Circles Below",
-    "potential_adversaries": "Cult of the Fallen (Cult Adept, Cult Fang, Cult Initiate, Secret-Keeper)",
+    "potentialAdversaries": "Cult of the Fallen (Cult Adept, Cult Fang, Cult Initiate, Secret-Keeper)",
     "features": [
       {
         "name": "Desecrated Ground - Passive",
@@ -4887,7 +4888,7 @@ const srdAdversaries = [
     "difficulty": 13,
     "type": "Social",
     "impulses": "Connect the Mortal Realm with the Hallows Above, display the power of the divine, provide aid and succor to the faithful",
-    "potential_adversaries": "Guards (Archer Guard, Bladed Guard, Head Guard)",
+    "potentialAdversaries": "Guards (Archer Guard, Bladed Guard, Head Guard)",
     "features": [
       {
         "name": "A Place of Healing - Passive",
@@ -4917,7 +4918,7 @@ const srdAdversaries = [
     "difficulty": 14,
     "type": "Exploration",
     "impulses": "Misdirect and disorient, replay apocalypses both public and personal",
-    "potential_adversaries": "Ghosts (Spectral Archer, Spectral Captain, Spectral Guardian), (ghostly versions of other adversaries (see \u201cGhostly Form\u201d))",
+    "potentialAdversaries": "Ghosts (Spectral Archer, Spectral Captain, Spectral Guardian), (ghostly versions of other adversaries (see \u201cGhostly Form\u201d))",
     "features": [
       {
         "name": "Buried Knowledge - Passive",
@@ -4947,7 +4948,7 @@ const srdAdversaries = [
     "difficulty": 15,
     "type": "Traversal",
     "impulses": "Exact a chilling toll in supplies and stamina, reveal magical slumber, slow down travel",
-    "potential_adversaries": "Beasts (Bear, Giant Eagle, Glass Snake), Chaos Skull, Minotaur Wrecker, Mortal Hunter",
+    "potentialAdversaries": "Beasts (Bear, Giant Eagle, Glass Snake), Chaos Skull, Minotaur Wrecker, Mortal Hunter",
     "features": [
       {
         "name": "Engraved Sigils - Passive",
@@ -4977,7 +4978,7 @@ const srdAdversaries = [
     "difficulty": 16,
     "type": "Exploration",
     "impulses": "Beat out an uncanny rhythm for all to follow, corrupt the woods",
-    "potential_adversaries": "Beasts (Bear, Glass Snake), Elementals (Elemental Spark), Verdant Defenders (Dryad, Oak Treant, Stag Knight)",
+    "potentialAdversaries": "Beasts (Bear, Glass Snake), Elementals (Elemental Spark), Verdant Defenders (Dryad, Oak Treant, Stag Knight)",
     "features": [
       {
         "name": "Chaos Magic Locus - Passive",
@@ -5011,7 +5012,7 @@ const srdAdversaries = [
     "difficulty": 17,
     "type": "Event",
     "impulses": "Bleed out the will to fight, breach the walls, build tension",
-    "potential_adversaries": "Mercenaries (Harrier, Sellsword, Spellblade, Weaponmaster), Noble Forces (Archer Squadron, Conscript, Elite Soldier, Knight of the Realm)",
+    "potentialAdversaries": "Mercenaries (Harrier, Sellsword, Spellblade, Weaponmaster), Noble Forces (Archer Squadron, Conscript, Elite Soldier, Knight of the Realm)",
     "features": [
       {
         "name": "Secret Entrance - Passive",
@@ -5041,7 +5042,7 @@ const srdAdversaries = [
     "difficulty": 17,
     "type": "Event",
     "impulses": "Seize people, land, and wealth, spill blood for greed and glory",
-    "potential_adversaries": "Mercenaries (Sellsword, Harrier, Spellblade, Weaponmaster), Noble Forces (Archer Squadron, Conscript, Elite Soldier, Knight of the Realm)",
+    "potentialAdversaries": "Mercenaries (Sellsword, Harrier, Spellblade, Weaponmaster), Noble Forces (Archer Squadron, Conscript, Elite Soldier, Knight of the Realm)",
     "features": [
       {
         "name": "Adrift on a Sea of Steel - Passive",
@@ -5071,7 +5072,7 @@ const srdAdversaries = [
     "difficulty": 20,
     "type": "Traversal",
     "impulses": "Annihilate certainty, consume power, defy logic",
-    "potential_adversaries": "Outer Realms Monstrosities (Abomination, Corruptor, Thrall)",
+    "potentialAdversaries": "Outer Realms Monstrosities (Abomination, Corruptor, Thrall)",
     "features": [
       {
         "name": "Impossible Architecture - Passive",
@@ -5105,7 +5106,7 @@ const srdAdversaries = [
     "difficulty": 20,
     "type": "Event",
     "impulses": "Collect power, overawe, silence dissent",
-    "potential_adversaries": "Arch-Necromancer, Fallen Shock Troops, Mortal Hunter, Oracle of Doom, Perfected Zombie",
+    "potentialAdversaries": "Arch-Necromancer, Fallen Shock Troops, Mortal Hunter, Oracle of Doom, Perfected Zombie",
     "features": [
       {
         "name": "Final Preparations - Passive",
@@ -5143,7 +5144,7 @@ const srdAdversaries = [
     "difficulty": 20,
     "type": "Social",
     "impulses": "Justify and perpetuate imperial rule, seduce rivals with promises of power and comfort",
-    "potential_adversaries": "Bladed Guard, Courtesan, Knight of the Realm, Monarch, Spy",
+    "potentialAdversaries": "Bladed Guard, Courtesan, Knight of the Realm, Monarch, Spy",
     "features": [
       {
         "name": "All Roads Lead Here - Passive",
@@ -5177,7 +5178,7 @@ const srdAdversaries = [
     "difficulty": 19,
     "type": "Exploration",
     "impulses": "Confound intruders, delve into secrets best left buried, manifest unlife, unleash a tide of undead",
-    "potential_adversaries": "Arch-Necromancer\u2019s Host (Perfected Zombie, Zombie Legion)",
+    "potentialAdversaries": "Arch-Necromancer\u2019s Host (Perfected Zombie, Zombie Legion)",
     "features": [
       {
         "name": "No Place for the Living - Passive",

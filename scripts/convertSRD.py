@@ -83,10 +83,12 @@ def loadEntry(entry, category):
     elif category == "Environment":
         item['impulses'] = entry.get('impulses')
         # Could be 'Any' or various abbreviations instead of exact name matches
-        item['potential_adversaries'] = entry.get('potential_adversaries')
+        item['potentialAdversaries'] = entry.get('potential_adversaries')
 
     # Final common fields
-    # TODO: ? Env feats may have questions at the end that could be extracted and styled differently. JSON wraps them in `*`.
+    # TODO: ? Env feats may have questions at the end that could be extracted and styled differently.
+    #       JSON wraps them in `*`. Could have name/text/questions? But then the editor would
+    #       have to account for it too...
     item['features'] = entry.get('feats')
 
     items.append(item)

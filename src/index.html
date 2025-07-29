@@ -400,6 +400,13 @@
             <option>severeThreshold</option>
         </datalist>
 
+        <datalist id="srd-environment-types">
+            <option>Event</option>
+            <option>Exploration</option>
+            <option>Social</option>
+            <option>Traversal</option>
+        </datalist>
+
         <div id="top-bar">
             <div class="top-bar-group">
                 <select id="current-encounter">
@@ -457,48 +464,64 @@
                     <br>
                     <label for="adversary-tier">Tier:</label>
                     <input type="number" id="adversary-tier" min="1" max="4" value="1" required />
-                    <label for="adversary-type">Type:</label>
-                    <select id="adversary-type">
-                        <option>Bruiser</option>
-                        <option>Horde</option>
-                        <option>Leader</option>
-                        <option>Minion</option>
-                        <option>Ranged</option>
-                        <option>Skulk</option>
-                        <option>Social</option>
-                        <option>Solo</option>
-                        <option>Standard</option>
-                        <option>Support</option>
-                    </select>
-                    <input type="number" id="adversary-count-per-hp" min="1" max="20" value="1" required />
-                    <label for="adversary-count-per-hp" id="adversary-count-per-hp-label">/HP</label>
+                    <span class="adversary-editor-adversary">
+                        <label for="adversary-type">Type:</label>
+                        <select id="adversary-type" list="srd-adversary-types">
+                            <option>Bruiser</option>
+                            <option>Horde</option>
+                            <option>Leader</option>
+                            <option>Minion</option>
+                            <option>Ranged</option>
+                            <option>Skulk</option>
+                            <option>Social</option>
+                            <option>Solo</option>
+                            <option>Standard</option>
+                            <option>Support</option>
+                        </select>
+                        <input type="number" id="adversary-count-per-hp" min="1" max="20" value="1" />
+                        <label for="adversary-count-per-hp" id="adversary-count-per-hp-label">/HP</label>
+                    </span>
+                    <span class="adversary-editor-environment">
+                        <label for="adversary-environment-type">Type:</label>
+                        <input type="text" id="adversary-environment-type" list="srd-environment-types" />
+                    </span>
                     <br>
                     <label for="adversary-description">Description:</label>
                     <textarea id="adversary-description" cols="30" rows="3"></textarea>
-                    <br>
-                    <label for="adversary-motives">Motives & Tactics:</label>
-                    <textarea id="adversary-motives" cols="30" rows="2"></textarea>
+                    <div class="adversary-editor-adversary">
+                        <label for="adversary-motives">Motives & Tactics:</label>
+                        <textarea id="adversary-motives" cols="30" rows="2"></textarea>
+                    </div>
+                    <div class="adversary-editor-environment">
+                        <label for="adversary-impulses">Impulses:</label>
+                        <textarea id="adversary-impulses" cols="30" rows="2"></textarea>
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>Stats</legend>
                     <label for="adversary-difficulty">Difficulty:</label>
-                    <input type="number" id="adversary-difficulty" min="0" max="20" value="12" required />
-                    <br>
-                    <label for="adversary-major-threshold">Major Threshold:</label>
-                    <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
-                    /
-                    <label for="adversary-severe-threshold">Severe Threshold:</label>
-                    <input type="number" id="adversary-severe-threshold" min="0" max="20" value="14" />
-                    <br>
-                    <label for="adversary-hp">HP:</label>
-                    <input type="number" id="adversary-hp" min="1" max="20" value="5" required />
-                    <label for="adversary-stress">Stress:</label>
-                    <input type="number" id="adversary-stress" min="0" max="20" value="2" required />
-                    <br>
-                    <label for="adversary-experience">Experience:</label>
-                    <input type="text" id="adversary-experience" />
+                    <input type="number" id="adversary-difficulty" min="0" max="40" value="12" required />
+                    <div class="adversary-editor-adversary">
+                        <label for="adversary-major-threshold">Major Threshold:</label>
+                        <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
+                        /
+                        <label for="adversary-severe-threshold">Severe Threshold:</label>
+                        <input type="number" id="adversary-severe-threshold" min="0" max="20" value="14" />
+                        <br>
+                        <label for="adversary-hp">HP:</label>
+                        <input type="number" id="adversary-hp" min="1" max="40" value="5" />
+                        <label for="adversary-stress">Stress:</label>
+                        <input type="number" id="adversary-stress" min="0" max="40" value="2" />
+                        <br>
+                        <label for="adversary-experience">Experience:</label>
+                        <input type="text" id="adversary-experience" />
+                    </div>
+                    <div class="adversary-editor-environment">
+                        <label for="adversary-potential-adversaries">Potential Adversaries:</label>
+                        <textarea id="adversary-potential-adversaries" cols="30" rows="3"></textarea>
+                    </div>
                 </fieldset>
-                <fieldset>
+                <fieldset class="adversary-editor-adversary">
                     <legend>Attack</legend>
                     <label for="adversary-attack-modifier">Modifier:</label>
                     <input type="text" id="adversary-attack-modifier" size="4" placeholder="e.g. +3" />
@@ -644,7 +667,7 @@
         function createFeatureEditorElement(feature, idSuffix)  {
             const featureElement = document.createElement("div");
             featureElement.className = "feature";
-            featureElement.innerHTML = `<label for="adversary-feature-name-${idSuffix}">Name:</label><input type="text" class="adversary-feature-name" id="adversary-feature-name-${idSuffix}" value="${feature?.name ?? ""}"><label for="adversary-feature-text-${idSuffix}">Description:</label><textarea id="adversary-feature-text-${idSuffix}" class="adversary-feature-text" rows="4" cols="50">${feature?.text ?? ""}</textarea>`;
+            featureElement.innerHTML = `<label for="adversary-feature-name-${idSuffix}">Name:</label><input type="text" class="adversary-feature-name" id="adversary-feature-name-${idSuffix}" value="${feature?.name ?? ""}" size="30"><label for="adversary-feature-text-${idSuffix}"><br>Description:</label><textarea id="adversary-feature-text-${idSuffix}" class="adversary-feature-text" rows="4" cols="50">${feature?.text ?? ""}</textarea>`;
             return featureElement;
         }
 
@@ -668,9 +691,27 @@
             // Basics
             adversaryEditor.querySelector("#adversary-name").value = adversary.name;
             adversaryEditor.querySelector("#adversary-tier").value = adversary.tier;
-            adversaryEditor.querySelector("#adversary-type").value = adversary.type; // TODO: Case mangling as needed
             adversaryEditor.querySelector("#adversary-description").value = adversary.description || "";
             adversaryEditor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
+            adversaryEditor.querySelector("#adversary-impulses").value = adversary.impulses || "";
+
+            if (adversary.category == "Adversary") {
+                adversaryEditor.querySelector("#adversary-type").value = adversary.type;
+                adversaryEditor.querySelectorAll(".adversary-editor-adversary").forEach(function(element) {
+                    element.classList.remove("hidden");
+                });
+                adversaryEditor.querySelectorAll(".adversary-editor-environment").forEach(function(element) {
+                    element.classList.add("hidden");
+                });
+            } else if (adversary.category == "Environment") {
+                adversaryEditor.querySelector("#adversary-environment-type").value = adversary.type;
+                adversaryEditor.querySelectorAll(".adversary-editor-adversary").forEach(function(element) {
+                    element.classList.add("hidden");
+                });
+                adversaryEditor.querySelectorAll(".adversary-editor-environment").forEach(function(element) {
+                    element.classList.remove("hidden");
+                });
+            }
 
             adversaryEditor.querySelector("#adversary-count-per-hp").value = adversary.countPerHp || 1;
             refreshCounterPerHpDisplay();
@@ -682,6 +723,7 @@
             adversaryEditor.querySelector("#adversary-hp").value = adversary.hp;
             adversaryEditor.querySelector("#adversary-stress").value = adversary.stress;
             adversaryEditor.querySelector("#adversary-experience").value = adversary.experience || "";
+            adversaryEditor.querySelector("#adversary-potential-adversaries").value = adversary.potentialAdversaries || "";
 
             // Attack
             adversaryEditor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || "";
@@ -723,38 +765,46 @@
 
             const adversary = adversaryEditor.adversary;
             if (adversary) {
+                // TODO: Don't set optional fields if empty?
+
                 // Basics
                 adversary.name = adversaryEditor.querySelector("#adversary-name").value.trim();
                 adversary.tier = parseInt(adversaryEditor.querySelector("#adversary-tier").value);
-                adversary.countPerHp = parseInt(adversaryEditor.querySelector("#adversary-count-per-hp").value);
-                adversary.type = adversaryEditor.querySelector("#adversary-type").value;
-                // TODO: Don't set optional fields if empty?
                 adversary.description = adversaryEditor.querySelector("#adversary-description").value.trim();
-                adversary.motivesAndTactics = adversaryEditor.querySelector("#adversary-motives").value.trim();
-
-                // Stats
                 adversary.difficulty = parseInt(adversaryEditor.querySelector("#adversary-difficulty").value);
-                adversary.majorThreshold = parseInt(adversaryEditor.querySelector("#adversary-major-threshold").value);
-                adversary.severeThreshold = parseInt(adversaryEditor.querySelector("#adversary-severe-threshold").value);
-                adversary.hp = parseInt(adversaryEditor.querySelector("#adversary-hp").value);
-                if (adversary.instances) {
-                    adversary.instances.forEach(function(instance) {
-                        instance.hpMarked = Math.min(instance.hpMarked, adversary.hp);
-                    });
-                }
-                adversary.stress = parseInt(adversaryEditor.querySelector("#adversary-stress").value);
-                if (adversary.instances) {
-                    adversary.instances.forEach(function(instance) {
-                        instance.stressMarked = Math.min(instance.stressMarked, adversary.stress);
-                    });
-                }
-                adversary.experience = adversaryEditor.querySelector("#adversary-experience").value.trim();
 
-                // Attack
-                adversary.attackModifier = adversaryEditor.querySelector("#adversary-attack-modifier").value.trim();
-                adversary.attackDescription = adversaryEditor.querySelector("#adversary-attack-description").value.trim();
-                adversary.attackRange = adversaryEditor.querySelector("#adversary-attack-range").value;
-                adversary.attackDamage = adversaryEditor.querySelector("#adversary-attack-damage").value.trim();
+                if (adversary.category == "Adversary") {
+                    adversary.countPerHp = parseInt(adversaryEditor.querySelector("#adversary-count-per-hp").value);
+                    adversary.type = adversaryEditor.querySelector("#adversary-type").value;
+                    adversary.motivesAndTactics = adversaryEditor.querySelector("#adversary-motives").value.trim();
+
+                    // Stats
+                    adversary.majorThreshold = parseInt(adversaryEditor.querySelector("#adversary-major-threshold").value);
+                    adversary.severeThreshold = parseInt(adversaryEditor.querySelector("#adversary-severe-threshold").value);
+                    adversary.hp = parseInt(adversaryEditor.querySelector("#adversary-hp").value);
+                    if (adversary.instances) {
+                        adversary.instances.forEach(function(instance) {
+                            instance.hpMarked = Math.min(instance.hpMarked, adversary.hp);
+                        });
+                    }
+                    adversary.stress = parseInt(adversaryEditor.querySelector("#adversary-stress").value);
+                    if (adversary.instances) {
+                        adversary.instances.forEach(function(instance) {
+                            instance.stressMarked = Math.min(instance.stressMarked, adversary.stress);
+                        });
+                    }
+                    adversary.experience = adversaryEditor.querySelector("#adversary-experience").value.trim();
+
+                    // Attack
+                    adversary.attackModifier = adversaryEditor.querySelector("#adversary-attack-modifier").value.trim();
+                    adversary.attackDescription = adversaryEditor.querySelector("#adversary-attack-description").value.trim();
+                    adversary.attackRange = adversaryEditor.querySelector("#adversary-attack-range").value;
+                    adversary.attackDamage = adversaryEditor.querySelector("#adversary-attack-damage").value.trim();
+                } else if (adversary.category == "Environment") {
+                    adversary.type = adversaryEditor.querySelector("#adversary-environment-type").value;
+                    adversary.impulses = adversaryEditor.querySelector("#adversary-impulses").value;
+                    adversary.potentialAdversaries = adversaryEditor.querySelector("#adversary-potential-adversaries").value;
+                }
 
                 // Features
                 adversary.features = [];
@@ -1157,7 +1207,7 @@
             addButton.innerText = "➕ Add";
             addButton.addEventListener("click", function(event) {
                 const adversaryCopy = JSON.parse(JSON.stringify(tr.adversary));
-                if (!adversaryCopy.instances || adversaryCopy.instances.length == 0) {
+                if (adversaryCopy.category == "Adversary" && (!adversaryCopy.instances || adversaryCopy.instances.length == 0)) {
                     adversaryCopy.instances = [
                         {
                             name: adversaryCopy.name + " #1",
@@ -1277,25 +1327,27 @@
             topActions.className = "top-actions";
             adversaryElement.appendChild(topActions);
 
-            const addInstanceButton = document.createElement("button");
-            addInstanceButton.innerText = "➕";
-            addInstanceButton.title = "Add another instance of this adversary";
-            addInstanceButton.onclick = function() {
-                const newInstance = {
-                    // TODO: Review naming, this doesn't work well if you add several, delete several, add again.
-                    //       May need to parse the names to find the largest, like we do for adversary display names.
-                    name: adversary.name + " #" + (adversary.instances.length + 1),
-                    hpMarked: 0,
-                    stressMarked: 0
+            if (adversary.category == "Adversary") {
+                const addInstanceButton = document.createElement("button");
+                addInstanceButton.innerText = "➕";
+                addInstanceButton.title = "Add another instance of this adversary";
+                addInstanceButton.onclick = function() {
+                    const newInstance = {
+                        // TODO: Review naming, this doesn't work well if you add several, delete several, add again.
+                        //       May need to parse the names to find the largest, like we do for adversary display names.
+                        name: adversary.name + " #" + (adversary.instances.length + 1),
+                        hpMarked: 0,
+                        stressMarked: 0
+                    };
+                    if (!adversary.instances) {
+                        adversary.instances = [];
+                    }
+                    adversary.instances.push(newInstance);
+                    saveState();
+                    refreshDisplay();
                 };
-                if (!adversary.instances) {
-                    adversary.instances = [];
-                }
-                adversary.instances.push(newInstance);
-                saveState();
-                refreshDisplay();
-            };
-            topActions.appendChild(addInstanceButton);
+                topActions.appendChild(addInstanceButton);
+            }
 
             const editButton = document.createElement("button");
             editButton.innerText = "✏️";
@@ -1420,7 +1472,7 @@
             adversaryDiv.innerHTML = `<h3 title="Source: ${adversary.originalName}, ${adversary.source} ">${adversary.name}</h3>`;
 
             // TODO: Don't show parenthetical if Environment and no warning
-            const battlePoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount) * adversary.instances.length;
+            const battlePoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount) * (adversary.instances?.length || 0);
             const tierAndType = document.createElement("p");
             tierAndType.className = "tier";
             tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type}${typeSuffix} (${battlePoints} pts${warning})`;
@@ -1439,18 +1491,28 @@
                 motives.innerHTML = `<span class="motivesLabel">Motives & Tactics:</span> ${adversary.motivesAndTactics}`;
                 adversaryDiv.appendChild(motives);
             }
+            if (adversary.impulses) {
+                const impulses = document.createElement("p");
+                impulses.className =  "motives";
+                impulses.innerHTML = `<span class="motivesLabel">Impulses:</span> ${adversary.impulses}`;
+                adversaryDiv.appendChild(impulses);
+            }
 
             const stats = document.createElement("p");
             stats.className = "stats";
             let majorThreshold = adversary.majorThreshold || "None";
             let severeThreshold = adversary.severeThreshold || "None";
             thresholds = `${majorThreshold}/${severeThreshold}`;
+            // TODO: Break this up for when no thresholds
             stats.innerHTML = `<div><span class="statLabel">Difficulty:</span> ${adversary.difficulty} <span class="divider">|</span> <span class="statLabel">Thresholds:</span> ${thresholds}</div>`;
             if (adversary.attackDescription) {
                 stats.innerHTML += `<div><span class="statLabel">ATK:</span> ${adversary.attackModifier} <span class="divider">|</span> <span class="statLabel">${adversary.attackDescription}:</span> ${adversary.attackRange} <span class="divider">|</span> ${adversary.attackDamage}</div>`;
             }
             if (adversary.experience) {
                 stats.innerHTML += `<div class="experiences"><span class="statLabel">Experience:</span> ${adversary.experience}</div>`;
+            }
+            if (adversary.potentialAdversaries) {
+                stats.innerHTML += `<div class="experiences"><span class="statLabel">Potential Adversaries:</span> ${adversary.potentialAdversaries}</div>`;
             }
             adversaryDiv.appendChild(stats);
 
@@ -1482,7 +1544,7 @@
                 adversaryDiv.appendChild(featuresContainer);
             }
 
-            for (let i = 0; i < adversary.instances.length; i++) {
+            for (let i = 0; i < adversary.instances?.length || 0; i++) {
                 const instance = adversary.instances[i];
 
                 const instanceDiv = document.createElement("div");
@@ -1586,7 +1648,7 @@
                     return;
                 }
 
-                if (!newAdversary.instances || newAdversary.instances.length == 0) {
+                if (newAdversary.category == "Adversary" && !newAdversary.instances || newAdversary.instances.length == 0) {
                     newAdversary.instances = [
                         {
                             name: newAdversary.name + " #1",
@@ -1672,7 +1734,7 @@
                 const adversary = encounter.adversaries[j];
                 const adversaryPoints = adversary.category == "Adversary" ? getStatBlockBattlePoints(adversary.type, encounter.playerCount) : 0;
                 // TODO: Deal with tier differences
-                currentBattlePoints += adversaryPoints * adversary.instances.length;
+                currentBattlePoints += adversaryPoints * (adversary.instances?.length || 0);
             }
             return currentBattlePoints;
         }
@@ -1783,7 +1845,7 @@
                 // TODO: Else, custom with given name?
 
                 if (adversary) {
-                    if (!adversary.instances || adversary.instances.length == 0) {
+                    if (adversary.category == "Adversary" && !adversary.instances || adversary.instances.length == 0) {
                         adversary.instances = [
                             {
                                 name: adversary.name + " #1",
