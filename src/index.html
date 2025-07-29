@@ -8,6 +8,7 @@
         <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
         <link rel="manifest" href="site.webmanifest">
         <script src="adversaries.js"></script>
+        <script src="sample-encounters.js"></script>
         <!-- <script src="environments.js"></script> -->
         <style>
             :root {
@@ -620,64 +621,6 @@
     </body>
 
     <script>
-        // TODO: Replace this with a sample JSON file that can be loaded from no-encounters-experience
-        const sampleState = {
-            "encounters": [
-                {
-                    "name": "Forest Ambush",
-                    "targetBattlePoints": 10, // Allows telling user they might need more or less adversaries
-                    "currentFear": 5, // Convenient. Also allows remembering fear state for different groups
-                    "playerTier": 1, // Needed to help calculate battle points, if adversary tiers differ
-                    "playerCount": 3, // Need to calculate minion battle points
-                    "description": "A group of bandits ambushes the party in a dense forest.", // TODO: Useful?
-                    "adversaries": [
-                        {
-                            "name": "Bandit",
-                            "originalName": "Jagged Knife Bandit",
-                            "source": "SRD",
-                            "tier": 1,
-                            "type": "Standard",
-                            "difficulty": 12,
-                            "majorThreshold": 8,
-                            "severeThreshold": 14,
-                            "hp": 5,
-                            "stress": 3,
-                            "instances": [
-                                {
-                                    "name": "Bandit #1",
-                                    "hpMarked": 3,
-                                    "stressMarked": 0,
-                                    "conditions": [
-                                        "Restrained",
-                                        "Vulnerable"
-                                    ],
-                                    "modifications": [
-                                        {
-                                            "modificationName": "Distracted",
-                                            "propertyName": "difficulty",
-                                            "modification": "-2"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "name": "Bandit #2",
-                                    "hpMarked": 0,
-                                    "stressMarked": 0,
-                                    "conditions": [],
-                                    "modifications": []
-                                }
-                            ],
-                        }
-                    ],
-                    "environments": [], // Big TODO
-                }
-            ],
-            "custom": { // Yay homebrew, allow searching this, adding, modifying
-                "adversaries": [],
-                "environments": []
-            }
-        };
-
         // TODO: Change all code that puts user data directly into innerHTML
 
         const adversaryRemovedEvent = new Event("adversaryRemoved");
@@ -1883,7 +1826,7 @@
             selectedEncounterIndex = 0;
         }
 
-        let state = sampleState;
+        let state = sampleEncounters;
         const persistedStateJson = localStorage.getItem("encounters-state");
         if (persistedStateJson) {
             try {
