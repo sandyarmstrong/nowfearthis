@@ -1484,14 +1484,9 @@
 
             let warning = "";
             if (adversary.tier > encounter.playerTier) {
-                warning += ", ⚠️ above player tier";
+                warning += "⚠️ above player tier";
             } else if (adversary.tier < encounter.playerTier) {
-                warning += ", ⚠️ below player tier"
-            }
-
-            let typeSuffix = "";
-            if (adversary.countPerHp > 1 || adversary.type === "Horde") {
-                typeSuffix = ` (${adversary.countPerHp}/HP)`;
+                warning += "⚠️ below player tier"
             }
 
             const adversaryDiv = document.createElement("div");
@@ -1499,11 +1494,25 @@
             adversaryDiv.adversary = adversary;
             adversaryDiv.innerHTML = `<h3 title="Source: ${adversary.originalName}, ${adversary.source} ">${adversary.name}</h3>`;
 
-            // TODO: Don't show parenthetical if Environment and no warning
             const battlePoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount) * (adversary.instances?.length || 0);
+            let tierTypeSuffix = "";
+            let tierTypeSuffixComponents = [];
+            if (adversary.countPerHp > 1 || adversary.type === "Horde") {
+                tierTypeSuffixComponents.push(`${adversary.countPerHp}/HP`);
+            }
+            if (adversary.category === "Adversary") {
+                tierTypeSuffixComponents.push(`${battlePoints} pts`);
+            }
+            if (warning) {
+                tierTypeSuffixComponents.push(warning);
+            }
+            if (tierTypeSuffixComponents.length > 0) {
+                tierTypeSuffix = ` (${tierTypeSuffixComponents.join(", ")})`;
+            }
+
             const tierAndType = document.createElement("p");
             tierAndType.className = "tier";
-            tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type}${typeSuffix} (${battlePoints} pts${warning})`;
+            tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type}${tierTypeSuffix}`;
             adversaryDiv.appendChild(tierAndType);
 
             if (adversary.description) {
