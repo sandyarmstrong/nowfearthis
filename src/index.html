@@ -1182,6 +1182,80 @@
             return fearDiv;
         }
 
+        function refreshBattlePoints() {
+            const encounter = state.encounters[selectedEncounterIndex];
+            const battlePointsDiv = document.querySelector("#battle-points");
+            const currentBattlePoints = calculateBattlePoints(encounter);
+
+            // Round to nearest 0.1 for display
+            const remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
+
+            if (remainingBattlePoints < 0) {
+                battlePointsDiv.querySelector("[name='current-battle-points']").innerText = `⚠️ ${Math.abs(remainingBattlePoints)}`;
+                battlePointsDiv.querySelector("[name='remaining-suffix']").innerText = "over";
+            } else {
+                battlePointsDiv.querySelector("[name='current-battle-points']").innerText = Math.abs(remainingBattlePoints);
+                battlePointsDiv.querySelector("[name='remaining-suffix']").innerText = "left";
+            }
+        }
+
+        function addAdversaryToSearch(adversary) {
+            // Datalist for basic search
+            const option = document.createElement("option");
+            option.adversary = adversary;
+            option.value = adversary.name;
+            adversaryDatalist.appendChild(option);
+
+            // Table for browsing
+            const tr = document.createElement("tr");
+            tr.adversary = adversary;
+            browsingTableBody.appendChild(tr);
+
+            const addButtonTD = document.createElement("td");
+            addButtonTD.className = "nowrap";
+            const addButton = document.createElement("button");
+            addButton.innerText = "➕ Add";
+            addButton.addEventListener("click", function(event) {
+                const adversaryCopy = JSON.parse(JSON.stringify(tr.adversary));
+                if (!adversaryCopy.instances || adversaryCopy.instances.length == 0) {
+                    adversaryCopy.instances = [
+                        {
+                            name: adversaryCopy.name + " #1",
+                            hpMarked: 0,
+                            stressMarked: 0
+                        }
+                    ];
+                }
+                const encounter = state.encounters[selectedEncounterIndex];
+                // TODO: What if there is no encounter?
+                if (!encounter.adversaries) {
+                    encounter.adversaries = [];
+                }
+                encounter.adversaries.push(adversaryCopy);
+                addAdversary(
+                    document.querySelector("#encounter .adversaries"),
+                    encounter,
+                    adversaryCopy,
+                    refreshBattlePoints);
+                saveState();
+            });
+            addButtonTD.appendChild(addButton);
+            tr.appendChild(addButtonTD);
+
+            const nameTD = document.createElement("td");
+            nameTD.innerText = adversary.name;
+            tr.appendChild(nameTD);
+
+            const typeTD = document.createElement("td");
+            typeTD.className = "nowrap";
+            typeTD.innerText = adversary.type;
+            tr.appendChild(typeTD);
+
+            const descriptionTD = document.createElement("td");
+            descriptionTD.innerText = adversary.description;
+            tr.appendChild(descriptionTD);
+        }
+
         function updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName) {
             const elements = [];
             const slots = adversary[adversarySlotsPropertyName];
@@ -1528,7 +1602,7 @@
             return adversaryDiv;
         }
 
-        function addAdversary(container, encounter, adversary, refreshBattlePoints) {
+        function addAdversary(container, encounter, adversary) {
             const adversaryElement = createAdversaryElement(encounter, adversary);
 
             adversaryElement.addEventListener("adversaryRemoved", function(event) {
@@ -1546,7 +1620,7 @@
                     encounter.adversaries = [];
                 }
                 encounter.adversaries.push(newAdversary);
-                addAdversary(container, encounter, newAdversary, refreshBattlePoints);
+                addAdversary(container, encounter, newAdversary);
                 saveState();
             });
             adversaryElement.addEventListener("adversaryCopiedFromSource", function(event) {
@@ -1581,7 +1655,7 @@
                     encounter.adversaries = [];
                 }
                 encounter.adversaries.push(newAdversary);
-                addAdversary(container, encounter, newAdversary, refreshBattlePoints);
+                addAdversary(container, encounter, newAdversary);
                 saveState();
             });
             adversaryElement.addEventListener("adversarySavedToCustom", function(event) {
@@ -1688,8 +1762,14 @@
             // Clear custom entries from search
             for (let i = adversaryDatalist.children.length - 1; i >= 0; i--) {
                 const option = adversaryDatalist.children[i];
-                if (!option.isSRD) {
+                if (option.adversary.source !== "SRD") {
                     option.remove();
+                }
+            }
+            for (let i = browsingTableBody.children.length - 1; i >= 0; i--) {
+                const row = browsingTableBody.children[i];
+                if (row.adversary.source !== "SRD") {
+                    row.remove();
                 }
             }
 
@@ -1698,9 +1778,7 @@
             // TODO: This is not encounter-specific data, should it not be refreshed here?
             if (state.custom && state.custom.adversaries && state.custom.adversaries.length > 0) {
                 state.custom.adversaries.forEach(function(adversary) {
-                    const option = document.createElement("option");
-                    option.value = adversary.name;
-                    adversaryDatalist.appendChild(option);
+                    addAdversaryToSearch(adversary);
                 });
             }
 
@@ -1726,23 +1804,9 @@
 
             // TODO: Should be able to initiate edit from here? Should this move to top bar?
             const battlePointsDiv = document.createElement("div");
+            battlePointsDiv.id = "battle-points";
             battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> <span name="remaining-suffix"></span>) <span title="TODO: Click for summary from BUILDING BALANCED ENCOUNTERS">ℹ️</span></p>`;
             encounterBar.appendChild(battlePointsDiv);
-
-            function refreshBattlePoints() {
-                const currentBattlePoints = calculateBattlePoints(encounter);
-
-                // Round to nearest 0.1 for display
-                const remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
-
-                if (remainingBattlePoints < 0) {
-                    battlePointsDiv.querySelector("[name='current-battle-points']").innerText = `⚠️ ${Math.abs(remainingBattlePoints)}`;
-                    battlePointsDiv.querySelector("[name='remaining-suffix']").innerText = "over";
-                } else {
-                    battlePointsDiv.querySelector("[name='current-battle-points']").innerText = Math.abs(remainingBattlePoints);
-                    battlePointsDiv.querySelector("[name='remaining-suffix']").innerText = "left";
-                }
-            }
             refreshBattlePoints();
 
             const fearDiv = createFearTracker(encounter);
@@ -1751,7 +1815,7 @@
             const adversariesDiv = document.createElement("div");
             adversariesDiv.className = "adversaries";
             for (let j = 0; j < encounter.adversaries.length; j++) {
-                addAdversary(adversariesDiv, encounter, encounter.adversaries[j], refreshBattlePoints);
+                addAdversary(adversariesDiv, encounter, encounter.adversaries[j]);
             }
             encounterDiv.appendChild(adversariesDiv);
 
@@ -1791,7 +1855,7 @@
                         encounter.adversaries = [];
                     }
                     encounter.adversaries.push(adversary);
-                    addAdversary(adversariesDiv, encounter, adversary, refreshBattlePoints);
+                    addAdversary(adversariesDiv, encounter, adversary);
                     saveState();
                 }
             };
@@ -1870,61 +1934,11 @@
         // TODO: This is probably a silly way to do this, we
         //       don't actually want all these DOM elements.
         //       But it's an easy way to get that autocomplete for now.
-        // TODO: Also, we want a broader search option, should be able
-        //       to search by source, tier, and other arbitrary property text,
-        //       and allow easier browsing.
         const adversaryDatalist = document.createElement("datalist");
         adversaryDatalist.id = "searchable-adversaries";
         const browsingTableBody = document.querySelector("#browsing tbody");
         for (let i = 0; i < srdAdversaries.length; i++) {
-            // Datalist for basic search (TODO: Are we keeping this mode?)
-            const option = document.createElement("option");
-            option.value = srdAdversaries[i].name;
-            option.isSRD = true;
-            adversaryDatalist.appendChild(option);
-
-            // Table for browsing
-            // TODO: Custom
-            const tr = document.createElement("tr");
-            tr.adversary = srdAdversaries[i];
-            browsingTableBody.appendChild(tr);
-
-            const addButtonTD = document.createElement("td");
-            addButtonTD.className = "nowrap";
-            const addButton = document.createElement("button");
-            addButton.innerText = "➕ Add";
-            addButton.addEventListener("click", function(event) {
-                const adversary = JSON.parse(JSON.stringify(tr.adversary));
-                if (!adversary.instances || adversary.instances.length == 0) {
-                    adversary.instances = [
-                        {
-                            name: adversary.name + " #1",
-                            hpMarked: 0,
-                            stressMarked: 0
-                        }
-                    ];
-                }
-                addAdversary(
-                    document.querySelector("#encounter .adversaries"),
-                    state.encounters[selectedEncounterIndex],
-                    adversary,
-                    null); // TODO: Missing refreshBattlePoints. Actually this whole thing is gross.
-            });
-            addButtonTD.appendChild(addButton);
-            tr.appendChild(addButtonTD);
-
-            const nameTD = document.createElement("td");
-            nameTD.innerText = srdAdversaries[i].name;
-            tr.appendChild(nameTD);
-
-            const typeTD = document.createElement("td");
-            typeTD.className = "nowrap";
-            typeTD.innerText = srdAdversaries[i].type;
-            tr.appendChild(typeTD);
-
-            const descriptionTD = document.createElement("td");
-            descriptionTD.innerText = srdAdversaries[i].description;
-            tr.appendChild(descriptionTD);
+            addAdversaryToSearch(srdAdversaries[i]);
         }
         document.body.appendChild(adversaryDatalist);
 
