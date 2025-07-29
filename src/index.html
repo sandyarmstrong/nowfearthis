@@ -355,16 +355,25 @@
                 box-shadow: 10px 10px 10px black;
             }
 
+            #browsing {
+                background-color: var(--clr-surface-a10);
+                position: relative;
+                width: fit-content; /* TODO: Better to pick a width, table can resize like this */
+                padding: 10px;
+                border-radius: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
             .results th, .results td {
-                border: 1px solid black;
+                border: 1px solid var(--clr-surface-a0);
             }
             .results table {
                 overflow-y: auto;
-                /* width: 100%; */
-                max-width: 700px;
+                width: 700px;
+                /* max-width: 700px; */
                 height: 15em;
                 display: block;
-                margin: 0 auto;
+                /* margin: 0 auto; */
             }
             .results td.nowrap {
                 white-space: nowrap;
@@ -378,7 +387,7 @@
                 position: sticky;
                 top: 0;
                 vertical-align: bottom;
-                background: black; /* Need a background to avoid scrolled rows from showing through */
+                background: var(--clr-surface-a20); /* Need a background to avoid scrolled rows from showing through */
             }
         </style>
     </head>
@@ -546,6 +555,7 @@
         </div>
 
         <div id="browsing">
+            <!-- TODO: Add some UI to reset filters, or at least to clear search text? -->
             <input id="browsing-search" type="text" placeholder="Search" />
             <select id="browsing-source">
                 <option>Any source</option>
@@ -577,10 +587,10 @@
                 <table>
                     <thead>
                         <tr>
+                            <th scope="col"></th>
                             <th scope="col">Name</th>
                             <th scope="col">Type</th>
                             <th scope="col">Description</th>
-                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -603,7 +613,7 @@
     </body>
 
     <script>
-        // TODO: Populate with some real examples
+        // TODO: Replace this with a sample JSON file that can be loaded from no-encounters-experience
         const sampleState = {
             "encounters": [
                 {
@@ -1783,21 +1793,8 @@
             // Table for browsing
             // TODO: Custom
             const tr = document.createElement("tr");
-            tr.adversary = srdAdversaries[i]; // TODO: Convert it here or on-demand?
+            tr.adversary = srdAdversaries[i];
             browsingTableBody.appendChild(tr);
-
-            const nameTD = document.createElement("td");
-            nameTD.innerText = srdAdversaries[i].name;
-            tr.appendChild(nameTD);
-
-            const typeTD = document.createElement("td");
-            typeTD.className = "nowrap";
-            typeTD.innerText = srdAdversaries[i].type;
-            tr.appendChild(typeTD);
-
-            const descriptionTD = document.createElement("td");
-            descriptionTD.innerText = srdAdversaries[i].description;
-            tr.appendChild(descriptionTD);
 
             const addButtonTD = document.createElement("td");
             addButtonTD.className = "nowrap";
@@ -1822,33 +1819,81 @@
             });
             addButtonTD.appendChild(addButton);
             tr.appendChild(addButtonTD);
+
+            const nameTD = document.createElement("td");
+            nameTD.innerText = srdAdversaries[i].name;
+            tr.appendChild(nameTD);
+
+            const typeTD = document.createElement("td");
+            typeTD.className = "nowrap";
+            typeTD.innerText = srdAdversaries[i].type;
+            tr.appendChild(typeTD);
+
+            const descriptionTD = document.createElement("td");
+            descriptionTD.innerText = srdAdversaries[i].description;
+            tr.appendChild(descriptionTD);
         }
         document.body.appendChild(adversaryDatalist);
 
-        document.querySelector("#browsing-tier").addEventListener("change", function(event) {
-            const selectedTier = parseInt(event.target.value) || "Any tier";
-            const rows = browsingTableBody.querySelectorAll("tr");
-            rows.forEach(function(row) {
-                // TODO: Actually have to apply all filters on each change
-                if (selectedTier == "Any tier" || row.adversary.tier == selectedTier) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-            });
-        });
+        // TODO: Set default browsing tier based on encounter player tier
+        // TODO: Allow keyboard navigation of table and adding of adversaries directly from search input?
+        // TODO: Clear search input on refresh, or apply to browser if not clearing
 
-        document.querySelector("#browsing-type").addEventListener("change", function(event) {
-            const selectedType = event.target.value;
+        function adversaryMatchesSearch(adversary, searchText) {
+            if (!searchText) {
+                return true;
+            }
+
+            const adversaryName = adversary.name.toLowerCase();
+            const adversaryDescription = adversary.description.toLowerCase();
+            const adversaryType = adversary.type.toLowerCase();
+
+            // All terms must match somewhere
+            const terms = searchText.toLowerCase().split(/\s+/);
+            for (const term of terms) {
+                if (!term) {
+                    continue; // Skip empty terms
+                }
+                if (!(adversaryName.includes(term) ||
+                    adversaryDescription.includes(term) ||
+                    adversaryType.includes(term))) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function updateBrowsingTableFiltering() {
+            const selectedSource = document.querySelector("#browsing-source").value;
+            const selectedTier = parseInt(document.querySelector("#browsing-tier").value) || "Any tier";
+            const selectedType = document.querySelector("#browsing-type").value;
+            const searchText = document.querySelector("#browsing-search").value;
+
             const rows = browsingTableBody.querySelectorAll("tr");
             rows.forEach(function(row) {
-                // TODO: Actually have to apply all filters on each change
-                if (selectedType == "Any type" || row.adversary.type == selectedType) {
+                if ((selectedSource == "Any source" || row.adversary.source == selectedSource) &&
+                    (selectedTier == "Any tier" || row.adversary.tier == selectedTier) &&
+                    (selectedType == "Any type" || row.adversary.type == selectedType) &&
+                    (!searchText || adversaryMatchesSearch(row.adversary, searchText))) {
                     row.style.display = "";
                 } else {
                     row.style.display = "none";
                 }
             });
+        }
+
+        document.querySelector("#browsing-search").addEventListener("input", function(event) {
+            updateBrowsingTableFiltering();
+        });
+        document.querySelector("#browsing-source").addEventListener("change", function(event) {
+            updateBrowsingTableFiltering();
+        });
+        document.querySelector("#browsing-tier").addEventListener("change", function(event) {
+            updateBrowsingTableFiltering();
+        });
+        document.querySelector("#browsing-type").addEventListener("change", function(event) {
+            updateBrowsingTableFiltering();
         });
 
         refreshDisplay();
