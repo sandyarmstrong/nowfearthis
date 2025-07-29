@@ -643,6 +643,16 @@
 
         let expandAllFeatures = false;
 
+        document.getElementById("editor-overlay").addEventListener("click", function() {
+            if (!adversaryEditor.classList.contains("hidden")) {
+                hideAdversaryEditor();
+            } else if (!encounterEditor.classList.contains("hidden")) {
+                hideEncounterEditor();
+            } else if (!conditionsEditor.classList.contains("hidden")) {
+                hideConditionsEditor();
+            }
+        });
+
         function hideAdversaryEditor() {
             const adversary = adversaryEditor.adversary;
             adversaryEditor.adversary = undefined;
