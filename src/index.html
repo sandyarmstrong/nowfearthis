@@ -699,10 +699,10 @@
             adversaryEditor.classList.add("hidden");
             editorOverlay.classList.add("hidden");
             if (adversary) {
-                const adversaryElements = Array.from(document.querySelectorAll(".statBlock"));
-                for (let i = 0; i < adversaryElements.length; i++) {
-                    if (adversaryElements[i].adversary == adversary) {
-                        adversaryElements[i].scrollIntoView({ behavior: "instant", block: "center" });
+                const statBlockElements = Array.from(document.querySelectorAll(".statBlock"));
+                for (let i = 0; i < statBlockElements.length; i++) {
+                    if (statBlockElements[i].adversary == adversary) {
+                        statBlockElements[i].scrollIntoView({ behavior: "instant", block: "center" });
                     }
                 }
             }
@@ -1325,13 +1325,13 @@
             container.replaceChildren(...elements);
         }
 
-        function setupAdversaryActionButton(adversaryElement, adversary) {
+        function setupAdversaryActionButton(statBlockElement, adversary) {
             const actionsMenu = createElement("menu", "actions-menu");
 
             const copyAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Duplicate</button>`);
             copyAction.title = "Copy this adversary, including all changed state";
             copyAction.onclick = function() {
-                adversaryElement.dispatchEvent(adversaryCopiedEvent);
+                statBlockElement.dispatchEvent(adversaryCopiedEvent);
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(copyAction);
@@ -1339,7 +1339,7 @@
             const copyFromSourceAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Copy From Source</button>`);
             copyFromSourceAction.title = "Copy this adversary from the source, ignoring all changes";
             copyFromSourceAction.onclick = function() {
-                adversaryElement.dispatchEvent(adversaryCopiedFromSourceEvent);
+                statBlockElement.dispatchEvent(adversaryCopiedFromSourceEvent);
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(copyFromSourceAction);
@@ -1348,7 +1348,7 @@
             // TODO: Disable when no changes have been made?
             saveCustomAction.title = "Save this adversary to your custom adversaries for later use";
             saveCustomAction.onclick = function() {
-                adversaryElement.dispatchEvent(adversarySavedToCustomEvent);
+                statBlockElement.dispatchEvent(adversarySavedToCustomEvent);
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(saveCustomAction);
@@ -1357,14 +1357,14 @@
             deleteCustomAction.innerHTML = `<button class="menu-action" ${adversary.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Adversaries</button>`;
             deleteCustomAction.title = "Delete from your custom adversaries";
             deleteCustomAction.onclick = function() {
-                adversaryElement.dispatchEvent(adversaryDeletedFromCustomEvent);
+                statBlockElement.dispatchEvent(adversaryDeletedFromCustomEvent);
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(deleteCustomAction);
 
             const topActions = document.createElement("div");
             topActions.className = "top-actions";
-            adversaryElement.appendChild(topActions);
+            statBlockElement.appendChild(topActions);
 
             if (adversary.category == "Adversary") {
                 const addInstanceButton = createElement("button", null, "➕");
@@ -1397,7 +1397,7 @@
             const deleteButton = createElement("button", null, "🗑️");
             deleteButton.title = "Remove this adversary from the encounter";
             deleteButton.onclick = function() {
-                adversaryElement.dispatchEvent(adversaryRemovedEvent);
+                statBlockElement.dispatchEvent(adversaryRemovedEvent);
             };
             topActions.appendChild(deleteButton);
 
@@ -1407,7 +1407,7 @@
                 if (actionsMenu.parentElement) {
                     actionsMenu.remove();
                 } else {
-                    adversaryElement.appendChild(actionsMenu);
+                    statBlockElement.appendChild(actionsMenu);
                 }
             };
             topActions.appendChild(actionsButton);
@@ -1485,9 +1485,7 @@
             }
         }
 
-        // TODO: Keep saying "adversary" everywhere, or pick a generic term like "statBlock"
-        //       that more accurately includes Environments as well?
-        function createAdversaryElement(encounter, adversary) {
+        function createStatBlockElement(encounter, adversary) {
             // TODO: Allow reordering?
 
             let warning = "";
@@ -1641,17 +1639,17 @@
         }
 
         function addAdversary(container, encounter, adversary) {
-            const adversaryElement = createAdversaryElement(encounter, adversary);
+            const statBlockElement = createStatBlockElement(encounter, adversary);
 
-            adversaryElement.addEventListener("adversaryRemoved", function(event) {
+            statBlockElement.addEventListener("adversaryRemoved", function(event) {
                 encounter.statBlocks = encounter.statBlocks.filter(function(a) {
                     return a !== adversary;
                 });
-                container.removeChild(adversaryElement);
+                container.removeChild(statBlockElement);
                 refreshBattlePoints();
                 saveState();
             });
-            adversaryElement.addEventListener("adversaryCopied", function(event) {
+            statBlockElement.addEventListener("adversaryCopied", function(event) {
                 const newAdversary = JSON.parse(JSON.stringify(adversary));
                 newAdversary.name += " (copy)"; // TODO: Decide naming
                 if (!encounter.statBlocks) {
@@ -1661,7 +1659,7 @@
                 addAdversary(container, encounter, newAdversary);
                 saveState();
             });
-            adversaryElement.addEventListener("adversaryCopiedFromSource", function(event) {
+            statBlockElement.addEventListener("adversaryCopiedFromSource", function(event) {
                 // TODO: This is mostly a dupe of addAdversaryButton.onclick
                 let newAdversary = null;
                 if (adversary.source == "SRD") {
@@ -1696,7 +1694,7 @@
                 addAdversary(container, encounter, newAdversary);
                 saveState();
             });
-            adversaryElement.addEventListener("adversarySavedToCustom", function(event) {
+            statBlockElement.addEventListener("adversarySavedToCustom", function(event) {
                 adversary.source = "Custom";
                 adversary.originalName = adversary.name; // TODO: Enforce unique names (easy here, hard if we offer import)
                 const newCustomAdversary = JSON.parse(JSON.stringify(adversary));
@@ -1711,7 +1709,7 @@
                 saveState();
                 refreshDisplay(); // To add to search
             });
-            adversaryElement.addEventListener("adversaryDeletedFromCustom", function(event) {
+            statBlockElement.addEventListener("adversaryDeletedFromCustom", function(event) {
                 if (adversary.source !== "Custom") {
                     console.warn("Trying to delete a non-custom adversary from custom list");
                     return;
@@ -1730,7 +1728,7 @@
                 refreshDisplay();
             });
 
-            container.appendChild(adversaryElement);
+            container.appendChild(statBlockElement);
             refreshBattlePoints();
         }
 
