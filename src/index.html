@@ -132,10 +132,7 @@
                 top: 0px;
                 left: 0px;
                 right: 0px;
-                padding-left: 10px;
-                padding-right: 10px; /* Extra room for scroll bar */
-                padding-bottom: 3px;
-                padding-top: 3px;
+                padding: 3px 10px;
                 background-color: var(--clr-surface-a10);
                 border-bottom: 1px solid var(--clr-surface-a20);
             }
@@ -144,8 +141,8 @@
                 padding: 3px;
             }
 
-            #encounter {
-                margin: 10px;
+            .below-top-bar {
+                margin: 10px
             }
 
             .encounter-bar p {
@@ -367,7 +364,7 @@
             #simple-search, #browsing {
                 background-color: var(--clr-surface-a10);
                 padding: 5px;
-                margin: 10px;
+                margin: 5px 0px;
                 border-radius: 5px;
             }
             #simple-search, .results table {
@@ -471,8 +468,9 @@
             </div>
         </div>
 
-        <!-- TODO: Should all these editors use <dialog>? Safari doesn't support closedBy... -->
         <div id="editor-overlay" class="hidden"></div>
+
+        <!-- TODO: Should all these editors use <dialog>? Safari doesn't support closedBy... -->
         <div id="encounter-editor" class="editor hidden">
             <form id="encounter-form">
                 <label for="encounter-name">Name:</label>
@@ -504,6 +502,7 @@
                 <button type="submit">Save Encounter</button>
             </form>
         </div>
+
         <div id="statBlock-editor" class="editor hidden">
             <form id="statBlock-form">
                 <fieldset>
@@ -596,6 +595,7 @@
                 <button type="submit">Save</button>
             </form>
         </div>
+
         <div id="conditions-editor" class="editor hidden"> <!-- TODO: Position over statBlock instead? -->
             <h3 class="instance-name"></h3>
             <div class="conditions"></div>
@@ -612,87 +612,91 @@
             <button id="done-adding-conditions">Close</button>
         </div>
 
-        <div id="simple-search" class="hidden">
-            <button id="show-full-search" class="subtle" title="Expand to Full Search">⏬</button>
-            <input id="simple-search-input" type="search" placeholder="Search Adversaries & Environments" list="searchable-statBlocks" />
-            <button id="simple-search-add-button">➕ Add</button>
-        </div>
+        <div class="below-top-bar">
 
-        <div id="browsing">
-            <!-- TODO: Allow keyboard navigation of table and adding of statBlocks directly from search input?-->
-            <div class="browsing-filters">
-                <button id="hide-full-search" class="subtle" title="Collapse to Simple Search">⏫</button>
-                <input id="browsing-search" type="text" placeholder="Search Adversaries & Environments" />
-                <select id="browsing-source">
-                    <option value="">Any source</option>
-                    <option>SRD</option>
-                    <option>Custom</option>
-                </select>
-                <select id="browsing-tier">
-                    <option value="">Any tier</option>
-                    <option value="1">Tier 1</option>
-                    <option value="2">Tier 2</option>
-                    <option value="3">Tier 3</option>
-                    <option value="4">Tier 4</option>
-                </select>
-                <select id="browsing-category">
-                    <option value="">Any category</option>
-                    <option value="Adversary">Adversaries</option>
-                    <option value="Environment">Environments</option>
-                </select>
-                <select id="browsing-type">
-                    <option value="">Any type</option>
-                    <!-- Hide group when specific categories selected? Would require resetting type if category changes, sometimes -->
-                    <optgroup label="Adversaries">
-                        <option>Bruiser</option>
-                        <option>Horde</option>
-                        <option>Leader</option>
-                        <option>Minion</option>
-                        <option>Ranged</option>
-                        <option>Skulk</option>
-                        <option>Social</option>
-                        <option>Solo</option>
-                        <option>Standard</option>
-                        <option>Support</option>
-                    </optgroup>
-                    <optgroup label="Environments">
-                        <option>Event</option>
-                        <option>Exploration</option>
-                        <option>Social</option>
-                        <option>Traversal</option>
-                    </optgroup>
-                </select>
-                <button id="browsing-reset-filters">Reset Filters</button>
+            <div id="simple-search" class="hidden">
+                <button id="show-full-search" class="subtle" title="Expand to Full Search">⏬</button>
+                <input id="simple-search-input" type="search" placeholder="Search Adversaries & Environments" list="searchable-statBlocks" />
+                <button id="simple-search-add-button">➕ Add</button>
             </div>
-            <div class="results">
-                <table>
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+
+            <div id="browsing">
+                <!-- TODO: Allow keyboard navigation of table and adding of statBlocks directly from search input?-->
+                <div class="browsing-filters">
+                    <button id="hide-full-search" class="subtle" title="Collapse to Simple Search">⏫</button>
+                    <input id="browsing-search" type="text" placeholder="Search Adversaries & Environments" />
+                    <select id="browsing-source">
+                        <option value="">Any source</option>
+                        <option>SRD</option>
+                        <option>Custom</option>
+                    </select>
+                    <select id="browsing-tier">
+                        <option value="">Any tier</option>
+                        <option value="1">Tier 1</option>
+                        <option value="2">Tier 2</option>
+                        <option value="3">Tier 3</option>
+                        <option value="4">Tier 4</option>
+                    </select>
+                    <select id="browsing-category">
+                        <option value="">Any category</option>
+                        <option value="Adversary">Adversaries</option>
+                        <option value="Environment">Environments</option>
+                    </select>
+                    <select id="browsing-type">
+                        <option value="">Any type</option>
+                        <!-- Hide group when specific categories selected? Would require resetting type if category changes, sometimes -->
+                        <optgroup label="Adversaries">
+                            <option>Bruiser</option>
+                            <option>Horde</option>
+                            <option>Leader</option>
+                            <option>Minion</option>
+                            <option>Ranged</option>
+                            <option>Skulk</option>
+                            <option>Social</option>
+                            <option>Solo</option>
+                            <option>Standard</option>
+                            <option>Support</option>
+                        </optgroup>
+                        <optgroup label="Environments">
+                            <option>Event</option>
+                            <option>Exploration</option>
+                            <option>Social</option>
+                            <option>Traversal</option>
+                        </optgroup>
+                    </select>
+                    <button id="browsing-reset-filters">Reset Filters</button>
+                </div>
+                <div class="results">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <div id="encounter"></div>
+            <div id="encounter"></div>
 
-        <div id="repo-info">
-            <p><em><a href="https://nowfearthis.app">Now Fear This</a></em> is <a href="https://github.com/sandyarmstrong/nowfearthis">free and open source</a> and works entirely offline. Please <a href="https://github.com/sandyarmstrong/nowfearthis/issues">report any bugs or feature requests</a>.</p>
-        </div>
+            <div id="repo-info">
+                <p><em><a href="https://nowfearthis.app">Now Fear This</a></em> is <a href="https://github.com/sandyarmstrong/nowfearthis">free and open source</a> and works entirely offline. Please <a href="https://github.com/sandyarmstrong/nowfearthis/issues">report any bugs or feature requests</a>.</p>
+            </div>
 
-        <div id="copyright">
-            <p>This project includes materials from the Daggerheart System Reference Document 1.0,
-                © Critical Role, LLC. under the terms of the Darrington Press Community Gaming (DPCGL) License.
-                More information can be found at <a href="https://www.daggerheart.com">https://www.daggerheart.com</a>.
-                Minor formatting modifications were provided as part of the excellent
-                <a href="https://github.com/seansbox/daggerheart-srd">https://github.com/seansbox/daggerheart-srd</a>.</p>
-            <p>Site favicon courtesy of <a href="https://github.com/twitter/twemoji/blob/master/LICENSE-GRAPHICS">twemoji</a>.</p>
+            <div id="copyright">
+                <p>This project includes materials from the Daggerheart System Reference Document 1.0,
+                    © Critical Role, LLC. under the terms of the Darrington Press Community Gaming (DPCGL) License.
+                    More information can be found at <a href="https://www.daggerheart.com">https://www.daggerheart.com</a>.
+                    Minor formatting modifications were provided as part of the excellent
+                    <a href="https://github.com/seansbox/daggerheart-srd">https://github.com/seansbox/daggerheart-srd</a>.</p>
+                <p>Site favicon courtesy of <a href="https://github.com/twitter/twemoji/blob/master/LICENSE-GRAPHICS">twemoji</a>.</p>
+            </div>
+
         </div>
     </body>
 
