@@ -63,19 +63,6 @@
                 margin-top: 10px;
             }
 
-            #top-bar {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                top: 0px;
-                left: 0px;
-                right: 0px;
-                padding-left: 10px;
-                padding-right: 14px; /* Extra room for scroll bar */
-                background-color: var(--clr-surface-a10);
-                border-bottom: 1px solid var(--clr-surface-a20);
-            }
-
             .load-button input {
                 /* Hide the file input element and style its label as a button */
                 display: none;
@@ -116,6 +103,38 @@
             button.instance-action:disabled {
                 background-color: var(--clr-surface-tonal-a30);
                 opacity: 0.7;
+            }
+
+            button.subtle {
+                background-color: transparent;
+                border-radius: 4px;
+                margin: 0px;
+                padding: 2px;
+            }
+            button.subtle:hover {
+                background-color: var(--clr-surface-a20);
+            }
+            button.subtle:active {
+                background-color: var(--clr-surface-a30);
+            }
+
+            #top-bar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                top: 0px;
+                left: 0px;
+                right: 0px;
+                padding-left: 10px;
+                padding-right: 10px; /* Extra room for scroll bar */
+                padding-bottom: 3px;
+                padding-top: 3px;
+                background-color: var(--clr-surface-a10);
+                border-bottom: 1px solid var(--clr-surface-a20);
+            }
+            button#add-encounter {
+                border-radius: 4px;
+                padding: 3px;
             }
 
             #encounter {
@@ -347,12 +366,10 @@
             #simple-search, .results table {
                 max-width: 48em; /* 44em looks good, 48em is about the width of two statblocks */
             }
-            #simple-search {
+            #simple-search, .browsing-filters {
                 display: flex;
-            }
-            #show-full-search, #hide-full-search {
-                background-color: transparent;
-                border-radius: 0px;
+                flex-wrap: wrap;
+                gap: 4px;
             }
             #simple-search-input {
                 flex-grow: 1;
@@ -361,10 +378,6 @@
             #browsing {
                 position: relative;
                 width: fit-content;
-            }
-            .browsing-filters {
-                display: flex;
-                flex-wrap: wrap;
             }
             #browsing-search {
                 flex-grow: 1;
@@ -433,7 +446,7 @@
                 <select id="current-encounter"></select>
             </div>
             <div>
-                <button id="toggle-encounter-menu" title="Encounter Actions">⚙️</button>
+                <button id="toggle-encounter-menu" class="subtle" title="Encounter Actions">⚙️</button>
                 <menu id="encounter-menu" class="actions-menu hidden">
                     <li><button id="edit-encounter">✏️ Edit Encounter</button></li>
                     <li><button id="delete-encounter">🗑️ Delete Encounter</button></li>
@@ -590,7 +603,7 @@
         </div>
 
         <div id="simple-search" class="hidden">
-            <button id="show-full-search" title="Expand to Full Search">⏬</button>
+            <button id="show-full-search" class="subtle" title="Expand to Full Search">⏬</button>
             <input id="simple-search-input" type="search" placeholder="Search Adversaries & Environments" list="searchable-statBlocks" />
             <button id="simple-search-add-button">➕ Add</button>
         </div>
@@ -598,7 +611,7 @@
         <div id="browsing">
             <!-- TODO: Allow keyboard navigation of table and adding of statBlocks directly from search input?-->
             <div class="browsing-filters">
-                <button id="hide-full-search" title="Collapse to Simple Search">⏫</button>
+                <button id="hide-full-search" class="subtle" title="Collapse to Simple Search">⏫</button>
                 <input id="browsing-search" type="text" placeholder="Search Adversaries & Environments" />
                 <select id="browsing-source">
                     <option value="">Any source</option>
