@@ -652,7 +652,7 @@
 
         let expandAllFeatures = false;
 
-        function createElementWithText(tagName, innerText, className) {
+        function createElement(tagName, className = null, innerText = null) {
             const element = document.createElement(tagName);
             if (className) {
                 element.className = className;
@@ -662,6 +662,18 @@
             }
             return element;
         }
+
+        function createElementWithInnerHTML(tagName, className, innerHTML) {
+            const element = document.createElement(tagName);
+            if (className) {
+                element.className = className;
+            }
+            if (innerHTML) {
+                element.innerHTML = innerHTML;
+            }
+            return element;
+        }
+
         document.getElementById("editor-overlay").addEventListener("click", function() {
             if (!adversaryEditor.classList.contains("hidden")) {
                 hideAdversaryEditor();
@@ -1148,8 +1160,10 @@
             // TODO: Replace this with a stylized number input?
             const fearDiv = document.createElement("div");
             const fearValue = document.createElement("span");
-            const useFearButton = document.createElement("button");
-            const gainFearButton = document.createElement("button");
+            const useFearButton = createElement("button", "-");
+            useFearButton.title = "Use 1 Fear";
+            const gainFearButton = createElement("button", "+");
+            gainFearButton.title = "Gain 1 Fear (max 12)";
 
             if (encounter.currentFear === undefined) {
                 encounter.currentFear = 0;
@@ -1160,12 +1174,10 @@
                 fearValue.title = `${encounter.currentFear} Fear | Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}`;
 
                 for (let i = 0; i < maxFear; i++) {
-                    const fearIcon = document.createElement("span");
-                    fearIcon.className = "fear-icon";
+                    const fearIcon = createElement("span", "fear-icon", "💀");
                     if (i >= encounter.currentFear) {
                         fearIcon.classList.add("inactive");
                     }
-                    fearIcon.innerText = "💀";
                     fearValue.appendChild(fearIcon);
                 }
 
@@ -1174,8 +1186,6 @@
             }
             updateFearDisplay();
 
-            useFearButton.innerText = "-";
-            useFearButton.title = "Use 1 Fear";
             useFearButton.onclick = function() {
                 if (encounter.currentFear > 0) {
                     encounter.currentFear--;
@@ -1184,8 +1194,6 @@
                 }
             };
 
-            gainFearButton.innerText = "+";
-            gainFearButton.title = "Gain 1 Fear (max 12)";
             gainFearButton.onclick = function() {
                 if (encounter.currentFear < maxFear) {
                     encounter.currentFear++;
@@ -1230,10 +1238,8 @@
             tr.adversary = adversary;
             browsingTableBody.appendChild(tr);
 
-            const addButtonTD = document.createElement("td");
-            addButtonTD.className = "nowrap";
-            const addButton = document.createElement("button");
-            addButton.innerText = "➕ Add";
+            const addButtonTD = createElement("td", "nowrap");
+            const addButton = createElement("button", null, "➕ Add");
             addButton.addEventListener("click", function(event) {
                 const adversaryCopy = JSON.parse(JSON.stringify(tr.adversary));
                 if (adversaryCopy.category == "Adversary" && (!adversaryCopy.instances || adversaryCopy.instances.length == 0)) {
@@ -1261,21 +1267,17 @@
             addButtonTD.appendChild(addButton);
             tr.appendChild(addButtonTD);
 
-            const nameTD = document.createElement("td");
-            nameTD.innerText = adversary.name;
+            const nameTD = createElement("td", null, adversary.name);
             tr.appendChild(nameTD);
 
             // TODO: Could add pts, but we'd have to recalc when player count changes
             // const encounter = state.encounters[selectedEncounterIndex];
             // const battlePoints = getStatBlockBattlePoints(adversary.type, encounter?.playerCount ?? 1);
-            const typeTD = document.createElement("td");
-            typeTD.className = "nowrap";
             // typeTD.innerText = `${adversary.type} (${battlePoints} pts)`;
-            typeTD.innerText = adversary.type;
+            const typeTD = createElement("td", "nowrap", adversary.type);
             tr.appendChild(typeTD);
 
-            const descriptionTD = document.createElement("td");
-            descriptionTD.innerText = adversary.description;
+            const descriptionTD = createElement("td", null, adversary.description);
             tr.appendChild(descriptionTD);
         }
 
@@ -1312,11 +1314,9 @@
         }
 
         function setupAdversaryActionButton(adversaryElement, adversary) {
-            const actionsMenu = document.createElement("menu");
-            actionsMenu.className = "actions-menu";
+            const actionsMenu = createElement("menu", "actions-menu");
 
-            const copyAction = document.createElement("li");
-            copyAction.innerHTML = `<button class="menu-action">Duplicate</button>`;
+            const copyAction = createElementWithInnerHTML("li", `<button class="menu-action">Duplicate</button>`);
             copyAction.title = "Copy this adversary, including all changed state";
             copyAction.onclick = function() {
                 adversaryElement.dispatchEvent(adversaryCopiedEvent);
@@ -1324,8 +1324,7 @@
             };
             actionsMenu.appendChild(copyAction);
 
-            const copyFromSourceAction = document.createElement("li");
-            copyFromSourceAction.innerHTML = `<button class="menu-action">Copy From Source</button>`;
+            const copyFromSourceAction = createElementWithInnerHTML("li", `<button class="menu-action">Copy From Source</button>`);
             copyFromSourceAction.title = "Copy this adversary from the source, ignoring all changes";
             copyFromSourceAction.onclick = function() {
                 adversaryElement.dispatchEvent(adversaryCopiedFromSourceEvent);
@@ -1333,9 +1332,8 @@
             };
             actionsMenu.appendChild(copyFromSourceAction);
 
-            const saveCustomAction = document.createElement("li");
+            const saveCustomAction = createElementWithInnerHTML("li", `<button class="menu-action">Save to Custom Adversaries</button>`);
             // TODO: Disable when no changes have been made?
-            saveCustomAction.innerHTML = `<button class="menu-action">Save to Custom Adversaries</button>`;
             saveCustomAction.title = "Save this adversary to your custom adversaries for later use";
             saveCustomAction.onclick = function() {
                 adversaryElement.dispatchEvent(adversarySavedToCustomEvent);
@@ -1357,8 +1355,7 @@
             adversaryElement.appendChild(topActions);
 
             if (adversary.category == "Adversary") {
-                const addInstanceButton = document.createElement("button");
-                addInstanceButton.innerText = "➕";
+                const addInstanceButton = createElement("button", null, "➕");
                 addInstanceButton.title = "Add another instance of this adversary";
                 addInstanceButton.onclick = function() {
                     const newInstance = {
@@ -1378,24 +1375,21 @@
                 topActions.appendChild(addInstanceButton);
             }
 
-            const editButton = document.createElement("button");
-            editButton.innerText = "✏️";
+            const editButton = createElement("button", null, "✏️");
             editButton.title = "Edit this adversary";
             editButton.onclick = function() {
                 showAdversaryEditor(adversary);
             };
             topActions.appendChild(editButton);
 
-            const deleteButton = document.createElement("button");
-            deleteButton.innerText = "🗑️";
+            const deleteButton = createElement("button", null, "🗑️");
             deleteButton.title = "Remove this adversary from the encounter";
             deleteButton.onclick = function() {
                 adversaryElement.dispatchEvent(adversaryRemovedEvent);
             };
             topActions.appendChild(deleteButton);
 
-            const actionsButton = document.createElement("button");
-            actionsButton.innerText = "🎭";
+            const actionsButton = createElement("button", null, "🎭");
             actionsButton.title = "Adversary management actions";
             actionsButton.onclick = function() {
                 if (actionsMenu.parentElement) {
@@ -1423,13 +1417,9 @@
                     const conditionItem = document.createElement("li");
                     conditionsList.appendChild(conditionItem);
 
-                    const conditionText = document.createElement("span");
-                    conditionText.innerText = condition;
-                    conditionItem.appendChild(conditionText);
+                    conditionItem.appendChild(createElement("span", null, condition));
 
-                    const removeButton = document.createElement("button");
-                    removeButton.className = "inline-delete";
-                    removeButton.innerText = "❌";
+                    const removeButton = createElement("button", "inline-delete", "❌");
                     removeButton.title = "Remove condition";
                     removeButton.onclick = function(event) {
                         instance.conditions = instance.conditions.filter(function(c) {
@@ -1450,13 +1440,13 @@
                     const modificationItem = document.createElement("li");
                     conditionsList.appendChild(modificationItem);
 
-                    const modificationText = document.createElement("span");
-                    modificationText.innerText = `${modification.modificationName} (${modification.propertyName} ${modification.modification})`;
+                    const modificationText = createElement(
+                        "span",
+                        null,
+                        `${modification.modificationName} (${modification.propertyName} ${modification.modification})`);
                     modificationItem.appendChild(modificationText);
 
-                    const removeButton = document.createElement("button");
-                    removeButton.className = "inline-delete";
-                    removeButton.innerText = "❌";
+                    const removeButton = createElement("button", "inline-delete", "❌");
                     removeButton.title = "Remove modification";
                     removeButton.onclick = function(event) {
                         instance.modifications = instance.modifications.filter(function(m) {
@@ -1470,15 +1460,11 @@
             }
 
             if (inDialog && !hasConditionsOrModifications) {
-                const placeholder = document.createElement("li");
-                placeholder.innerText = "No conditions or modifications, add below";
-                conditionsList.appendChild(placeholder);
+                conditionsList.appendChild(createElement("li", "placeholder", "No conditions or modifications, add below"));
             }
 
             if (!inDialog) {
-                const editConditions = document.createElement("button");
-                editConditions.className = "add-conditions-button"
-                editConditions.innerText = "Add Conditions";
+                const editConditions = createElement("button", "add-conditions-button", "Add Conditions");
                 editConditions.title = "Add conditions or modifications to this adversary instance";
                 editConditions.onclick = function(event) {
                     showConditionsEditor(instance);
@@ -1520,16 +1506,11 @@
                 tierTypeSuffix = ` (${tierTypeSuffixComponents.join(", ")})`;
             }
 
-            const tierAndType = document.createElement("p");
-            tierAndType.className = "tier";
-            tierAndType.innerText = `Tier ${adversary.tier} ${adversary.type}${tierTypeSuffix}`;
+            const tierAndType = createElement("p", "tier", `Tier ${adversary.tier} ${adversary.type}${tierTypeSuffix}`);
             adversaryDiv.appendChild(tierAndType);
 
             if (adversary.description) {
-                const description = document.createElement("p");
-                description.className =  "description";
-                description.innerText = adversary.description;
-                adversaryDiv.appendChild(description);
+                adversaryDiv.appendChild(createElement("p", "description", adversary.description));
             }
 
             if (adversary.motivesAndTactics) {
@@ -1550,7 +1531,7 @@
 
             const difficultyDiv = document.createElement("div");
             stats.appendChild(difficultyDiv);
-            difficultyDiv.appendChild(createElementWithText("span", "Difficulty:", "statLabel"));
+            difficultyDiv.appendChild(createElement("span", "statLabel", "Difficulty:"));
             difficultyDiv.appendChild(document.createTextNode(` ${adversary.difficulty} `));
 
             if (adversary.majorThreshold || adversary.severeThreshold) {
@@ -1558,9 +1539,9 @@
                 let severeThreshold = adversary.severeThreshold || "None";
                 thresholds = `${majorThreshold}/${severeThreshold}`;
 
-                difficultyDiv.appendChild(createElementWithText("span", "|", "divider"));
+                difficultyDiv.appendChild(createElement("span", "divider", "|"));
                 difficultyDiv.appendChild(document.createTextNode(" "));
-                difficultyDiv.appendChild(createElementWithText("span", "Thresholds:", "statLabel"));
+                difficultyDiv.appendChild(createElement("span", "statLabel", "Thresholds:"));
                 difficultyDiv.appendChild(document.createTextNode(` ${thresholds}`));
             }
 
@@ -1576,28 +1557,18 @@
             adversaryDiv.appendChild(stats);
 
             if (adversary.features && adversary.features.length > 0) {
-                const featuresContainer = document.createElement("details");
+                const featuresContainer = createElementWithInnerHTML("details", "featuresExpander", `<summary>FEATURES</summary>`);
                 featuresContainer.open = expandAllFeatures;
-                featuresContainer.className = "featuresExpander";
-                featuresContainer.innerHTML = `<summary>FEATURES</summary>`;
-                const featuresDiv = document.createElement("div");
-                featuresDiv.className = "features";
+                const featuresDiv = createElement("div", "features");
                 featuresContainer.appendChild(featuresDiv);
                 featuresContainer.addEventListener("toggle", handleFeaturesToggle);
 
                 for (let i = 0; i < adversary.features.length; i++) {
-                    const featureElement = document.createElement("p");
-                    featureElement.className = "feature";
+                    const featureElement = createElement("p", "feature");
                     featuresDiv.appendChild(featureElement);
 
-                    const label = document.createElement("span");
-                    label.className = "featureLabel";
-                    label.innerText = `${adversary.features[i].name}:`;
-                    featureElement.appendChild(label);
-
-                    const description = document.createElement("span");
-                    description.innerText = ` ${adversary.features[i].text}`;
-                    featureElement.appendChild(description);
+                    featureElement.appendChild(createElement("span", "featureLabel", `${adversary.features[i].name}:`));
+                    featureElement.appendChild(createElement("span", null, ` ${adversary.features[i].text}`));
                 }
 
                 adversaryDiv.appendChild(featuresContainer);
@@ -1606,8 +1577,7 @@
             for (let i = 0; i < adversary.instances?.length || 0; i++) {
                 const instance = adversary.instances[i];
 
-                const instanceDiv = document.createElement("div");
-                instanceDiv.className = "instance";
+                const instanceDiv = createElement("div", "instance");
                 instanceDiv.instance = instance;
                 adversaryDiv.appendChild(instanceDiv);
 
@@ -1621,36 +1591,26 @@
                 });
                 instanceDiv.appendChild(instanceName);
 
-                const hpDiv = document.createElement("div");
-                hpDiv.className = "slotInfo";
-                hpDiv.innerHTML = "HP:";
-                const hpSlotsDiv = document.createElement("div");
-                hpSlotsDiv.className = "slots";
+                const hpDiv = createElementWithInnerHTML("div", "slotInfo", "HP:");
+                const hpSlotsDiv = createElement("div", "slots");
                 updateResource(hpSlotsDiv, adversary, "hp", instance, "hpMarked");
                 hpDiv.appendChild(hpSlotsDiv);
                 instanceDiv.appendChild(hpDiv);
 
-                const stressDiv = document.createElement("div");
-                stressDiv.className = "slotInfo";
-                stressDiv.innerHTML = "Stress:";
-                const stressSlotsDiv = document.createElement("div");
-                stressSlotsDiv.className = "slots";
+                const stressDiv = createElement("div", "slotInfo", "Stress:");
+                const stressSlotsDiv = createElement("div", "slots");
                 updateResource(stressSlotsDiv, adversary, "stress", instance, "stressMarked");
                 stressDiv.appendChild(stressSlotsDiv);
                 instanceDiv.appendChild(stressDiv);
 
-                const conditionsDiv = document.createElement("div");
-                conditionsDiv.className = "conditions";
+                const conditionsDiv = createElement("div", "conditions");
                 instanceDiv.appendChild(conditionsDiv);
                 updateConditionsDisplay(conditionsDiv, instance, false);
 
-                const instanceTopActions = document.createElement("div");
-                instanceTopActions.className = "top-actions";
+                const instanceTopActions = createElement("div", "top-actions");
                 instanceDiv.appendChild(instanceTopActions);
 
-                const removeInstanceButton = document.createElement("button");
-                removeInstanceButton.className = "instance-action";
-                removeInstanceButton.innerText = "🗑️";
+                const removeInstanceButton = createElement("button", "instance-action", "🗑️");
                 removeInstanceButton.title = "Remove this instance of the adversary";
                 removeInstanceButton.onclick = function(event) {
                     event.target.closest(".instance").remove();
@@ -1802,10 +1762,9 @@
             encounterSelector.innerHTML = ""; // Clear any existing options
             for (let i = 0; i < state.encounters.length; i++) {
                 const encounter = state.encounters[i];
-                const option = document.createElement("option");
-                option.value = i;
                 // TODO: Validate various fields
-                option.innerText = `${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)`;
+                const option = createElement("option", null, `${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)`);
+                option.value = i;
                 encounterSelector.appendChild(option);
             }
 
@@ -1882,8 +1841,7 @@
             }
             encounterDiv.appendChild(adversariesDiv);
 
-            const addAdversaryButton = document.createElement("button");
-            addAdversaryButton.innerText = "Add Adversary";
+            const addAdversaryButton = createElement("button", null, "Add Adversary");
             addAdversaryButton.onclick = function() {
                 let selectedOption = srdSearch.value.trim();
                 if (!selectedOption) {
