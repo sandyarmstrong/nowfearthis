@@ -1253,10 +1253,10 @@
                 }
                 const encounter = state.encounters[selectedEncounterIndex];
                 // TODO: What if there is no encounter?
-                if (!encounter.adversaries) {
-                    encounter.adversaries = [];
+                if (!encounter.statBlocks) {
+                    encounter.statBlocks = [];
                 }
-                encounter.adversaries.push(adversaryCopy);
+                encounter.statBlocks.push(adversaryCopy);
                 addAdversary(
                     document.querySelector("#encounter .adversaries"),
                     encounter,
@@ -1632,7 +1632,7 @@
             const adversaryElement = createAdversaryElement(encounter, adversary);
 
             adversaryElement.addEventListener("adversaryRemoved", function(event) {
-                encounter.adversaries = encounter.adversaries.filter(function(a) {
+                encounter.statBlocks = encounter.statBlocks.filter(function(a) {
                     return a !== adversary;
                 });
                 container.removeChild(adversaryElement);
@@ -1642,10 +1642,10 @@
             adversaryElement.addEventListener("adversaryCopied", function(event) {
                 const newAdversary = JSON.parse(JSON.stringify(adversary));
                 newAdversary.name += " (copy)"; // TODO: Decide naming
-                if (!encounter.adversaries) {
-                    encounter.adversaries = [];
+                if (!encounter.statBlocks) {
+                    encounter.statBlocks = [];
                 }
-                encounter.adversaries.push(newAdversary);
+                encounter.statBlocks.push(newAdversary);
                 addAdversary(container, encounter, newAdversary);
                 saveState();
             });
@@ -1657,8 +1657,8 @@
                         return a.name === adversary.originalName;
                     });
                     newAdversary = JSON.parse(JSON.stringify(sourceAdversary));
-                } else if (adversary.source == "Custom" && state.custom && state.custom.adversaries) { // TODO: Case-insensive?
-                    const sourceAdversary = state.custom.adversaries.find(function(a) {
+                } else if (adversary.source == "Custom" && state.custom && state.custom.statBlocks) { // TODO: Case-insensive?
+                    const sourceAdversary = state.custom.statBlocks.find(function(a) {
                         return a.name === adversary.originalName;
                     });
                     newAdversary = JSON.parse(JSON.stringify(sourceAdversary));
@@ -1677,10 +1677,10 @@
                     ];
                 }
 
-                if (!encounter.adversaries) {
-                    encounter.adversaries = [];
+                if (!encounter.statBlocks) {
+                    encounter.statBlocks = [];
                 }
-                encounter.adversaries.push(newAdversary);
+                encounter.statBlocks.push(newAdversary);
                 addAdversary(container, encounter, newAdversary);
                 saveState();
             });
@@ -1692,10 +1692,10 @@
                 if (!state.custom) {
                     state.custom = {};
                 }
-                if (!state.custom.adversaries) {
-                    state.custom.adversaries = [];
+                if (!state.custom.statBlocks) {
+                    state.custom.statBlocks = [];
                 }
-                state.custom.adversaries.push(newCustomAdversary);
+                state.custom.statBlocks.push(newCustomAdversary);
                 saveState();
                 refreshDisplay(); // To add to search
             });
@@ -1707,10 +1707,10 @@
                 if (!state.custom) {
                     state.custom = {};
                 }
-                if (!state.custom.adversaries) {
-                    state.custom.adversaries = [];
+                if (!state.custom.statBlocks) {
+                    state.custom.statBlocks = [];
                 }
-                state.custom.adversaries = state.custom.adversaries.filter(function(a) {
+                state.custom.statBlocks = state.custom.statBlocks.filter(function(a) {
                     return a.name !== adversary.originalName;
                 });
                 adversary.source = "Orphaned";
@@ -1749,8 +1749,8 @@
         function calculateBattlePoints(encounter)
         {
             let currentBattlePoints = 0;
-            for (let j = 0; j < encounter.adversaries.length; j++) {
-                const adversary = encounter.adversaries[j];
+            for (let j = 0; j < encounter.statBlocks.length; j++) {
+                const adversary = encounter.statBlocks[j];
                 const adversaryPoints = adversary.category == "Adversary" ? getStatBlockBattlePoints(adversary.type, encounter.playerCount) : 0;
                 // TODO: Deal with tier differences
                 currentBattlePoints += adversaryPoints * (adversary.instances?.length || 0);
@@ -1801,15 +1801,15 @@
             // Add custom entries
             // TODO: Sort alpha by name, mixing sources (environments should also be mixed/sorted)
             // TODO: This is not encounter-specific data, should it not be refreshed here?
-            if (state.custom && state.custom.adversaries && state.custom.adversaries.length > 0) {
-                state.custom.adversaries.forEach(function(adversary) {
+            if (state.custom && state.custom.statBlocks && state.custom.statBlocks.length > 0) {
+                state.custom.statBlocks.forEach(function(adversary) {
                     addAdversaryToSearch(adversary);
                 });
             }
 
             // TODO: Validate various fields
-            if (!encounter.adversaries) {
-                encounter.adversaries = [];
+            if (!encounter.statBlocks) {
+                encounter.statBlocks = [];
             }
 
             const encounterBar = document.createElement("div");
@@ -1836,8 +1836,8 @@
 
             const adversariesDiv = document.createElement("div");
             adversariesDiv.className = "adversaries";
-            for (let j = 0; j < encounter.adversaries.length; j++) {
-                addAdversary(adversariesDiv, encounter, encounter.adversaries[j]);
+            for (let j = 0; j < encounter.statBlocks.length; j++) {
+                addAdversary(adversariesDiv, encounter, encounter.statBlocks[j]);
             }
             encounterDiv.appendChild(adversariesDiv);
 
@@ -1851,8 +1851,8 @@
                 let adversary = srdAdversaries.find(function(a) {
                     return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
                 });
-                if (!adversary && state.custom && state.custom.adversaries) {
-                    adversary = state.custom.adversaries.find(function(a) {
+                if (!adversary && state.custom && state.custom.statBlocks) {
+                    adversary = state.custom.statBlocks.find(function(a) {
                         return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base'}) === 0;
                     });
                 }
@@ -1872,10 +1872,10 @@
                         ];
                     }
 
-                    if (!encounter.adversaries) {
-                        encounter.adversaries = [];
+                    if (!encounter.statBlocks) {
+                        encounter.statBlocks = [];
                     }
-                    encounter.adversaries.push(adversary);
+                    encounter.statBlocks.push(adversary);
                     addAdversary(adversariesDiv, encounter, adversary);
                     saveState();
                 }
