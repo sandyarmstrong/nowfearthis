@@ -1221,6 +1221,7 @@
             if (state.encounters && selectedEncounterIndex < state.encounters.length) {
                 // Update the tier dropdown based on the current encounter
                 document.querySelector("#browsing-tier").value = state.encounters[selectedEncounterIndex].playerTier || "";
+                updateBrowsingTableFiltering();
             }
         }
 
