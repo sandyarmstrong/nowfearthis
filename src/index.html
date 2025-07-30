@@ -576,7 +576,7 @@
             <!-- TODO: Allow keyboard navigation of table and adding of adversaries directly from search input?-->
             <input id="browsing-search" type="text" placeholder="Search" />
             <select id="browsing-source">
-                <option>Any source</option>
+                <option value="">Any source</option>
                 <option>SRD</option>
                 <option>Custom</option>
             </select>
@@ -588,22 +588,31 @@
                 <option value="4">Tier 4</option>
             </select>
             <select id="browsing-category">
-                <option>Any category</option>
+                <option value="">Any category</option>
                 <option value="Adversary">Adversaries</option>
                 <option value="Environment">Environments</option>
             </select>
             <select id="browsing-type">
-                <option>Any type</option>
-                <option>Bruiser</option>
-                <option>Horde</option>
-                <option>Leader</option>
-                <option>Minion</option>
-                <option>Ranged</option>
-                <option>Skulk</option>
-                <option>Social</option>
-                <option>Solo</option>
-                <option>Standard</option>
-                <option>Support</option>
+                <option value="">Any type</option>
+                <!-- Hide group when specific categories selected? Would require resetting type if category changes, sometimes -->
+                <optgroup label="Adversaries">
+                    <option>Bruiser</option>
+                    <option>Horde</option>
+                    <option>Leader</option>
+                    <option>Minion</option>
+                    <option>Ranged</option>
+                    <option>Skulk</option>
+                    <option>Social</option>
+                    <option>Solo</option>
+                    <option>Standard</option>
+                    <option>Support</option>
+                </optgroup>
+                <optgroup label="Environments">
+                    <option>Event</option>
+                    <option>Exploration</option>
+                    <option>Social</option>
+                    <option>Traversal</option>
+                </optgroup>
             </select>
             <button id="browsing-reset-filters">Reset</button>
             <div class="results">
@@ -1082,8 +1091,10 @@
             }
 
             const adversaryName = adversary.name.toLowerCase();
+            // TODO: Include potentialAdversaries? But only if also shown in Description cell?
             const adversaryDescription = adversary.description.toLowerCase();
             const adversaryType = adversary.type.toLowerCase();
+            const adversaryCategory = adversary.category.toLowerCase();
 
             // All terms must match somewhere
             const terms = searchText.toLowerCase().split(/\s+/);
@@ -1093,7 +1104,8 @@
                 }
                 if (!(adversaryName.includes(term) ||
                     adversaryDescription.includes(term) ||
-                    adversaryType.includes(term))) {
+                    adversaryType.includes(term) ||
+                    adversaryCategory.includes(term))) {
                     return false;
                 }
             }
@@ -1110,17 +1122,17 @@
 
         function updateBrowsingTableFiltering() {
             const selectedSource = document.querySelector("#browsing-source").value;
-            const selectedTier = parseInt(document.querySelector("#browsing-tier").value) || "Any tier";
+            const selectedTier = parseInt(document.querySelector("#browsing-tier").value);
             const selectedCategory = document.querySelector("#browsing-category").value;
             const selectedType = document.querySelector("#browsing-type").value;
             const searchText = document.querySelector("#browsing-search").value;
 
             const rows = browsingTableBody.querySelectorAll("tr");
             rows.forEach(function(row) {
-                if ((selectedSource == "Any source" || row.adversary.source == selectedSource) &&
-                    (selectedTier == "Any tier" || row.adversary.tier == selectedTier) &&
-                    (selectedCategory == "Any category" || row.adversary.category == selectedCategory) &&
-                    (selectedType == "Any type" || row.adversary.type == selectedType) &&
+                if ((!selectedSource || row.adversary.source == selectedSource) &&
+                    (!selectedTier || row.adversary.tier == selectedTier) &&
+                    (!selectedCategory || row.adversary.category == selectedCategory) &&
+                    (!selectedType || row.adversary.type == selectedType) &&
                     (!searchText || adversaryMatchesSearch(row.adversary, searchText))) {
                     row.style.display = "";
                 } else {
@@ -1146,10 +1158,10 @@
         });
         document.querySelector("#browsing-reset-filters").addEventListener("click", function(event) {
             document.querySelector("#browsing-search").value = "";
-            document.querySelector("#browsing-source").value = "Any source";
+            document.querySelector("#browsing-source").value = "";
             document.querySelector("#browsing-tier").value = "";
-            document.querySelector("#browsing-category").value = "Any category";
-            document.querySelector("#browsing-type").value = "Any type";
+            document.querySelector("#browsing-category").value = "";
+            document.querySelector("#browsing-type").value = "";
             updateBrowsingTableFiltering();
         });
 
