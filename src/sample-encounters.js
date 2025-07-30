@@ -95,7 +95,7 @@ const sampleEncounters ={
                     ],
                     "instances": [
                         {
-                            "name": "Pirate Captain #1",
+                            "name": "Corrupted Captain #1",
                             "hpMarked": 4,
                             "stressMarked": 1
                         }
@@ -132,7 +132,7 @@ const sampleEncounters ={
                     ],
                     "instances": [
                         {
-                            "name": "Pirate Raiders #1",
+                            "name": "Corrupted Raiders #1",
                             "hpMarked": 3,
                             "stressMarked": 0
                         }
