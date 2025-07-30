@@ -694,14 +694,14 @@
         });
 
         function hideStatBlockEditor() {
-            const adversary = statBlockEditor.adversary;
-            statBlockEditor.adversary = undefined;
+            const statBlock = statBlockEditor.statBlock;
+            statBlockEditor.statBlock = undefined;
             statBlockEditor.classList.add("hidden");
             editorOverlay.classList.add("hidden");
-            if (adversary) {
+            if (statBlock) {
                 const statBlockElements = Array.from(document.querySelectorAll(".statBlock"));
                 for (let i = 0; i < statBlockElements.length; i++) {
-                    if (statBlockElements[i].adversary == adversary) {
+                    if (statBlockElements[i].statBlock == statBlock) {
                         statBlockElements[i].scrollIntoView({ behavior: "instant", block: "center" });
                     }
                 }
@@ -737,24 +737,24 @@
             refreshCounterPerHpDisplay();
         });
 
-        function showStatBlockEditor(adversary) {
+        function showStatBlockEditor(statBlock) {
             // Basics
-            statBlockEditor.querySelector("#statBlock-name").value = adversary.name;
-            statBlockEditor.querySelector("#statBlock-tier").value = adversary.tier;
-            statBlockEditor.querySelector("#statBlock-description").value = adversary.description || "";
-            statBlockEditor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
-            statBlockEditor.querySelector("#environment-impulses").value = adversary.impulses || "";
+            statBlockEditor.querySelector("#statBlock-name").value = statBlock.name;
+            statBlockEditor.querySelector("#statBlock-tier").value = statBlock.tier;
+            statBlockEditor.querySelector("#statBlock-description").value = statBlock.description || "";
+            statBlockEditor.querySelector("#adversary-motives").value = statBlock.motivesAndTactics || "";
+            statBlockEditor.querySelector("#environment-impulses").value = statBlock.impulses || "";
 
-            if (adversary.category == "Adversary") {
-                statBlockEditor.querySelector("#adversary-type").value = adversary.type;
+            if (statBlock.category == "Adversary") {
+                statBlockEditor.querySelector("#adversary-type").value = statBlock.type;
                 statBlockEditor.querySelectorAll(".statBlock-editor-adversary").forEach(function(element) {
                     element.classList.remove("hidden");
                 });
                 statBlockEditor.querySelectorAll(".statBlock-editor-environment").forEach(function(element) {
                     element.classList.add("hidden");
                 });
-            } else if (adversary.category == "Environment") {
-                statBlockEditor.querySelector("#environment-type").value = adversary.type;
+            } else if (statBlock.category == "Environment") {
+                statBlockEditor.querySelector("#environment-type").value = statBlock.type;
                 statBlockEditor.querySelectorAll(".statBlock-editor-adversary").forEach(function(element) {
                     element.classList.add("hidden");
                 });
@@ -763,30 +763,30 @@
                 });
             }
 
-            statBlockEditor.querySelector("#adversary-count-per-hp").value = adversary.countPerHp || 1;
+            statBlockEditor.querySelector("#adversary-count-per-hp").value = statBlock.countPerHp || 1;
             refreshCounterPerHpDisplay();
 
             // Stats
-            statBlockEditor.querySelector("#statBlock-difficulty").value = adversary.difficulty;
-            statBlockEditor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
-            statBlockEditor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
-            statBlockEditor.querySelector("#adversary-hp").value = adversary.hp;
-            statBlockEditor.querySelector("#adversary-stress").value = adversary.stress;
-            statBlockEditor.querySelector("#adversary-experience").value = adversary.experience || "";
+            statBlockEditor.querySelector("#statBlock-difficulty").value = statBlock.difficulty;
+            statBlockEditor.querySelector("#adversary-major-threshold").value = statBlock.majorThreshold;
+            statBlockEditor.querySelector("#adversary-severe-threshold").value = statBlock.severeThreshold;
+            statBlockEditor.querySelector("#adversary-hp").value = statBlock.hp;
+            statBlockEditor.querySelector("#adversary-stress").value = statBlock.stress;
+            statBlockEditor.querySelector("#adversary-experience").value = statBlock.experience || "";
             statBlockEditor.querySelector("#environment-potential-adversaries").value = adversary.potentialAdversaries || "";
 
             // Attack
-            statBlockEditor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || "";
-            statBlockEditor.querySelector("#adversary-attack-description").value = adversary.attackDescription || "";
-            statBlockEditor.querySelector("#adversary-attack-range").value = adversary.attackRange || ""; // TODO: Case mangling as needed
-            statBlockEditor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
+            statBlockEditor.querySelector("#adversary-attack-modifier").value = statBlock.attackModifier || "";
+            statBlockEditor.querySelector("#adversary-attack-description").value = statBlock.attackDescription || "";
+            statBlockEditor.querySelector("#adversary-attack-range").value = statBlock.attackRange || ""; // TODO: Case mangling as needed
+            statBlockEditor.querySelector("#adversary-attack-damage").value = statBlock.attackDamage || "";
 
             // Features
             const featuresContainer = statBlockEditor.querySelector("#statBlock-features");
             featuresContainer.innerHTML = ""; // Clear any existing children
-            if (adversary.features && adversary.features.length > 0) {
-                for (let i = 0; i < adversary.features.length; i++) {
-                    const feature = adversary.features[i];
+            if (statBlock.features && statBlock.features.length > 0) {
+                for (let i = 0; i < statBlock.features.length; i++) {
+                    const feature = statBlock.features[i];
                     const featureElement = createFeatureEditorElement(feature, i);
                     featuresContainer.appendChild(featureElement);
                 }
@@ -794,7 +794,7 @@
 
             editorOverlay.classList.remove("hidden");
             statBlockEditor.classList.remove("hidden");
-            statBlockEditor.adversary = adversary;
+            statBlockEditor.statBlock = statBlock;
             statBlockEditor.querySelector("#statBlock-name").select();
             window.scrollTo(0, 0);
         }
@@ -813,51 +813,51 @@
         document.querySelector("#statBlock-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent page refresh
 
-            const adversary = statBlockEditor.adversary;
-            if (adversary) {
+            const statBlock = statBlockEditor.statBlock;
+            if (statBlock) {
                 // TODO: Don't set optional fields if empty?
 
                 // Basics
-                adversary.name = statBlockEditor.querySelector("#statBlock-name").value.trim();
-                adversary.tier = parseInt(statBlockEditor.querySelector("#statBlock-tier").value);
-                adversary.description = statBlockEditor.querySelector("#statBlock-description").value.trim();
-                adversary.difficulty = parseInt(statBlockEditor.querySelector("#statBlock-difficulty").value);
+                statBlock.name = statBlockEditor.querySelector("#statBlock-name").value.trim();
+                statBlock.tier = parseInt(statBlockEditor.querySelector("#statBlock-tier").value);
+                statBlock.description = statBlockEditor.querySelector("#statBlock-description").value.trim();
+                statBlock.difficulty = parseInt(statBlockEditor.querySelector("#statBlock-difficulty").value);
 
-                if (adversary.category == "Adversary") {
-                    adversary.countPerHp = parseInt(statBlockEditor.querySelector("#adversary-count-per-hp").value);
-                    adversary.type = statBlockEditor.querySelector("#adversary-type").value;
-                    adversary.motivesAndTactics = statBlockEditor.querySelector("#adversary-motives").value.trim();
+                if (statBlock.category == "Adversary") {
+                    statBlock.countPerHp = parseInt(statBlockEditor.querySelector("#adversary-count-per-hp").value);
+                    statBlock.type = statBlockEditor.querySelector("#adversary-type").value;
+                    statBlock.motivesAndTactics = statBlockEditor.querySelector("#adversary-motives").value.trim();
 
                     // Stats
-                    adversary.majorThreshold = parseInt(statBlockEditor.querySelector("#adversary-major-threshold").value);
-                    adversary.severeThreshold = parseInt(statBlockEditor.querySelector("#adversary-severe-threshold").value);
-                    adversary.hp = parseInt(statBlockEditor.querySelector("#adversary-hp").value);
-                    if (adversary.instances) {
-                        adversary.instances.forEach(function(instance) {
-                            instance.hpMarked = Math.min(instance.hpMarked, adversary.hp);
+                    statBlock.majorThreshold = parseInt(statBlockEditor.querySelector("#adversary-major-threshold").value);
+                    statBlock.severeThreshold = parseInt(statBlockEditor.querySelector("#adversary-severe-threshold").value);
+                    statBlock.hp = parseInt(statBlockEditor.querySelector("#adversary-hp").value);
+                    if (statBlock.instances) {
+                        statBlock.instances.forEach(function(instance) {
+                            instance.hpMarked = Math.min(instance.hpMarked, statBlock.hp);
                         });
                     }
-                    adversary.stress = parseInt(statBlockEditor.querySelector("#adversary-stress").value);
-                    if (adversary.instances) {
-                        adversary.instances.forEach(function(instance) {
-                            instance.stressMarked = Math.min(instance.stressMarked, adversary.stress);
+                    statBlock.stress = parseInt(statBlockEditor.querySelector("#adversary-stress").value);
+                    if (statBlock.instances) {
+                        statBlock.instances.forEach(function(instance) {
+                            instance.stressMarked = Math.min(instance.stressMarked, statBlock.stress);
                         });
                     }
-                    adversary.experience = statBlockEditor.querySelector("#adversary-experience").value.trim();
+                    statBlock.experience = statBlockEditor.querySelector("#adversary-experience").value.trim();
 
                     // Attack
-                    adversary.attackModifier = statBlockEditor.querySelector("#adversary-attack-modifier").value.trim();
-                    adversary.attackDescription = statBlockEditor.querySelector("#adversary-attack-description").value.trim();
-                    adversary.attackRange = statBlockEditor.querySelector("#adversary-attack-range").value;
-                    adversary.attackDamage = statBlockEditor.querySelector("#adversary-attack-damage").value.trim();
-                } else if (adversary.category == "Environment") {
-                    adversary.type = statBlockEditor.querySelector("#environment-type").value;
-                    adversary.impulses = statBlockEditor.querySelector("#environment-impulses").value;
-                    adversary.potentialAdversaries = statBlockEditor.querySelector("#environment-potential-adversaries").value;
+                    statBlock.attackModifier = statBlockEditor.querySelector("#adversary-attack-modifier").value.trim();
+                    statBlock.attackDescription = statBlockEditor.querySelector("#adversary-attack-description").value.trim();
+                    statBlock.attackRange = statBlockEditor.querySelector("#adversary-attack-range").value;
+                    statBlock.attackDamage = statBlockEditor.querySelector("#adversary-attack-damage").value.trim();
+                } else if (statBlock.category == "Environment") {
+                    statBlock.type = statBlockEditor.querySelector("#environment-type").value;
+                    statBlock.impulses = statBlockEditor.querySelector("#environment-impulses").value;
+                    statBlock.potentialAdversaries = statBlockEditor.querySelector("#environment-potential-adversaries").value;
                 }
 
                 // Features
-                adversary.features = [];
+                statBlock.features = [];
                 const featureElements = statBlockEditor.querySelectorAll("#statBlock-features .feature");
                 featureElements.forEach(function(featureElement) {
                     const feature = {
@@ -865,7 +865,7 @@
                         text: featureElement.querySelector(".statBlock-feature-text").value.trim()
                     };
                     if (feature.name || feature.text) { // TODO: Require both?
-                        adversary.features.push(feature);
+                        statBlock.features.push(feature);
                     }
                 });
             }
@@ -1071,7 +1071,7 @@
             updateEditorBattlePointsRecommendation();
         });
 
-        // TODO: This is annoying if you are scrolled down, and every adversary above changes expansion,
+        // TODO: This is annoying if you are scrolled down, and every statBlock above changes expansion,
         //       messing with your scroll position. Fix scroll position or just don't do this.
         function handleFeaturesToggle(event) {
             const opened = event.target.open;
@@ -1085,16 +1085,16 @@
             }
         }
 
-        function adversaryMatchesSearch(adversary, searchText) {
+        function adversaryMatchesSearch(statBlock, searchText) {
             if (!searchText) {
                 return true;
             }
 
-            const adversaryName = adversary.name.toLowerCase();
+            const adversaryName = statBlock.name.toLowerCase();
             // TODO: Include potentialAdversaries? But only if also shown in Description cell?
-            const adversaryDescription = adversary.description.toLowerCase();
-            const adversaryType = adversary.type.toLowerCase();
-            const adversaryCategory = adversary.category.toLowerCase();
+            const adversaryDescription = statBlock.description.toLowerCase();
+            const adversaryType = statBlock.type.toLowerCase();
+            const adversaryCategory = statBlock.category.toLowerCase();
 
             // All terms must match somewhere
             const terms = searchText.toLowerCase().split(/\s+/);
@@ -1129,11 +1129,11 @@
 
             const rows = browsingTableBody.querySelectorAll("tr");
             rows.forEach(function(row) {
-                if ((!selectedSource || row.adversary.source == selectedSource) &&
-                    (!selectedTier || row.adversary.tier == selectedTier) &&
-                    (!selectedCategory || row.adversary.category == selectedCategory) &&
-                    (!selectedType || row.adversary.type == selectedType) &&
-                    (!searchText || adversaryMatchesSearch(row.adversary, searchText))) {
+                if ((!selectedSource || row.statBlock.source == selectedSource) &&
+                    (!selectedTier || row.statBlock.tier == selectedTier) &&
+                    (!selectedCategory || row.statBlock.category == selectedCategory) &&
+                    (!selectedType || row.statBlock.type == selectedType) &&
+                    (!searchText || adversaryMatchesSearch(row.statBlock, searchText))) {
                     row.style.display = "";
                 } else {
                     row.style.display = "none";
@@ -1238,22 +1238,22 @@
             }
         }
 
-        function addAdversaryToSearch(adversary) {
+        function addAdversaryToSearch(statBlock) {
             // Datalist for basic search
             const option = document.createElement("option");
-            option.adversary = adversary;
-            option.value = adversary.name;
+            option.statBlock = statBlock;
+            option.value = statBlock.name;
             adversaryDatalist.appendChild(option);
 
             // Table for browsing
             const tr = document.createElement("tr");
-            tr.adversary = adversary;
+            tr.statBlock = statBlock;
             browsingTableBody.appendChild(tr);
 
             const addButtonTD = createElement("td", "nowrap");
             const addButton = createElement("button", null, "➕ Add");
             addButton.addEventListener("click", function(event) {
-                const adversaryCopy = JSON.parse(JSON.stringify(tr.adversary));
+                const adversaryCopy = JSON.parse(JSON.stringify(tr.statBlock));
                 if (adversaryCopy.category == "Adversary" && (!adversaryCopy.instances || adversaryCopy.instances.length == 0)) {
                     adversaryCopy.instances = [
                         {
@@ -1269,7 +1269,7 @@
                     encounter.statBlocks = [];
                 }
                 encounter.statBlocks.push(adversaryCopy);
-                addAdversary(
+                addStatBlock(
                     document.querySelector("#encounter .adversaries"),
                     encounter,
                     adversaryCopy,
@@ -1279,17 +1279,17 @@
             addButtonTD.appendChild(addButton);
             tr.appendChild(addButtonTD);
 
-            const nameTD = createElement("td", null, adversary.name);
+            const nameTD = createElement("td", null, statBlock.name);
             tr.appendChild(nameTD);
 
             // TODO: Could add pts, but we'd have to recalc when player count changes
             // const encounter = state.encounters[selectedEncounterIndex];
             // const battlePoints = getStatBlockBattlePoints(adversary.type, encounter?.playerCount ?? 1);
             // typeTD.innerText = `${adversary.type} (${battlePoints} pts)`;
-            const typeTD = createElement("td", "nowrap", adversary.type);
+            const typeTD = createElement("td", "nowrap", statBlock.type);
             tr.appendChild(typeTD);
 
-            const descriptionTD = createElement("td", null, adversary.description);
+            const descriptionTD = createElement("td", null, statBlock.description);
             tr.appendChild(descriptionTD);
         }
 
@@ -1325,11 +1325,11 @@
             container.replaceChildren(...elements);
         }
 
-        function setupAdversaryActionButton(statBlockElement, adversary) {
+        function setupAdversaryActionButton(statBlockElement, statBlock) {
             const actionsMenu = createElement("menu", "actions-menu");
 
             const copyAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Duplicate</button>`);
-            copyAction.title = "Copy this adversary, including all changed state";
+            copyAction.title = "Copy this stat block, including all changed state";
             copyAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockCopiedEvent);
                 actionsMenu.remove();
@@ -1337,7 +1337,7 @@
             actionsMenu.appendChild(copyAction);
 
             const copyFromSourceAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Copy From Source</button>`);
-            copyFromSourceAction.title = "Copy this adversary from the source, ignoring all changes";
+            copyFromSourceAction.title = "Copy this stat block from the source, ignoring all changes";
             copyFromSourceAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockCopiedFromSourceEvent);
                 actionsMenu.remove();
@@ -1346,7 +1346,7 @@
 
             const saveCustomAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Save to Custom Adversaries</button>`);
             // TODO: Disable when no changes have been made?
-            saveCustomAction.title = "Save this adversary to your custom adversaries for later use";
+            saveCustomAction.title = "Save this stat block to your custom adversaries for later use";
             saveCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockSavedToCustomEvent);
                 actionsMenu.remove();
@@ -1354,7 +1354,7 @@
             actionsMenu.appendChild(saveCustomAction);
 
             const deleteCustomAction = document.createElement("li");
-            deleteCustomAction.innerHTML = `<button class="menu-action" ${adversary.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Adversaries</button>`;
+            deleteCustomAction.innerHTML = `<button class="menu-action" ${statBlock.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Adversaries</button>`;
             deleteCustomAction.title = "Delete from your custom adversaries";
             deleteCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockDeletedFromCustomEvent);
@@ -1366,21 +1366,21 @@
             topActions.className = "top-actions";
             statBlockElement.appendChild(topActions);
 
-            if (adversary.category == "Adversary") {
+            if (statBlock.category == "Adversary") {
                 const addInstanceButton = createElement("button", null, "➕");
                 addInstanceButton.title = "Add another instance of this adversary";
                 addInstanceButton.onclick = function() {
                     const newInstance = {
                         // TODO: Review naming, this doesn't work well if you add several, delete several, add again.
-                        //       May need to parse the names to find the largest, like we do for adversary display names.
-                        name: adversary.name + " #" + (adversary.instances.length + 1),
+                        //       May need to parse the names to find the largest, like we do for statBlock display names.
+                        name: statBlock.name + " #" + (statBlock.instances.length + 1),
                         hpMarked: 0,
                         stressMarked: 0
                     };
-                    if (!adversary.instances) {
-                        adversary.instances = [];
+                    if (!statBlock.instances) {
+                        statBlock.instances = [];
                     }
-                    adversary.instances.push(newInstance);
+                    statBlock.instances.push(newInstance);
                     saveState();
                     refreshDisplay();
                 };
@@ -1388,14 +1388,14 @@
             }
 
             const editButton = createElement("button", null, "✏️");
-            editButton.title = "Edit this adversary";
+            editButton.title = "Edit this stat block";
             editButton.onclick = function() {
-                showStatBlockEditor(adversary);
+                showStatBlockEditor(statBlock);
             };
             topActions.appendChild(editButton);
 
             const deleteButton = createElement("button", null, "🗑️");
-            deleteButton.title = "Remove this adversary from the encounter";
+            deleteButton.title = "Remove this stat block from the encounter";
             deleteButton.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockRemovedEvent);
             };
@@ -1485,28 +1485,28 @@
             }
         }
 
-        function createStatBlockElement(encounter, adversary) {
+        function createStatBlockElement(encounter, statBlock) {
             // TODO: Allow reordering?
 
             let warning = "";
-            if (adversary.tier > encounter.playerTier) {
+            if (statBlock.tier > encounter.playerTier) {
                 warning += "⚠️ above player tier";
-            } else if (adversary.tier < encounter.playerTier) {
+            } else if (statBlock.tier < encounter.playerTier) {
                 warning += "⚠️ below player tier"
             }
 
             const adversaryDiv = document.createElement("div");
             adversaryDiv.className = "statBlock";
-            adversaryDiv.adversary = adversary;
-            adversaryDiv.innerHTML = `<h3 title="Source: ${adversary.originalName}, ${adversary.source} ">${adversary.name}</h3>`;
+            adversaryDiv.statBlock = statBlock;
+            adversaryDiv.innerHTML = `<h3 title="Source: ${statBlock.originalName}, ${statBlock.source} ">${statBlock.name}</h3>`;
 
             let tierTypeSuffix = "";
             let tierTypeSuffixComponents = [];
-            if (adversary.countPerHp > 1 || adversary.type === "Horde") {
-                tierTypeSuffixComponents.push(`${adversary.countPerHp}/HP`);
+            if (statBlock.countPerHp > 1 || statBlock.type === "Horde") {
+                tierTypeSuffixComponents.push(`${statBlock.countPerHp}/HP`);
             }
-            if (adversary.category === "Adversary") {
-                const battlePoints = getStatBlockBattlePoints(adversary.type, encounter.playerCount) * (adversary.instances?.length || 0);
+            if (statBlock.category === "Adversary") {
+                const battlePoints = getStatBlockBattlePoints(statBlock.type, encounter.playerCount) * (statBlock.instances?.length || 0);
                 tierTypeSuffixComponents.push(`${battlePoints} pts`);
             }
             if (warning) {
@@ -1516,23 +1516,23 @@
                 tierTypeSuffix = ` (${tierTypeSuffixComponents.join(", ")})`;
             }
 
-            const tierAndType = createElement("p", "tier", `Tier ${adversary.tier} ${adversary.type}${tierTypeSuffix}`);
+            const tierAndType = createElement("p", "tier", `Tier ${statBlock.tier} ${statBlock.type}${tierTypeSuffix}`);
             adversaryDiv.appendChild(tierAndType);
 
-            if (adversary.description) {
-                adversaryDiv.appendChild(createElement("p", "description", adversary.description));
+            if (statBlock.description) {
+                adversaryDiv.appendChild(createElement("p", "description", statBlock.description));
             }
 
-            if (adversary.motivesAndTactics) {
+            if (statBlock.motivesAndTactics) {
                 const motives = document.createElement("p");
                 motives.className =  "motives";
-                motives.innerHTML = `<span class="motivesLabel">Motives & Tactics:</span> ${adversary.motivesAndTactics}`;
+                motives.innerHTML = `<span class="motivesLabel">Motives & Tactics:</span> ${statBlock.motivesAndTactics}`;
                 adversaryDiv.appendChild(motives);
             }
-            if (adversary.impulses) {
+            if (statBlock.impulses) {
                 const impulses = document.createElement("p");
                 impulses.className =  "motives";
-                impulses.innerHTML = `<span class="motivesLabel">Impulses:</span> ${adversary.impulses}`;
+                impulses.innerHTML = `<span class="motivesLabel">Impulses:</span> ${statBlock.impulses}`;
                 adversaryDiv.appendChild(impulses);
             }
 
@@ -1542,11 +1542,11 @@
             const difficultyDiv = document.createElement("div");
             stats.appendChild(difficultyDiv);
             difficultyDiv.appendChild(createElement("span", "statLabel", "Difficulty:"));
-            difficultyDiv.appendChild(document.createTextNode(` ${adversary.difficulty} `));
+            difficultyDiv.appendChild(document.createTextNode(` ${statBlock.difficulty} `));
 
-            if (adversary.majorThreshold || adversary.severeThreshold) {
-                let majorThreshold = adversary.majorThreshold || "None";
-                let severeThreshold = adversary.severeThreshold || "None";
+            if (statBlock.majorThreshold || statBlock.severeThreshold) {
+                let majorThreshold = statBlock.majorThreshold || "None";
+                let severeThreshold = statBlock.severeThreshold || "None";
                 thresholds = `${majorThreshold}/${severeThreshold}`;
 
                 difficultyDiv.appendChild(createElement("span", "divider", "|"));
@@ -1555,37 +1555,37 @@
                 difficultyDiv.appendChild(document.createTextNode(` ${thresholds}`));
             }
 
-            if (adversary.attackDescription) {
-                stats.innerHTML += `<div><span class="statLabel">ATK:</span> ${adversary.attackModifier} <span class="divider">|</span> <span class="statLabel">${adversary.attackDescription}:</span> ${adversary.attackRange} <span class="divider">|</span> ${adversary.attackDamage}</div>`;
+            if (statBlock.attackDescription) {
+                stats.innerHTML += `<div><span class="statLabel">ATK:</span> ${statBlock.attackModifier} <span class="divider">|</span> <span class="statLabel">${statBlock.attackDescription}:</span> ${statBlock.attackRange} <span class="divider">|</span> ${statBlock.attackDamage}</div>`;
             }
-            if (adversary.experience) {
-                stats.innerHTML += `<div class="experiences"><span class="statLabel">Experience:</span> ${adversary.experience}</div>`;
+            if (statBlock.experience) {
+                stats.innerHTML += `<div class="experiences"><span class="statLabel">Experience:</span> ${statBlock.experience}</div>`;
             }
-            if (adversary.potentialAdversaries) {
-                stats.innerHTML += `<div><span class="statLabel">Potential Adversaries:</span> ${adversary.potentialAdversaries}</div>`;
+            if (statBlock.potentialAdversaries) {
+                stats.innerHTML += `<div><span class="statLabel">Potential Adversaries:</span> ${statBlock.potentialAdversaries}</div>`;
             }
             adversaryDiv.appendChild(stats);
 
-            if (adversary.features && adversary.features.length > 0) {
+            if (statBlock.features && statBlock.features.length > 0) {
                 const featuresContainer = createElementWithInnerHTML("details", "featuresExpander", `<summary>FEATURES</summary>`);
                 featuresContainer.open = expandAllFeatures;
                 const featuresDiv = createElement("div", "features");
                 featuresContainer.appendChild(featuresDiv);
                 featuresContainer.addEventListener("toggle", handleFeaturesToggle);
 
-                for (let i = 0; i < adversary.features.length; i++) {
+                for (let i = 0; i < statBlock.features.length; i++) {
                     const featureElement = createElement("p", "feature");
                     featuresDiv.appendChild(featureElement);
 
-                    featureElement.appendChild(createElement("span", "featureLabel", `${adversary.features[i].name}:`));
-                    featureElement.appendChild(createElement("span", null, ` ${adversary.features[i].text}`));
+                    featureElement.appendChild(createElement("span", "featureLabel", `${statBlock.features[i].name}:`));
+                    featureElement.appendChild(createElement("span", null, ` ${statBlock.features[i].text}`));
                 }
 
                 adversaryDiv.appendChild(featuresContainer);
             }
 
-            for (let i = 0; i < adversary.instances?.length || 0; i++) {
-                const instance = adversary.instances[i];
+            for (let i = 0; i < statBlock.instances?.length || 0; i++) {
+                const instance = statBlock.instances[i];
 
                 const instanceDiv = createElement("div", "instance");
                 instanceDiv.instance = instance;
@@ -1603,13 +1603,13 @@
 
                 const hpDiv = createElementWithInnerHTML("div", "slotInfo", "HP:");
                 const hpSlotsDiv = createElement("div", "slots");
-                updateResource(hpSlotsDiv, adversary, "hp", instance, "hpMarked");
+                updateResource(hpSlotsDiv, statBlock, "hp", instance, "hpMarked");
                 hpDiv.appendChild(hpSlotsDiv);
                 instanceDiv.appendChild(hpDiv);
 
                 const stressDiv = createElement("div", "slotInfo", "Stress:");
                 const stressSlotsDiv = createElement("div", "slots");
-                updateResource(stressSlotsDiv, adversary, "stress", instance, "stressMarked");
+                updateResource(stressSlotsDiv, statBlock, "stress", instance, "stressMarked");
                 stressDiv.appendChild(stressSlotsDiv);
                 instanceDiv.appendChild(stressDiv);
 
@@ -1624,7 +1624,7 @@
                 removeInstanceButton.title = "Remove this instance of the adversary";
                 removeInstanceButton.onclick = function(event) {
                     event.target.closest(".instance").remove();
-                    adversary.instances = adversary.instances.filter(function(i) {
+                    statBlock.instances = statBlock.instances.filter(function(i) {
                         return i !== instance;
                     });
                     saveState();
@@ -1633,43 +1633,43 @@
                 instanceTopActions.appendChild(removeInstanceButton);
             }
 
-            setupAdversaryActionButton(adversaryDiv, adversary);
+            setupAdversaryActionButton(adversaryDiv, statBlock);
 
             return adversaryDiv;
         }
 
-        function addAdversary(container, encounter, adversary) {
-            const statBlockElement = createStatBlockElement(encounter, adversary);
+        function addStatBlock(container, encounter, statBlock) {
+            const statBlockElement = createStatBlockElement(encounter, statBlock);
 
             statBlockElement.addEventListener("statBlockRemoved", function(event) {
                 encounter.statBlocks = encounter.statBlocks.filter(function(a) {
-                    return a !== adversary;
+                    return a !== statBlock;
                 });
                 container.removeChild(statBlockElement);
                 refreshBattlePoints();
                 saveState();
             });
             statBlockElement.addEventListener("statBlockCopied", function(event) {
-                const newAdversary = JSON.parse(JSON.stringify(adversary));
+                const newAdversary = JSON.parse(JSON.stringify(statBlock));
                 newAdversary.name += " (copy)"; // TODO: Decide naming
                 if (!encounter.statBlocks) {
                     encounter.statBlocks = [];
                 }
                 encounter.statBlocks.push(newAdversary);
-                addAdversary(container, encounter, newAdversary);
+                addStatBlock(container, encounter, newAdversary);
                 saveState();
             });
             statBlockElement.addEventListener("statBlockCopiedFromSource", function(event) {
                 // TODO: This is mostly a dupe of addAdversaryButton.onclick
                 let newAdversary = null;
-                if (adversary.source == "SRD") {
+                if (statBlock.source == "SRD") {
                     const sourceAdversary = srdAdversaries.find(function(a) {
-                        return a.name === adversary.originalName;
+                        return a.name === statBlock.originalName;
                     });
                     newAdversary = JSON.parse(JSON.stringify(sourceAdversary));
-                } else if (adversary.source == "Custom" && state.custom && state.custom.statBlocks) { // TODO: Case-insensive?
+                } else if (statBlock.source == "Custom" && state.custom && state.custom.statBlocks) { // TODO: Case-insensive?
                     const sourceAdversary = state.custom.statBlocks.find(function(a) {
-                        return a.name === adversary.originalName;
+                        return a.name === statBlock.originalName;
                     });
                     newAdversary = JSON.parse(JSON.stringify(sourceAdversary));
                 } else {
@@ -1691,13 +1691,13 @@
                     encounter.statBlocks = [];
                 }
                 encounter.statBlocks.push(newAdversary);
-                addAdversary(container, encounter, newAdversary);
+                addStatBlock(container, encounter, newAdversary);
                 saveState();
             });
             statBlockElement.addEventListener("statBlockSavedToCustom", function(event) {
-                adversary.source = "Custom";
-                adversary.originalName = adversary.name; // TODO: Enforce unique names (easy here, hard if we offer import)
-                const newCustomAdversary = JSON.parse(JSON.stringify(adversary));
+                statBlock.source = "Custom";
+                statBlock.originalName = statBlock.name; // TODO: Enforce unique names (easy here, hard if we offer import)
+                const newCustomAdversary = JSON.parse(JSON.stringify(statBlock));
                 delete newCustomAdversary.instances;
                 if (!state.custom) {
                     state.custom = {};
@@ -1710,8 +1710,8 @@
                 refreshDisplay(); // To add to search
             });
             statBlockElement.addEventListener("statBlockDeletedFromCustom", function(event) {
-                if (adversary.source !== "Custom") {
-                    console.warn("Trying to delete a non-custom adversary from custom list");
+                if (statBlock.source !== "Custom") {
+                    console.warn("Trying to delete a non-custom statBlock from custom list");
                     return;
                 }
                 if (!state.custom) {
@@ -1721,9 +1721,9 @@
                     state.custom.statBlocks = [];
                 }
                 state.custom.statBlocks = state.custom.statBlocks.filter(function(a) {
-                    return a.name !== adversary.originalName;
+                    return a.name !== statBlock.originalName;
                 });
-                adversary.source = "Orphaned";
+                statBlock.source = "Orphaned";
                 saveState();
                 refreshDisplay();
             });
@@ -1760,10 +1760,10 @@
         {
             let currentBattlePoints = 0;
             for (let j = 0; j < encounter.statBlocks.length; j++) {
-                const adversary = encounter.statBlocks[j];
-                const adversaryPoints = adversary.category == "Adversary" ? getStatBlockBattlePoints(adversary.type, encounter.playerCount) : 0;
+                const statBlock = encounter.statBlocks[j];
+                const adversaryPoints = statBlock.category == "Adversary" ? getStatBlockBattlePoints(statBlock.type, encounter.playerCount) : 0;
                 // TODO: Deal with tier differences
-                currentBattlePoints += adversaryPoints * (adversary.instances?.length || 0);
+                currentBattlePoints += adversaryPoints * (statBlock.instances?.length || 0);
             }
             return currentBattlePoints;
         }
@@ -1797,13 +1797,13 @@
             // Clear custom entries from search
             for (let i = adversaryDatalist.children.length - 1; i >= 0; i--) {
                 const option = adversaryDatalist.children[i];
-                if (option.adversary.source !== "SRD") {
+                if (option.statBlock.source !== "SRD") {
                     option.remove();
                 }
             }
             for (let i = browsingTableBody.children.length - 1; i >= 0; i--) {
                 const row = browsingTableBody.children[i];
-                if (row.adversary.source !== "SRD") {
+                if (row.statBlock.source !== "SRD") {
                     row.remove();
                 }
             }
@@ -1812,8 +1812,8 @@
             // TODO: Sort alpha by name, mixing sources (environments should also be mixed/sorted)
             // TODO: This is not encounter-specific data, should it not be refreshed here?
             if (state.custom && state.custom.statBlocks && state.custom.statBlocks.length > 0) {
-                state.custom.statBlocks.forEach(function(adversary) {
-                    addAdversaryToSearch(adversary);
+                state.custom.statBlocks.forEach(function(statBlock) {
+                    addAdversaryToSearch(statBlock);
                 });
             }
 
@@ -1829,7 +1829,7 @@
             const addAdversaryDiv = document.createElement("div");
             const srdSearch = document.createElement("input");
             srdSearch.type = "search";
-            srdSearch.placeholder = "Search Adversaries";
+            srdSearch.placeholder = "Search Stat Blocks";
             srdSearch.setAttribute("list", "searchable-adversaries");
             addAdversaryDiv.appendChild(srdSearch);
             encounterBar.appendChild(addAdversaryDiv);
@@ -1847,35 +1847,35 @@
             const adversariesDiv = document.createElement("div");
             adversariesDiv.className = "adversaries";
             for (let j = 0; j < encounter.statBlocks.length; j++) {
-                addAdversary(adversariesDiv, encounter, encounter.statBlocks[j]);
+                addStatBlock(adversariesDiv, encounter, encounter.statBlocks[j]);
             }
             encounterDiv.appendChild(adversariesDiv);
 
-            const addAdversaryButton = createElement("button", null, "Add Adversary");
+            const addAdversaryButton = createElement("button", null, "Add Stat Block");
             addAdversaryButton.onclick = function() {
                 let selectedOption = srdSearch.value.trim();
                 if (!selectedOption) {
                     // TODO: Or some "custom" type?
                     selectedOption = "Jagged Knife Bandit";
                 }
-                let adversary = srdAdversaries.find(function(a) {
+                let statBlock = srdAdversaries.find(function(a) {
                     return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
                 });
-                if (!adversary && state.custom && state.custom.statBlocks) {
-                    adversary = state.custom.statBlocks.find(function(a) {
+                if (!statBlock && state.custom && state.custom.statBlocks) {
+                    statBlock = state.custom.statBlocks.find(function(a) {
                         return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base'}) === 0;
                     });
                 }
-                if (adversary) {
-                    adversary = JSON.parse(JSON.stringify(adversary));
+                if (statBlock) {
+                    statBlock = JSON.parse(JSON.stringify(statBlock));
                 }
                 // TODO: Else, custom with given name?
 
-                if (adversary) {
-                    if (adversary.category == "Adversary" && !adversary.instances || adversary.instances.length == 0) {
-                        adversary.instances = [
+                if (statBlock) {
+                    if (statBlock.category == "Adversary" && !statBlock.instances || statBlock.instances.length == 0) {
+                        statBlock.instances = [
                             {
-                                name: adversary.name + " #1",
+                                name: statBlock.name + " #1",
                                 hpMarked: 0,
                                 stressMarked: 0
                             }
@@ -1885,8 +1885,8 @@
                     if (!encounter.statBlocks) {
                         encounter.statBlocks = [];
                     }
-                    encounter.statBlocks.push(adversary);
-                    addAdversary(adversariesDiv, encounter, adversary);
+                    encounter.statBlocks.push(statBlock);
+                    addStatBlock(adversariesDiv, encounter, statBlock);
                     saveState();
                 }
             };
