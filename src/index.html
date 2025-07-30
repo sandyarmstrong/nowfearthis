@@ -305,6 +305,11 @@
                 border-radius: 0px;
                 width: 100%;
                 text-align: left;
+
+                /* Force button-likes in the menu to have the same font/size.
+                   This does not perfectly match the default for buttons. */
+                font-family: serif;
+                font-size: inherit;
             }
 
             .battle-point-advice {
@@ -418,9 +423,9 @@
                         <label for="load-encounters" title="Load Encounters (replaces existing encounters)">📂 Load Encounters JSON</label>
                         <input type="file" id="load-encounters" accept=".json" />
                     </div></li>
-                    <li><button id="export-custom">💾 Export Custom JSON</button></li>
+                    <li><button id="export-custom">✈️ Export Custom JSON</button></li>
                     <li><div id="import-custom-container" class="load-button">
-                        <label for="import-custom">📂 Import Custom JSON</label>
+                        <label for="import-custom">🎁 Import Custom JSON</label>
                         <input type="file" id="import-custom" accept=".json" />
                     </div></li>
                 </menu>
