@@ -338,13 +338,29 @@
                 box-shadow: 10px 10px 10px black;
             }
 
-            #browsing {
+            #simple-search, #browsing {
                 background-color: var(--clr-surface-a10);
-                position: relative;
-                width: fit-content; /* TODO: Better to pick a width, table can resize like this */
-                padding: 10px;
+                padding: 5px;
                 margin: 10px;
-                border-radius: 10px;
+                border-radius: 5px;
+            }
+            #simple-search, .results table {
+                max-width: 48em; /* 44em looks good, 48em is about the width of two statblocks */
+            }
+            #simple-search {
+                display: flex;
+            }
+            #show-full-search, #hide-full-search {
+                background-color: transparent;
+                border-radius: 0px;
+            }
+            #simple-search-input {
+                flex-grow: 1;
+            }
+
+            #browsing {
+                position: relative;
+                width: fit-content;
             }
             .browsing-filters {
                 display: flex;
@@ -358,10 +374,8 @@
             }
             .results table {
                 overflow-y: auto;
-                max-width: 48em; /* 44em looks good, 48em is about the width of two statblocks */
                 height: 15em;
                 display: block;
-                /* margin: 0 auto; */
             }
             .results td.nowrap {
                 white-space: nowrap;
@@ -380,7 +394,7 @@
 
             /* Keep this last */
             .hidden {
-                display: none;
+                display: none !important;
             }
         </style>
     </head>
@@ -436,8 +450,6 @@
                 </menu>
             </div>
         </div>
-
-        <div id="encounter"></div>
 
         <!-- TODO: Should all these editors use <dialog>? Safari doesn't support closedBy... -->
         <div id="editor-overlay" class="hidden"></div>
@@ -577,9 +589,16 @@
             <button id="done-adding-conditions">Close</button>
         </div>
 
+        <div id="simple-search" class="hidden">
+            <button id="show-full-search" title="Expand to Full Search">⏬</button>
+            <input id="simple-search-input" type="search" placeholder="Search Adversaries & Environments" list="searchable-statBlocks" />
+            <button id="simple-search-add-button">➕ Add</button>
+        </div>
+
         <div id="browsing">
             <!-- TODO: Allow keyboard navigation of table and adding of statBlocks directly from search input?-->
             <div class="browsing-filters">
+                <button id="hide-full-search" title="Collapse to Simple Search">⏫</button>
                 <input id="browsing-search" type="text" placeholder="Search Adversaries & Environments" />
                 <select id="browsing-source">
                     <option value="">Any source</option>
@@ -637,6 +656,8 @@
                 </table>
             </div>
         </div>
+
+        <div id="encounter"></div>
 
         <div id="repo-info">
             <p><em>Now Fear This</em> is free and open source and works entirely offline. Please <a href="https://github.com/sandyarmstrong/nowfearthis/issues">report any bugs or feature requests</a>.</p>
@@ -1164,28 +1185,105 @@
             });
         }
 
-        document.querySelector("#browsing-search").addEventListener("input", function(event) {
+        document.getElementById("browsing-search").addEventListener("input", function(event) {
             updateBrowsingTableFiltering();
         });
-        document.querySelector("#browsing-source").addEventListener("change", function(event) {
+        document.getElementById("browsing-source").addEventListener("change", function(event) {
             updateBrowsingTableFiltering();
         });
-        document.querySelector("#browsing-tier").addEventListener("change", function(event) {
+        document.getElementById("browsing-tier").addEventListener("change", function(event) {
             updateBrowsingTableFiltering();
         });
-        document.querySelector("#browsing-type").addEventListener("change", function(event) {
+        document.getElementById("browsing-type").addEventListener("change", function(event) {
             updateBrowsingTableFiltering();
         });
-        document.querySelector("#browsing-category").addEventListener("change", function(event) {
+        document.getElementById("browsing-category").addEventListener("change", function(event) {
             updateBrowsingTableFiltering();
         });
-        document.querySelector("#browsing-reset-filters").addEventListener("click", function(event) {
-            document.querySelector("#browsing-search").value = "";
-            document.querySelector("#browsing-source").value = "";
-            document.querySelector("#browsing-tier").value = "";
-            document.querySelector("#browsing-category").value = "";
-            document.querySelector("#browsing-type").value = "";
+        document.getElementById("browsing-reset-filters").addEventListener("click", function(event) {
+            document.getElementById("browsing-search").value = "";
+            document.getElementById("browsing-source").value = "";
+            document.getElementById("browsing-tier").value = "";
+            document.getElementById("browsing-category").value = "";
+            document.getElementById("browsing-type").value = "";
             updateBrowsingTableFiltering();
+        });
+
+        document.getElementById("simple-search-input").addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) { // Enter key
+                event.preventDefault();
+                document.getElementById("simple-search-add-button").click();
+            }
+        });
+
+        document.getElementById("simple-search-add-button").addEventListener("click", () => {
+            let selectedOption = document.getElementById("simple-search-input").value.trim();
+            if (!selectedOption) {
+                // TODO: Or some "custom" type?
+                selectedOption = "Jagged Knife Bandit";
+            }
+            let statBlock = srdStatBlocks.find(function(b) {
+                return b.name === selectedOption
+            });
+            if (!statBlock && state.custom && state.custom.statBlocks) {
+                statBlock = state.custom.statBlocks.find(function(b) {
+                    return b.name === selectedOption;
+                });
+            }
+            if (statBlock) {
+                statBlock = JSON.parse(JSON.stringify(statBlock));
+            }
+            // TODO: Else, custom with given name?
+
+            if (statBlock) {
+                if (statBlock.category == "Adversary" && !statBlock.instances || statBlock.instances.length == 0) {
+                    statBlock.instances = [
+                        {
+                            name: statBlock.name + " #1",
+                            hpMarked: 0,
+                            stressMarked: 0
+                        }
+                    ];
+                }
+
+                const encounter = ensureEncounter();
+                if (!encounter.statBlocks) {
+                    encounter.statBlocks = [];
+                }
+                encounter.statBlocks.push(statBlock);
+                saveState();
+
+                const statBlocks =  document.querySelector("#statBlocks");
+                if (statBlocks) {
+                    addStatBlock(statBlocks, encounter, statBlock);
+                } else {
+                    refreshDisplay();
+                }
+            }
+        });
+
+        document.getElementById("show-full-search").addEventListener("click", function(event) {
+            // TODO: Should maybe do this globally and use elsewhere
+            const fullSearch = document.getElementById("browsing");
+            const simpleSearch = document.getElementById("simple-search");
+
+            fullSearch.classList.remove("hidden");
+            simpleSearch.classList.add("hidden");
+            document.getElementById("browsing-search").focus();
+            preferSimpleSearch = false;
+            saveState();
+        });
+
+        document.getElementById("hide-full-search").addEventListener("click", function(event) {
+            // TODO: Should maybe do this globally and use elsewhere
+            const fullSearch = document.getElementById("browsing");
+            const simpleSearch = document.getElementById("simple-search");
+
+            fullSearch.classList.add("hidden");
+            simpleSearch.classList.remove("hidden");
+            document.getElementById("simple-search-input").focus();
+            preferSimpleSearch = true;
+            saveState();
         });
 
         function createFearTracker(encounter) {
@@ -1261,6 +1359,29 @@
             }
         }
 
+        function ensureEncounter() {
+            if (!state) {
+                state = {}
+            }
+            if (!state.encounters || state.encounters.length === 0) {
+                state.encounters = [
+                    {
+                        name: "New Encounter",
+                        playerTier: 1,
+                        playerCount: 4,
+                        targetBattlePoints: 14,
+                    }
+                ];
+            }
+            if (!selectedEncounterIndex ||
+                selectedEncounterIndex < 0 ||
+                selectedEncounterIndex >= state.encounters.length) {
+                selectedEncounterIndex = 0;
+            }
+
+            return state.encounters[selectedEncounterIndex];
+        }
+
         function addStatBlockToSearch(statBlock) {
             // Datalist for basic search
             const option = document.createElement("option");
@@ -1286,18 +1407,24 @@
                         }
                     ];
                 }
-                const encounter = state.encounters[selectedEncounterIndex];
-                // TODO: What if there is no encounter?
+
+                const encounter = ensureEncounter();
                 if (!encounter.statBlocks) {
                     encounter.statBlocks = [];
                 }
                 encounter.statBlocks.push(statBlockCopy);
-                addStatBlock(
-                    document.querySelector("#encounter .statBlocks"),
-                    encounter,
-                    statBlockCopy,
-                    refreshBattlePoints);
                 saveState();
+
+                const statBlocks =  document.querySelector("#statBlocks");
+                if (statBlocks) {
+                    addStatBlock(
+                        statBlocks,
+                        encounter,
+                        statBlockCopy,
+                        refreshBattlePoints);
+                } else {
+                    refreshDisplay();
+                }
             });
             addButtonTD.appendChild(addButton);
             tr.appendChild(addButtonTD);
@@ -1860,14 +1987,6 @@
             encounterBar.className = "encounter-bar";
             encounterDiv.appendChild(encounterBar);
 
-            const addStatBlockDiv = document.createElement("div");
-            const srdSearch = document.createElement("input");
-            srdSearch.type = "search";
-            srdSearch.placeholder = "Search Stat Blocks";
-            srdSearch.setAttribute("list", "searchable-statBlocks");
-            addStatBlockDiv.appendChild(srdSearch);
-            encounterBar.appendChild(addStatBlockDiv);
-
             // TODO: Should be able to initiate edit from here? Should this move to top bar?
             const battlePointsDiv = document.createElement("div");
             battlePointsDiv.id = "battle-points";
@@ -1879,59 +1998,21 @@
             encounterBar.appendChild(fearDiv);
 
             const statBlocksDiv = document.createElement("div");
-            statBlocksDiv.className = "statBlocks";
+            statBlocksDiv.id = "statBlocks";
             for (let j = 0; j < encounter.statBlocks.length; j++) {
                 addStatBlock(statBlocksDiv, encounter, encounter.statBlocks[j]);
             }
             encounterDiv.appendChild(statBlocksDiv);
+        }
 
-            const addStatBlockButton = createElement("button", null, "Add Stat Block");
-            addStatBlockButton.onclick = function() {
-                let selectedOption = srdSearch.value.trim();
-                if (!selectedOption) {
-                    // TODO: Or some "custom" type?
-                    selectedOption = "Jagged Knife Bandit";
-                }
-                let statBlock = srdStatBlocks.find(function(a) {
-                    return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
-                });
-                if (!statBlock && state.custom && state.custom.statBlocks) {
-                    statBlock = state.custom.statBlocks.find(function(a) {
-                        return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base'}) === 0;
-                    });
-                }
-                if (statBlock) {
-                    statBlock = JSON.parse(JSON.stringify(statBlock));
-                }
-                // TODO: Else, custom with given name?
-
-                if (statBlock) {
-                    if (statBlock.category == "Adversary" && !statBlock.instances || statBlock.instances.length == 0) {
-                        statBlock.instances = [
-                            {
-                                name: statBlock.name + " #1",
-                                hpMarked: 0,
-                                stressMarked: 0
-                            }
-                        ];
-                    }
-
-                    if (!encounter.statBlocks) {
-                        encounter.statBlocks = [];
-                    }
-                    encounter.statBlocks.push(statBlock);
-                    addStatBlock(statBlocksDiv, encounter, statBlock);
-                    saveState();
-                }
-            };
-            addStatBlockDiv.appendChild(addStatBlockButton);
-
-            srdSearch.addEventListener("keyup", function(event) {
-                if (event.keyCode === 13) { // Enter key
-                    event.preventDefault();
-                    addStatBlockButton.click();
-                }
-            });
+        // TODO: Also persist Features expand/collapse state?
+        let preferSimpleSearch = localStorage.getItem("prefer-simple-search") === "true";
+        if (preferSimpleSearch) {
+            document.getElementById("simple-search").classList.remove("hidden");
+            document.getElementById("browsing").classList.add("hidden");
+        } else {
+            document.getElementById("simple-search").classList.add("hidden");
+            document.getElementById("browsing").classList.remove("hidden");
         }
 
         let selectedEncounterIndex = parseInt(localStorage.getItem("selected-encounter-index"));
@@ -2041,7 +2122,8 @@
 
         function saveState() {
             localStorage.setItem("encounters-state", JSON.stringify(state));
-            localStorage.setItem("selected-encounter-index", selectedEncounterIndex)
+            localStorage.setItem("selected-encounter-index", selectedEncounterIndex);
+            localStorage.setItem("prefer-simple-search", preferSimpleSearch);
         }
 
         // TODO: This is probably a silly way to do this, we
