@@ -1,4 +1,4 @@
-const sampleEncounters ={
+const sampleEncounters = {
     "encounters": [
         {
             "name": "Escaping Corruption",
@@ -52,7 +52,10 @@ const sampleEncounters ={
                         {
                             "name": "Winged Salamander #1",
                             "hpMarked": 6,
-                            "stressMarked": 2
+                            "stressMarked": 2,
+                            "conditions": [
+                                "Vulnerable"
+                            ]
                         }
                     ]
                 },
@@ -98,7 +101,10 @@ const sampleEncounters ={
                         {
                             "name": "Corrupted Captain #1",
                             "hpMarked": 4,
-                            "stressMarked": 1
+                            "stressMarked": 1,
+                            "conditions": [
+                                "Restrained"
+                            ]
                         }
                     ]
                 },
