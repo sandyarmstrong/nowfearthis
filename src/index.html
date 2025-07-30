@@ -673,6 +673,7 @@
                                 <th scope="col"></th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Type</th>
+                                <th scope="col">Points</th>
                                 <th scope="col">Description</th>
                             </tr>
                         </thead>
@@ -1499,6 +1500,15 @@
             // typeTD.innerText = `${adversary.type} (${battlePoints} pts)`;
             const typeTD = createElement("td", "nowrap", statBlock.type);
             tr.appendChild(typeTD);
+
+            let battlePoints = "";
+            if (statBlock.category === "Adversary") {
+                battlePoints = statBlock.type === "Minion" ?
+                    "1/player" :
+                    getStatBlockBattlePoints(statBlock.type, 1);
+            }
+            const pointsTD = createElement("td", "nowrap", battlePoints);
+            tr.appendChild(pointsTD);
 
             const descriptionTD = createElement("td", null, statBlock.description);
             tr.appendChild(descriptionTD);
