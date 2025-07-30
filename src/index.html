@@ -1325,7 +1325,7 @@
             container.replaceChildren(...elements);
         }
 
-        function setupAdversaryActionButton(statBlockElement, statBlock) {
+        function setupStatBlockActionButton(statBlockElement, statBlock) {
             const actionsMenu = createElement("menu", "actions-menu");
 
             const copyAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Duplicate</button>`);
@@ -1344,7 +1344,7 @@
             };
             actionsMenu.appendChild(copyFromSourceAction);
 
-            const saveCustomAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Save to Custom Adversaries</button>`);
+            const saveCustomAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Save to Custom Stat Blocks</button>`);
             // TODO: Disable when no changes have been made?
             saveCustomAction.title = "Save this stat block to your custom stat blocks for later use";
             saveCustomAction.onclick = function() {
@@ -1354,7 +1354,7 @@
             actionsMenu.appendChild(saveCustomAction);
 
             const deleteCustomAction = document.createElement("li");
-            deleteCustomAction.innerHTML = `<button class="menu-action" ${statBlock.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Adversaries</button>`;
+            deleteCustomAction.innerHTML = `<button class="menu-action" ${statBlock.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Stat Blocks</button>`;
             deleteCustomAction.title = "Delete from your custom stat blocks";
             deleteCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockDeletedFromCustomEvent);
@@ -1402,7 +1402,7 @@
             topActions.appendChild(deleteButton);
 
             const actionsButton = createElement("button", null, "🎭");
-            actionsButton.title = "Adversary management actions";
+            actionsButton.title = "Stat block management actions";
             actionsButton.onclick = function() {
                 if (actionsMenu.parentElement) {
                     actionsMenu.remove();
@@ -1633,7 +1633,7 @@
                 instanceTopActions.appendChild(removeInstanceButton);
             }
 
-            setupAdversaryActionButton(statBlockDiv, statBlock);
+            setupStatBlockActionButton(statBlockDiv, statBlock);
 
             return statBlockDiv;
         }
@@ -1660,18 +1660,18 @@
                 saveState();
             });
             statBlockElement.addEventListener("statBlockCopiedFromSource", function(event) {
-                // TODO: This is mostly a dupe of addAdversaryButton.onclick
+                // TODO: This is mostly a dupe of addStatBlockButton.onclick
                 let newStatBlock = null;
                 if (statBlock.source == "SRD") {
-                    const sourceAdversary = srdStatBlocks.find(function(a) {
+                    const sourceStatBlock = srdStatBlocks.find(function(a) {
                         return a.name === statBlock.originalName;
                     });
-                    newStatBlock = JSON.parse(JSON.stringify(sourceAdversary));
+                    newStatBlock = JSON.parse(JSON.stringify(sourceStatBlock));
                 } else if (statBlock.source == "Custom" && state.custom && state.custom.statBlocks) { // TODO: Case-insensive?
-                    const sourceAdversary = state.custom.statBlocks.find(function(a) {
+                    const sourceStatBlock = state.custom.statBlocks.find(function(a) {
                         return a.name === statBlock.originalName;
                     });
-                    newStatBlock = JSON.parse(JSON.stringify(sourceAdversary));
+                    newStatBlock = JSON.parse(JSON.stringify(sourceStatBlock));
                 } else {
                     console.warn("Only 'SRD' and 'Custom' sources are supported");
                     return;
@@ -1826,13 +1826,13 @@
             encounterBar.className = "encounter-bar";
             encounterDiv.appendChild(encounterBar);
 
-            const addAdversaryDiv = document.createElement("div");
+            const addStatBlockDiv = document.createElement("div");
             const srdSearch = document.createElement("input");
             srdSearch.type = "search";
             srdSearch.placeholder = "Search Stat Blocks";
             srdSearch.setAttribute("list", "searchable-statBlocks");
-            addAdversaryDiv.appendChild(srdSearch);
-            encounterBar.appendChild(addAdversaryDiv);
+            addStatBlockDiv.appendChild(srdSearch);
+            encounterBar.appendChild(addStatBlockDiv);
 
             // TODO: Should be able to initiate edit from here? Should this move to top bar?
             const battlePointsDiv = document.createElement("div");
@@ -1851,8 +1851,8 @@
             }
             encounterDiv.appendChild(statBlocksDiv);
 
-            const addAdversaryButton = createElement("button", null, "Add Stat Block");
-            addAdversaryButton.onclick = function() {
+            const addStatBlockButton = createElement("button", null, "Add Stat Block");
+            addStatBlockButton.onclick = function() {
                 let selectedOption = srdSearch.value.trim();
                 if (!selectedOption) {
                     // TODO: Or some "custom" type?
@@ -1890,12 +1890,12 @@
                     saveState();
                 }
             };
-            addAdversaryDiv.appendChild(addAdversaryButton);
+            addStatBlockDiv.appendChild(addStatBlockButton);
 
             srdSearch.addEventListener("keyup", function(event) {
                 if (event.keyCode === 13) { // Enter key
                     event.preventDefault();
-                    addAdversaryButton.click();
+                    addStatBlockButton.click();
                 }
             });
         }
