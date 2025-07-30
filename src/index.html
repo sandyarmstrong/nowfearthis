@@ -1172,9 +1172,9 @@
             // TODO: Replace this with a stylized number input?
             const fearDiv = document.createElement("div");
             const fearValue = document.createElement("span");
-            const useFearButton = createElement("button", "-");
+            const useFearButton = createElement("button", null, "-");
             useFearButton.title = "Use 1 Fear";
-            const gainFearButton = createElement("button", "+");
+            const gainFearButton = createElement("button", null, "+");
             gainFearButton.title = "Gain 1 Fear (max 12)";
 
             if (encounter.currentFear === undefined) {
