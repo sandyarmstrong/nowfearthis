@@ -61,6 +61,7 @@
             #copyright, #repo-info {
                 font-size: smaller;
                 margin-top: 10px;
+                max-width: 50em;
             }
             #copyright a, #repo-info a {
                 color: var(--clr-primary-a50);
@@ -159,7 +160,7 @@
                 opacity: 0.3;
             }
 
-            .statBlock {
+            .statBlock, .no-encounters {
                 position: relative; /* For action button */
                 display: inline-block;
                 vertical-align: top;
@@ -1944,9 +1945,9 @@
             encounterDiv.innerHTML = ""; // Clear any existing content
 
             if (!state || !state.encounters || state.encounters.length == 0) {
-                const noEncounters = createElement("p");
+                const noEncounters = createElement("p", "no-encounters");
                 encounterDiv.appendChild(noEncounters);
-                const noEncountersSpan = createElement("span", null, "No encounters found. You can create a new encounter above, or ");
+                const noEncountersSpan = createElement("span", null, "No encounters found. Start adding adversaries or environments to create your first encounter, or ");
                 noEncounters.appendChild(noEncountersSpan);
                 const loadSamplesButon = createElement("button", "load-samples", "Load Sample Encounters");
                 noEncounters.appendChild(loadSamplesButon)
