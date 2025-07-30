@@ -1,4 +1,3 @@
-// TODO: Regenerate once format shuffling is done
 const sampleEncounters ={
     "encounters": [
         {
@@ -381,6 +380,206 @@ const sampleEncounters ={
                 }
             ],
             "currentFear": 10
+        },
+        {
+            "name": "Robbing a Thief",
+            "playerTier": 1,
+            "playerCount": 4,
+            "targetBattlePoints": 14,
+            "statBlocks": [
+                {
+                    "name": "Bustling Marketplace",
+                    "originalName": "Bustling Marketplace",
+                    "source": "SRD",
+                    "tier": 1,
+                    "category": "Environment",
+                    "description": "The economic heart of the settlement, with local artisans, traveling merchants, and patrons across social classes.",
+                    "difficulty": 10,
+                    "type": "Social",
+                    "impulses": "Buy low, sell high, tempt and tantalize with wares from near and far",
+                    "potentialAdversaries": "Guards (Bladed Guard, Head Guard), Masked Thief, Merchant",
+                    "features": [
+                        {
+                            "name": "Tip the Scales - Passive",
+                            "text": "PCs can gain advantage on a Presence Roll by offering a handful of gold as part of the interaction.\n\n  *Will any coin be accepted, or only local currency? How overt are the PCs in offering this bribe?*"
+                        },
+                        {
+                            "name": "Unexpected Find - Action",
+                            "text": "Reveal to the PCs that one of the merchants has something they want or need, such as food from their home, a rare book, magical components, a dubious treasure map, or a magical key.\n\n  *What cost beyond gold will the merchant ask for in exchange for this rarity?*"
+                        },
+                        {
+                            "name": "Sticky Fingers - Action",
+                            "text": "A thief tries to steal something from a PC. The PC must succeed on an Instinct Roll to notice the thief or lose an item of the GM’s choice as the thief escapes to a Close distance. To retrieve the stolen item, the PCs must complete a Progress Countdown (6) to chase down the thief before the thief completes a Consequence Countdown (4) and escapes to their hideout.\n\n  *What drove this person to pickpocketing? Where is the thief’s hideout and how has it avoided notice?*"
+                        },
+                        {
+                            "name": "Crowd Control - Reaction",
+                            "text": "When one of the PCs splits from the group, the crowds shift and cut them off from the party.\n\n  *Where does the crowd’s movement carry them? How do they feel about being alone but surrounded?*"
+                        }
+                    ]
+                },
+                {
+                    "name": "Merchant",
+                    "originalName": "Merchant",
+                    "source": "SRD",
+                    "tier": 1,
+                    "category": "Adversary",
+                    "description": "A finely dressed trader with a keen eye for financial gain.",
+                    "difficulty": 12,
+                    "type": "Social",
+                    "countPerHp": 1,
+                    "motivesAndTactics": "Buy low and sell high, create demand, inflate prices, seek profit",
+                    "hp": 3,
+                    "stress": 3,
+                    "majorThreshold": 4,
+                    "severeThreshold": 8,
+                    "attackModifier": "-4",
+                    "attackDescription": "Club",
+                    "attackRange": "Melee",
+                    "attackDamage": "1d4+1 phy",
+                    "experience": "Shrewd Negotiator +3",
+                    "features": [
+                        {
+                            "name": "Preferential Treatment - Passive",
+                            "text": "A PC who succeeds on a Presence Roll against the Merchant gains a discount on purchases. A PC who fails on a Presence Roll against the Merchant must pay more and has disadvantage on future Presence Rolls against the Merchant."
+                        },
+                        {
+                            "name": "The Runaround - Passive",
+                            "text": "When a PC rolls a 14 or lower on a Presence Roll made against the Merchant, they must mark a Stress."
+                        }
+                    ],
+                    "instances": [
+                        {
+                            "name": "Merchant #1",
+                            "hpMarked": 0,
+                            "stressMarked": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "Head Guard",
+                    "originalName": "Head Guard",
+                    "source": "SRD",
+                    "tier": 1,
+                    "category": "Adversary",
+                    "description": "A seasoned guard with a mace, a whistle, and a bellowing voice.",
+                    "difficulty": 15,
+                    "type": "Leader",
+                    "countPerHp": 1,
+                    "motivesAndTactics": "Arrest, close gates, pin down, seek glory",
+                    "hp": 7,
+                    "stress": 3,
+                    "majorThreshold": 7,
+                    "severeThreshold": 13,
+                    "attackModifier": "+4",
+                    "attackDescription": "Mace",
+                    "attackRange": "Melee",
+                    "attackDamage": "1d10+4 phy",
+                    "experience": "Commander +2, Local Knowledge +2",
+                    "features": [
+                        {
+                            "name": "Rally Guards - Action",
+                            "text": "Spend 2 Fear to spotlight the Head Guard and up to 2d4 allies within Far range."
+                        },
+                        {
+                            "name": "On My Signal - Reaction",
+                            "text": "Countdown (5). When the Head Guard is in the spotlight for the first time, activate the countdown. It ticks down when a PC makes an attack roll. When it triggers, all Archer Guards within Far range make a standard attack with advantage against the nearest target within their range. If any attacks succeed on the same target, combine their damage."
+                        },
+                        {
+                            "name": "Momentum - Reaction",
+                            "text": "When the Head Guard makes a successful attack against a PC, you gain a Fear."
+                        }
+                    ],
+                    "instances": [
+                        {
+                            "name": "Head Guard #1",
+                            "hpMarked": 0,
+                            "stressMarked": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "Bladed Guard",
+                    "originalName": "Bladed Guard",
+                    "source": "SRD",
+                    "tier": 1,
+                    "category": "Adversary",
+                    "description": "An armored guard bearing a sword and shield painted in the settlement’s colors.",
+                    "difficulty": 12,
+                    "type": "Standard",
+                    "countPerHp": 1,
+                    "motivesAndTactics": "Arrest, close gates, make it through the day, pin down",
+                    "hp": 5,
+                    "stress": 2,
+                    "majorThreshold": 5,
+                    "severeThreshold": 9,
+                    "attackModifier": "+1",
+                    "attackDescription": "Longsword",
+                    "attackRange": "Melee",
+                    "attackDamage": "1d6+1 phy",
+                    "experience": "Local Knowledge +3",
+                    "features": [
+                        {
+                            "name": "Shield Wall - Passive",
+                            "text": "A creature who tries to move within Very Close range of the Guard must succeed on an Agility Roll. If additional Bladed Guards are standing in a line alongside the first, and each is within Melee range of another guard in the line, the Difficulty increases by the total number of guards in the line."
+                        },
+                        {
+                            "name": "Detain - Action",
+                            "text": "Make an attack against a target within Very Close range. On a success, mark a Stress to Restrain the target until they break free with a successful attack, Finesse Roll, or Strength Roll."
+                        }
+                    ],
+                    "instances": [
+                        {
+                            "name": "Bladed Guard #1",
+                            "hpMarked": 0,
+                            "stressMarked": 0
+                        },
+                        {
+                            "name": "Bladed Guard #2",
+                            "hpMarked": 0,
+                            "stressMarked": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "Jagged Knife Bandit",
+                    "originalName": "Jagged Knife Bandit",
+                    "source": "SRD",
+                    "tier": 1,
+                    "category": "Adversary",
+                    "description": "A cunning criminal in a cloak bearing one of the gang’s iconic knives.",
+                    "difficulty": 12,
+                    "type": "Standard",
+                    "countPerHp": 1,
+                    "motivesAndTactics": "Escape, profit, steal, throw smoke",
+                    "hp": 5,
+                    "stress": 3,
+                    "majorThreshold": 8,
+                    "severeThreshold": 14,
+                    "attackModifier": "+1",
+                    "attackDescription": "Daggers",
+                    "attackRange": "Melee",
+                    "attackDamage": "1d8+1 phy",
+                    "experience": "Thief +2",
+                    "features": [
+                        {
+                            "name": "Climber - Passive",
+                            "text": "The Bandit climbs just as easily as they run."
+                        },
+                        {
+                            "name": "From Above - Passive",
+                            "text": "When the Bandit succeeds on a standard attack from above a target, they deal 1d10+1 physical damage instead of their standard damage."
+                        }
+                    ],
+                    "instances": [
+                        {
+                            "name": "Jagged Knife Bandit #1",
+                            "hpMarked": 0,
+                            "stressMarked": 0
+                        }
+                    ]
+                }
+            ],
+            "currentFear": 0
         }
     ]
 }
