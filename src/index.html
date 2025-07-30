@@ -1770,6 +1770,28 @@
 
         function refreshDisplay() {
             encounterSelector.innerHTML = ""; // Clear any existing options
+            const encounterDiv = document.getElementById("encounter");
+            encounterDiv.className = "encounter";
+            encounterDiv.innerHTML = ""; // Clear any existing content
+
+            if (!state || !state.encounters || state.encounters.length == 0) {
+                const noEncounters = createElement("p");
+                encounterDiv.appendChild(noEncounters);
+                const noEncountersSpan = createElement("span", null, "No encounters found. You can create a new encounter above, or ");
+                noEncounters.appendChild(noEncountersSpan);
+                const loadSamplesButon = createElement("button", "load-samples", "Load Sample Encounters");
+                noEncounters.appendChild(loadSamplesButon)
+                loadSamplesButon.addEventListener("click", () => {
+                    state = JSON.parse(JSON.stringify(sampleEncounters));
+                    selectedEncounterIndex = 0;
+                    saveState();
+                    refreshDisplay();
+                });
+                return;
+            }
+
+            const encounter = state.encounters[selectedEncounterIndex];
+
             for (let i = 0; i < state.encounters.length; i++) {
                 const encounter = state.encounters[i];
                 // TODO: Validate various fields
@@ -1779,19 +1801,8 @@
             }
 
             const validatedEncounterIndex = Math.max(0, Math.min(selectedEncounterIndex, state.encounters.length - 1));
-            console.log("validatedEncounterIndex: " + validatedEncounterIndex);
             if (encounterSelector.value !== validatedEncounterIndex) {
                 encounterSelector.value = validatedEncounterIndex;
-            }
-
-            const encounterDiv = document.getElementById("encounter");
-            encounterDiv.className = "encounter";
-            encounterDiv.innerHTML = ""; // Clear any existing content
-
-            const encounter = state.encounters[selectedEncounterIndex];
-            if (!encounter) {
-                encounterDiv.innerHTML = "<p>No encounters found. Please create a new encounter.</p>";
-                return;
             }
 
             // Clear custom entries from search
@@ -1906,7 +1917,7 @@
             selectedEncounterIndex = 0;
         }
 
-        let state = sampleEncounters;
+        let state = null;
         const persistedStateJson = localStorage.getItem("encounters-state");
         if (persistedStateJson) {
             try {
@@ -1915,7 +1926,7 @@
                 console.error("Error loading saved encounters:", error);
             }
         } else {
-            console.warn("No saved encounters found, displaying sample encounters.");
+            console.warn("No saved encounters found");
         }
 
         const fileInput = document.getElementById("load-encounters");
