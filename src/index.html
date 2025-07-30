@@ -343,17 +343,22 @@
                 position: relative;
                 width: fit-content; /* TODO: Better to pick a width, table can resize like this */
                 padding: 10px;
+                margin: 10px;
                 border-radius: 10px;
-                left: 50%;
-                transform: translateX(-50%);
+            }
+            .browsing-filters {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            #browsing-search {
+                flex-grow: 1;
             }
             .results th, .results td {
                 border: 1px solid var(--clr-surface-a0);
             }
             .results table {
                 overflow-y: auto;
-                width: 700px;
-                /* max-width: 700px; */
+                max-width: 48em; /* 44em looks good, 48em is about the width of two statblocks */
                 height: 15em;
                 display: block;
                 /* margin: 0 auto; */
@@ -574,47 +579,49 @@
 
         <div id="browsing">
             <!-- TODO: Allow keyboard navigation of table and adding of statBlocks directly from search input?-->
-            <input id="browsing-search" type="text" placeholder="Search" />
-            <select id="browsing-source">
-                <option value="">Any source</option>
-                <option>SRD</option>
-                <option>Custom</option>
-            </select>
-            <select id="browsing-tier">
-                <option value="">Any tier</option>
-                <option value="1">Tier 1</option>
-                <option value="2">Tier 2</option>
-                <option value="3">Tier 3</option>
-                <option value="4">Tier 4</option>
-            </select>
-            <select id="browsing-category">
-                <option value="">Any category</option>
-                <option value="Adversary">Adversaries</option>
-                <option value="Environment">Environments</option>
-            </select>
-            <select id="browsing-type">
-                <option value="">Any type</option>
-                <!-- Hide group when specific categories selected? Would require resetting type if category changes, sometimes -->
-                <optgroup label="Adversaries">
-                    <option>Bruiser</option>
-                    <option>Horde</option>
-                    <option>Leader</option>
-                    <option>Minion</option>
-                    <option>Ranged</option>
-                    <option>Skulk</option>
-                    <option>Social</option>
-                    <option>Solo</option>
-                    <option>Standard</option>
-                    <option>Support</option>
-                </optgroup>
-                <optgroup label="Environments">
-                    <option>Event</option>
-                    <option>Exploration</option>
-                    <option>Social</option>
-                    <option>Traversal</option>
-                </optgroup>
-            </select>
-            <button id="browsing-reset-filters">Reset</button>
+            <div class="browsing-filters">
+                <input id="browsing-search" type="text" placeholder="Search Adversaries & Environments" />
+                <select id="browsing-source">
+                    <option value="">Any source</option>
+                    <option>SRD</option>
+                    <option>Custom</option>
+                </select>
+                <select id="browsing-tier">
+                    <option value="">Any tier</option>
+                    <option value="1">Tier 1</option>
+                    <option value="2">Tier 2</option>
+                    <option value="3">Tier 3</option>
+                    <option value="4">Tier 4</option>
+                </select>
+                <select id="browsing-category">
+                    <option value="">Any category</option>
+                    <option value="Adversary">Adversaries</option>
+                    <option value="Environment">Environments</option>
+                </select>
+                <select id="browsing-type">
+                    <option value="">Any type</option>
+                    <!-- Hide group when specific categories selected? Would require resetting type if category changes, sometimes -->
+                    <optgroup label="Adversaries">
+                        <option>Bruiser</option>
+                        <option>Horde</option>
+                        <option>Leader</option>
+                        <option>Minion</option>
+                        <option>Ranged</option>
+                        <option>Skulk</option>
+                        <option>Social</option>
+                        <option>Solo</option>
+                        <option>Standard</option>
+                        <option>Support</option>
+                    </optgroup>
+                    <optgroup label="Environments">
+                        <option>Event</option>
+                        <option>Exploration</option>
+                        <option>Social</option>
+                        <option>Traversal</option>
+                    </optgroup>
+                </select>
+                <button id="browsing-reset-filters">Reset Filters</button>
+            </div>
             <div class="results">
                 <table>
                     <thead>
