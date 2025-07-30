@@ -15,7 +15,7 @@ with urllib.request.urlopen(srdAdversariesUrl) as url:
     srdAdversaries = json.load(url)
 
 srdEnvironmentsUrl = sys.argv[2]
-print("Loading adversaries from", srdEnvironmentsUrl, "...")
+print("Loading environments from", srdEnvironmentsUrl, "...")
 
 with urllib.request.urlopen(srdEnvironmentsUrl) as url:
     srdEnvironments = json.load(url)
@@ -102,12 +102,15 @@ for srdEnvironment in srdEnvironments:
     loadEntry(srdEnvironment, "Environment")
 
 thisFileDirectory = os.path.dirname(os.path.realpath(__file__))
-adversariesOutputPath = os.path.join(thisFileDirectory, '..', 'src', 'adversaries.js')
+outputPath = os.path.join(thisFileDirectory, '..', 'src', 'statBlocks.js')
 
-with open(adversariesOutputPath, 'w') as f:
+with open(outputPath, 'w') as f:
     f.write("// Courtesy of ")
     f.write(srdAdversariesUrl)
     f.write("\n")
-    f.write("const srdAdversaries = ")
+    f.write("// and ")
+    f.write(srdEnvironmentsUrl)
+    f.write("\n")
+    f.write("const srdStatBlocks = ")
     f.write(json.dumps(items, indent=2))
     f.write(";")

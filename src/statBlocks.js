@@ -1,5 +1,6 @@
 ﻿// Courtesy of https://raw.githubusercontent.com/seansbox/daggerheart-srd/refs/heads/main/.build/json/adversaries.json
-const srdAdversaries = [
+// and https://raw.githubusercontent.com/seansbox/daggerheart-srd/refs/heads/main/.build/json/environments.json
+const srdStatBlocks = [
   {
     "name": "Acid Burrower",
     "originalName": "Acid Burrower",

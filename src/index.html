@@ -1663,7 +1663,7 @@
                 // TODO: This is mostly a dupe of addAdversaryButton.onclick
                 let newAdversary = null;
                 if (statBlock.source == "SRD") {
-                    const sourceAdversary = srdAdversaries.find(function(a) {
+                    const sourceAdversary = srdStatBlocks.find(function(a) {
                         return a.name === statBlock.originalName;
                     });
                     newAdversary = JSON.parse(JSON.stringify(sourceAdversary));
@@ -1858,7 +1858,7 @@
                     // TODO: Or some "custom" type?
                     selectedOption = "Jagged Knife Bandit";
                 }
-                let statBlock = srdAdversaries.find(function(a) {
+                let statBlock = srdStatBlocks.find(function(a) {
                     return a.name.localeCompare(selectedOption, undefined, { sensitivity: 'base' }) === 0;
                 });
                 if (!statBlock && state.custom && state.custom.statBlocks) {
@@ -1971,8 +1971,8 @@
         const statBlockDatalist = document.createElement("datalist");
         statBlockDatalist.id = "searchable-statBlocks";
         const browsingTableBody = document.querySelector("#browsing tbody");
-        for (let i = 0; i < srdAdversaries.length; i++) {
-            addAdversaryToSearch(srdAdversaries[i]);
+        for (let i = 0; i < srdStatBlocks.length; i++) {
+            addAdversaryToSearch(srdStatBlocks[i]);
         }
         document.body.appendChild(statBlockDatalist);
 
