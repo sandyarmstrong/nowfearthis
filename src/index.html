@@ -7,7 +7,7 @@
         <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
         <link rel="manifest" href="site.webmanifest">
-        <script src="adversaries.js"></script>
+        <script src="statBlocks.js"></script>
         <script src="sample-encounters.js"></script>
         <style>
             :root {
@@ -1243,7 +1243,7 @@
             const option = document.createElement("option");
             option.statBlock = statBlock;
             option.value = statBlock.name;
-            adversaryDatalist.appendChild(option);
+            statBlockDatalist.appendChild(option);
 
             // Table for browsing
             const tr = document.createElement("tr");
@@ -1795,8 +1795,8 @@
             }
 
             // Clear custom entries from search
-            for (let i = adversaryDatalist.children.length - 1; i >= 0; i--) {
-                const option = adversaryDatalist.children[i];
+            for (let i = statBlockDatalist.children.length - 1; i >= 0; i--) {
+                const option = statBlockDatalist.children[i];
                 if (option.statBlock.source !== "SRD") {
                     option.remove();
                 }
@@ -1830,7 +1830,7 @@
             const srdSearch = document.createElement("input");
             srdSearch.type = "search";
             srdSearch.placeholder = "Search Stat Blocks";
-            srdSearch.setAttribute("list", "searchable-adversaries");
+            srdSearch.setAttribute("list", "searchable-statBlocks");
             addAdversaryDiv.appendChild(srdSearch);
             encounterBar.appendChild(addAdversaryDiv);
 
@@ -1968,13 +1968,13 @@
         // TODO: This is probably a silly way to do this, we
         //       don't actually want all these DOM elements.
         //       But it's an easy way to get that autocomplete for now.
-        const adversaryDatalist = document.createElement("datalist");
-        adversaryDatalist.id = "searchable-adversaries";
+        const statBlockDatalist = document.createElement("datalist");
+        statBlockDatalist.id = "searchable-statBlocks";
         const browsingTableBody = document.querySelector("#browsing tbody");
         for (let i = 0; i < srdAdversaries.length; i++) {
             addAdversaryToSearch(srdAdversaries[i]);
         }
-        document.body.appendChild(adversaryDatalist);
+        document.body.appendChild(statBlockDatalist);
 
         refreshDisplay();
         updateBrowsingTableFiltering(); // TODO: Move into refreshDisplay?
