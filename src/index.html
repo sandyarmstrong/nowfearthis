@@ -1916,6 +1916,8 @@
                 reader.onload = function(e) {
                     try {
                         state = JSON.parse(e.target.result);
+                        selectedEncounterIndex = 0;
+                        saveState();
                         refreshDisplay();
                     } catch (error) {
                         console.error("Error loading encounters:", error);
