@@ -6,7 +6,7 @@ const sampleEncounters ={
             "playerTier": 1,
             "playerCount": 3,
             "targetBattlePoints": 11,
-            "adversaries": [
+            "statBlocks": [
                 {
                     "name": "Winged Salamander",
                     "originalName": "Minor Fire Elemental",
@@ -230,7 +230,7 @@ const sampleEncounters ={
             "playerTier": 1,
             "playerCount": 3,
             "targetBattlePoints": 11,
-            "adversaries": [
+            "statBlocks": [
                 {
                     "name": "Patchwork Zombie Hulk",
                     "originalName": "Patchwork Zombie Hulk",
