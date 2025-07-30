@@ -71,39 +71,32 @@
                 left: 0px;
                 right: 0px;
                 padding-left: 10px;
-                padding-right: 14px;
+                padding-right: 14px; /* Extra room for scroll bar */
                 background-color: var(--clr-surface-a10);
                 border-bottom: 1px solid var(--clr-surface-a20);
             }
-            input#load-encounters {
+
+            .load-button input {
                 /* Hide the file input element and style its label as a button */
                 display: none;
             }
-            #load-encounters-container label {
-                background-color: var(--button-bg-color);
-                color: var(--button-text-color);
-                padding: 5px;
-                height: auto;
+            .load-button label {
                 display: block;
+                user-select: none;
             }
-            #load-encounters-container label:hover {
-                background-color: var(--button-bg-hover-color);
-            }
-            #load-encounters-container label:active {
-                background-color: var(--button-bg-active-color);
-            }
-
-            button {
+            button, .load-button label {
                 padding: 5px;
-                border-radius: 8px;
                 color: var(--button-text-color);
-                border: 0px;
                 background-color: var(--button-bg-color);
+                border: 0px;
             }
-            button:hover {
+            button {
+                border-radius: 8px;
+            }
+            button:hover, .load-button label:hover {
                 background-color: var(--button-bg-hover-color);
             }
-            button:active {
+            button:active, .load-button label:active {
                 background-color: var(--button-bg-active-color);
             }
             button:disabled {
@@ -311,6 +304,7 @@
             .actions-menu button, .actions-menu div {
                 border-radius: 0px;
                 width: 100%;
+                text-align: left;
             }
 
             .battle-point-advice {
@@ -417,20 +411,25 @@
             <div>
                 <button id="toggle-encounter-menu" title="Encounter Actions">⚙️</button>
                 <menu id="encounter-menu" class="actions-menu hidden">
-                    <li><button id="edit-encounter" title="Edit Encounter">✏️ Edit Encounter</button></li>
-                    <li><button id="delete-encounter" title="Delete Encounter">🗑️ Delete Encounter</button></li>
-                    <li><button id="save-encounters" title="Save Encounters">💾 Download Encounters JSON</button></li>
-                    <li><div id="load-encounters-container">
+                    <li><button id="edit-encounter">✏️ Edit Encounter</button></li>
+                    <li><button id="delete-encounter">🗑️ Delete Encounter</button></li>
+                    <li><button id="save-encounters">💾 Download Encounters JSON</button></li>
+                    <li><div id="load-encounters-container" class="load-button">
                         <label for="load-encounters" title="Load Encounters (replaces existing encounters)">📂 Load Encounters JSON</label>
                         <input type="file" id="load-encounters" accept=".json" />
                     </div></li>
-                    <!-- TODO: Add import/export customs -->
+                    <li><button id="export-custom">💾 Export Custom JSON</button></li>
+                    <li><div id="import-custom-container" class="load-button">
+                        <label for="import-custom">📂 Import Custom JSON</label>
+                        <input type="file" id="import-custom" accept=".json" />
+                    </div></li>
                 </menu>
             </div>
         </div>
 
         <div id="encounter"></div>
 
+        <!-- TODO: Should all these editors use <dialog>? Safari doesn't support closedBy... -->
         <div id="editor-overlay" class="hidden"></div>
         <div id="encounter-editor" class="editor hidden">
             <form id="encounter-form">
@@ -1935,37 +1934,88 @@
             console.error("Error loading saved encounters:", error);
         }
 
-        document.getElementById("load-encounters").addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        state = JSON.parse(e.target.result);
-                        selectedEncounterIndex = 0;
-                        saveState();
-                        refreshDisplay();
-                        hideEncounterMenu();
-                    } catch (error) {
-                        console.error("Error loading encounters:", error);
-                    }
-                };
-                reader.onerror = function(e) {
-                    console.error("Error reading file:", e);
-                };
-                reader.readAsText(file);
+        function loadFromJsonFile(fileInputEvent, callback) {
+            const file = fileInputEvent.target.files[0];
+            if (!file) {
+                callback(null);
+                return;
             }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    callback(JSON.parse(e.target.result));
+                } catch (error) {
+                    console.error("Error loading encounters:", error);
+                    callback(null);
+                }
+            };
+            reader.onerror = function(e) {
+                console.error("Error reading file:", e);
+                callback(null);
+            };
+            reader.readAsText(file);
+        }
+
+        document.getElementById("load-encounters").addEventListener("change", function(event) {
+            loadFromJsonFile(event, function(loadedState) {
+                if (loadedState) {
+                    state = loadedState;
+                    selectedEncounterIndex = 0;
+                    saveState();
+                    refreshDisplay();
+                } else {
+                    alert("Failed to load encounters from file.");
+                }
+                hideEncounterMenu();
+            });
         });
 
-        document.getElementById("save-encounters").addEventListener("click", function() {
-            const json = JSON.stringify(state, null, "    ");
+        document.getElementById("import-custom").addEventListener("change", function(event) {
+            loadFromJsonFile(event, function(loadedState) {
+                if (loadedState && loadedState.custom && loadedState.custom.statBlocks) {
+                    if (!state) {
+                        // NOTE: This is allowing state without any encounters
+                        // TODO: If we keep the browser visible in the no-encounters scenario, make sure it gets updated here
+                        state = {};
+                    }
+                    if (!state.custom) {
+                        state.custom = {};
+                    }
+                    if (!state.custom.statBlocks) {
+                        state.custom.statBlocks = [];
+                    }
+                    state.custom.statBlocks.push(...loadedState.custom.statBlocks);
+                    saveState();
+                    refreshDisplay();
+                } else {
+                    alert("Failed to load custom stat blocks from file.");
+                }
+                hideEncounterMenu();
+            });
+        });
+
+        function saveToJsonFile(filename, data) {
+            const json = JSON.stringify(data, null, "    ");
             const blob = new Blob([json], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "encounters.json";
+            a.download = filename;
             a.click();
             URL.revokeObjectURL(url);
+        }
+
+        document.getElementById("save-encounters").addEventListener("click", function() {
+            saveToJsonFile("encounters.json", state);
+            hideEncounterMenu();
+        });
+
+        document.getElementById("export-custom").addEventListener("click", function() {
+            if (state.custom && state.custom.statBlocks && state.custom.statBlocks.length > 0) {
+                saveToJsonFile("custom-stat-blocks.json", { custom: { statBlocks: state.custom.statBlocks } });
+            } else {
+                alert("No custom stat blocks to export.");
+            }
             hideEncounterMenu();
         });
 
