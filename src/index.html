@@ -42,10 +42,10 @@
 
                 --body-bg-color: var(--clr-surface-a0);
                 --text-color: var(--clr-light-a0);
-                --adversary-bg-color: var(--clr-surface-a10);
+                --statBlock-bg-color: var(--clr-surface-a10);
                 --stats-bg-color: var(--clr-surface-a20);
-                --adversary-border-color: var(--adversary-bg-color);
-                --adversary-text-color: var(--text-color);
+                --statBlock-border-color: var(--statBlock-bg-color);
+                --statBlock-text-color: var(--text-color);
                 --header-text-color: var(--clr-primary-a50);
 
                 --button-bg-color: var(--clr-primary-a20);
@@ -152,7 +152,7 @@
                 opacity: 0.3;
             }
 
-            .adversary {
+            .statBlock {
                 position: relative; /* For action button */
                 display: inline-block;
                 vertical-align: top;
@@ -164,15 +164,15 @@
                     Experience line from overflowing.
                 */
                 width: 23em;
-                border: 1px ridge var(--adversary-border-color);
+                border: 1px ridge var(--statBlock-border-color);
                 border-radius: 5px;
                 margin-right: 5px;
                 margin-top: 5px;
                 padding: 5px 10px;
-                background-color: var(--adversary-bg-color);
-                color: var(--adversary-text-color);
+                background-color: var(--statBlock-bg-color);
+                color: var(--statBlock-text-color);
             }
-            .adversary h3 {
+            .statBlock h3 {
                 margin: 8px 0px;
                 color: var(--header-text-color);
             }
@@ -181,39 +181,39 @@
                 margin-bottom: 10px;
                 color: var(--header-text-color);
             }
-            .adversary p {
+            .statBlock p {
                 margin: 2px 0px;
             }
-            .adversary .source {
+            .statBlock .source {
                 font-style: italic;
                 font-size: smaller;
             }
-            .adversary .tier {
+            .statBlock .tier {
                 font-style: italic;
                 font-weight: bold;
             }
-            .adversary .description {
+            .statBlock .description {
                 font-size: smaller;
                 font-style: italic;
             }
-            .adversary .motives {
+            .statBlock .motives {
                 font-size: smaller;
             }
-            .adversary .stats {
+            .statBlock .stats {
                 background-color: var(--stats-bg-color);
                 border-top: 1px solid var(--clr-surface-a0);
                 border-bottom: 1px solid var(--clr-surface-a0);
                 padding: 5px;
             }
-            .adversary .statLabel, .adversary .motivesLabel {
+            .statBlock .statLabel, .statBlock .motivesLabel {
                 font-weight: bold;
             }
-            .adversary .experiences {
+            .statBlock .experiences {
                 border-top: 1px dotted var(--clr-surface-a50);
                 margin-top: 2px;
                 padding-top: 2px;
             }
-            .adversary .divider {
+            .statBlock .divider {
                 margin: 0px 3px;
                 font-weight: bold;
             }
@@ -464,16 +464,16 @@
                 <button type="submit" id="save-encounter-edit">Save Encounter</button>
             </form>
         </div>
-        <div id="adversary-editor" class="editor hidden">
-            <form id="adversary-form">
+        <div id="statBlock-editor" class="editor hidden">
+            <form id="statBlock-form">
                 <fieldset>
                     <legend>Basics</legend>
-                    <label for="adversary-name">Name:</label>
-                    <input type="text" id="adversary-name" size="30" required />
+                    <label for="statBlock-name">Name:</label>
+                    <input type="text" id="statBlock-name" size="30" required />
                     <br>
-                    <label for="adversary-tier">Tier:</label>
-                    <input type="number" id="adversary-tier" min="1" max="4" value="1" required />
-                    <span class="adversary-editor-adversary">
+                    <label for="statBlock-tier">Tier:</label>
+                    <input type="number" id="statBlock-tier" min="1" max="4" value="1" required />
+                    <span class="statBlock-editor-adversary">
                         <label for="adversary-type">Type:</label>
                         <select id="adversary-type" list="srd-adversary-types">
                             <option>Bruiser</option>
@@ -490,27 +490,27 @@
                         <input type="number" id="adversary-count-per-hp" min="1" max="20" value="1" />
                         <label for="adversary-count-per-hp" id="adversary-count-per-hp-label">/HP</label>
                     </span>
-                    <span class="adversary-editor-environment">
-                        <label for="adversary-environment-type">Type:</label>
-                        <input type="text" id="adversary-environment-type" list="srd-environment-types" />
+                    <span class="statBlock-editor-environment">
+                        <label for="environment-type">Type:</label>
+                        <input type="text" id="environment-type" list="srd-environment-types" />
                     </span>
                     <br>
-                    <label for="adversary-description">Description:</label>
-                    <textarea id="adversary-description" cols="30" rows="3"></textarea>
-                    <div class="adversary-editor-adversary">
+                    <label for="statBlock-description">Description:</label>
+                    <textarea id="statBlock-description" cols="30" rows="3"></textarea>
+                    <div class="statBlock-editor-adversary">
                         <label for="adversary-motives">Motives & Tactics:</label>
                         <textarea id="adversary-motives" cols="30" rows="2"></textarea>
                     </div>
-                    <div class="adversary-editor-environment">
-                        <label for="adversary-impulses">Impulses:</label>
-                        <textarea id="adversary-impulses" cols="30" rows="2"></textarea>
+                    <div class="statBlock-editor-environment">
+                        <label for="environment-impulses">Impulses:</label>
+                        <textarea id="environment-impulses" cols="30" rows="2"></textarea>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>Stats</legend>
-                    <label for="adversary-difficulty">Difficulty:</label>
-                    <input type="number" id="adversary-difficulty" min="0" max="40" value="12" required />
-                    <div class="adversary-editor-adversary">
+                    <label for="statBlock-difficulty">Difficulty:</label>
+                    <input type="number" id="statBlock-difficulty" min="0" max="40" value="12" required />
+                    <div class="statBlock-editor-adversary">
                         <label for="adversary-major-threshold">Major Threshold:</label>
                         <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
                         /
@@ -525,12 +525,12 @@
                         <label for="adversary-experience">Experience:</label>
                         <input type="text" id="adversary-experience" />
                     </div>
-                    <div class="adversary-editor-environment">
-                        <label for="adversary-potential-adversaries">Potential Adversaries:</label>
-                        <textarea id="adversary-potential-adversaries" cols="30" rows="3"></textarea>
+                    <div class="statBlock-editor-environment">
+                        <label for="environment-potential-adversaries">Potential Adversaries:</label>
+                        <textarea id="environment-potential-adversaries" cols="30" rows="3"></textarea>
                     </div>
                 </fieldset>
-                <fieldset class="adversary-editor-adversary">
+                <fieldset class="statBlock-editor-adversary">
                     <legend>Attack</legend>
                     <label for="adversary-attack-modifier">Modifier:</label>
                     <input type="text" id="adversary-attack-modifier" size="4" placeholder="e.g. +3" />
@@ -550,13 +550,13 @@
                 <fieldset>
                     <legend>Features</legend>
                     <button id="add-feature">+ Add Feature</button>
-                    <div id="adversary-features"></div>
+                    <div id="statBlock-features"></div>
                 </fieldset>
-                <button type="button" id="cancel-adversary-edit">Cancel</button>
-                <button type="submit" id="save-adversary-edit">Save</button>
+                <button type="button" id="cancel-statBlock-edit">Cancel</button>
+                <button type="submit" id="save-statBlock-edit">Save</button>
             </form>
         </div>
-        <div id="conditions-editor" class="editor hidden"> <!-- TODO: Position over adversary instead? -->
+        <div id="conditions-editor" class="editor hidden"> <!-- TODO: Position over statBlock instead? -->
             <h3 class="instance-name"></h3>
             <div class="conditions"></div>
             <div class="add-conditions">
@@ -647,7 +647,7 @@
 
         const editorOverlay = document.getElementById("editor-overlay");
         const encounterEditor = document.getElementById("encounter-editor");
-        const adversaryEditor = document.getElementById("adversary-editor");
+        const adversaryEditor = document.getElementById("statBlock-editor");
         const conditionsEditor = document.getElementById("conditions-editor");
 
         let expandAllFeatures = false;
@@ -690,7 +690,7 @@
             adversaryEditor.classList.add("hidden");
             editorOverlay.classList.add("hidden");
             if (adversary) {
-                const adversaryElements = Array.from(document.querySelectorAll(".adversary"));
+                const adversaryElements = Array.from(document.querySelectorAll(".statBlock"));
                 for (let i = 0; i < adversaryElements.length; i++) {
                     if (adversaryElements[i].adversary == adversary) {
                         adversaryElements[i].scrollIntoView({ behavior: "instant", block: "center" });
@@ -708,7 +708,7 @@
         function createFeatureEditorElement(feature, idSuffix)  {
             const featureElement = document.createElement("div");
             featureElement.className = "feature";
-            featureElement.innerHTML = `<label for="adversary-feature-name-${idSuffix}">Name:</label><input type="text" class="adversary-feature-name" id="adversary-feature-name-${idSuffix}" value="${feature?.name ?? ""}" size="30"><label for="adversary-feature-text-${idSuffix}"><br>Description:</label><textarea id="adversary-feature-text-${idSuffix}" class="adversary-feature-text" rows="4" cols="50">${feature?.text ?? ""}</textarea>`;
+            featureElement.innerHTML = `<label for="statBlock-feature-name-${idSuffix}">Name:</label><input type="text" class="statBlock-feature-name" id="statBlock-feature-name-${idSuffix}" value="${feature?.name ?? ""}" size="30"><label for="statBlock-feature-text-${idSuffix}"><br>Description:</label><textarea id="statBlock-feature-text-${idSuffix}" class="statBlock-feature-text" rows="4" cols="50">${feature?.text ?? ""}</textarea>`;
             return featureElement;
         }
 
@@ -730,26 +730,26 @@
 
         function showAdversaryEditor(adversary) {
             // Basics
-            adversaryEditor.querySelector("#adversary-name").value = adversary.name;
-            adversaryEditor.querySelector("#adversary-tier").value = adversary.tier;
-            adversaryEditor.querySelector("#adversary-description").value = adversary.description || "";
+            adversaryEditor.querySelector("#statBlock-name").value = adversary.name;
+            adversaryEditor.querySelector("#statBlock-tier").value = adversary.tier;
+            adversaryEditor.querySelector("#statBlock-description").value = adversary.description || "";
             adversaryEditor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
-            adversaryEditor.querySelector("#adversary-impulses").value = adversary.impulses || "";
+            adversaryEditor.querySelector("#environment-impulses").value = adversary.impulses || "";
 
             if (adversary.category == "Adversary") {
                 adversaryEditor.querySelector("#adversary-type").value = adversary.type;
-                adversaryEditor.querySelectorAll(".adversary-editor-adversary").forEach(function(element) {
+                adversaryEditor.querySelectorAll(".statBlock-editor-adversary").forEach(function(element) {
                     element.classList.remove("hidden");
                 });
-                adversaryEditor.querySelectorAll(".adversary-editor-environment").forEach(function(element) {
+                adversaryEditor.querySelectorAll(".statBlock-editor-environment").forEach(function(element) {
                     element.classList.add("hidden");
                 });
             } else if (adversary.category == "Environment") {
-                adversaryEditor.querySelector("#adversary-environment-type").value = adversary.type;
-                adversaryEditor.querySelectorAll(".adversary-editor-adversary").forEach(function(element) {
+                adversaryEditor.querySelector("#environment-type").value = adversary.type;
+                adversaryEditor.querySelectorAll(".statBlock-editor-adversary").forEach(function(element) {
                     element.classList.add("hidden");
                 });
-                adversaryEditor.querySelectorAll(".adversary-editor-environment").forEach(function(element) {
+                adversaryEditor.querySelectorAll(".statBlock-editor-environment").forEach(function(element) {
                     element.classList.remove("hidden");
                 });
             }
@@ -758,13 +758,13 @@
             refreshCounterPerHpDisplay();
 
             // Stats
-            adversaryEditor.querySelector("#adversary-difficulty").value = adversary.difficulty;
+            adversaryEditor.querySelector("#statBlock-difficulty").value = adversary.difficulty;
             adversaryEditor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
             adversaryEditor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
             adversaryEditor.querySelector("#adversary-hp").value = adversary.hp;
             adversaryEditor.querySelector("#adversary-stress").value = adversary.stress;
             adversaryEditor.querySelector("#adversary-experience").value = adversary.experience || "";
-            adversaryEditor.querySelector("#adversary-potential-adversaries").value = adversary.potentialAdversaries || "";
+            adversaryEditor.querySelector("#environment-potential-adversaries").value = adversary.potentialAdversaries || "";
 
             // Attack
             adversaryEditor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || "";
@@ -773,7 +773,7 @@
             adversaryEditor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
 
             // Features
-            const featuresContainer = adversaryEditor.querySelector("#adversary-features");
+            const featuresContainer = adversaryEditor.querySelector("#statBlock-features");
             featuresContainer.innerHTML = ""; // Clear any existing children
             if (adversary.features && adversary.features.length > 0) {
                 for (let i = 0; i < adversary.features.length; i++) {
@@ -786,22 +786,22 @@
             editorOverlay.classList.remove("hidden");
             adversaryEditor.classList.remove("hidden");
             adversaryEditor.adversary = adversary;
-            adversaryEditor.querySelector("#adversary-name").select();
+            adversaryEditor.querySelector("#statBlock-name").select();
             window.scrollTo(0, 0);
         }
 
         document.querySelector("#add-feature").addEventListener("click", function() {
-            const featureContainer = adversaryEditor.querySelector("#adversary-features");
+            const featureContainer = adversaryEditor.querySelector("#statBlock-features");
             const featureElement = createFeatureEditorElement(null, featureContainer.children.length);
             featureContainer.appendChild(featureElement);
             // TODO: Allow deletion (but could also do this by deleting all text for a feature)
         });
 
-        document.querySelector("#cancel-adversary-edit").addEventListener("click", function() {
+        document.querySelector("#cancel-statBlock-edit").addEventListener("click", function() {
             hideAdversaryEditor();
         });
 
-        document.querySelector("#adversary-form").addEventListener("submit", function(event) {
+        document.querySelector("#statBlock-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent page refresh
 
             const adversary = adversaryEditor.adversary;
@@ -809,10 +809,10 @@
                 // TODO: Don't set optional fields if empty?
 
                 // Basics
-                adversary.name = adversaryEditor.querySelector("#adversary-name").value.trim();
-                adversary.tier = parseInt(adversaryEditor.querySelector("#adversary-tier").value);
-                adversary.description = adversaryEditor.querySelector("#adversary-description").value.trim();
-                adversary.difficulty = parseInt(adversaryEditor.querySelector("#adversary-difficulty").value);
+                adversary.name = adversaryEditor.querySelector("#statBlock-name").value.trim();
+                adversary.tier = parseInt(adversaryEditor.querySelector("#statBlock-tier").value);
+                adversary.description = adversaryEditor.querySelector("#statBlock-description").value.trim();
+                adversary.difficulty = parseInt(adversaryEditor.querySelector("#statBlock-difficulty").value);
 
                 if (adversary.category == "Adversary") {
                     adversary.countPerHp = parseInt(adversaryEditor.querySelector("#adversary-count-per-hp").value);
@@ -842,18 +842,18 @@
                     adversary.attackRange = adversaryEditor.querySelector("#adversary-attack-range").value;
                     adversary.attackDamage = adversaryEditor.querySelector("#adversary-attack-damage").value.trim();
                 } else if (adversary.category == "Environment") {
-                    adversary.type = adversaryEditor.querySelector("#adversary-environment-type").value;
-                    adversary.impulses = adversaryEditor.querySelector("#adversary-impulses").value;
-                    adversary.potentialAdversaries = adversaryEditor.querySelector("#adversary-potential-adversaries").value;
+                    adversary.type = adversaryEditor.querySelector("#environment-type").value;
+                    adversary.impulses = adversaryEditor.querySelector("#environment-impulses").value;
+                    adversary.potentialAdversaries = adversaryEditor.querySelector("#environment-potential-adversaries").value;
                 }
 
                 // Features
                 adversary.features = [];
-                const featureElements = adversaryEditor.querySelectorAll("#adversary-features .feature");
+                const featureElements = adversaryEditor.querySelectorAll("#statBlock-features .feature");
                 featureElements.forEach(function(featureElement) {
                     const feature = {
-                        name: featureElement.querySelector(".adversary-feature-name").value.trim(),
-                        text: featureElement.querySelector(".adversary-feature-text").value.trim()
+                        name: featureElement.querySelector(".statBlock-feature-name").value.trim(),
+                        text: featureElement.querySelector(".statBlock-feature-text").value.trim()
                     };
                     if (feature.name || feature.text) { // TODO: Require both?
                         adversary.features.push(feature);
@@ -1486,7 +1486,7 @@
             }
 
             const adversaryDiv = document.createElement("div");
-            adversaryDiv.className = "adversary";
+            adversaryDiv.className = "statBlock";
             adversaryDiv.adversary = adversary;
             adversaryDiv.innerHTML = `<h3 title="Source: ${adversary.originalName}, ${adversary.source} ">${adversary.name}</h3>`;
 
