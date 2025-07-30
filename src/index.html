@@ -652,6 +652,16 @@
 
         let expandAllFeatures = false;
 
+        function createElementWithText(tagName, innerText, className) {
+            const element = document.createElement(tagName);
+            if (className) {
+                element.className = className;
+            }
+            if (innerText) {
+                element.innerText = innerText;
+            }
+            return element;
+        }
         document.getElementById("editor-overlay").addEventListener("click", function() {
             if (!adversaryEditor.classList.contains("hidden")) {
                 hideAdversaryEditor();
@@ -1537,11 +1547,23 @@
 
             const stats = document.createElement("p");
             stats.className = "stats";
-            let majorThreshold = adversary.majorThreshold || "None";
-            let severeThreshold = adversary.severeThreshold || "None";
-            thresholds = `${majorThreshold}/${severeThreshold}`;
-            // TODO: Break this up for when no thresholds
-            stats.innerHTML = `<div><span class="statLabel">Difficulty:</span> ${adversary.difficulty} <span class="divider">|</span> <span class="statLabel">Thresholds:</span> ${thresholds}</div>`;
+
+            const difficultyDiv = document.createElement("div");
+            stats.appendChild(difficultyDiv);
+            difficultyDiv.appendChild(createElementWithText("span", "Difficulty:", "statLabel"));
+            difficultyDiv.appendChild(document.createTextNode(` ${adversary.difficulty} `));
+
+            if (adversary.majorThreshold || adversary.severeThreshold) {
+                let majorThreshold = adversary.majorThreshold || "None";
+                let severeThreshold = adversary.severeThreshold || "None";
+                thresholds = `${majorThreshold}/${severeThreshold}`;
+
+                difficultyDiv.appendChild(createElementWithText("span", "|", "divider"));
+                difficultyDiv.appendChild(document.createTextNode(" "));
+                difficultyDiv.appendChild(createElementWithText("span", "Thresholds:", "statLabel"));
+                difficultyDiv.appendChild(document.createTextNode(` ${thresholds}`));
+            }
+
             if (adversary.attackDescription) {
                 stats.innerHTML += `<div><span class="statLabel">ATK:</span> ${adversary.attackModifier} <span class="divider">|</span> <span class="statLabel">${adversary.attackDescription}:</span> ${adversary.attackRange} <span class="divider">|</span> ${adversary.attackDamage}</div>`;
             }
@@ -1549,7 +1571,7 @@
                 stats.innerHTML += `<div class="experiences"><span class="statLabel">Experience:</span> ${adversary.experience}</div>`;
             }
             if (adversary.potentialAdversaries) {
-                stats.innerHTML += `<div class="experiences"><span class="statLabel">Potential Adversaries:</span> ${adversary.potentialAdversaries}</div>`;
+                stats.innerHTML += `<div><span class="statLabel">Potential Adversaries:</span> ${adversary.potentialAdversaries}</div>`;
             }
             adversaryDiv.appendChild(stats);
 
