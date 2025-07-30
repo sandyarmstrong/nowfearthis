@@ -573,7 +573,7 @@
         </div>
 
         <div id="browsing">
-            <!-- TODO: Allow keyboard navigation of table and adding of adversaries directly from search input?-->
+            <!-- TODO: Allow keyboard navigation of table and adding of statBlocks directly from search input?-->
             <input id="browsing-search" type="text" placeholder="Search" />
             <select id="browsing-source">
                 <option value="">Any source</option>
@@ -648,15 +648,15 @@
     <script>
         // TODO: Change all code that puts user data directly into innerHTML
 
-        const adversaryRemovedEvent = new Event("adversaryRemoved");
-        const adversaryCopiedEvent = new Event("adversaryCopied");
-        const adversaryCopiedFromSourceEvent = new Event("adversaryCopiedFromSource");
-        const adversarySavedToCustomEvent = new Event("adversarySavedToCustom");
-        const adversaryDeletedFromCustomEvent = new Event("adversaryDeletedFromCustom");
+        const statBlockRemovedEvent = new Event("statBlockRemoved");
+        const statBlockCopiedEvent = new Event("statBlockCopied");
+        const statBlockCopiedFromSourceEvent = new Event("statBlockCopiedFromSource");
+        const statBlockSavedToCustomEvent = new Event("statBlockSavedToCustom");
+        const statBlockDeletedFromCustomEvent = new Event("statBlockDeletedFromCustom");
 
         const editorOverlay = document.getElementById("editor-overlay");
         const encounterEditor = document.getElementById("encounter-editor");
-        const adversaryEditor = document.getElementById("statBlock-editor");
+        const statBlockEditor = document.getElementById("statBlock-editor");
         const conditionsEditor = document.getElementById("conditions-editor");
 
         let expandAllFeatures = false;
@@ -684,8 +684,8 @@
         }
 
         document.getElementById("editor-overlay").addEventListener("click", function() {
-            if (!adversaryEditor.classList.contains("hidden")) {
-                hideAdversaryEditor();
+            if (!statBlockEditor.classList.contains("hidden")) {
+                hideStatBlockEditor();
             } else if (!encounterEditor.classList.contains("hidden")) {
                 hideEncounterEditor();
             } else if (!conditionsEditor.classList.contains("hidden")) {
@@ -693,10 +693,10 @@
             }
         });
 
-        function hideAdversaryEditor() {
-            const adversary = adversaryEditor.adversary;
-            adversaryEditor.adversary = undefined;
-            adversaryEditor.classList.add("hidden");
+        function hideStatBlockEditor() {
+            const adversary = statBlockEditor.adversary;
+            statBlockEditor.adversary = undefined;
+            statBlockEditor.classList.add("hidden");
             editorOverlay.classList.add("hidden");
             if (adversary) {
                 const statBlockElements = Array.from(document.querySelectorAll(".statBlock"));
@@ -708,9 +708,9 @@
             }
         }
 
-        adversaryEditor.addEventListener("keyup", function(event) {
+        statBlockEditor.addEventListener("keyup", function(event) {
             if (event.keyCode === 27) { // Escape key
-                hideAdversaryEditor();
+                hideStatBlockEditor();
             }
         });
 
@@ -722,67 +722,67 @@
         }
 
         function refreshCounterPerHpDisplay() {
-            const countPerHpInput = adversaryEditor.querySelector("#adversary-count-per-hp");
-            if (adversaryEditor.querySelector("#adversary-type").value === "Horde") {
+            const countPerHpInput = statBlockEditor.querySelector("#adversary-count-per-hp");
+            if (statBlockEditor.querySelector("#adversary-type").value === "Horde") {
                 countPerHpInput.classList.remove("hidden");
-                adversaryEditor.querySelector("#adversary-count-per-hp-label").classList.remove("hidden");
+                statBlockEditor.querySelector("#adversary-count-per-hp-label").classList.remove("hidden");
             } else {
                 countPerHpInput.classList.add("hidden");
-                adversaryEditor.querySelector("#adversary-count-per-hp-label").classList.add("hidden");
-                adversaryEditor.querySelector("#adversary-count-per-hp").value = 1;
+                statBlockEditor.querySelector("#adversary-count-per-hp-label").classList.add("hidden");
+                statBlockEditor.querySelector("#adversary-count-per-hp").value = 1;
             }
         }
 
-        adversaryEditor.querySelector("#adversary-type").addEventListener("change", function() {
+        statBlockEditor.querySelector("#adversary-type").addEventListener("change", function() {
             refreshCounterPerHpDisplay();
         });
 
-        function showAdversaryEditor(adversary) {
+        function showStatBlockEditor(adversary) {
             // Basics
-            adversaryEditor.querySelector("#statBlock-name").value = adversary.name;
-            adversaryEditor.querySelector("#statBlock-tier").value = adversary.tier;
-            adversaryEditor.querySelector("#statBlock-description").value = adversary.description || "";
-            adversaryEditor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
-            adversaryEditor.querySelector("#environment-impulses").value = adversary.impulses || "";
+            statBlockEditor.querySelector("#statBlock-name").value = adversary.name;
+            statBlockEditor.querySelector("#statBlock-tier").value = adversary.tier;
+            statBlockEditor.querySelector("#statBlock-description").value = adversary.description || "";
+            statBlockEditor.querySelector("#adversary-motives").value = adversary.motivesAndTactics || "";
+            statBlockEditor.querySelector("#environment-impulses").value = adversary.impulses || "";
 
             if (adversary.category == "Adversary") {
-                adversaryEditor.querySelector("#adversary-type").value = adversary.type;
-                adversaryEditor.querySelectorAll(".statBlock-editor-adversary").forEach(function(element) {
+                statBlockEditor.querySelector("#adversary-type").value = adversary.type;
+                statBlockEditor.querySelectorAll(".statBlock-editor-adversary").forEach(function(element) {
                     element.classList.remove("hidden");
                 });
-                adversaryEditor.querySelectorAll(".statBlock-editor-environment").forEach(function(element) {
+                statBlockEditor.querySelectorAll(".statBlock-editor-environment").forEach(function(element) {
                     element.classList.add("hidden");
                 });
             } else if (adversary.category == "Environment") {
-                adversaryEditor.querySelector("#environment-type").value = adversary.type;
-                adversaryEditor.querySelectorAll(".statBlock-editor-adversary").forEach(function(element) {
+                statBlockEditor.querySelector("#environment-type").value = adversary.type;
+                statBlockEditor.querySelectorAll(".statBlock-editor-adversary").forEach(function(element) {
                     element.classList.add("hidden");
                 });
-                adversaryEditor.querySelectorAll(".statBlock-editor-environment").forEach(function(element) {
+                statBlockEditor.querySelectorAll(".statBlock-editor-environment").forEach(function(element) {
                     element.classList.remove("hidden");
                 });
             }
 
-            adversaryEditor.querySelector("#adversary-count-per-hp").value = adversary.countPerHp || 1;
+            statBlockEditor.querySelector("#adversary-count-per-hp").value = adversary.countPerHp || 1;
             refreshCounterPerHpDisplay();
 
             // Stats
-            adversaryEditor.querySelector("#statBlock-difficulty").value = adversary.difficulty;
-            adversaryEditor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
-            adversaryEditor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
-            adversaryEditor.querySelector("#adversary-hp").value = adversary.hp;
-            adversaryEditor.querySelector("#adversary-stress").value = adversary.stress;
-            adversaryEditor.querySelector("#adversary-experience").value = adversary.experience || "";
-            adversaryEditor.querySelector("#environment-potential-adversaries").value = adversary.potentialAdversaries || "";
+            statBlockEditor.querySelector("#statBlock-difficulty").value = adversary.difficulty;
+            statBlockEditor.querySelector("#adversary-major-threshold").value = adversary.majorThreshold;
+            statBlockEditor.querySelector("#adversary-severe-threshold").value = adversary.severeThreshold;
+            statBlockEditor.querySelector("#adversary-hp").value = adversary.hp;
+            statBlockEditor.querySelector("#adversary-stress").value = adversary.stress;
+            statBlockEditor.querySelector("#adversary-experience").value = adversary.experience || "";
+            statBlockEditor.querySelector("#environment-potential-adversaries").value = adversary.potentialAdversaries || "";
 
             // Attack
-            adversaryEditor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || "";
-            adversaryEditor.querySelector("#adversary-attack-description").value = adversary.attackDescription || "";
-            adversaryEditor.querySelector("#adversary-attack-range").value = adversary.attackRange || ""; // TODO: Case mangling as needed
-            adversaryEditor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
+            statBlockEditor.querySelector("#adversary-attack-modifier").value = adversary.attackModifier || "";
+            statBlockEditor.querySelector("#adversary-attack-description").value = adversary.attackDescription || "";
+            statBlockEditor.querySelector("#adversary-attack-range").value = adversary.attackRange || ""; // TODO: Case mangling as needed
+            statBlockEditor.querySelector("#adversary-attack-damage").value = adversary.attackDamage || "";
 
             // Features
-            const featuresContainer = adversaryEditor.querySelector("#statBlock-features");
+            const featuresContainer = statBlockEditor.querySelector("#statBlock-features");
             featuresContainer.innerHTML = ""; // Clear any existing children
             if (adversary.features && adversary.features.length > 0) {
                 for (let i = 0; i < adversary.features.length; i++) {
@@ -793,72 +793,72 @@
             }
 
             editorOverlay.classList.remove("hidden");
-            adversaryEditor.classList.remove("hidden");
-            adversaryEditor.adversary = adversary;
-            adversaryEditor.querySelector("#statBlock-name").select();
+            statBlockEditor.classList.remove("hidden");
+            statBlockEditor.adversary = adversary;
+            statBlockEditor.querySelector("#statBlock-name").select();
             window.scrollTo(0, 0);
         }
 
         document.querySelector("#add-feature").addEventListener("click", function() {
-            const featureContainer = adversaryEditor.querySelector("#statBlock-features");
+            const featureContainer = statBlockEditor.querySelector("#statBlock-features");
             const featureElement = createFeatureEditorElement(null, featureContainer.children.length);
             featureContainer.appendChild(featureElement);
             // TODO: Allow deletion (but could also do this by deleting all text for a feature)
         });
 
         document.querySelector("#cancel-statBlock-edit").addEventListener("click", function() {
-            hideAdversaryEditor();
+            hideStatBlockEditor();
         });
 
         document.querySelector("#statBlock-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent page refresh
 
-            const adversary = adversaryEditor.adversary;
+            const adversary = statBlockEditor.adversary;
             if (adversary) {
                 // TODO: Don't set optional fields if empty?
 
                 // Basics
-                adversary.name = adversaryEditor.querySelector("#statBlock-name").value.trim();
-                adversary.tier = parseInt(adversaryEditor.querySelector("#statBlock-tier").value);
-                adversary.description = adversaryEditor.querySelector("#statBlock-description").value.trim();
-                adversary.difficulty = parseInt(adversaryEditor.querySelector("#statBlock-difficulty").value);
+                adversary.name = statBlockEditor.querySelector("#statBlock-name").value.trim();
+                adversary.tier = parseInt(statBlockEditor.querySelector("#statBlock-tier").value);
+                adversary.description = statBlockEditor.querySelector("#statBlock-description").value.trim();
+                adversary.difficulty = parseInt(statBlockEditor.querySelector("#statBlock-difficulty").value);
 
                 if (adversary.category == "Adversary") {
-                    adversary.countPerHp = parseInt(adversaryEditor.querySelector("#adversary-count-per-hp").value);
-                    adversary.type = adversaryEditor.querySelector("#adversary-type").value;
-                    adversary.motivesAndTactics = adversaryEditor.querySelector("#adversary-motives").value.trim();
+                    adversary.countPerHp = parseInt(statBlockEditor.querySelector("#adversary-count-per-hp").value);
+                    adversary.type = statBlockEditor.querySelector("#adversary-type").value;
+                    adversary.motivesAndTactics = statBlockEditor.querySelector("#adversary-motives").value.trim();
 
                     // Stats
-                    adversary.majorThreshold = parseInt(adversaryEditor.querySelector("#adversary-major-threshold").value);
-                    adversary.severeThreshold = parseInt(adversaryEditor.querySelector("#adversary-severe-threshold").value);
-                    adversary.hp = parseInt(adversaryEditor.querySelector("#adversary-hp").value);
+                    adversary.majorThreshold = parseInt(statBlockEditor.querySelector("#adversary-major-threshold").value);
+                    adversary.severeThreshold = parseInt(statBlockEditor.querySelector("#adversary-severe-threshold").value);
+                    adversary.hp = parseInt(statBlockEditor.querySelector("#adversary-hp").value);
                     if (adversary.instances) {
                         adversary.instances.forEach(function(instance) {
                             instance.hpMarked = Math.min(instance.hpMarked, adversary.hp);
                         });
                     }
-                    adversary.stress = parseInt(adversaryEditor.querySelector("#adversary-stress").value);
+                    adversary.stress = parseInt(statBlockEditor.querySelector("#adversary-stress").value);
                     if (adversary.instances) {
                         adversary.instances.forEach(function(instance) {
                             instance.stressMarked = Math.min(instance.stressMarked, adversary.stress);
                         });
                     }
-                    adversary.experience = adversaryEditor.querySelector("#adversary-experience").value.trim();
+                    adversary.experience = statBlockEditor.querySelector("#adversary-experience").value.trim();
 
                     // Attack
-                    adversary.attackModifier = adversaryEditor.querySelector("#adversary-attack-modifier").value.trim();
-                    adversary.attackDescription = adversaryEditor.querySelector("#adversary-attack-description").value.trim();
-                    adversary.attackRange = adversaryEditor.querySelector("#adversary-attack-range").value;
-                    adversary.attackDamage = adversaryEditor.querySelector("#adversary-attack-damage").value.trim();
+                    adversary.attackModifier = statBlockEditor.querySelector("#adversary-attack-modifier").value.trim();
+                    adversary.attackDescription = statBlockEditor.querySelector("#adversary-attack-description").value.trim();
+                    adversary.attackRange = statBlockEditor.querySelector("#adversary-attack-range").value;
+                    adversary.attackDamage = statBlockEditor.querySelector("#adversary-attack-damage").value.trim();
                 } else if (adversary.category == "Environment") {
-                    adversary.type = adversaryEditor.querySelector("#environment-type").value;
-                    adversary.impulses = adversaryEditor.querySelector("#environment-impulses").value;
-                    adversary.potentialAdversaries = adversaryEditor.querySelector("#environment-potential-adversaries").value;
+                    adversary.type = statBlockEditor.querySelector("#environment-type").value;
+                    adversary.impulses = statBlockEditor.querySelector("#environment-impulses").value;
+                    adversary.potentialAdversaries = statBlockEditor.querySelector("#environment-potential-adversaries").value;
                 }
 
                 // Features
                 adversary.features = [];
-                const featureElements = adversaryEditor.querySelectorAll("#statBlock-features .feature");
+                const featureElements = statBlockEditor.querySelectorAll("#statBlock-features .feature");
                 featureElements.forEach(function(featureElement) {
                     const feature = {
                         name: featureElement.querySelector(".statBlock-feature-name").value.trim(),
@@ -872,7 +872,7 @@
 
             saveState();
             refreshDisplay();
-            hideAdversaryEditor();
+            hideStatBlockEditor();
         });
 
         function showConditionsEditor(instance) {
@@ -1331,7 +1331,7 @@
             const copyAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Duplicate</button>`);
             copyAction.title = "Copy this adversary, including all changed state";
             copyAction.onclick = function() {
-                statBlockElement.dispatchEvent(adversaryCopiedEvent);
+                statBlockElement.dispatchEvent(statBlockCopiedEvent);
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(copyAction);
@@ -1339,7 +1339,7 @@
             const copyFromSourceAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Copy From Source</button>`);
             copyFromSourceAction.title = "Copy this adversary from the source, ignoring all changes";
             copyFromSourceAction.onclick = function() {
-                statBlockElement.dispatchEvent(adversaryCopiedFromSourceEvent);
+                statBlockElement.dispatchEvent(statBlockCopiedFromSourceEvent);
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(copyFromSourceAction);
@@ -1348,7 +1348,7 @@
             // TODO: Disable when no changes have been made?
             saveCustomAction.title = "Save this adversary to your custom adversaries for later use";
             saveCustomAction.onclick = function() {
-                statBlockElement.dispatchEvent(adversarySavedToCustomEvent);
+                statBlockElement.dispatchEvent(statBlockSavedToCustomEvent);
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(saveCustomAction);
@@ -1357,7 +1357,7 @@
             deleteCustomAction.innerHTML = `<button class="menu-action" ${adversary.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Adversaries</button>`;
             deleteCustomAction.title = "Delete from your custom adversaries";
             deleteCustomAction.onclick = function() {
-                statBlockElement.dispatchEvent(adversaryDeletedFromCustomEvent);
+                statBlockElement.dispatchEvent(statBlockDeletedFromCustomEvent);
                 actionsMenu.remove();
             };
             actionsMenu.appendChild(deleteCustomAction);
@@ -1390,14 +1390,14 @@
             const editButton = createElement("button", null, "✏️");
             editButton.title = "Edit this adversary";
             editButton.onclick = function() {
-                showAdversaryEditor(adversary);
+                showStatBlockEditor(adversary);
             };
             topActions.appendChild(editButton);
 
             const deleteButton = createElement("button", null, "🗑️");
             deleteButton.title = "Remove this adversary from the encounter";
             deleteButton.onclick = function() {
-                statBlockElement.dispatchEvent(adversaryRemovedEvent);
+                statBlockElement.dispatchEvent(statBlockRemovedEvent);
             };
             topActions.appendChild(deleteButton);
 
@@ -1641,7 +1641,7 @@
         function addAdversary(container, encounter, adversary) {
             const statBlockElement = createStatBlockElement(encounter, adversary);
 
-            statBlockElement.addEventListener("adversaryRemoved", function(event) {
+            statBlockElement.addEventListener("statBlockRemoved", function(event) {
                 encounter.statBlocks = encounter.statBlocks.filter(function(a) {
                     return a !== adversary;
                 });
@@ -1649,7 +1649,7 @@
                 refreshBattlePoints();
                 saveState();
             });
-            statBlockElement.addEventListener("adversaryCopied", function(event) {
+            statBlockElement.addEventListener("statBlockCopied", function(event) {
                 const newAdversary = JSON.parse(JSON.stringify(adversary));
                 newAdversary.name += " (copy)"; // TODO: Decide naming
                 if (!encounter.statBlocks) {
@@ -1659,7 +1659,7 @@
                 addAdversary(container, encounter, newAdversary);
                 saveState();
             });
-            statBlockElement.addEventListener("adversaryCopiedFromSource", function(event) {
+            statBlockElement.addEventListener("statBlockCopiedFromSource", function(event) {
                 // TODO: This is mostly a dupe of addAdversaryButton.onclick
                 let newAdversary = null;
                 if (adversary.source == "SRD") {
@@ -1694,7 +1694,7 @@
                 addAdversary(container, encounter, newAdversary);
                 saveState();
             });
-            statBlockElement.addEventListener("adversarySavedToCustom", function(event) {
+            statBlockElement.addEventListener("statBlockSavedToCustom", function(event) {
                 adversary.source = "Custom";
                 adversary.originalName = adversary.name; // TODO: Enforce unique names (easy here, hard if we offer import)
                 const newCustomAdversary = JSON.parse(JSON.stringify(adversary));
@@ -1709,7 +1709,7 @@
                 saveState();
                 refreshDisplay(); // To add to search
             });
-            statBlockElement.addEventListener("adversaryDeletedFromCustom", function(event) {
+            statBlockElement.addEventListener("statBlockDeletedFromCustom", function(event) {
                 if (adversary.source !== "Custom") {
                     console.warn("Trying to delete a non-custom adversary from custom list");
                     return;
