@@ -58,9 +58,6 @@
                 color: var(--text-color);
                 margin: 0px;
             }
-            .hidden {
-                display: none;
-            }
             #copyright, #repo-info {
                 font-size: smaller;
                 margin-top: 10px;
@@ -85,17 +82,12 @@
                 /* Hide the file input element and style its label as a button */
                 display: none;
             }
-            #load-encounters-container {
-                /* Need vertical margin to make room for label padding */
-                margin: 10px 0px;
-            }
             #load-encounters-container label {
-                /* NOTE: When styling real buttons, don't forget to update this to match */
                 background-color: var(--button-bg-color);
                 color: var(--button-text-color);
                 padding: 5px;
-                border-radius: 8px;
                 height: auto;
+                display: block;
             }
             #load-encounters-container label:hover {
                 background-color: var(--button-bg-hover-color);
@@ -311,6 +303,7 @@
             }
 
             .actions-menu {
+                z-index: 999; /* Above most things, below the overlay */
                 position: absolute;
                 right: 5px;
                 top: 30px;
@@ -318,7 +311,7 @@
                 padding: 0px;
                 list-style-type: none;
             }
-            .actions-menu button {
+            .actions-menu button, .actions-menu div {
                 border-radius: 0px;
                 width: 100%;
             }
@@ -383,6 +376,11 @@
                 vertical-align: bottom;
                 background: var(--clr-surface-a20); /* Need a background to avoid scrolled rows from showing through */
             }
+
+            /* Keep this last */
+            .hidden {
+                display: none;
+            }
         </style>
     </head>
 
@@ -416,20 +414,21 @@
 
         <div id="top-bar">
             <div class="top-bar-group">
-                <select id="current-encounter">
-                </select>
-                <button id="edit-encounter" title="Edit Encounter">✏️</button>
-                <button id="delete-encounter" title="Delete Encounter">🗑️</button>
-                <!-- TODO: Separator-->
                 <button id="add-encounter" title="Create New Encounter">➕ Create New Encounter</button>
+                <select id="current-encounter"></select> <!-- TODO: Center this one? -->
             </div>
-            <!-- TODO: Move these items to ... menu, and add import/export customs -->
             <div class="top-bar-group">
-                <button id="save-encounters" title="Save Encounters">💾</button>
-                <div id="load-encounters-container">
-                    <label for="load-encounters" title="Load Encounters (replaces existing encounters)">📂</label>
-                    <input type="file" id="load-encounters" accept=".json" />
-                </div>
+                <button id="toggle-encounter-menu" title="Encounter Actions">⚙️</button>
+                <menu id="encounter-menu" class="actions-menu hidden">
+                    <li><button id="edit-encounter" title="Edit Encounter">✏️ Edit Encounter</button></li>
+                    <li><button id="delete-encounter" title="Delete Encounter">🗑️ Delete Encounter</button></li>
+                    <li><button id="save-encounters" title="Save Encounters">💾 Download Encounters JSON</button></li>
+                    <li><div id="load-encounters-container">
+                        <label for="load-encounters" title="Load Encounters (replaces existing encounters)">📂 Load Encounters JSON</label>
+                        <input type="file" id="load-encounters" accept=".json" />
+                    </div></li>
+                    <!-- TODO: Add import/export customs -->
+                </menu>
             </div>
         </div>
 
@@ -690,6 +689,20 @@
                 hideEncounterEditor();
             } else if (!conditionsEditor.classList.contains("hidden")) {
                 hideConditionsEditor();
+            }
+        });
+
+        function hideEncounterMenu() {
+            const encounterMenu = document.getElementById("encounter-menu");
+            encounterMenu.classList.add("hidden");
+        }
+
+        document.getElementById("toggle-encounter-menu").addEventListener("click", function() {
+            const encounterMenu = document.getElementById("encounter-menu");
+            if (encounterMenu.classList.contains("hidden")) {
+                encounterMenu.classList.remove("hidden");
+            } else {
+                hideEncounterMenu();
             }
         });
 
@@ -1053,6 +1066,7 @@
         document.querySelector("#edit-encounter").addEventListener("click", function() {
             const encounter = state.encounters[selectedEncounterIndex];
             showEncounterEditor(encounter);
+            hideEncounterMenu();
         });
 
         document.querySelector("#delete-encounter").addEventListener("click", function() {
@@ -1065,6 +1079,7 @@
                 }
                 refreshDisplay();
             }
+            hideEncounterMenu();
         });
 
         document.querySelector("#encounter-player-count").addEventListener("change", function() {
@@ -1940,6 +1955,7 @@
                         selectedEncounterIndex = 0;
                         saveState();
                         refreshDisplay();
+                        hideEncounterMenu();
                     } catch (error) {
                         console.error("Error loading encounters:", error);
                     }
@@ -1961,6 +1977,7 @@
             a.download = "encounters.json";
             a.click();
             URL.revokeObjectURL(url);
+            hideEncounterMenu();
         });
 
         const encounterSelector = document.getElementById("current-encounter");
