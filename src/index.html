@@ -483,6 +483,9 @@
                 <label for="encounter-player-count">Player Count:</label>
                 <input type="number" id="encounter-player-count" min="1" max="20" value="4" required />
                 <br>
+                <label for="encounter-starting-fear">Starting Fear:</label>
+                <input type="number" id="encounter-starting-fear" min="0" max="12" value="0"/>
+                <br>
                 <label for="encounter-target-battle-points">Target Battle Points:</label>
                 <input type="number" id="encounter-target-battle-points" min="1" max="99" value="14" required />
                 <span id="encounter-recommended-battle-points"></span>
@@ -498,7 +501,7 @@
                     </ul>
                 </div>
                 <button type="button" id="cancel-encounter-edit">Cancel</button>
-                <button type="submit" id="save-encounter-edit">Save Encounter</button>
+                <button type="submit">Save Encounter</button>
             </form>
         </div>
         <div id="statBlock-editor" class="editor hidden">
@@ -590,7 +593,7 @@
                     <div id="statBlock-features"></div>
                 </fieldset>
                 <button type="button" id="cancel-statBlock-edit">Cancel</button>
-                <button type="submit" id="save-statBlock-edit">Save</button>
+                <button type="submit">Save</button>
             </form>
         </div>
         <div id="conditions-editor" class="editor hidden"> <!-- TODO: Position over statBlock instead? -->
@@ -1053,15 +1056,43 @@
             document.querySelector("#encounter-recommended-battle-points").innerText = `(Base recommendation: ${recommendedBattlePoints})`;
         }
 
+        function getNewEncounterName() {
+            const baseName = "New Encounter";
+            if (!state?.encounters?.length) {
+                return baseName;
+            }
+
+            let max = 0;
+
+            for (const encounter of state.encounters) {
+                const match = encounter.name.match(new RegExp(`${baseName}\\s*#*(\\d+)?`));
+                if (match) {
+                    const num = match[1] ? parseInt(match[1]) : 1;
+                    if (num > max) {
+                        max = num;
+                    }
+                }
+            }
+
+            return max === 0 ? baseName : `${baseName} ${max + 1}`;
+        }
+
         function showEncounterEditor(encounter) {
             if (!encounter) {
-                encounter = {
-                    name: "New Encounter",
-                    playerTier: 1,
-                    playerCount: 4,
-                    targetBattlePoints: 14, // TODO: Automatically adjust when playerCount changes?
-                };
                 encounterEditor.encounter = null;
+
+                let previousEncounter = null;
+                if (state && state.encounters && state.encounters.length > 0) {
+                    previousEncounter = state.encounters[selectedEncounterIndex];
+                }
+
+                encounter = {
+                    name: getNewEncounterName(),
+                    playerTier: previousEncounter?.playerTier ?? 1,
+                    playerCount: previousEncounter?.playerCount ?? 4,
+                    targetBattlePoints: previousEncounter?.targetBattlePoints ?? 14,
+                    currentFear: previousEncounter?.currentFear ?? 0,
+                };
             } else {
                 encounterEditor.encounter = encounter;
             }
@@ -1069,6 +1100,7 @@
             encounterEditor.querySelector("#encounter-name").value = encounter.name;
             encounterEditor.querySelector("#encounter-tier").value = encounter.playerTier ?? 1;
             encounterEditor.querySelector("#encounter-player-count").value = encounter.playerCount ?? 4;
+            encounterEditor.querySelector("#encounter-starting-fear").value = encounter.currentFear ?? 0;
             encounterEditor.querySelector("#encounter-target-battle-points").value = encounter.targetBattlePoints ?? 14;
 
             updateEditorBattlePointsRecommendation();
@@ -1084,6 +1116,9 @@
 
             let encounter = encounterEditor.encounter;
             if (!encounter) {
+                if (!state) {
+                    state = {};
+                }
                 if (!state.encounters) {
                     state.encounters = [];
                 }
@@ -1095,6 +1130,7 @@
             encounter.name = encounterEditor.querySelector("#encounter-name").value.trim();
             encounter.playerTier = parseInt(encounterEditor.querySelector("#encounter-tier").value);
             encounter.playerCount = parseInt(encounterEditor.querySelector("#encounter-player-count").value);
+            encounter.currentFear = parseInt(encounterEditor.querySelector("#encounter-starting-fear").value);
             encounter.targetBattlePoints = parseInt(encounterEditor.querySelector("#encounter-target-battle-points").value);
 
             saveState();
@@ -1383,10 +1419,10 @@
             if (!state) {
                 state = {}
             }
-            if (!state.encounters || state.encounters.length === 0) {
+            if (!state.encounters?.length) {
                 state.encounters = [
                     {
-                        name: "New Encounter",
+                        name: getNewEncounterName(),
                         playerTier: 1,
                         playerCount: 4,
                         targetBattlePoints: 14,
@@ -1944,7 +1980,7 @@
             encounterDiv.className = "encounter";
             encounterDiv.innerHTML = ""; // Clear any existing content
 
-            if (!state || !state.encounters || state.encounters.length == 0) {
+            if (!state?.encounters?.length) {
                 const noEncounters = createElement("p", "no-encounters");
                 encounterDiv.appendChild(noEncounters);
                 const noEncountersSpan = createElement("span", null, "No encounters found. Start adding adversaries or environments to create your first encounter, or ");
