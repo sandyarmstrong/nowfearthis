@@ -75,9 +75,6 @@
                 background-color: var(--clr-surface-a10);
                 border-bottom: 1px solid var(--clr-surface-a20);
             }
-            .top-bar-group > * {
-                display: inline-block;
-            }
             input#load-encounters {
                 /* Hide the file input element and style its label as a button */
                 display: none;
@@ -413,11 +410,11 @@
         </datalist>
 
         <div id="top-bar">
-            <div class="top-bar-group">
+            <div>
                 <button id="add-encounter" title="Create New Encounter">➕ Create New Encounter</button>
-                <select id="current-encounter"></select> <!-- TODO: Center this one? -->
+                <select id="current-encounter"></select>
             </div>
-            <div class="top-bar-group">
+            <div>
                 <button id="toggle-encounter-menu" title="Encounter Actions">⚙️</button>
                 <menu id="encounter-menu" class="actions-menu hidden">
                     <li><button id="edit-encounter" title="Edit Encounter">✏️ Edit Encounter</button></li>
@@ -1926,26 +1923,19 @@
             });
         }
 
-        console.log("fetching state...");
         let selectedEncounterIndex = parseInt(localStorage.getItem("selected-encounter-index"));
         if (!selectedEncounterIndex) {
             selectedEncounterIndex = 0;
         }
 
         let state = null;
-        const persistedStateJson = localStorage.getItem("encounters-state");
-        if (persistedStateJson) {
-            try {
-                state = JSON.parse(persistedStateJson);
-            } catch (error) {
-                console.error("Error loading saved encounters:", error);
-            }
-        } else {
-            console.warn("No saved encounters found");
+        try {
+            state = JSON.parse(localStorage.getItem("encounters-state"));
+        } catch (error) {
+            console.error("Error loading saved encounters:", error);
         }
 
-        const fileInput = document.getElementById("load-encounters");
-        fileInput.addEventListener("change", function(event) {
+        document.getElementById("load-encounters").addEventListener("change", function(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -1967,8 +1957,7 @@
             }
         });
 
-        const saveEncountersButton = document.getElementById("save-encounters");
-        saveEncountersButton.addEventListener("click", function() {
+        document.getElementById("save-encounters").addEventListener("click", function() {
             const json = JSON.stringify(state, null, "    ");
             const blob = new Blob([json], { type: "application/json" });
             const url = URL.createObjectURL(blob);
