@@ -1458,24 +1458,11 @@
             return state.encounters[selectedEncounterIndex];
         }
 
-        function addStatBlockToSearch(statBlock) {
-            // Datalist for basic search
-            const option = document.createElement("option");
-            option.statBlock = statBlock;
-            option.value = statBlock.name;
-            statBlockDatalist.appendChild(option);
-
-            // Table for browsing
-            const tr = document.createElement("tr");
-            tr.statBlock = statBlock;
-            browsingTableBody.appendChild(tr);
-
-            const addButtonTD = createElement("td", "nowrap");
-            const addButton = createElement("button", null, "➕ Add");
-            addButton.addEventListener("click", function(event) {
-                const statBlockCopy = JSON.parse(JSON.stringify(tr.statBlock));
-                if (statBlockCopy.category == "Adversary" && (!statBlockCopy.instances || statBlockCopy.instances.length == 0)) {
-                    statBlockCopy.instances = [
+        function onBrowserAddButtonClick(event) {
+            const tr = event.target.closest("tr");
+            const statBlockCopy = JSON.parse(JSON.stringify(tr.statBlock));
+            if (statBlockCopy.category == "Adversary" && (!statBlockCopy.instances || statBlockCopy.instances.length == 0)) {
+                statBlockCopy.instances = [
                         {
                             name: statBlockCopy.name + " #1",
                             hpMarked: 0,
@@ -1498,10 +1485,26 @@
                         encounter,
                         statBlockCopy,
                         refreshBattlePoints);
-                } else {
-                    refreshDisplay();
-                }
-            });
+            } else {
+                refreshDisplay();
+            }
+        }
+
+        function addStatBlockToSearch(statBlock) {
+            // Datalist for basic search
+            const option = document.createElement("option");
+            option.statBlock = statBlock;
+            option.value = statBlock.name;
+            statBlockDatalist.appendChild(option);
+
+            // Table for browsing
+            const tr = document.createElement("tr");
+            tr.statBlock = statBlock;
+            browsingTableBody.appendChild(tr);
+
+            const addButtonTD = createElement("td", "nowrap");
+            const addButton = createElement("button", null, "➕ Add");
+            addButton.addEventListener("click", onBrowserAddButtonClick);
             addButtonTD.appendChild(addButton);
             tr.appendChild(addButtonTD);
 
