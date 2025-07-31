@@ -1579,9 +1579,9 @@
             };
             actionsMenu.appendChild(copyFromSourceAction);
 
-            const saveCustomAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Save to Custom Stat Blocks</button>`);
+            const saveCustomAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Save to Custom Source</button>`);
             // TODO: Disable when no changes have been made?
-            saveCustomAction.title = "Save this stat block to your custom stat blocks for later use";
+            saveCustomAction.title = "Save this stat block to your custom stat block source for later use";
             saveCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockSavedToCustomEvent);
                 actionsMenu.remove();
@@ -1589,8 +1589,8 @@
             actionsMenu.appendChild(saveCustomAction);
 
             const deleteCustomAction = document.createElement("li");
-            deleteCustomAction.innerHTML = `<button class="menu-action" ${statBlock.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Stat Blocks</button>`;
-            deleteCustomAction.title = "Delete from your custom stat blocks";
+            deleteCustomAction.innerHTML = `<button class="menu-action" ${statBlock.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Source</button>`;
+            deleteCustomAction.title = "Delete from your custom stat block source";
             deleteCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockDeletedFromCustomEvent);
                 actionsMenu.remove();
@@ -1930,8 +1930,9 @@
                 saveState();
             });
             statBlockElement.addEventListener("statBlockSavedToCustom", function(event) {
+                // TODO: Warn user of overwrite?
                 statBlock.source = "Custom";
-                statBlock.originalName = statBlock.name; // TODO: Enforce unique names (easy here, hard if we offer import)
+                statBlock.originalName = statBlock.name;
                 const newCustomStatBlock = JSON.parse(JSON.stringify(statBlock));
                 delete newCustomStatBlock.instances;
                 if (!state.custom) {
@@ -1939,10 +1940,17 @@
                 }
                 if (!state.custom.statBlocks) {
                     state.custom.statBlocks = [];
+                } else {
+                    // Can only have one custom statblock of a given name
+                    state.custom.statBlocks = state.custom.statBlocks.filter(function(a) {
+                        return a.name !== statBlock.name;
+                    });
                 }
                 state.custom.statBlocks.push(newCustomStatBlock);
+                state.custom.statBlocks.sort((a, b) => a.name.localeCompare(b.name));
                 saveState();
-                refreshDisplay(); // To add to search
+                refreshDisplay(); // Update this statblock display (just tooltip/menu state)
+                refreshCustomStatBlocksInSearch();
             });
             statBlockElement.addEventListener("statBlockDeletedFromCustom", function(event) {
                 if (statBlock.source !== "Custom") {
@@ -1954,13 +1962,15 @@
                 }
                 if (!state.custom.statBlocks) {
                     state.custom.statBlocks = [];
+                } else {
+                    state.custom.statBlocks = state.custom.statBlocks.filter(function(a) {
+                        return a.name !== statBlock.originalName;
+                    });
                 }
-                state.custom.statBlocks = state.custom.statBlocks.filter(function(a) {
-                    return a.name !== statBlock.originalName;
-                });
                 statBlock.source = "Orphaned";
                 saveState();
-                refreshDisplay();
+                refreshDisplay(); // Update this statblock display (just tooltip/menu state)
+                refreshCustomStatBlocksInSearch();
             });
 
             container.appendChild(statBlockElement);
@@ -2038,29 +2048,6 @@
             const validatedEncounterIndex = Math.max(0, Math.min(selectedEncounterIndex, state.encounters.length - 1));
             if (encounterSelector.value !== validatedEncounterIndex) {
                 encounterSelector.value = validatedEncounterIndex;
-            }
-
-            // Clear custom entries from search
-            for (let i = statBlockDatalist.children.length - 1; i >= 0; i--) {
-                const option = statBlockDatalist.children[i];
-                if (option.statBlock.source !== "SRD") {
-                    option.remove();
-                }
-            }
-            for (let i = browsingTableBody.children.length - 1; i >= 0; i--) {
-                const row = browsingTableBody.children[i];
-                if (row.statBlock.source !== "SRD") {
-                    row.remove();
-                }
-            }
-
-            // Add custom entries
-            // TODO: Sort alpha by name, mixing sources (environments should also be mixed/sorted)
-            // TODO: This is not encounter-specific data, should it not be refreshed here?
-            if (state.custom && state.custom.statBlocks && state.custom.statBlocks.length > 0) {
-                state.custom.statBlocks.forEach(function(statBlock) {
-                    addStatBlockToSearch(statBlock);
-                });
             }
 
             // TODO: Validate various fields
@@ -2153,8 +2140,6 @@
             loadFromJsonFile(event, function(loadedState) {
                 if (loadedState && loadedState.custom && loadedState.custom.statBlocks) {
                     if (!state) {
-                        // NOTE: This is allowing state without any encounters
-                        // TODO: If we keep the browser visible in the no-encounters scenario, make sure it gets updated here
                         state = {};
                     }
                     if (!state.custom) {
@@ -2164,8 +2149,9 @@
                         state.custom.statBlocks = [];
                     }
                     state.custom.statBlocks.push(...loadedState.custom.statBlocks);
+                    state.custom.statBlocks.sort((a, b) => a.name.localeCompare(b.name));
                     saveState();
-                    refreshDisplay();
+                    refreshCustomStatBlocksInSearch();
                 } else {
                     alert("Failed to load custom stat blocks from file.");
                 }
@@ -2212,9 +2198,30 @@
             localStorage.setItem("prefer-simple-search", preferSimpleSearch);
         }
 
-        // TODO: This is probably a silly way to do this, we
-        //       don't actually want all these DOM elements.
-        //       But it's an easy way to get that autocomplete for now.
+        function refreshCustomStatBlocksInSearch() {
+            // Clear custom entries from search
+            for (let i = statBlockDatalist.children.length - 1; i >= 0; i--) {
+                const option = statBlockDatalist.children[i];
+                if (option.statBlock.source !== "SRD") {
+                    option.remove();
+                }
+            }
+            for (let i = browsingTableBody.children.length - 1; i >= 0; i--) {
+                const row = browsingTableBody.children[i];
+                if (row.statBlock.source !== "SRD") {
+                    row.remove();
+                }
+            }
+
+            // Add custom entries
+            // TODO: Sort alpha by name, mixing sources (environments should also be mixed/sorted)
+            if (state.custom && state.custom.statBlocks && state.custom.statBlocks.length > 0) {
+                state.custom.statBlocks.forEach(function(statBlock) {
+                    addStatBlockToSearch(statBlock);
+                });
+            }
+        }
+
         const statBlockDatalist = document.createElement("datalist");
         statBlockDatalist.id = "searchable-statBlocks";
         const browsingTableBody = document.querySelector("#browsing tbody");
@@ -2222,6 +2229,7 @@
             addStatBlockToSearch(srdStatBlocks[i]);
         }
         document.body.appendChild(statBlockDatalist);
+        refreshCustomStatBlocksInSearch();
 
         refreshDisplay();
         updateBrowsingTableFiltering(); // TODO: Move into refreshDisplay?
