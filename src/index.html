@@ -1529,7 +1529,6 @@
         }
 
         function updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName) {
-            const elements = [];
             const slots = adversary[adversarySlotsPropertyName];
             const marked = instance[instanceMarkedPropertyName];
 
@@ -1539,25 +1538,29 @@
             // TODO: Add "Vulnerable (stress full)" condition when stress is fully marked?
             //       Would have to make sure it couldn't be deleted otherwise though.
 
-            for (let i = 0; i < slots; i++) {
-                const slot = document.createElement("input");
-                slot.type = "checkbox";
-                if (i < marked) {
-                    slot.checked = true;
-                }
-                slot.onclick = function(event) {
-                    if (event.target.checked) {
-                        instance[instanceMarkedPropertyName]++;
+            if (container.childElementCount != slots) {
+                const checkboxes = [];
+                for (let i = 0; i < slots; i++) {
+                    const slot = document.createElement("input");
+                    slot.type = "checkbox";
+                    slot.onclick = function(event) {
+                        if (event.target.checked) {
+                            instance[instanceMarkedPropertyName]++;
                     } else {
                         instance[instanceMarkedPropertyName]--;
                     }
-                    saveState();
-                    updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName);
-                };
-                elements.push(slot);
+                        saveState();
+                        updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName);
+                    };
+                    checkboxes.push(slot)
+                }
+
+                container.replaceChildren(...checkboxes);
             }
 
-            container.replaceChildren(...elements);
+            for (let i = 0; i < slots; i++) {
+                container.children[i].checked = i < marked;
+            }
         }
 
         function setupStatBlockActionButton(statBlockElement, statBlock) {
