@@ -1312,7 +1312,7 @@
             // TODO: Else, custom with given name?
 
             if (statBlock) {
-                if (statBlock.category == "Adversary" && !statBlock.instances || statBlock.instances.length == 0) {
+                if (statBlock.category == "Adversary" && !statBlock.instances?.length) {
                     statBlock.instances = [
                         {
                             name: statBlock.name + " #1",
@@ -1461,10 +1461,10 @@
         function onBrowserAddButtonClick(event) {
             const tr = event.target.closest("tr");
             const statBlockCopy = JSON.parse(JSON.stringify(tr.statBlock));
-            if (statBlockCopy.category == "Adversary" && (!statBlockCopy.instances || statBlockCopy.instances.length == 0)) {
+            if (statBlockCopy.category == "Adversary" && !statBlockCopy.instances?.length) {
                 statBlockCopy.instances = [
-                        {
-                            name: statBlockCopy.name + " #1",
+                    {
+                        name: statBlockCopy.name + " #1",
                             hpMarked: 0,
                             stressMarked: 0
                         }
@@ -1918,7 +1918,7 @@
                     return;
                 }
 
-                if (newStatBlock.category == "Adversary" && !newStatBlock.instances || newStatBlock.instances.length == 0) {
+                if (newStatBlock.category == "Adversary" && !newStatBlock.instances?.length) {
                     newStatBlock.instances = [
                         {
                             name: newStatBlock.name + " #1",
