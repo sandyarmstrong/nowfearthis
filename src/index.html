@@ -2222,7 +2222,7 @@
 
             // Add custom entries
             // TODO: Sort alpha by name, mixing sources (environments should also be mixed/sorted)
-            if (state.custom && state.custom.statBlocks && state.custom.statBlocks.length > 0) {
+            if (state?.custom?.statBlocks?.length) {
                 state.custom.statBlocks.forEach(function(statBlock) {
                     addStatBlockToSearch(statBlock);
                 });
