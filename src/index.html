@@ -98,16 +98,16 @@
                 /* opacity: 0.7; */
             }
 
-            button.instance-action {
+            button.child-action {
                 background-color: var(--clr-surface-tonal-a0);
             }
-            button.instance-action:hover {
+            button.child-action:hover {
                 background-color: var(--clr-surface-tonal-a10);
             }
-            button.instance-action:active {
+            button.child-action:active {
                 background-color: var(--clr-surface-tonal-a20);
             }
-            button.instance-action:disabled {
+            button.child-action:disabled {
                 background-color: var(--clr-surface-tonal-a30);
                 opacity: 0.7;
             }
@@ -359,6 +359,9 @@
                 padding: 20px;
                 border-radius: 10px;
                 box-shadow: 10px 10px 10px black;
+            }
+            .editor .feature {
+                position: relative; /* For top action bar */
             }
 
             #simple-search, #browsing {
@@ -788,6 +791,18 @@
             const featureElement = document.createElement("div");
             featureElement.className = "feature";
             featureElement.innerHTML = `<label for="statBlock-feature-name-${idSuffix}">Name:</label><input type="text" class="statBlock-feature-name" id="statBlock-feature-name-${idSuffix}" value="${feature?.name ?? ""}" size="30"><label for="statBlock-feature-text-${idSuffix}"><br>Description:</label><textarea id="statBlock-feature-text-${idSuffix}" class="statBlock-feature-text" rows="4" cols="50">${feature?.text ?? ""}</textarea>`;
+
+            const instanceTopActions = createElement("div", "top-actions");
+            featureElement.appendChild(instanceTopActions);
+
+            const removeInstanceButton = createElement("button", "child-action", "🗑️");
+            removeInstanceButton.title = "Remove this feature";
+            removeInstanceButton.onclick = function(event) {
+                event.target.closest(".feature").remove();
+                // Editor will handle saving state and refreshing display
+            };
+            instanceTopActions.appendChild(removeInstanceButton);
+
             return featureElement;
         }
 
@@ -873,7 +888,6 @@
             const featureContainer = statBlockEditor.querySelector("#statBlock-features");
             const featureElement = createFeatureEditorElement(null, featureContainer.children.length);
             featureContainer.appendChild(featureElement);
-            // TODO: Allow deletion (but could also do this by deleting all text for a feature)
         });
 
         document.querySelector("#cancel-statBlock-edit").addEventListener("click", function() {
@@ -1841,7 +1855,7 @@
                 const instanceTopActions = createElement("div", "top-actions");
                 instanceDiv.appendChild(instanceTopActions);
 
-                const removeInstanceButton = createElement("button", "instance-action", "🗑️");
+                const removeInstanceButton = createElement("button", "child-action", "🗑️");
                 removeInstanceButton.title = "Remove this instance of the adversary";
                 removeInstanceButton.onclick = function(event) {
                     event.target.closest(".instance").remove();
