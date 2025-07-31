@@ -955,7 +955,7 @@
             }
 
             saveState();
-            refreshDisplay();
+            refreshDisplay(); // TODO: CreateOrEditStatBlockElement, EditTotalBattlePoints
             hideStatBlockEditor();
         });
 
@@ -977,7 +977,7 @@
             conditionsEditor.classList.add("hidden");
             editorOverlay.classList.add("hidden");
 
-            refreshDisplay(); // TODO: A more efficient way to update just the conditions div, maybe a callback?
+            refreshDisplay(); // TODO: EditStatBlockConditions
 
             if (instance) {
                 const instanceElements = Array.from(document.querySelectorAll(".instance"));
@@ -1153,7 +1153,7 @@
             encounter.targetBattlePoints = parseInt(encounterEditor.querySelector("#encounter-target-battle-points").value);
 
             saveState();
-            refreshDisplay();
+            refreshDisplay(); // TODO: Only needed for _new_ encounters. Otherwise, EditTotalBattlePoints
             hideEncounterEditor();
 
             updateBrowsingTier();
@@ -1546,9 +1546,9 @@
                     slot.onclick = function(event) {
                         if (event.target.checked) {
                             instance[instanceMarkedPropertyName]++;
-                    } else {
-                        instance[instanceMarkedPropertyName]--;
-                    }
+                        } else {
+                            instance[instanceMarkedPropertyName]--;
+                        }
                         saveState();
                         updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName);
                     };
@@ -1620,7 +1620,7 @@
                     }
                     statBlock.instances.push(newInstance);
                     saveState();
-                    refreshDisplay();
+                    refreshDisplay(); // TODO: EditStatBlock (add instance element, update BP), EditTotalBattlePoints
                 };
                 topActions.appendChild(addInstanceButton);
             }
@@ -1866,7 +1866,7 @@
                         return i !== instance;
                     });
                     saveState();
-                    refreshDisplay();
+                    refreshDisplay(); // TODO: EditStatBlock (update BP), EditTotalBattlePoints
                 };
                 instanceTopActions.appendChild(removeInstanceButton);
             }
@@ -1952,7 +1952,7 @@
                 state.custom.statBlocks.push(newCustomStatBlock);
                 state.custom.statBlocks.sort((a, b) => a.name.localeCompare(b.name));
                 saveState();
-                refreshDisplay(); // Update this statblock display (just tooltip/menu state)
+                refreshDisplay(); // TODO: EditStatBlock (just tooltip/menu state)
                 refreshCustomStatBlocksInSearch();
             });
             statBlockElement.addEventListener("statBlockDeletedFromCustom", function(event) {
@@ -1972,7 +1972,7 @@
                 }
                 statBlock.source = "Orphaned";
                 saveState();
-                refreshDisplay(); // Update this statblock display (just tooltip/menu state)
+                refreshDisplay(); // TODO: EditStatBlock (just tooltip/menu state)
                 refreshCustomStatBlocksInSearch();
             });
 
