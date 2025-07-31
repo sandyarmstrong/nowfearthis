@@ -101,6 +101,8 @@ for srdAdversary in srdAdversaries:
 for srdEnvironment in srdEnvironments:
     loadEntry(srdEnvironment, "Environment")
 
+items.sort(key=lambda statBlock: statBlock['name'])
+
 thisFileDirectory = os.path.dirname(os.path.realpath(__file__))
 outputPath = os.path.join(thisFileDirectory, '..', 'src', 'statBlocks.js')
 
