@@ -4,7 +4,6 @@ import re
 import sys
 import urllib.request
 
-# TODO: Support environments too
 if len(sys.argv) != 3:
     sys.exit("Usage: convertSRD.py {adversariesJsonUrl} {environmentsJsonUrl}")
 

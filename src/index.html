@@ -473,7 +473,10 @@
 
         <div id="editor-overlay" class="hidden"></div>
 
-        <!-- TODO: Should all these editors use <dialog>? Safari doesn't support closedBy... -->
+        <!-- Could remove overlay and instead use <dialog> instead of these divs,
+             but Safari doesn't support closedBy=any so it wouldn't really have the
+             behavior I want. Plus it's more styling work due to <dialog>'s use of
+             the canastext color. -->
         <div id="encounter-editor" class="editor hidden">
             <form id="encounter-form">
                 <label for="encounter-name">Name:</label>
