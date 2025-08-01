@@ -1466,26 +1466,26 @@
                 statBlockCopy.instances = [
                     {
                         name: statBlockCopy.name + " #1",
-                            hpMarked: 0,
-                            stressMarked: 0
-                        }
-                    ];
-                }
+                        hpMarked: 0,
+                        stressMarked: 0
+                    }
+                ];
+            }
 
-                const encounter = ensureEncounter();
-                if (!encounter.statBlocks) {
-                    encounter.statBlocks = [];
-                }
-                encounter.statBlocks.push(statBlockCopy);
-                saveState();
+            const encounter = ensureEncounter();
+            if (!encounter.statBlocks) {
+                encounter.statBlocks = [];
+            }
+            encounter.statBlocks.push(statBlockCopy);
+            saveState();
 
-                const statBlocks =  document.querySelector("#statBlocks");
-                if (statBlocks) {
-                    addStatBlock(
-                        statBlocks,
-                        encounter,
-                        statBlockCopy,
-                        refreshBattlePoints);
+            const statBlocks =  document.querySelector("#statBlocks");
+            if (statBlocks) {
+                addStatBlock(
+                    statBlocks,
+                    encounter,
+                    statBlockCopy,
+                    refreshBattlePoints);
             } else {
                 refreshDisplay();
             }
