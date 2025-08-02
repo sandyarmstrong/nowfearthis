@@ -731,6 +731,11 @@
         const statBlockEditor = document.getElementById("statBlock-editor");
         const conditionsEditor = document.getElementById("conditions-editor");
 
+        const simpleSearch = document.getElementById("simple-search");
+        const simpleSearchInput = document.getElementById("simple-search-input");
+        const fullSearch = document.getElementById("browsing");
+        const fullSearchInput = document.getElementById("browsing-search");
+
         let expandAllFeatures = false;
 
         function createElement(tagName, className = null, innerText = null) {
@@ -788,7 +793,7 @@
                 const statBlockElements = Array.from(document.querySelectorAll(".statBlock"));
                 for (let i = 0; i < statBlockElements.length; i++) {
                     if (statBlockElements[i].statBlock == statBlock) {
-                        statBlockElements[i].scrollIntoView({ behavior: "instant", block: "center" });
+                        statBlockElements[i].scrollIntoView({ behavior: "instant", block: "nearest" });
                     }
                 }
             }
@@ -997,7 +1002,7 @@
                 const instanceElements = Array.from(document.querySelectorAll(".instance"));
                 for (let i = 0; i < instanceElements.length; i++) {
                     if (instanceElements[i].instance == instance) {
-                        instanceElements[i].scrollIntoView({ behavior: "instant", block: "center" });
+                        instanceElements[i].scrollIntoView({ behavior: "instant", block: "nearest" });
                     }
                 }
             }
@@ -1204,18 +1209,26 @@
             updateEditorBattlePointsRecommendation();
         });
 
-        // TODO: This is annoying if you are scrolled down, and every statBlock above changes expansion,
-        //       messing with your scroll position. Fix scroll position or just don't do this.
         function handleFeaturesToggle(event) {
+            // Don't handle toggling if this was triggered by the event handler itself,
+            // as that messes with our ability to scroll back to the right position.
+            if (event.target.manuallyTogglingViaEventHandler) {
+                event.target.manuallyTogglingViaEventHandler = undefined;
+                return;
+            }
+
             const opened = event.target.open;
             if (expandAllFeatures != opened) {
                 expandAllFeatures = opened;
                 for (const element of document.getElementsByClassName("featuresExpander")) {
                     if (element.open != expandAllFeatures) {
+                        element.manuallyTogglingViaEventHandler = true;
                         element.open = expandAllFeatures;
                     }
                 }
             }
+
+            event.target.scrollIntoView({ behavior: "instant", block: "nearest" });
         }
 
         function statBlockMatchesSearch(statBlock, searchText) {
@@ -1259,7 +1272,7 @@
             const selectedTier = parseInt(document.querySelector("#browsing-tier").value);
             const selectedCategory = document.querySelector("#browsing-category").value;
             const selectedType = document.querySelector("#browsing-type").value;
-            const searchText = document.querySelector("#browsing-search").value;
+            const searchText = fullSearchInput.value;
 
             const rows = browsingTableBody.querySelectorAll("tr");
             rows.forEach(function(row) {
@@ -1275,7 +1288,7 @@
             });
         }
 
-        document.getElementById("browsing-search").addEventListener("input", function(event) {
+        fullSearchInput.addEventListener("input", function(event) {
             updateBrowsingTableFiltering();
         });
         document.getElementById("browsing-source").addEventListener("change", function(event) {
@@ -1291,7 +1304,7 @@
             updateBrowsingTableFiltering();
         });
         document.getElementById("browsing-reset-filters").addEventListener("click", function(event) {
-            document.getElementById("browsing-search").value = "";
+            fullSearchInput.value = "";
             document.getElementById("browsing-source").value = "";
             document.getElementById("browsing-tier").value = "";
             document.getElementById("browsing-category").value = "";
@@ -1299,7 +1312,7 @@
             updateBrowsingTableFiltering();
         });
 
-        document.getElementById("simple-search-input").addEventListener("keyup", function(event) {
+        simpleSearchInput.addEventListener("keyup", function(event) {
             if (event.keyCode === 13) { // Enter key
                 event.preventDefault();
                 document.getElementById("simple-search-add-button").click();
@@ -1307,7 +1320,7 @@
         });
 
         document.getElementById("simple-search-add-button").addEventListener("click", () => {
-            let selectedOption = document.getElementById("simple-search-input").value.trim();
+            let selectedOption = simpleSearchInput.value.trim();
             if (!selectedOption) {
                 // TODO: Or some "custom" type?
                 selectedOption = "Jagged Knife Bandit";
@@ -1353,25 +1366,22 @@
         });
 
         document.getElementById("show-full-search").addEventListener("click", function(event) {
-            // TODO: Should maybe do this globally and use elsewhere
-            const fullSearch = document.getElementById("browsing");
-            const simpleSearch = document.getElementById("simple-search");
-
             fullSearch.classList.remove("hidden");
             simpleSearch.classList.add("hidden");
-            document.getElementById("browsing-search").focus();
+            if (fullSearchInput.value != simpleSearchInput.value) {
+                fullSearchInput.value = simpleSearchInput.value;
+                updateBrowsingTableFiltering();
+            }
+            fullSearchInput.focus();
             preferSimpleSearch = false;
             saveState();
         });
 
         document.getElementById("hide-full-search").addEventListener("click", function(event) {
-            // TODO: Should maybe do this globally and use elsewhere
-            const fullSearch = document.getElementById("browsing");
-            const simpleSearch = document.getElementById("simple-search");
-
             fullSearch.classList.add("hidden");
             simpleSearch.classList.remove("hidden");
-            document.getElementById("simple-search-input").focus();
+            simpleSearchInput.value = fullSearchInput.value;
+            simpleSearchInput.focus();
             preferSimpleSearch = true;
             saveState();
         });
@@ -2100,11 +2110,11 @@
         // TODO: Also persist Features expand/collapse state?
         let preferSimpleSearch = localStorage.getItem("prefer-simple-search") === "true";
         if (preferSimpleSearch) {
-            document.getElementById("simple-search").classList.remove("hidden");
-            document.getElementById("browsing").classList.add("hidden");
+            simpleSearch.classList.remove("hidden");
+            fullSearch.classList.add("hidden");
         } else {
-            document.getElementById("simple-search").classList.add("hidden");
-            document.getElementById("browsing").classList.remove("hidden");
+            simpleSearch.classList.add("hidden");
+            fullSearch.classList.remove("hidden");
         }
 
         let selectedEncounterIndex = parseInt(localStorage.getItem("selected-encounter-index"));
@@ -2244,7 +2254,7 @@
 
         const statBlockDatalist = document.createElement("datalist");
         statBlockDatalist.id = "searchable-statBlocks";
-        const browsingTableBody = document.querySelector("#browsing tbody");
+        const browsingTableBody = fullSearch.querySelector("tbody");
         for (let i = 0; i < srdStatBlocks.length; i++) {
             addStatBlockToSearch(srdStatBlocks[i]);
         }
