@@ -1515,16 +1515,26 @@
         }
 
         function addStatBlockToSearch(statBlock) {
+            // Find insertion position
+            let insertBeforeIndex = 1;
+            for (let i = 0; i < statBlockDatalist.children.length; i++) {
+                if (statBlockDatalist.children[i].value.localeCompare(statBlock.name) > 0) {
+                    break;
+                }
+                insertBeforeIndex++;
+            }
+
             // Datalist for basic search
             const option = document.createElement("option");
             option.statBlock = statBlock;
             option.value = statBlock.name;
-            statBlockDatalist.appendChild(option);
+
+            statBlockDatalist.insertBefore(option, statBlockDatalist.childNodes[insertBeforeIndex]);
 
             // Table for browsing
             const tr = document.createElement("tr");
             tr.statBlock = statBlock;
-            browsingTableBody.appendChild(tr);
+            browsingTableBody.insertBefore(tr, browsingTableBody.childNodes[insertBeforeIndex]);
 
             const addButtonTD = createElement("td", "nowrap");
             const addButton = createElement("button", null, "➕ Add");
@@ -2244,7 +2254,6 @@
             }
 
             // Add custom entries
-            // TODO: Sort alpha by name, mixing sources (environments should also be mixed/sorted)
             if (state?.custom?.statBlocks?.length) {
                 state.custom.statBlocks.forEach(function(statBlock) {
                     addStatBlockToSearch(statBlock);
