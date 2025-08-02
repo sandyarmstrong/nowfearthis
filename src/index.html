@@ -477,10 +477,14 @@
         <!-- Could remove overlay and instead use <dialog> instead of these divs,
              but Safari doesn't support closedBy=any so it wouldn't really have the
              behavior I want. Plus it's more styling work due to <dialog>'s use of
-             the canvastext color.
+             the canvastext color. Would need to unset a lot of default [popover]
+             styling.
 
              Another option might be to use <dialog>, but non-modally, with a custom
-             overlay, and drive it with the Popover API?
+             overlay, and drive it with the Popover API? This would be fine if
+             fixed or viewport-relative positioning was always ok, since Firefox
+             doesn't yet support anchor positioning. But viewport-relative
+             positioning is not always ok.
         -->
         <div id="encounter-editor" class="editor hidden">
             <form id="encounter-form">
