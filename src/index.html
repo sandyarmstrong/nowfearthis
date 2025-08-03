@@ -996,14 +996,18 @@
             conditionsEditor.classList.add("hidden");
             editorOverlay.classList.add("hidden");
 
-            refreshDisplay(); // TODO: EditStatBlockConditions
+            const instanceElements = Array.from(document.querySelectorAll(".instance"));
+            for (let i = 0; i < instanceElements.length; i++) {
+                if (instanceElements[i].instance == instance) {
+                    const conditionsDiv = instanceElements[i].querySelector(".conditions");
+                    if (conditionsDiv) {
+                        updateConditionsDisplay(conditionsDiv, instance, false);
 
-            if (instance) {
-                const instanceElements = Array.from(document.querySelectorAll(".instance"));
-                for (let i = 0; i < instanceElements.length; i++) {
-                    if (instanceElements[i].instance == instance) {
-                        instanceElements[i].scrollIntoView({ behavior: "instant", block: "nearest" });
+                        // TODO: If we don't need to refreshDisplay, can we just present the editor
+                        //       without changing our Y position, and then skip this scrolling?
+                        conditionsDiv.scrollIntoView({ behavior: "instant", block: "nearest" });
                     }
+                    break;
                 }
             }
         }
