@@ -1605,13 +1605,13 @@
         }
 
         function setupStatBlockActionButton(statBlockElement, statBlock) {
-            const actionsMenu = createElement("menu", "actions-menu");
+            const actionsMenu = createElement("menu", "actions-menu hidden");
 
             const copyAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Duplicate</button>`);
             copyAction.title = "Copy this stat block, including all changed state";
             copyAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockCopiedEvent);
-                actionsMenu.remove();
+                actionsMenu.classList.remove("hidden");
             };
             actionsMenu.appendChild(copyAction);
 
@@ -1619,7 +1619,7 @@
             copyFromSourceAction.title = "Copy this stat block from the source, ignoring all changes";
             copyFromSourceAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockCopiedFromSourceEvent);
-                actionsMenu.remove();
+                actionsMenu.classList.add("hidden");
             };
             actionsMenu.appendChild(copyFromSourceAction);
 
@@ -1628,7 +1628,7 @@
             saveCustomAction.title = "Save this stat block to your custom stat block source for later use";
             saveCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockSavedToCustomEvent);
-                actionsMenu.remove();
+                actionsMenu.classList.add("hidden");
             };
             actionsMenu.appendChild(saveCustomAction);
 
@@ -1637,7 +1637,7 @@
             deleteCustomAction.title = "Delete from your custom stat block source";
             deleteCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockDeletedFromCustomEvent);
-                actionsMenu.remove();
+                actionsMenu.classList.add("hidden");
             };
             actionsMenu.appendChild(deleteCustomAction);
 
@@ -1683,12 +1683,9 @@
             const actionsButton = createElement("button", null, "🎭");
             actionsButton.title = "Stat block management actions";
             actionsButton.onclick = function() {
-                if (actionsMenu.parentElement) {
-                    actionsMenu.remove();
-                } else {
-                    statBlockElement.appendChild(actionsMenu);
-                }
+                actionsMenu.classList.toggle("hidden");
             };
+            statBlockElement.appendChild(actionsMenu)
             topActions.appendChild(actionsButton);
         }
 
