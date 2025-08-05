@@ -53,6 +53,18 @@
                 --button-bg-active-color: var(--clr-primary-a0);
                 --button-text-color: var(--clr-dark-a0);
             }
+            @media (max-width: 1100px) {
+                :root {
+                    font-size: 36px;
+                }
+                button, select, input, textarea {
+                    font-size: inherit;
+                }
+                input[type='checkbox'] {
+                    width: 1em;
+                    height: 1em;
+                }
+            }
             body {
                 background-color: var(--body-bg-color);
                 color: var(--text-color);
@@ -176,6 +188,13 @@
                 padding: 5px 10px;
                 background-color: var(--statBlock-bg-color);
                 color: var(--statBlock-text-color);
+            }
+            @media (max-width: 1100px) {
+                .statBlock {
+                    width: 90%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
             }
             .statBlock h3 {
                 margin: 8px 0px;
@@ -306,7 +325,7 @@
             .top-actions {
                 position: absolute;
                 right: 5px;
-                top: 5px;
+                top: 5px; /* Make sure to update menu positioning in actionsButton click handler if this changes */
             }
             .top-actions button {
                 padding: 2px;
@@ -319,7 +338,6 @@
                 z-index: 999; /* Above most things, below the overlay */
                 position: absolute;
                 right: 5px;
-                top: 30px;
                 margin: 0px;
                 padding: 0px;
                 list-style-type: none;
@@ -363,6 +381,15 @@
             }
             .editor .feature {
                 position: relative; /* For top action bar */
+            }
+            @media (max-width: 1100px) {
+                .editor {
+                    width: 90%;
+                }
+            }
+
+            textarea {
+                width: 100%;
             }
 
             #simple-search, #browsing {
@@ -411,6 +438,13 @@
                 top: 0;
                 vertical-align: bottom;
                 background: var(--clr-surface-a20); /* Need a background to avoid scrolled rows from showing through */
+            }
+
+            @media (max-width: 1100px) {
+                button {
+                    padding-left: 0.5em !important;
+                    padding-right: 0.5em !important;
+                }
             }
 
             /* Keep this last */
@@ -550,14 +584,14 @@
                     </span>
                     <br>
                     <label for="statBlock-description">Description:</label>
-                    <textarea id="statBlock-description" cols="30" rows="3"></textarea>
+                    <textarea id="statBlock-description" rows="3"></textarea>
                     <div class="statBlock-editor-adversary">
                         <label for="adversary-motives">Motives & Tactics:</label>
-                        <textarea id="adversary-motives" cols="30" rows="2"></textarea>
+                        <textarea id="adversary-motives" rows="2"></textarea>
                     </div>
                     <div class="statBlock-editor-environment">
                         <label for="environment-impulses">Impulses:</label>
-                        <textarea id="environment-impulses" cols="30" rows="2"></textarea>
+                        <textarea id="environment-impulses" rows="2"></textarea>
                     </div>
                 </fieldset>
                 <fieldset>
@@ -581,7 +615,7 @@
                     </div>
                     <div class="statBlock-editor-environment">
                         <label for="environment-potential-adversaries">Potential Adversaries:</label>
-                        <textarea id="environment-potential-adversaries" cols="30" rows="3"></textarea>
+                        <textarea id="environment-potential-adversaries" rows="3"></textarea>
                     </div>
                 </fieldset>
                 <fieldset class="statBlock-editor-adversary">
@@ -688,6 +722,7 @@
                             <tr>
                                 <th scope="col"></th>
                                 <th scope="col">Name</th>
+                                <!-- TODO: Make some columns disappear when insufficient width -->
                                 <th scope="col">Type</th>
                                 <th scope="col">Points</th>
                                 <th scope="col">Description</th>
@@ -775,9 +810,11 @@
             encounterMenu.classList.add("hidden");
         }
 
-        document.getElementById("toggle-encounter-menu").addEventListener("click", function() {
+        document.getElementById("toggle-encounter-menu").addEventListener("click", function(event) {
             const encounterMenu = document.getElementById("encounter-menu");
             if (encounterMenu.classList.contains("hidden")) {
+                const rect = event.target.getBoundingClientRect();
+                encounterMenu.style.top = `${rect.bottom + window.scrollY}px`;
                 encounterMenu.classList.remove("hidden");
             } else {
                 hideEncounterMenu();
@@ -809,11 +846,12 @@
             const featureElement = document.createElement("div");
             featureElement.className = "feature";
             // TODO: Safari doesn't wrap Description label/textarea, so textarea (and entire fieldset) sticks out to the right
-            featureElement.innerHTML = `<label for="statBlock-feature-name-${idSuffix}">Name:</label><input type="text" class="statBlock-feature-name" id="statBlock-feature-name-${idSuffix}" value="${feature?.name ?? ""}" size="30"><label for="statBlock-feature-text-${idSuffix}"><br>Description:</label><textarea id="statBlock-feature-text-${idSuffix}" class="statBlock-feature-text" rows="4" cols="50">${feature?.text ?? ""}</textarea>`;
+            featureElement.innerHTML = `<label for="statBlock-feature-name-${idSuffix}">Name:</label><input type="text" class="statBlock-feature-name" id="statBlock-feature-name-${idSuffix}" value="${feature?.name ?? ""}" size="30"><label for="statBlock-feature-text-${idSuffix}"><br>Description:</label><br><textarea id="statBlock-feature-text-${idSuffix}" class="statBlock-feature-text" rows="4">${feature?.text ?? ""}</textarea>`;
 
             const instanceTopActions = createElement("div", "top-actions");
             featureElement.appendChild(instanceTopActions);
 
+            // TODO: Could put this and Name in a flex container instead, to avoid overlap when super narrow
             const removeInstanceButton = createElement("button", "child-action", "🗑️");
             removeInstanceButton.title = "Remove this feature";
             removeInstanceButton.onclick = function(event) {
@@ -1682,7 +1720,9 @@
 
             const actionsButton = createElement("button", null, "🎭");
             actionsButton.title = "Stat block management actions";
-            actionsButton.onclick = function() {
+            actionsButton.onclick = function(event) {
+                const rect = event.target.getBoundingClientRect();
+                actionsMenu.style.top = `${rect.height + 5}px`;
                 actionsMenu.classList.toggle("hidden");
             };
             statBlockElement.appendChild(actionsMenu)
