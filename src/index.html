@@ -752,8 +752,6 @@
     </body>
 
     <script>
-        // TODO: Change all code that puts user data directly into innerHTML
-
         const statBlockRemovedEvent = new Event("statBlockRemoved");
         const statBlockCopiedEvent = new Event("statBlockCopied");
         const statBlockCopiedFromSourceEvent = new Event("statBlockCopiedFromSource");
@@ -845,6 +843,7 @@
             const featureElement = document.createElement("div");
             featureElement.className = "feature";
             // TODO: Safari doesn't wrap Description label/textarea, so textarea (and entire fieldset) sticks out to the right
+            // TODO: This is the last place where innerHTML is being set with user data; fix it
             featureElement.innerHTML = `<label for="statBlock-feature-name-${idSuffix}">Name:</label><input type="text" class="statBlock-feature-name" id="statBlock-feature-name-${idSuffix}" value="${feature?.name ?? ""}" size="30"><label for="statBlock-feature-text-${idSuffix}"><br>Description:</label><br><textarea id="statBlock-feature-text-${idSuffix}" class="statBlock-feature-text" rows="4">${feature?.text ?? ""}</textarea>`;
 
             const instanceTopActions = createElement("div", "top-actions");
@@ -1194,7 +1193,8 @@
             event.preventDefault(); // Prevent page refresh
 
             let encounter = encounterEditor.encounter;
-            if (!encounter) {
+            const isNewEncounter = !encounter;
+            if (isNewEncounter) {
                 if (!state) {
                     state = {};
                 }
@@ -1213,7 +1213,11 @@
             encounter.targetBattlePoints = parseInt(encounterEditor.querySelector("#encounter-target-battle-points").value);
 
             saveState();
-            refreshDisplay(); // TODO: Only needed for _new_ encounters. Otherwise, EditTotalBattlePoints
+            if (isNewEncounter) {
+                refreshDisplay();
+            } else {
+                refreshBattlePoints();
+            }
             hideEncounterEditor();
 
             updateBrowsingTier();
@@ -1488,6 +1492,8 @@
             const battlePointsDiv = document.querySelector("#battle-points");
             const currentBattlePoints = calculateBattlePoints(encounter);
 
+            battlePointsDiv.querySelector("[name='target-battle-points']").innerText = encounter.targetBattlePoints;
+
             // Round to nearest 0.1 for display
             const remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
 
@@ -1670,7 +1676,9 @@
             actionsMenu.appendChild(saveCustomAction);
 
             const deleteCustomAction = document.createElement("li");
-            deleteCustomAction.innerHTML = `<button class="menu-action" ${statBlock.source == 'Custom' ? '' : 'disabled'}>Delete from Custom Source</button>`;
+            const deleteCustomActionButton = createElement("button", "menu-action", "Delete from Custom Source");
+            deleteCustomActionButton.disabled = statBlock.source !== 'Custom';
+            deleteCustomAction.appendChild(deleteCustomActionButton);
             deleteCustomAction.title = "Delete from your custom stat block source";
             deleteCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockDeletedFromCustomEvent);
@@ -1812,7 +1820,9 @@
 
             const statBlockDiv = createElement("article", "statBlock");
             statBlockDiv.statBlock = statBlock;
-            statBlockDiv.innerHTML = `<h3 title="Source: ${statBlock.originalName}, ${statBlock.source} ">${statBlock.name}</h3>`;
+            const statBlockHeader = createElement("h3", null, statBlock.name);
+            statBlockHeader.title = `Source: ${statBlock.originalName}, ${statBlock.source}`;
+            statBlockDiv.appendChild(statBlockHeader);
 
             let tierTypeSuffix = "";
             let tierTypeSuffixComponents = [];
@@ -1840,13 +1850,15 @@
             if (statBlock.motivesAndTactics) {
                 const motives = document.createElement("p");
                 motives.className =  "motives";
-                motives.innerHTML = `<span class="motivesLabel">Motives & Tactics:</span> ${statBlock.motivesAndTactics}`;
+                motives.appendChild(createElement("span", "motivesLabel", "Motives & Tactics:"));
+                motives.appendChild(document.createTextNode(` ${statBlock.motivesAndTactics}`));
                 statBlockDiv.appendChild(motives);
             }
             if (statBlock.impulses) {
                 const impulses = document.createElement("p");
                 impulses.className =  "motives";
-                impulses.innerHTML = `<span class="motivesLabel">Impulses:</span> ${statBlock.impulses}`;
+                impulses.appendChild(createElement("span", "motivesLabel", "Impulses:"));
+                impulses.appendChild(document.createTextNode(` ${statBlock.impulses}`));
                 statBlockDiv.appendChild(impulses);
             }
 
@@ -1917,7 +1929,7 @@
                 });
                 instanceDiv.appendChild(instanceName);
 
-                const hpDiv = createElementWithInnerHTML("div", "slotInfo", "HP:");
+                const hpDiv = createElement("div", "slotInfo", "HP:");
                 const hpSlotsDiv = createElement("div", "slots");
                 updateResource(hpSlotsDiv, statBlock, "hp", instance, "hpMarked");
                 hpDiv.appendChild(hpSlotsDiv);
@@ -2141,9 +2153,10 @@
             encounterDiv.appendChild(encounterBar);
 
             // TODO: Should be able to initiate edit from here? Should this move to top bar?
+            //       Seems like it could be created statically.
             const battlePointsDiv = document.createElement("div");
             battlePointsDiv.id = "battle-points";
-            battlePointsDiv.innerHTML = `<p>Target Battle Points: ${encounter.targetBattlePoints} (<span name="current-battle-points"></span> <span name="remaining-suffix"></span>) <span title="TODO: Click for summary from BUILDING BALANCED ENCOUNTERS">ℹ️</span></p>`;
+            battlePointsDiv.innerHTML = 'Target Battle Points: <span name="target-battle-points"></span> (<span name="current-battle-points"></span> <span name="remaining-suffix"></span>)';
             encounterBar.appendChild(battlePointsDiv);
             refreshBattlePoints();
 
