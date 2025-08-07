@@ -1811,8 +1811,7 @@
                 warning += "⚠️ below player tier"
             }
 
-            const statBlockDiv = document.createElement("div");
-            statBlockDiv.className = "statBlock";
+            const statBlockDiv = createElement("article", "statBlock");
             statBlockDiv.statBlock = statBlock;
             statBlockDiv.innerHTML = `<h3 title="Source: ${statBlock.originalName}, ${statBlock.source} ">${statBlock.name}</h3>`;
 
@@ -1903,6 +1902,8 @@
             for (let i = 0; i < statBlock.instances?.length || 0; i++) {
                 const instance = statBlock.instances[i];
 
+                // TODO: In theory this should maybe be a section or sub-article instead, but would
+                //       need an h4 for instance name.
                 const instanceDiv = createElement("div", "instance");
                 instanceDiv.instance = instance;
                 statBlockDiv.appendChild(instanceDiv);
@@ -2150,7 +2151,7 @@
             const fearDiv = createFearTracker(encounter);
             encounterBar.appendChild(fearDiv);
 
-            const statBlocksDiv = document.createElement("div");
+            const statBlocksDiv = document.createElement("main");
             statBlocksDiv.id = "statBlocks";
             for (let j = 0; j < encounter.statBlocks.length; j++) {
                 addStatBlock(statBlocksDiv, encounter, encounter.statBlocks[j]);
