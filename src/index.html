@@ -44,7 +44,6 @@
                 --text-color: var(--clr-light-a0);
                 --statBlock-bg-color: var(--clr-surface-a10);
                 --stats-bg-color: var(--clr-surface-a20);
-                --statBlock-border-color: var(--statBlock-bg-color);
                 --statBlock-text-color: var(--text-color);
                 --header-text-color: var(--clr-primary-a50);
 
@@ -57,6 +56,7 @@
                 :root {
                     font-size: 36px;
                 }
+                /* Apparently none of this input element sizing works the same on Safari */
                 button, select, input, textarea {
                     font-size: inherit;
                 }
@@ -181,7 +181,6 @@
                     Experience line from overflowing.
                 */
                 width: 23em;
-                border: 1px ridge var(--statBlock-border-color);
                 border-radius: 5px;
                 margin-right: 5px;
                 margin-top: 5px;
@@ -1910,7 +1909,7 @@
 
                 const instanceName = document.createElement("input")
                 instanceName.type = "text";
-                instanceName.size = 30;
+                instanceName.size = 30; // TODO: Change all size like we changed cols to scale down when narrow
                 instanceName.value = instance.name;
                 instanceName.addEventListener("input", function(event) {
                     instance.name = event.target.value;
