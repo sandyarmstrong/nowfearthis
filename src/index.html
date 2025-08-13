@@ -360,16 +360,24 @@
                 font-size: smaller;
             }
 
-            #editor-overlay {
+            .overlay {
                 position: fixed;
-                z-index: 1000; /* Ensure it is above other content */
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                backdrop-filter:blur(3px);
+
+                &#editor-overlay {
+                    z-index: 1000; /* Ensure it is above other content */
+                    background-color: rgba(0, 0, 0, 0.5);
+                    backdrop-filter:blur(3px);
+                }
+                &#active-menu-overlay {
+                    z-index: 998; /* Ensure it is above most content, but below the menu */
+                    background-color: rgba(0, 0, 0, 0.0); /* Transparent */
+                }
             }
+
             .editor {
                 position: absolute;
                 z-index: 1001; /* Ensure it is above the overlay */
@@ -508,7 +516,8 @@
             </div>
         </div>
 
-        <div id="editor-overlay" class="hidden"></div>
+        <div id="editor-overlay" class="hidden overlay"></div>
+        <div id="active-menu-overlay" class="hidden overlay"></div>
 
         <!-- Could remove overlay and instead use <dialog> instead of these divs,
              but Safari doesn't support closedBy=any so it wouldn't really have the
@@ -781,6 +790,7 @@
         const statBlockSavedToCustomEvent = new Event("statBlockSavedToCustom");
         const statBlockDeletedFromCustomEvent = new Event("statBlockDeletedFromCustom");
 
+        const activeMenuOverlay = document.getElementById("active-menu-overlay");
         const editorOverlay = document.getElementById("editor-overlay");
         const encounterEditor = document.getElementById("encounter-editor");
         const statBlockEditor = document.getElementById("statBlock-editor");
@@ -816,6 +826,15 @@
             return element;
         }
 
+        activeMenuOverlay.addEventListener("click", function() {
+            document.querySelectorAll(".actions-menu").forEach(function(menu) {
+                if (!menu.classList.contains("hidden")) {
+                    menu.classList.add("hidden");
+                }
+            });
+            activeMenuOverlay.classList.add("hidden");
+        });
+
         document.getElementById("editor-overlay").addEventListener("click", function() {
             if (!statBlockEditor.classList.contains("hidden")) {
                 hideStatBlockEditor();
@@ -829,6 +848,7 @@
         function hideEncounterMenu() {
             const encounterMenu = document.getElementById("encounter-menu");
             encounterMenu.classList.add("hidden");
+            activeMenuOverlay.classList.add("hidden");
         }
 
         document.getElementById("toggle-encounter-menu").addEventListener("click", function(event) {
@@ -837,6 +857,7 @@
                 const rect = event.target.getBoundingClientRect();
                 encounterMenu.style.top = `${rect.bottom + window.scrollY}px`;
                 encounterMenu.classList.remove("hidden");
+                activeMenuOverlay.classList.remove("hidden");
             } else {
                 hideEncounterMenu();
             }
@@ -1636,11 +1657,16 @@
         function setupStatBlockActionButton(statBlockElement, statBlock) {
             const actionsMenu = createElement("menu", "actions-menu hidden");
 
+            function dismissActionsMenu() {
+                actionsMenu.classList.add("hidden");
+                activeMenuOverlay.classList.add("hidden");
+            }
+
             const copyAction = createElementWithInnerHTML("li", null, `<button class="menu-action">Duplicate</button>`);
             copyAction.title = "Copy this stat block, including all changed state";
             copyAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockCopiedEvent);
-                actionsMenu.classList.remove("hidden");
+                dismissActionsMenu();
             };
             actionsMenu.appendChild(copyAction);
 
@@ -1648,7 +1674,7 @@
             copyFromSourceAction.title = "Copy this stat block from the source, ignoring all changes";
             copyFromSourceAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockCopiedFromSourceEvent);
-                actionsMenu.classList.add("hidden");
+                dismissActionsMenu();
             };
             actionsMenu.appendChild(copyFromSourceAction);
 
@@ -1657,7 +1683,7 @@
             saveCustomAction.title = "Save this stat block to your custom stat block source for later use";
             saveCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockSavedToCustomEvent);
-                actionsMenu.classList.add("hidden");
+                dismissActionsMenu();
             };
             actionsMenu.appendChild(saveCustomAction);
 
@@ -1668,7 +1694,7 @@
             deleteCustomAction.title = "Delete from your custom stat block source";
             deleteCustomAction.onclick = function() {
                 statBlockElement.dispatchEvent(statBlockDeletedFromCustomEvent);
-                actionsMenu.classList.add("hidden");
+                dismissActionsMenu();
             };
             actionsMenu.appendChild(deleteCustomAction);
 
@@ -1716,7 +1742,8 @@
             actionsButton.onclick = function(event) {
                 const rect = event.target.getBoundingClientRect();
                 actionsMenu.style.top = `${rect.height + 5}px`;
-                actionsMenu.classList.toggle("hidden");
+                actionsMenu.classList.remove("hidden");
+                activeMenuOverlay.classList.remove("hidden");
             };
             statBlockElement.appendChild(actionsMenu)
             topActions.appendChild(actionsButton);
