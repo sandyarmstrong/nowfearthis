@@ -74,12 +74,13 @@
                 font-size: smaller;
                 margin-top: 10px;
                 max-width: 50em;
-            }
-            #copyright a, #repo-info a {
-                color: var(--clr-primary-a50);
-            }
-            #copyright a:visited, #repo-info a:visited {
-                color: var(--clr-primary-a30);
+
+                a {
+                    color: var(--clr-primary-a50);
+                }
+                a:visited {
+                    color: var(--clr-primary-a30);
+                }
             }
 
             .load-button input {
@@ -112,16 +113,16 @@
 
             button.child-action {
                 background-color: var(--clr-surface-tonal-a0);
-            }
-            button.child-action:hover {
-                background-color: var(--clr-surface-tonal-a10);
-            }
-            button.child-action:active {
-                background-color: var(--clr-surface-tonal-a20);
-            }
-            button.child-action:disabled {
-                background-color: var(--clr-surface-tonal-a30);
-                opacity: 0.7;
+                &:hover {
+                    background-color: var(--clr-surface-tonal-a10);
+                }
+                &:active {
+                    background-color: var(--clr-surface-tonal-a20);
+                }
+                &:disabled {
+                    background-color: var(--clr-surface-tonal-a30);
+                    opacity: 0.7;
+                }
             }
 
             button.subtle {
@@ -129,12 +130,12 @@
                 border-radius: 4px;
                 margin: 0px;
                 padding: 2px;
-            }
-            button.subtle:hover {
-                background-color: var(--clr-surface-a20);
-            }
-            button.subtle:active {
-                background-color: var(--clr-surface-a30);
+                &:hover {
+                    background-color: var(--clr-surface-a20);
+                }
+                &:active {
+                    background-color: var(--clr-surface-a30);
+                }
             }
 
             #top-bar {
@@ -280,14 +281,15 @@
                 display: inline;
                 padding: 0px;
                 font-size: smaller;
-            }
-            ul.conditions-list li {
-                display: inline-block;
-                background-color: var(--clr-surface-a40);
-                border-radius: 3px;
-                margin-right: 5px;
-                margin-bottom: 5px;
-                padding: 2px;
+
+                li {
+                    display: inline-block;
+                    background-color: var(--clr-surface-a40);
+                    border-radius: 3px;
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                    padding: 2px;
+                }
             }
             button.inline-delete {
                 background-color: transparent;
@@ -297,12 +299,12 @@
                 padding: 0px;
                 margin-left: 5px;
                 font-size: smaller;
-            }
-            button.inline-delete:hover {
-                background-color: var(--clr-primary-a30);
-            }
-            button.inline-delete:active {
-                background-color: var(--clr-primary-a10);
+                &:hover {
+                    background-color: var(--clr-primary-a30);
+                }
+                &:active {
+                    background-color: var(--clr-primary-a10);
+                }
             }
 
             button.inline-add {
@@ -325,12 +327,13 @@
                 position: absolute;
                 right: 5px;
                 top: 5px; /* Make sure to update menu positioning in actionsButton click handler if this changes */
-            }
-            .top-actions button {
-                padding: 2px;
-                margin-left: 3px;
-                border-radius: 4px;
-                font-size: smaller;
+
+                button {
+                    padding: 2px;
+                    margin-left: 3px;
+                    border-radius: 4px;
+                    font-size: smaller;
+                }
             }
 
             .actions-menu {
@@ -340,16 +343,17 @@
                 margin: 0px;
                 padding: 0px;
                 list-style-type: none;
-            }
-            .actions-menu button, .actions-menu div {
-                border-radius: 0px;
-                width: 100%;
-                text-align: left;
+
+                button, div {
+                    border-radius: 0px;
+                    width: 100%;
+                    text-align: left;
 
                 /* Force button-likes in the menu to have the same font/size.
                    This does not perfectly match the default for buttons. */
-                font-family: serif;
-                font-size: inherit;
+                    font-family: serif;
+                    font-size: inherit;
+                }
             }
 
             .battle-point-advice {
@@ -377,9 +381,10 @@
                 padding: 20px;
                 border-radius: 10px;
                 box-shadow: 10px 10px 10px black;
-            }
-            .editor .feature {
-                position: relative; /* For top action bar */
+
+                .feature {
+                    position: relative; /* For top action bar */
+                }
             }
             @media (max-width: 1100px) {
                 .editor {
@@ -418,6 +423,9 @@
             }
             .results th, .results td {
                 border: 1px solid var(--clr-surface-a0);
+                padding: 5px 10px;
+                border-top-width: 0;
+                border-left-width: 0;
             }
             .results table {
                 overflow-y: auto;
@@ -426,11 +434,6 @@
             }
             .results td.nowrap {
                 white-space: nowrap;
-            }
-            .results th, .results td {
-                padding: 5px 10px;
-                border-top-width: 0;
-                border-left-width: 0;
             }
             .results th {
                 position: sticky;
