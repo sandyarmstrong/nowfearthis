@@ -533,19 +533,24 @@
         -->
         <div id="encounter-editor" class="editor hidden">
             <form id="encounter-form">
-                <label for="encounter-name">Name:</label>
-                <input type="text" id="encounter-name" required />
+                <label>Name:
+                    <input type="text" id="encounter-name" required />
+                </label>
                 <br>
-                <label for="encounter-tier">Tier:</label>
-                <input type="number" id="encounter-tier" min="1" max="4" value="1" required />
-                <label for="encounter-player-count">Player Count:</label>
-                <input type="number" id="encounter-player-count" min="1" max="20" value="4" required />
+                <label>Tier:
+                    <input type="number" id="encounter-tier" min="1" max="4" value="1" required />
+                </label>
+                <label>Player Count:
+                    <input type="number" id="encounter-player-count" min="1" max="20" value="4" required />
+                </label>
                 <br>
-                <label for="encounter-starting-fear">Starting Fear:</label>
-                <input type="number" id="encounter-starting-fear" min="0" max="12" value="0"/>
+                <label>Starting Fear:
+                    <input type="number" id="encounter-starting-fear" min="0" max="12" value="0"/>
+                </label>
                 <br>
-                <label for="encounter-target-battle-points">Target Battle Points:</label>
-                <input type="number" id="encounter-target-battle-points" min="1" max="99" value="14" required />
+                <label>Target Battle Points:
+                    <input type="number" id="encounter-target-battle-points" min="1" max="99" value="14" required />
+                </label>
                 <span id="encounter-recommended-battle-points"></span>
                 <div class="battle-point-advice">
                     <p>When planning a battle, start with <strong>[(3 x the number of PCs in combat) + 2]</strong> Battle Points and make the following adjustments:</p>
@@ -567,84 +572,104 @@
             <form id="statBlock-form">
                 <fieldset>
                     <legend>Basics</legend>
-                    <label for="statBlock-name">Name:</label>
-                    <input type="text" id="statBlock-name" size="30" required />
+                    <label>Name:
+                        <input type="text" id="statBlock-name" size="30" required />
+                    </label>
                     <br>
-                    <label for="statBlock-tier">Tier:</label>
-                    <input type="number" id="statBlock-tier" min="1" max="4" value="1" required />
+                    <label>Tier:
+                        <input type="number" id="statBlock-tier" min="1" max="4" value="1" required />
+                    </label>
                     <span class="statBlock-editor-adversary">
-                        <label for="adversary-type">Type:</label>
-                        <select id="adversary-type" list="srd-adversary-types">
-                            <option>Bruiser</option>
-                            <option>Horde</option>
-                            <option>Leader</option>
-                            <option>Minion</option>
-                            <option>Ranged</option>
-                            <option>Skulk</option>
-                            <option>Social</option>
-                            <option>Solo</option>
-                            <option>Standard</option>
-                            <option>Support</option>
-                        </select>
-                        <input type="number" id="adversary-count-per-hp" min="1" max="20" value="1" />
-                        <label for="adversary-count-per-hp" id="adversary-count-per-hp-label">/HP</label>
+                        <label>Type:
+                            <select id="adversary-type" list="srd-adversary-types">
+                                <option>Bruiser</option>
+                                <option>Horde</option>
+                                <option>Leader</option>
+                                <option>Minion</option>
+                                <option>Ranged</option>
+                                <option>Skulk</option>
+                                <option>Social</option>
+                                <option>Solo</option>
+                                <option>Standard</option>
+                                <option>Support</option>
+                            </select>
+                        </label>
+                        <label>
+                            <input type="number" id="adversary-count-per-hp" min="1" max="20" value="1" />
+                            /HP
+                        </label>
                     </span>
                     <span class="statBlock-editor-environment">
-                        <label for="environment-type">Type:</label>
-                        <input type="text" id="environment-type" list="srd-environment-types" />
+                        <label>Type:
+                            <input type="text" id="environment-type" list="srd-environment-types" />
+                        </label>
                     </span>
                     <br>
-                    <label for="statBlock-description">Description:</label>
-                    <textarea id="statBlock-description" rows="3"></textarea>
+                    <label>Description:
+                        <textarea id="statBlock-description" rows="3"></textarea>
+                    </label>
                     <div class="statBlock-editor-adversary">
-                        <label for="adversary-motives">Motives & Tactics:</label>
-                        <textarea id="adversary-motives" rows="2"></textarea>
+                        <label>Motives & Tactics:
+                            <textarea id="adversary-motives" rows="2"></textarea>
+                        </label>
                     </div>
                     <div class="statBlock-editor-environment">
-                        <label for="environment-impulses">Impulses:</label>
-                        <textarea id="environment-impulses" rows="2"></textarea>
+                        <label>Impulses:
+                            <textarea id="environment-impulses" rows="2"></textarea>
+                        </label>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>Stats</legend>
-                    <label for="statBlock-difficulty">Difficulty:</label>
-                    <input type="number" id="statBlock-difficulty" min="0" max="40" value="12" required />
+                    <label>Difficulty:
+                        <input type="number" id="statBlock-difficulty" min="0" max="40" value="12" required />
+                    </label>
                     <div class="statBlock-editor-adversary">
-                        <label for="adversary-major-threshold">Major Threshold:</label>
-                        <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
+                        <label>Major Threshold:
+                            <input type="number" id="adversary-major-threshold" min="0" max="20" value="8" />
+                        </label>
                         /
-                        <label for="adversary-severe-threshold">Severe Threshold:</label>
-                        <input type="number" id="adversary-severe-threshold" min="0" max="20" value="14" />
+                        <label>Severe Threshold:
+                            <input type="number" id="adversary-severe-threshold" min="0" max="20" value="14" />
+                        </label>
                         <br>
-                        <label for="adversary-hp">HP:</label>
-                        <input type="number" id="adversary-hp" min="1" max="40" value="5" />
-                        <label for="adversary-stress">Stress:</label>
-                        <input type="number" id="adversary-stress" min="0" max="40" value="2" />
+                        <label>HP:
+                            <input type="number" id="adversary-hp" min="1" max="40" value="5" />
+                        </label>
+                        <label>Stress:
+                            <input type="number" id="adversary-stress" min="0" max="40" value="2" />
+                        </label>
                         <br>
-                        <label for="adversary-experience">Experience:</label>
-                        <input type="text" id="adversary-experience" />
+                        <label>Experience:
+                            <input type="text" id="adversary-experience" />
+                        </label>
                     </div>
                     <div class="statBlock-editor-environment">
-                        <label for="environment-potential-adversaries">Potential Adversaries:</label>
-                        <textarea id="environment-potential-adversaries" rows="3"></textarea>
+                        <label>Potential Adversaries:
+                            <textarea id="environment-potential-adversaries" rows="3"></textarea>
+                        </label>
                     </div>
                 </fieldset>
                 <fieldset class="statBlock-editor-adversary">
                     <legend>Attack</legend>
-                    <label for="adversary-attack-modifier">Modifier:</label>
-                    <input type="text" id="adversary-attack-modifier" size="4" placeholder="e.g. +3" />
-                    <label for="adversary-attack-description">Description:</label>
-                    <input type="text" id="adversary-attack-description" placeholder="e.g. Mace" />
+                    <label>Modifier:
+                        <input type="text" id="adversary-attack-modifier" size="4" placeholder="e.g. +3" />
+                    </label>
+                    <label>Description:
+                        <input type="text" id="adversary-attack-description" placeholder="e.g. Mace" />
+                    </label>
                     <br>
-                    <label for="adversary-attack-range">Range:</label>
-                    <select id="adversary-attack-range">
-                        <option>Melee</option>
-                        <option>Very Close</option>
-                        <option>Close</option>
-                        <option>Far</option>
-                    </select>
-                    <label for="adversary-attack-damage">Damage:</label>
-                    <input type="text" id="adversary-attack-damage" size="12" placeholder="e.g. 1d10+3 phy" />
+                    <label>Range:
+                        <select id="adversary-attack-range">
+                            <option>Melee</option>
+                            <option>Very Close</option>
+                            <option>Close</option>
+                            <option>Far</option>
+                        </select>
+                    </label>
+                    <label>Damage:
+                        <input type="text" id="adversary-attack-damage" size="12" placeholder="e.g. 1d10+3 phy" />
+                    </label>
                 </fieldset>
                 <fieldset>
                     <legend>Features</legend>
@@ -920,12 +945,10 @@
         function refreshCounterPerHpDisplay() {
             const countPerHpInput = statBlockEditor.querySelector("#adversary-count-per-hp");
             if (statBlockEditor.querySelector("#adversary-type").value === "Horde") {
-                countPerHpInput.classList.remove("hidden");
-                statBlockEditor.querySelector("#adversary-count-per-hp-label").classList.remove("hidden");
+                countPerHpInput.parentElement.classList.remove("hidden");
             } else {
-                countPerHpInput.classList.add("hidden");
-                statBlockEditor.querySelector("#adversary-count-per-hp-label").classList.add("hidden");
-                statBlockEditor.querySelector("#adversary-count-per-hp").value = 1;
+                countPerHpInput.parentElement.classList.add("hidden");
+                countPerHpInput.value = 1;
             }
         }
 
