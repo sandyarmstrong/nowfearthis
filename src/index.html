@@ -732,6 +732,15 @@
                         </thead>
                         <tbody>
                         </tbody>
+                        <template id="results-row-template">
+                            <tr>
+                                <td class="nowrap"><button>➕ Add</button></td>
+                                <td></td>
+                                <td class="nowrap"></td>
+                                <td class="nowrap"></td>
+                                <td></td>
+                            </tr>
+                        </template>
                     </table>
                 </div>
             </div>
@@ -770,6 +779,8 @@
         const simpleSearchInput = document.getElementById("simple-search-input");
         const fullSearch = document.getElementById("browsing");
         const fullSearchInput = document.getElementById("browsing-search");
+
+        const resultsRowTemplate = document.getElementById("results-row-template");
 
         let expandAllFeatures = false;
 
@@ -1582,37 +1593,21 @@
             statBlockDatalist.insertBefore(option, statBlockDatalist.childNodes[insertBeforeIndex]);
 
             // Table for browsing
-            const tr = document.createElement("tr");
-            tr.statBlock = statBlock;
-            browsingTableBody.insertBefore(tr, browsingTableBody.childNodes[insertBeforeIndex]);
-
-            const addButtonTD = createElement("td", "nowrap");
-            const addButton = createElement("button", null, "➕ Add");
-            addButton.addEventListener("click", onBrowserAddButtonClick);
-            addButtonTD.appendChild(addButton);
-            tr.appendChild(addButtonTD);
-
-            const nameTD = createElement("td", null, statBlock.name);
-            tr.appendChild(nameTD);
-
-            // TODO: Could add pts, but we'd have to recalc when player count changes
-            // const encounter = state.encounters[selectedEncounterIndex];
-            // const battlePoints = getStatBlockBattlePoints(adversary.type, encounter?.playerCount ?? 1);
-            // typeTD.innerText = `${adversary.type} (${battlePoints} pts)`;
-            const typeTD = createElement("td", "nowrap", statBlock.type);
-            tr.appendChild(typeTD);
-
             let battlePoints = "";
             if (statBlock.category === "Adversary") {
                 battlePoints = statBlock.type === "Minion" ?
                     "1/player" :
                     getStatBlockBattlePoints(statBlock.type, 1);
             }
-            const pointsTD = createElement("td", "nowrap", battlePoints);
-            tr.appendChild(pointsTD);
-
-            const descriptionTD = createElement("td", null, statBlock.description);
-            tr.appendChild(descriptionTD);
+            const tr = resultsRowTemplate.content.cloneNode(true).children[0];
+            tr.statBlock = statBlock;
+            const tds = tr.querySelectorAll("td");
+            tds[0].querySelector("button").addEventListener("click", onBrowserAddButtonClick);
+            tds[1].textContent = statBlock.name;
+            tds[2].textContent = statBlock.type;
+            tds[3].textContent = battlePoints;
+            tds[4].textContent = statBlock.description;
+            browsingTableBody.insertBefore(tr, browsingTableBody.childNodes[insertBeforeIndex]);
         }
 
         function updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName) {
