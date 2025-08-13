@@ -649,7 +649,19 @@
                 <fieldset>
                     <legend>Features</legend>
                     <button id="add-feature">+ Add Feature</button>
-                    <div id="statBlock-features"></div>
+                    <div id="statBlock-features">
+                        <template id="feature-editor-template">
+                            <div class="feature">
+                                <label>Name:
+                                    <input type="text" class="statBlock-feature-name" size="30" />
+                                </label>
+                                <br />
+                                <label>Description:
+                                    <textarea type="text" class="statBlock-feature-text" rows="4"></textarea>
+                                </label>
+                            </div>
+                        </template>
+                    </div>
                 </fieldset>
                 <button type="button" id="cancel-statBlock-edit">Cancel</button>
                 <button type="submit">Save</button>
@@ -803,6 +815,7 @@
 
         const resultsRowTemplate = document.getElementById("results-row-template");
         const conditionTemplate = document.getElementById("condition-template");
+        const featureEditorTemplate = document.getElementById("feature-editor-template");
 
         function createElement(tagName, className = null, innerText = null) {
             const element = document.createElement(tagName);
@@ -885,11 +898,9 @@
         });
 
         function createFeatureEditorElement(feature, idSuffix)  {
-            const featureElement = document.createElement("div");
-            featureElement.className = "feature";
-            // TODO: Safari doesn't wrap Description label/textarea, so textarea (and entire fieldset) sticks out to the right
-            // TODO: This is the last place where innerHTML is being set with user data; fix it
-            featureElement.innerHTML = `<label for="statBlock-feature-name-${idSuffix}">Name:</label><input type="text" class="statBlock-feature-name" id="statBlock-feature-name-${idSuffix}" value="${feature?.name ?? ""}" size="30"><label for="statBlock-feature-text-${idSuffix}"><br>Description:</label><br><textarea id="statBlock-feature-text-${idSuffix}" class="statBlock-feature-text" rows="4">${feature?.text ?? ""}</textarea>`;
+            const featureElement = featureEditorTemplate.content.cloneNode(true).children[0];
+            featureElement.querySelector(".statBlock-feature-name").value = feature?.name ?? "";
+            featureElement.querySelector(".statBlock-feature-text").value = feature?.text ?? "";
 
             const instanceTopActions = createElement("div", "top-actions");
             featureElement.appendChild(instanceTopActions);
