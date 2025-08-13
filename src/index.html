@@ -649,7 +649,18 @@
 
         <div id="conditions-editor" class="editor hidden"> <!-- TODO: Position over statBlock instead? -->
             <h3 class="instance-name"></h3>
-            <div class="conditions"></div>
+            <div class="conditions">
+                <ul class="conditions-list">
+                    <!-- TODO: Should this live here or elsewhere, considering it's
+                               shared with statblock? -->
+                    <template id="condition-template">
+                        <li>
+                            <span></span>
+                            <button class="inline-delete" title="Remove condition">❌</button>
+                        </li>
+                    </template>
+                </ul>
+            </div>
             <div class="add-conditions">
                 <input type="text" placeholder="Condition Name" list="srd-conditions" id="condition-name">
                 <button class="inline-add" id="add-condition">➕ Add Condition</button>
@@ -781,6 +792,7 @@
         const fullSearchInput = document.getElementById("browsing-search");
 
         const resultsRowTemplate = document.getElementById("results-row-template");
+        const conditionTemplate = document.getElementById("condition-template");
 
         function createElement(tagName, className = null, innerText = null) {
             const element = document.createElement(tagName);
@@ -1710,34 +1722,26 @@
             topActions.appendChild(actionsButton);
         }
 
+        // TODO: Pass list directly instead of container
         function updateConditionsDisplay(container, instance, inDialog) {
-            container.innerHTML = "";
-
-            const conditionsList = document.createElement("ul");
-            conditionsList.className = "conditions-list";
-            container.appendChild(conditionsList);
+            const conditionsList = container.querySelector(".conditions-list");
+            conditionsList.innerHTML = "";
             let hasConditionsOrModifications = false;
 
             if (instance.conditions && instance.conditions.length > 0) {
                 for (let i = 0; i < instance.conditions.length; i++) {
                     hasConditionsOrModifications = true;
                     const condition = instance.conditions[i];
-
-                    const conditionItem = document.createElement("li");
-                    conditionsList.appendChild(conditionItem);
-
-                    conditionItem.appendChild(createElement("span", null, condition));
-
-                    const removeButton = createElement("button", "inline-delete", "❌");
-                    removeButton.title = "Remove condition";
-                    removeButton.onclick = function(event) {
+                    const conditionItem = conditionTemplate.content.cloneNode(true).children[0];
+                    conditionItem.children[0].textContent = condition;
+                    conditionItem.children[1].onclick = function(event) {
                         instance.conditions = instance.conditions.filter(function(c) {
                             return c !== condition;
                         });
                         updateConditionsDisplay(container, instance, inDialog);
                         saveState();
                     };
-                    conditionItem.appendChild(removeButton);
+                    conditionsList.appendChild(conditionItem);
                 }
             }
 
@@ -1745,33 +1749,26 @@
                 for (let i = 0; i < instance.modifications.length; i++) {
                     hasConditionsOrModifications = true;
                     const modification = instance.modifications[i];
-
-                    const modificationItem = document.createElement("li");
-                    conditionsList.appendChild(modificationItem);
-
-                    const modificationText = createElement(
-                        "span",
-                        null,
-                        `${modification.modificationName} (${modification.propertyName} ${modification.modification})`);
-                    modificationItem.appendChild(modificationText);
-
-                    const removeButton = createElement("button", "inline-delete", "❌");
-                    removeButton.title = "Remove modification";
-                    removeButton.onclick = function(event) {
+                    const conditionItem = conditionTemplate.content.cloneNode(true).children[0];
+                    conditionItem.children[0].textContent = `${modification.modificationName} (${modification.propertyName} ${modification.modification})`
+                    conditionItem.children[1].onclick = function(event) {
                         instance.modifications = instance.modifications.filter(function(m) {
                             return m !== modification;
                         });
                         updateConditionsDisplay(container, instance, inDialog);
                         saveState();
                     };
-                    modificationItem.appendChild(removeButton);
+                    conditionsList.appendChild(conditionItem);
                 }
             }
 
+            // TODO: Maybe have this in the editor HTML, and hide/show instead of recreating?
+            //       Same with button below, except in statblock HTML?
             if (inDialog && !hasConditionsOrModifications) {
                 conditionsList.appendChild(createElement("li", "placeholder", "No conditions or modifications, add below"));
             }
 
+            // TODO: Templatize? Also is it kosher for a list to contain a naked button?
             if (!inDialog) {
                 const editConditions = createElement("button", "add-conditions-button", "Add Conditions");
                 editConditions.title = "Add conditions or modifications to this adversary instance";
@@ -1914,6 +1911,7 @@
                 instanceDiv.appendChild(stressDiv);
 
                 const conditionsDiv = createElement("div", "conditions");
+                conditionsDiv.innerHTML = "<ul class='conditions-list'></ul>";
                 instanceDiv.appendChild(conditionsDiv);
                 updateConditionsDisplay(conditionsDiv, instance, false);
 
