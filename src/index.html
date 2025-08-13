@@ -782,8 +782,6 @@
 
         const resultsRowTemplate = document.getElementById("results-row-template");
 
-        let expandAllFeatures = false;
-
         function createElement(tagName, className = null, innerText = null) {
             const element = document.createElement(tagName);
             if (className) {
@@ -1267,28 +1265,6 @@
         document.querySelector("#encounter-player-count").addEventListener("change", function() {
             updateEditorBattlePointsRecommendation();
         });
-
-        function handleFeaturesToggle(event) {
-            // Don't handle toggling if this was triggered by the event handler itself,
-            // as that messes with our ability to scroll back to the right position.
-            if (event.target.manuallyTogglingViaEventHandler) {
-                event.target.manuallyTogglingViaEventHandler = undefined;
-                return;
-            }
-
-            const opened = event.target.open;
-            if (expandAllFeatures != opened) {
-                expandAllFeatures = opened;
-                for (const element of document.getElementsByClassName("featuresExpander")) {
-                    if (element.open != expandAllFeatures) {
-                        element.manuallyTogglingViaEventHandler = true;
-                        element.open = expandAllFeatures;
-                    }
-                }
-            }
-
-            event.target.scrollIntoView({ behavior: "instant", block: "nearest" });
-        }
 
         function statBlockMatchesSearch(statBlock, searchText) {
             if (!searchText) {
@@ -1892,10 +1868,8 @@
 
             if (statBlock.features && statBlock.features.length > 0) {
                 const featuresContainer = createElementWithInnerHTML("details", "featuresExpander", `<summary>FEATURES</summary>`);
-                featuresContainer.open = expandAllFeatures;
                 const featuresDiv = createElement("div", "features");
                 featuresContainer.appendChild(featuresDiv);
-                featuresContainer.addEventListener("toggle", handleFeaturesToggle);
 
                 for (let i = 0; i < statBlock.features.length; i++) {
                     const featureElement = createElement("p", "feature");
