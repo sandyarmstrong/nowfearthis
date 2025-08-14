@@ -492,9 +492,16 @@
             <option>Traversal</option>
         </datalist>
 
+        <datalist id="searchable-campaigns">
+            <option>Campaign 1</option>
+            <option>Campaign 2</option>
+            <option>Campaign 3</option>
+        </datalist>
+
         <div id="top-bar">
             <div>
                 <button id="add-encounter" title="Create New Encounter">➕ Create New Encounter</button>
+                <select id="current-campaign"></select> <!-- TODO: Only show when a named campaign exists -->
                 <select id="current-encounter"></select>
             </div>
             <div>
@@ -535,6 +542,14 @@
             <form id="encounter-form">
                 <label>Name:
                     <input type="text" id="encounter-name" required />
+                </label>
+                <br>
+                <label>Campaign:
+                    <input
+                        type="text"
+                        id="encounter-campaign-name"
+                        placeholder="(optional)"
+                        list="searchable-campaigns" />
                 </label>
                 <br>
                 <label>Tier:
@@ -724,7 +739,11 @@
 
             <div id="simple-search" class="hidden">
                 <button id="show-full-search" class="subtle" title="Expand to Full Search">⏬</button>
-                <input id="simple-search-input" type="search" placeholder="Search Adversaries & Environments" list="searchable-statBlocks" />
+                <input
+                    id="simple-search-input"
+                    type="search"
+                    placeholder="Search Adversaries & Environments"
+                    list="searchable-statBlocks" />
                 <button id="simple-search-add-button">➕ Add</button>
             </div>
 
@@ -1271,11 +1290,16 @@
         document.querySelector("#encounter-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent page refresh
 
+            // TODO:
+            let campaignName = encounterEditor.querySelector("#encounter-campaign-name").value.trim();
             let encounter = encounterEditor.encounter;
             const isNewEncounter = !encounter;
             if (isNewEncounter) {
                 if (!state) {
                     state = {};
+                }
+                if (!state.campaigns) {
+                    state.campaigns = [];
                 }
                 if (!state.encounters) {
                     state.encounters = [];
@@ -1722,6 +1746,8 @@
             actionsMenu.appendChild(saveCustomAction);
 
             const deleteCustomAction = document.createElement("li");
+            // TODO: Add class to help identify this so statBlockSavedToCustom/statBlockDeletedFromCustom
+            //       can change enabled state.
             const deleteCustomActionButton = createElement("button", "menu-action", "Delete from Custom Source");
             deleteCustomActionButton.disabled = statBlock.source !== 'Custom';
             deleteCustomAction.appendChild(deleteCustomActionButton);
@@ -1852,6 +1878,8 @@
 
             const statBlockDiv = createElement("article", "statBlock");
             statBlockDiv.statBlock = statBlock;
+            // TODO: Make it easier for source to be identified and changed
+            //       in statBlockSavedToCustom/statBlockDeletedFromCustom
             const statBlockHeader = createElement("h3", null, statBlock.name);
             statBlockHeader.title = `Source: ${statBlock.originalName}, ${statBlock.source}`;
             statBlockDiv.appendChild(statBlockHeader);
@@ -2138,12 +2166,14 @@
         }
 
         function refreshDisplay() {
+            // TODO: Is it really necessary to wipe the encounter/campaign selectors on each refresh?
             encounterSelector.innerHTML = ""; // Clear any existing options
             const encounterDiv = document.getElementById("encounter");
             encounterDiv.className = "encounter";
             encounterDiv.innerHTML = ""; // Clear any existing content
 
             if (!state?.encounters?.length) {
+                // TODO: Move this to the HTML?
                 const noEncounters = createElement("p", "no-encounters");
                 encounterDiv.appendChild(noEncounters);
                 const noEncountersSpan = createElement("span", null, "No encounters found. Start adding adversaries or environments to create your first encounter, or ");
@@ -2151,7 +2181,7 @@
                 const loadSamplesButon = createElement("button", "load-samples", "Load Sample Encounters");
                 noEncounters.appendChild(loadSamplesButon)
                 loadSamplesButon.addEventListener("click", () => {
-                    state = JSON.parse(JSON.stringify(sampleEncounters));
+                    state = JSON.parse(JSON.stringify(sampleState));
                     selectedEncounterIndex = 0;
                     saveState();
                     refreshDisplay();
@@ -2212,6 +2242,10 @@
             fullSearch.classList.remove("hidden");
         }
 
+        let selectedCampaignIndex = parseInt(localStorage.getItem("selected-campaign-index"));
+        if (!selectedCampaignIndex) {
+            selectedCampaignIndex = 0;
+        }
         let selectedEncounterIndex = parseInt(localStorage.getItem("selected-encounter-index"));
         if (!selectedEncounterIndex) {
             selectedEncounterIndex = 0;
@@ -2251,6 +2285,7 @@
             loadFromJsonFile(event, function(loadedState) {
                 if (loadedState) {
                     state = loadedState;
+                    selectedCampaignIndex = 0;
                     selectedEncounterIndex = 0;
                     saveState();
                     refreshDisplay();
@@ -2309,6 +2344,14 @@
             hideEncounterMenu();
         });
 
+        const campaignSelector = document.getElementById("current-campaign");
+        campaignSelector.addEventListener("change", function() {
+            selectedCampaignIndex = parseInt(campaignSelector.value);
+            saveState();
+            refreshDisplay();
+            updateBrowsingTier()
+        });
+
         const encounterSelector = document.getElementById("current-encounter");
         encounterSelector.addEventListener("change", function() {
             selectedEncounterIndex = parseInt(encounterSelector.value);
@@ -2319,6 +2362,7 @@
 
         function saveState() {
             localStorage.setItem("encounters-state", JSON.stringify(state));
+            localStorage.setItem("selected-campaign-index", selectedCampaignIndex);
             localStorage.setItem("selected-encounter-index", selectedEncounterIndex);
             localStorage.setItem("prefer-simple-search", preferSimpleSearch);
         }
