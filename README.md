@@ -8,7 +8,7 @@ A tool for folks like me who can't draw squares very quickly.
 * Manage multiple encounters and _keep track of your Fear_ from session to session.
 * Save and share your encounters (or just your custom stat blocks) with a _simple JSON format_.
 * Works _entirely offline_, no accounts, no ads, no tracking or cookies. State is persisted in `localStorage`.
-* [Download and run _your own copy_](https://github.com/sandyarmstrong/nowfearthis/archive/refs/heads/main.zip) from your desktop. No build, no package manager, no dependencies.
+* [Download and run _your own copy_](https://codeberg.org/sandyarmstrong/nowfearthis/archive/main.zip) from your desktop. No build, no package manager, no dependencies.
 
 ## Daggerheart SRD Content License
 
