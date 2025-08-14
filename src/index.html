@@ -89,6 +89,8 @@
             .load-button label {
                 display: block;
                 user-select: none;
+                /* No point in doing this for Safari, as Safari allows selecting even regular button text */
+                /* -webkit-user-select: none; */
             }
             button, .load-button label {
                 padding: 5px;
@@ -484,7 +486,7 @@
         <div id="top-bar">
             <div>
                 <button id="add-encounter" title="Create New Encounter">➕ Create New Encounter</button>
-                <select id="current-encounter"></select>
+                <select id="current-encounter" title="Choose an encounter"></select>
             </div>
             <div>
                 <button id="toggle-encounter-menu" class="subtle" title="Encounter Actions">⚙️</button>
@@ -1443,20 +1445,25 @@
             const gainFearButton = createElement("button", null, "+");
             gainFearButton.title = "Gain 1 Fear (max 12)";
 
-            if (encounter.currentFear === undefined) {
+            if (!encounter.currentFear) {
                 encounter.currentFear = 0;
             }
 
+            for (let i = 0; i < maxFear; i++) {
+                const fearIcon = createElement("span", "fear-icon", "💀");
+                fearValue.appendChild(fearIcon);
+            }
+
             function updateFearDisplay() {
-                fearValue.innerHTML = "";
                 fearValue.title = `${encounter.currentFear} Fear | Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}`;
 
-                for (let i = 0; i < maxFear; i++) {
-                    const fearIcon = createElement("span", "fear-icon", "💀");
-                    if (i >= encounter.currentFear) {
+                let i = 0;
+                for (const fearIcon of fearValue.getElementsByClassName("fear-icon")) {
+                    if (i++ >= encounter.currentFear) {
                         fearIcon.classList.add("inactive");
+                    } else {
+                        fearIcon.classList.remove("inactive");
                     }
-                    fearValue.appendChild(fearIcon);
                 }
 
                 useFearButton.disabled = encounter.currentFear <= 0;
