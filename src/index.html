@@ -559,10 +559,6 @@
                     <input type="number" id="encounter-player-count" min="1" max="20" value="4" required />
                 </label>
                 <br>
-                <label>Starting Fear:
-                    <input type="number" id="encounter-starting-fear" min="0" max="12" value="0"/>
-                </label>
-                <br>
                 <label>Target Battle Points:
                     <input type="number" id="encounter-target-battle-points" min="1" max="99" value="14" required />
                 </label>
@@ -881,6 +877,10 @@
                 element.innerHTML = innerHTML;
             }
             return element;
+        }
+
+        function stringBaseCompare(a, b) {
+            return a.localeCompare(b, "en", { sensitivity: "base" });
         }
 
         activeMenuOverlay.addEventListener("click", function() {
@@ -1234,13 +1234,14 @@
 
         function getNewEncounterName() {
             const baseName = "New Encounter";
-            if (!state?.encounters?.length) {
+            const campaign = ensureCampaign();
+            if (!campaign?.encounters?.length) {
                 return baseName;
             }
 
             let max = 0;
 
-            for (const encounter of state.encounters) {
+            for (const encounter of campaign.encounters) {
                 const match = encounter.name.match(new RegExp(`${baseName}\\s*#*(\\d+)?`));
                 if (match) {
                     const num = match[1] ? parseInt(match[1]) : 1;
@@ -1253,30 +1254,43 @@
             return max === 0 ? baseName : `${baseName} ${max + 1}`;
         }
 
+        function getSelected() {
+            let selectedCampaign = null;
+            let selectedEncounter = null;
+
+            if (state?.campaigns?.length) {
+                selectedCampaign = state.campaigns[selectedCampaignIndex];
+                if (selectedCampaign?.encounters?.length) {
+                    selectedEncounter = selectedCampaign.encounters[selectedEncounterIndex];
+                }
+            }
+
+            return {
+                campaign: selectedCampaign,
+                encounter: selectedEncounter,
+            }
+        }
+
         function showEncounterEditor(encounter) {
+            const selected = getSelected();
+
             if (!encounter) {
                 encounterEditor.encounter = null;
 
-                let previousEncounter = null;
-                if (state && state.encounters && state.encounters.length > 0) {
-                    previousEncounter = state.encounters[selectedEncounterIndex];
-                }
-
                 encounter = {
                     name: getNewEncounterName(),
-                    playerTier: previousEncounter?.playerTier ?? 1,
-                    playerCount: previousEncounter?.playerCount ?? 4,
-                    targetBattlePoints: previousEncounter?.targetBattlePoints ?? 14,
-                    currentFear: previousEncounter?.currentFear ?? 0,
+                    playerTier: selected.encounter?.playerTier ?? 1,
+                    playerCount: selected.encounter?.playerCount ?? 4,
+                    targetBattlePoints: selected.encounter?.targetBattlePoints ?? 14,
                 };
             } else {
                 encounterEditor.encounter = encounter;
             }
 
             encounterEditor.querySelector("#encounter-name").value = encounter.name;
+            encounterEditor.querySelector("#encounter-campaign-name").value = selected.campaign?.name;
             encounterEditor.querySelector("#encounter-tier").value = encounter.playerTier ?? 1;
             encounterEditor.querySelector("#encounter-player-count").value = encounter.playerCount ?? 4;
-            encounterEditor.querySelector("#encounter-starting-fear").value = encounter.currentFear ?? 0;
             encounterEditor.querySelector("#encounter-target-battle-points").value = encounter.targetBattlePoints ?? 14;
 
             updateEditorBattlePointsRecommendation();
@@ -1290,33 +1304,61 @@
         document.querySelector("#encounter-form").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent page refresh
 
-            // TODO:
-            let campaignName = encounterEditor.querySelector("#encounter-campaign-name").value.trim();
+            const campaignName = encounterEditor.querySelector("#encounter-campaign-name").value.trim();
             let encounter = encounterEditor.encounter;
-            const isNewEncounter = !encounter;
-            if (isNewEncounter) {
-                if (!state) {
-                    state = {};
+            let needsRefreshDisplay = false;
+
+            if (!state) {
+                state = {};
+            }
+            if (!state.campaigns) {
+                state.campaigns = [];
+            }
+            const previouslySelectedCampaign = state.campaigns[selectedCampaignIndex];
+
+            let campaign = state.campaigns.find(c => stringBaseCompare(c.name, campaignName) == 0);
+            if (!campaign) {
+                needsRefreshDisplay = true;
+                campaign = {
+                    name: campaignName,
+                    currentFear: 0, // TODO: Or playerCount?,
+                    encounters: [],
                 }
-                if (!state.campaigns) {
-                    state.campaigns = [];
-                }
-                if (!state.encounters) {
-                    state.encounters = [];
+                state.campaigns.push(campaign);
+            }
+
+            if (!encounter) {
+                needsRefreshDisplay = true;
+                if (!campaign.encounters) {
+                    campaign.encounters = [];
                 }
                 encounter = {}
-                state.encounters.push(encounter);
-                selectedEncounterIndex = state.encounters.length - 1;
+                campaign.encounters.push(encounter);
+                selectedEncounterIndex = campaign.encounters.length - 1;
+            } else if (campaign !== previouslySelectedCampaign) {
+                needsRefreshDisplay = true;
+                if (previouslySelectedCampaign?.encounters?.length) {
+                    const oldIndex = previouslySelectedCampaign.encounters.indexOf(encounter);
+                    if (oldIndex >= 0) {
+                        previouslySelectedCampaign.encounters.splice(oldIndex, 1);
+                        if (!previouslySelectedCampaign.encounters.length) {
+                            state.campaigns.splice(selectedCampaignIndex, 1);
+                        }
+                    }
+                }
+                campaign.encounters.push(encounter);
+                selectedEncounterIndex = campaign.encounters.length - 1;
             }
+
+            selectedCampaignIndex = state.campaigns.indexOf(campaign);
 
             encounter.name = encounterEditor.querySelector("#encounter-name").value.trim();
             encounter.playerTier = parseInt(encounterEditor.querySelector("#encounter-tier").value);
             encounter.playerCount = parseInt(encounterEditor.querySelector("#encounter-player-count").value);
-            encounter.currentFear = parseInt(encounterEditor.querySelector("#encounter-starting-fear").value);
             encounter.targetBattlePoints = parseInt(encounterEditor.querySelector("#encounter-target-battle-points").value);
 
             saveState();
-            if (isNewEncounter) {
+            if (needsRefreshDisplay) {
                 refreshDisplay();
             } else {
                 refreshBattlePoints();
@@ -1335,18 +1377,23 @@
         });
 
         document.querySelector("#edit-encounter").addEventListener("click", function() {
-            const encounter = state.encounters[selectedEncounterIndex];
+            const encounter = getSelected().encounter;
             showEncounterEditor(encounter);
             hideEncounterMenu();
         });
 
         document.querySelector("#delete-encounter").addEventListener("click", function() {
-            if (state.encounters && state.encounters.length > 0) {
-                state.encounters.splice(selectedEncounterIndex, 1);
-                selectedEncounterIndex = Math.min(selectedEncounterIndex, state.encounters.length - 1);
-                saveState();
-                if (state.encounters.length === 0) {
+            const selected = getSelected();
+            if (selected.encounter) {
+                selected.campaign.encounters.splice(selectedEncounterIndex, 1);
+                selectedEncounterIndex = Math.min(selectedEncounterIndex, selected.campaign.encounters.length - 1);
+                if (selected.campaign.encounters.length === 0) {
+                    state.campaigns.splice(selectedCampaignIndex, 1);
+                    selectedCampaignIndex = Math.min(selectedCampaignIndex, state.campaigns.length - 1);
+                    saveState();
                     showEncounterEditor();
+                } else {
+                    saveState();
                 }
                 refreshDisplay();
             }
@@ -1386,9 +1433,10 @@
         }
 
         function updateBrowsingTier() {
-            if (state.encounters && selectedEncounterIndex < state.encounters.length) {
+            const selected = getSelected();
+            if (selected.encounter) {
                 // Update the tier dropdown based on the current encounter
-                document.querySelector("#browsing-tier").value = state.encounters[selectedEncounterIndex].playerTier || "";
+                document.querySelector("#browsing-tier").value = selected.encounter.playerTier || "";
                 updateBrowsingTableFiltering();
             }
         }
@@ -1569,7 +1617,7 @@
         }
 
         function refreshBattlePoints() {
-            const encounter = state.encounters[selectedEncounterIndex];
+            const encounter = getSelected().encounter;
             const battlePointsDiv = document.querySelector("#battle-points");
             const currentBattlePoints = calculateBattlePoints(encounter);
 
@@ -1587,7 +1635,7 @@
             }
         }
 
-        function ensureEncounter() {
+        function ensureCampaign() {
             if (!state) {
                 state = {}
             }
@@ -1595,13 +1643,26 @@
             if (!state.campaigns?.length) {
                 state.campaigns = [
                     {
-
+                        name: "",
+                        currentFear: 0,
                     }
                 ]
             }
 
-            if (!state.encounters?.length) {
-                state.encounters = [
+            if (!selectedCampaignIndex ||
+                selectedCampaignIndex < 0 ||
+                selectedCampaignIndex >= state.campaigns.length) {
+                selectedCampaignIndex = 0;
+            }
+
+            return state.campaigns[selectedCampaignIndex];
+        }
+
+        function ensureEncounter() {
+            const campaign = ensureCampaign();
+
+            if (!campaign.encounters?.length) {
+                campaign.encounters = [
                     {
                         name: getNewEncounterName(),
                         playerTier: 1,
@@ -1612,11 +1673,11 @@
             }
             if (!selectedEncounterIndex ||
                 selectedEncounterIndex < 0 ||
-                selectedEncounterIndex >= state.encounters.length) {
+                selectedEncounterIndex >= campaign.encounters.length) {
                 selectedEncounterIndex = 0;
             }
 
-            return state.encounters[selectedEncounterIndex];
+            return campaign.encounters[selectedEncounterIndex];
         }
 
         function onBrowserAddButtonClick(event) {
@@ -1655,7 +1716,7 @@
             // Find insertion position
             let insertBeforeIndex = 1;
             for (let i = 0; i < statBlockDatalist.children.length; i++) {
-                if (statBlockDatalist.children[i].value.localeCompare(statBlock.name) > 0) {
+                if (stringBaseCompare(statBlockDatalist.children[i].value, statBlock.name) > 0) {
                     break;
                 }
                 insertBeforeIndex++;
@@ -2108,7 +2169,7 @@
                     });
                 }
                 state.custom.statBlocks.push(newCustomStatBlock);
-                state.custom.statBlocks.sort((a, b) => a.name.localeCompare(b.name));
+                state.custom.statBlocks.sort((a, b) => stringBaseCompare(a.name, b.name));
                 saveState();
                 refreshDisplay(); // TODO: EditStatBlock (just tooltip/menu state)
                 refreshCustomStatBlocksInSearch();
@@ -2176,12 +2237,35 @@
 
         function refreshDisplay() {
             // TODO: Is it really necessary to wipe the encounter/campaign selectors on each refresh?
-            encounterSelector.innerHTML = ""; // Clear any existing options
+            campaignSelector.innerHTML = "";
+            encounterSelector.innerHTML = "";
             const encounterDiv = document.getElementById("encounter");
             encounterDiv.className = "encounter";
             encounterDiv.innerHTML = ""; // Clear any existing content
 
-            if (!state?.encounters?.length) {
+            let campaign = null;
+            let encounter = null;
+            if (state?.campaigns?.length) {
+                selectedCampaignIndex = Math.min(selectedCampaignIndex, state.campaigns.length - 1);
+                campaign = state.campaigns[selectedCampaignIndex];
+                if (campaign.encounters?.length) {
+                    selectedEncounterIndex = Math.min(selectedEncounterIndex, campaign.encounters.length - 1);
+                    encounter = campaign.encounters[selectedEncounterIndex];
+                } else {
+                    // If selected campaign has no encounters, find the first one that does
+                    for (let i = 0; i < state.campaigns.length; i++) {
+                        campaign = state.campaigns[i];
+                        if (campaign.encounters?.length) {
+                            selectedCampaignIndex = i;
+                            selectedEncounterIndex = 0;
+                            encounter = campaign.encounters[selectedEncounterIndex];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!encounter) {
                 // TODO: Move this to the HTML?
                 const noEncounters = createElement("p", "no-encounters");
                 encounterDiv.appendChild(noEncounters);
@@ -2198,20 +2282,32 @@
                 return;
             }
 
-            const encounter = state.encounters[selectedEncounterIndex];
+            for (let i = 0; i < state.campaigns.length; i++) {
+                // TODO: Validate various fields
+                let displayName = state.campaigns[i].name;
+                if (!displayName) {
+                    displayName = "(default)";
+                }
+                const option = createElement("option", null, displayName);
+                option.value = i;
+                campaignSelector.appendChild(option);
+            }
+            campaignSelector.value = selectedCampaignIndex;
 
-            for (let i = 0; i < state.encounters.length; i++) {
-                const encounter = state.encounters[i];
+            if (state.campaigns.length == 1) {
+                campaignSelector.classList.add("hidden");
+            } else {
+                campaignSelector.classList.remove("hidden");
+            }
+
+            for (let i = 0; i < campaign.encounters.length; i++) {
+                const encounter = campaign.encounters[i];
                 // TODO: Validate various fields
                 const option = createElement("option", null, `${encounter.name} (Tier ${encounter.playerTier} | ${encounter.playerCount} Players)`);
                 option.value = i;
                 encounterSelector.appendChild(option);
             }
-
-            const validatedEncounterIndex = Math.max(0, Math.min(selectedEncounterIndex, state.encounters.length - 1));
-            if (encounterSelector.value !== validatedEncounterIndex) {
-                encounterSelector.value = validatedEncounterIndex;
-            }
+            encounterSelector.value = selectedEncounterIndex;
 
             // TODO: Validate various fields
             if (!encounter.statBlocks) {
@@ -2339,7 +2435,7 @@
                         state.custom.statBlocks = [];
                     }
                     state.custom.statBlocks.push(...loadedState.custom.statBlocks);
-                    state.custom.statBlocks.sort((a, b) => a.name.localeCompare(b.name));
+                    state.custom.statBlocks.sort((a, b) => stringBaseCompare(a.name, b.name));
                     saveState();
                     refreshCustomStatBlocksInSearch();
                 } else {
