@@ -1591,6 +1591,15 @@
             if (!state) {
                 state = {}
             }
+
+            if (!state.campaigns?.length) {
+                state.campaigns = [
+                    {
+
+                    }
+                ]
+            }
+
             if (!state.encounters?.length) {
                 state.encounters = [
                     {
@@ -2256,6 +2265,27 @@
             state = JSON.parse(localStorage.getItem("encounters-state"));
         } catch (error) {
             console.error("Error loading saved encounters:", error);
+        }
+
+        // Convert from encounter-first to campaign-first, if needed
+        if (!state?.campaigns && state?.encounters) {
+            const encounters = state.encounters;
+            state.encounters = undefined;
+
+            let latestFear = 0;
+            for (const encounter of encounters) {
+                if (encounter.currentFear) {
+                    latestFear = encounter.currentFear;
+                }
+                encounter.currentFear = undefined;
+            }
+
+            const campaign = {
+                name: "",
+                currentFear: latestFear,
+                encounters: encounters,
+            };
+            state.campaigns = [ campaign ];
         }
 
         function loadFromJsonFile(fileInputEvent, callback) {
