@@ -2243,7 +2243,6 @@
             campaignSelector.innerHTML = "";
             encounterSelector.innerHTML = "";
             const encounterDiv = document.getElementById("encounter");
-            encounterDiv.className = "encounter";
             encounterDiv.innerHTML = ""; // Clear any existing content
 
             let campaign = null;
@@ -2313,7 +2312,6 @@
             }
             encounterSelector.value = selectedEncounterIndex;
 
-            // TODO: Validate various fields
             if (!encounter.statBlocks) {
                 encounter.statBlocks = [];
             }
@@ -2340,7 +2338,6 @@
             encounterDiv.appendChild(statBlocksDiv);
         }
 
-        // TODO: Also persist Features expand/collapse state?
         let preferSimpleSearch = localStorage.getItem("prefer-simple-search") === "true";
         if (preferSimpleSearch) {
             simpleSearch.classList.remove("hidden");
