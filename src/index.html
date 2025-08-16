@@ -148,6 +148,10 @@
                 padding: 3px 10px;
                 background-color: var(--clr-surface-a10);
                 border-bottom: 1px solid var(--clr-surface-a20);
+
+                #fear-tracker {
+                    display: inline-block;
+                }
             }
             button#add-encounter {
                 border-radius: 4px;
@@ -503,6 +507,24 @@
                 <button id="add-encounter" title="Create New Encounter">➕ Create New Encounter</button>
                 <select id="current-campaign"></select> <!-- TODO: Only show when a named campaign exists -->
                 <select id="current-encounter"></select>
+                <div id="fear-tracker">
+                    <button id="use-fear" title="Use 1 Fear">-</button>
+                    <span id="fear-value">
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                        <span class="fear-icon">💀</span>
+                    </span>
+                    <button id="gain-fear" title="Gain 1 Fear (max 12)">+</button>
+                </div>
             </div>
             <div>
                 <button id="toggle-encounter-menu" class="subtle" title="Encounter Actions">⚙️</button>
@@ -1560,60 +1582,41 @@
             saveState();
         });
 
-        function createFearTracker(campaign) {
-            const maxFear = 12;
-            // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
-            // TODO: Roller for getting fear on rests?
-            // TODO: Replace this with a stylized number input?
-            const fearDiv = document.createElement("div");
-            const fearValue = document.createElement("span");
-            const useFearButton = createElement("button", null, "-");
-            useFearButton.title = "Use 1 Fear";
-            const gainFearButton = createElement("button", null, "+");
-            gainFearButton.title = "Gain 1 Fear (max 12)";
+        const maxFear = 12;
 
-            if (campaign.currentFear === undefined) {
-                campaign.currentFear = 0;
+        document.getElementById("use-fear").addEventListener("click", event => {
+            const campaign = getSelected().campaign;
+            if (campaign.currentFear > 0) {
+                campaign.currentFear--;
+                updateFearDisplay(campaign);
+                saveState();
+            }
+        });
+
+        document.getElementById("gain-fear").addEventListener("click", event => {
+            const campaign = getSelected().campaign;
+            if (campaign.currentFear < maxFear) {
+                campaign.currentFear++;
+                updateFearDisplay(campaign);
+                saveState();
+            }
+        });
+
+        function updateFearDisplay(campaign) {
+            const fearValue = document.getElementById("fear-value");
+            fearValue.title = `${campaign.currentFear} Fear | Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}`;
+
+            const fearIcons = fearValue.querySelectorAll(".fear-icon");
+            for (let i = 0; i < fearIcons.length; i++) {
+                if (i >= campaign.currentFear) {
+                    fearIcons[i].classList.add("inactive");
+                } else {
+                    fearIcons[i].classList.remove("inactive");
+                }
             }
 
-            function updateFearDisplay() {
-                fearValue.innerHTML = "";
-                fearValue.title = `${campaign.currentFear} Fear | Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}`;
-
-                for (let i = 0; i < maxFear; i++) {
-                    const fearIcon = createElement("span", "fear-icon", "💀");
-                    if (i >= campaign.currentFear) {
-                        fearIcon.classList.add("inactive");
-                    }
-                    fearValue.appendChild(fearIcon);
-                }
-
-                useFearButton.disabled = campaign.currentFear <= 0;
-                gainFearButton.disabled = campaign.currentFear >= maxFear;
-            }
-            updateFearDisplay();
-
-            useFearButton.onclick = function() {
-                if (campaign.currentFear > 0) {
-                    campaign.currentFear--;
-                    updateFearDisplay();
-                    saveState();
-                }
-            };
-
-            gainFearButton.onclick = function() {
-                if (campaign.currentFear < maxFear) {
-                    campaign.currentFear++;
-                    updateFearDisplay();
-                    saveState();
-                }
-            };
-
-            fearDiv.appendChild(useFearButton);
-            fearDiv.appendChild(fearValue);
-            fearDiv.appendChild(gainFearButton);
-
-            return fearDiv;
+            document.getElementById("use-fear").disabled = campaign.currentFear <= 0;
+            document.getElementById("gain-fear").disabled = campaign.currentFear >= maxFear;
         }
 
         function refreshBattlePoints() {
@@ -2326,8 +2329,7 @@
             encounterBar.appendChild(battlePointsDiv);
             refreshBattlePoints();
 
-            const fearDiv = createFearTracker(campaign);
-            encounterBar.appendChild(fearDiv);
+            updateFearDisplay(campaign);
 
             const statBlocksDiv = document.createElement("main");
             statBlocksDiv.id = "statBlocks";
