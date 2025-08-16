@@ -2276,7 +2276,7 @@
                 const loadSamplesButon = createElement("button", "load-samples", "Load Sample Encounters");
                 noEncounters.appendChild(loadSamplesButon)
                 loadSamplesButon.addEventListener("click", () => {
-                    state = JSON.parse(JSON.stringify(sampleState));
+                    state = loadState(JSON.parse(JSON.stringify(sampleState)));
                     selectedCampaignIndex = 0;
                     selectedEncounterIndex = 0;
                     saveState();
@@ -2357,32 +2357,36 @@
             selectedEncounterIndex = 0;
         }
 
-        let state = null;
-        try {
-            state = JSON.parse(localStorage.getItem("encounters-state"));
-        } catch (error) {
-            console.error("Error loading saved encounters:", error);
-        }
+        function loadState(incomingState) {
+            // Convert from encounter-first to campaign-first, if needed
+            if (!incomingState?.campaigns && incomingState?.encounters) {
+                const encounters = incomingState.encounters;
+                delete incomingState.encounters;
 
-        // Convert from encounter-first to campaign-first, if needed
-        if (!state?.campaigns && state?.encounters) {
-            const encounters = state.encounters;
-            delete state.encounters;
-
-            let latestFear = 0;
-            for (const encounter of encounters) {
-                if (encounter.currentFear) {
-                    latestFear = encounter.currentFear;
+                let latestFear = 0;
+                for (const encounter of encounters) {
+                    if (encounter.currentFear) {
+                        latestFear = encounter.currentFear;
+                    }
+                    delete encounter.currentFear;
                 }
-                delete encounter.currentFear;
+
+                const campaign = {
+                    name: "",
+                    currentFear: latestFear,
+                    encounters: encounters,
+                };
+                incomingState.campaigns = [ campaign ];
             }
 
-            const campaign = {
-                name: "",
-                currentFear: latestFear,
-                encounters: encounters,
-            };
-            state.campaigns = [ campaign ];
+            state = incomingState;
+        }
+
+        let state = null;
+        try {
+            loadState(JSON.parse(localStorage.getItem("encounters-state")));
+        } catch (error) {
+            console.error("Error loading saved encounters:", error);
         }
 
         function loadFromJsonFile(fileInputEvent, callback) {
@@ -2411,7 +2415,7 @@
             // TODO: Confirm, as this will overwrite all user state.
             loadFromJsonFile(event, function(loadedState) {
                 if (loadedState) {
-                    state = loadedState;
+                    loadState(loadedState);
                     selectedCampaignIndex = 0;
                     selectedEncounterIndex = 0;
                     saveState();
