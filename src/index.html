@@ -1560,7 +1560,7 @@
             saveState();
         });
 
-        function createFearTracker(encounter) {
+        function createFearTracker(campaign) {
             const maxFear = 12;
             // TODO: Nice simple rich tooltip guide: https://jsfiddle.net/8nnwytbL/
             // TODO: Roller for getting fear on rests?
@@ -1572,38 +1572,38 @@
             const gainFearButton = createElement("button", null, "+");
             gainFearButton.title = "Gain 1 Fear (max 12)";
 
-            if (encounter.currentFear === undefined) {
-                encounter.currentFear = 0;
+            if (campaign.currentFear === undefined) {
+                campaign.currentFear = 0;
             }
 
             function updateFearDisplay() {
                 fearValue.innerHTML = "";
-                fearValue.title = `${encounter.currentFear} Fear | Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}`;
+                fearValue.title = `${campaign.currentFear} Fear | Start: {number of PCs} | Short rest: 1d4 | Long rest: 1d4 + {number of PCs}`;
 
                 for (let i = 0; i < maxFear; i++) {
                     const fearIcon = createElement("span", "fear-icon", "💀");
-                    if (i >= encounter.currentFear) {
+                    if (i >= campaign.currentFear) {
                         fearIcon.classList.add("inactive");
                     }
                     fearValue.appendChild(fearIcon);
                 }
 
-                useFearButton.disabled = encounter.currentFear <= 0;
-                gainFearButton.disabled = encounter.currentFear >= maxFear;
+                useFearButton.disabled = campaign.currentFear <= 0;
+                gainFearButton.disabled = campaign.currentFear >= maxFear;
             }
             updateFearDisplay();
 
             useFearButton.onclick = function() {
-                if (encounter.currentFear > 0) {
-                    encounter.currentFear--;
+                if (campaign.currentFear > 0) {
+                    campaign.currentFear--;
                     updateFearDisplay();
                     saveState();
                 }
             };
 
             gainFearButton.onclick = function() {
-                if (encounter.currentFear < maxFear) {
-                    encounter.currentFear++;
+                if (campaign.currentFear < maxFear) {
+                    campaign.currentFear++;
                     updateFearDisplay();
                     saveState();
                 }
@@ -2326,7 +2326,7 @@
             encounterBar.appendChild(battlePointsDiv);
             refreshBattlePoints();
 
-            const fearDiv = createFearTracker(encounter);
+            const fearDiv = createFearTracker(campaign);
             encounterBar.appendChild(fearDiv);
 
             const statBlocksDiv = document.createElement("main");
