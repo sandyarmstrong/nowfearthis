@@ -2366,14 +2366,14 @@
         // Convert from encounter-first to campaign-first, if needed
         if (!state?.campaigns && state?.encounters) {
             const encounters = state.encounters;
-            state.encounters = undefined;
+            delete state.encounters;
 
             let latestFear = 0;
             for (const encounter of encounters) {
                 if (encounter.currentFear) {
                     latestFear = encounter.currentFear;
                 }
-                encounter.currentFear = undefined;
+                delete encounter.currentFear;
             }
 
             const campaign = {
