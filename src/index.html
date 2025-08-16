@@ -2278,6 +2278,7 @@
                 noEncounters.appendChild(loadSamplesButon)
                 loadSamplesButon.addEventListener("click", () => {
                     state = JSON.parse(JSON.stringify(sampleState));
+                    selectedCampaignIndex = 0;
                     selectedEncounterIndex = 0;
                     saveState();
                     refreshDisplay();
