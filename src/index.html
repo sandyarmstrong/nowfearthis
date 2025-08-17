@@ -1306,6 +1306,21 @@
             }
         }
 
+        function getDefaultSelectedIndexes() {
+            let defaultCampaignIndex = 0;
+            let defaultEncounterIndex = 0;
+            if (state.campaigns?.length) {
+                defaultCampaignIndex = state.campaigns.length - 1;
+                if (state.campaigns[defaultCampaignIndex].encounters?.length) {
+                    defaultEncounterIndex = state.campaigns[defaultCampaignIndex].encounters.length - 1;
+                }
+            }
+            return {
+                campaignIndex: defaultCampaignIndex,
+                encounterIndex: defaultEncounterIndex,
+            };
+        }
+
         function showEncounterEditor(encounter) {
             const selected = getSelected();
 
@@ -1670,7 +1685,7 @@
             if (!selectedCampaignIndex ||
                 selectedCampaignIndex < 0 ||
                 selectedCampaignIndex >= state.campaigns.length) {
-                selectedCampaignIndex = 0;
+                selectedCampaignIndex = state.campaigns.length - 1;
             }
 
             return state.campaigns[selectedCampaignIndex];
@@ -1692,7 +1707,7 @@
             if (!selectedEncounterIndex ||
                 selectedEncounterIndex < 0 ||
                 selectedEncounterIndex >= campaign.encounters.length) {
-                selectedEncounterIndex = 0;
+                selectedEncounterIndex = campaign.encounters.length - 1;
             }
 
             return campaign.encounters[selectedEncounterIndex];
@@ -2277,7 +2292,7 @@
                         campaign = state.campaigns[i];
                         if (campaign.encounters?.length) {
                             selectedCampaignIndex = i;
-                            selectedEncounterIndex = 0;
+                            selectedEncounterIndex = campaign.encounters.length - 1;
                             encounter = campaign.encounters[selectedEncounterIndex];
                             break;
                         }
@@ -2295,8 +2310,9 @@
                 noEncounters.appendChild(loadSamplesButon)
                 loadSamplesButon.addEventListener("click", () => {
                     state = loadState(JSON.parse(JSON.stringify(sampleState)));
-                    selectedCampaignIndex = 0;
-                    selectedEncounterIndex = 0;
+                    const defaults = getDefaultSelectedIndexes();
+                    selectedCampaignIndex = defaults.campaignIndex;
+                    selectedEncounterIndex = defaults.encounterIndex;
                     saveState();
                     refreshDisplay();
                 });
@@ -2362,12 +2378,13 @@
             fullSearch.classList.remove("hidden");
         }
 
+        // TODO: Validate these when state is loaded?
         let selectedCampaignIndex = parseInt(localStorage.getItem("selected-campaign-index"));
-        if (!selectedCampaignIndex) {
+        if (!selectedCampaignIndex || selectedCampaignIndex < 0) {
             selectedCampaignIndex = 0;
         }
         let selectedEncounterIndex = parseInt(localStorage.getItem("selected-encounter-index"));
-        if (!selectedEncounterIndex) {
+        if (!selectedEncounterIndex || selectedEncounterIndex < 0) {
             selectedEncounterIndex = 0;
         }
 
@@ -2430,8 +2447,9 @@
             loadFromJsonFile(event, function(loadedState) {
                 if (loadedState) {
                     loadState(loadedState);
-                    selectedCampaignIndex = 0;
-                    selectedEncounterIndex = 0;
+                    const defaults = getDefaultSelectedIndexes();
+                    selectedCampaignIndex = defaults.campaignIndex;
+                    selectedEncounterIndex = defaults.encounterIndex;
                     saveState();
                     refreshDisplay();
                 } else {
