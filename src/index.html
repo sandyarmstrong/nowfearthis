@@ -416,9 +416,10 @@
                 max-width: 48em; /* 44em looks good, 48em is about the width of two statblocks */
 
                 #battle-points {
-                    padding-top: 4px;
-                    padding-left: 4px;
+                    margin-top: 4px;
+                    padding: 5px;
                     font-weight: bold;
+                    color: var(--text-color);
                 }
             }
             #simple-search, .browsing-filters {
@@ -846,7 +847,7 @@
                     </div>
                 </div>
 
-                <div id="battle-points">
+                <button id="battle-points" class="subtle">
                     Target Battle Points: <span id="target-battle-points"></span> (<span id="current-battle-points"></span> <span id="current-battle-points-suffix"></span>)
                 </div>
             </div>
@@ -1320,6 +1321,11 @@
                 encounterIndex: defaultEncounterIndex,
             };
         }
+
+        battlePointsDisplay.addEventListener("click", () => {
+            const selected = getSelected();
+            showEncounterEditor(selected.encounter);
+        });
 
         function showEncounterEditor(encounter) {
             const selected = getSelected();
