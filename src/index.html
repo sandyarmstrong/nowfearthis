@@ -1338,7 +1338,7 @@
             }
 
             encounterEditor.querySelector("#encounter-name").value = encounter.name;
-            encounterEditor.querySelector("#encounter-campaign-name").value = selected.campaign?.name;
+            encounterEditor.querySelector("#encounter-campaign-name").value = selected.campaign?.name ?? "";
             encounterEditor.querySelector("#encounter-tier").value = encounter.playerTier ?? 1;
             encounterEditor.querySelector("#encounter-player-count").value = encounter.playerCount ?? 4;
             encounterEditor.querySelector("#encounter-target-battle-points").value = encounter.targetBattlePoints ?? 14;
