@@ -1411,11 +1411,13 @@
             if (selected.encounter) {
                 selected.campaign.encounters.splice(selectedEncounterIndex, 1);
                 selectedEncounterIndex = Math.max(Math.min(selectedEncounterIndex, selected.campaign.encounters.length - 1), 0);
-                if (selected.campaign.encounters.length === 0) {
+                if (!selected.campaign.encounters.length) {
                     state.campaigns.splice(selectedCampaignIndex, 1);
                     selectedCampaignIndex = Math.max(Math.min(selectedCampaignIndex, state.campaigns.length - 1), 0);
                     saveState();
-                    showEncounterEditor();
+                    if (!state.campaigns.length) {
+                        showEncounterEditor();
+                    }
                 } else {
                     saveState();
                 }
