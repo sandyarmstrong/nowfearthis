@@ -408,14 +408,18 @@
                 width: 100%;
             }
 
-            #simple-search, #browsing {
+            #search-container {
                 background-color: var(--clr-surface-a10);
                 padding: 5px;
                 margin: 5px 0px;
                 border-radius: 5px;
-            }
-            #simple-search, .results table {
                 max-width: 48em; /* 44em looks good, 48em is about the width of two statblocks */
+
+                #battle-points {
+                    padding-top: 4px;
+                    padding-left: 4px;
+                    font-weight: bold;
+                }
             }
             #simple-search, .browsing-filters {
                 display: flex;
@@ -757,87 +761,93 @@
 
         <div class="below-top-bar">
 
-            <div id="simple-search" class="hidden">
-                <button id="show-full-search" class="subtle" title="Expand to Full Search">⏬</button>
-                <input
-                    id="simple-search-input"
-                    type="search"
-                    placeholder="Search Adversaries & Environments"
-                    list="searchable-statBlocks" />
-                <button id="simple-search-add-button">➕ Add</button>
-            </div>
-
-            <div id="browsing">
-                <!-- TODO: Allow keyboard navigation of table and adding of statBlocks directly from search input?-->
-                <div class="browsing-filters">
-                    <!-- TODO: There is some new styling bug causing search to jump when toggling this -->
-                    <button id="hide-full-search" class="subtle" title="Collapse to Simple Search">⏫</button>
-                    <input id="browsing-search" type="text" placeholder="Search Adversaries & Environments" />
-                    <select id="browsing-source">
-                        <option value="">Any source</option>
-                        <option>SRD</option>
-                        <option>Custom</option>
-                    </select>
-                    <select id="browsing-tier">
-                        <option value="">Any tier</option>
-                        <option value="1">Tier 1</option>
-                        <option value="2">Tier 2</option>
-                        <option value="3">Tier 3</option>
-                        <option value="4">Tier 4</option>
-                    </select>
-                    <select id="browsing-category">
-                        <option value="">Any category</option>
-                        <option value="Adversary">Adversaries</option>
-                        <option value="Environment">Environments</option>
-                    </select>
-                    <select id="browsing-type">
-                        <option value="">Any type</option>
-                        <!-- Hide group when specific categories selected? Would require resetting type if category changes, sometimes -->
-                        <optgroup label="Adversaries">
-                            <option>Bruiser</option>
-                            <option>Horde</option>
-                            <option>Leader</option>
-                            <option>Minion</option>
-                            <option>Ranged</option>
-                            <option>Skulk</option>
-                            <option>Social</option>
-                            <option>Solo</option>
-                            <option>Standard</option>
-                            <option>Support</option>
-                        </optgroup>
-                        <optgroup label="Environments">
-                            <option>Event</option>
-                            <option>Exploration</option>
-                            <option>Social</option>
-                            <option>Traversal</option>
-                        </optgroup>
-                    </select>
-                    <button id="browsing-reset-filters">Reset Filters</button>
+            <div id="search-container">
+                <div id="simple-search" class="hidden">
+                    <button id="show-full-search" class="subtle" title="Expand to Full Search">⏬</button>
+                    <input
+                        id="simple-search-input"
+                        type="search"
+                        placeholder="Search Adversaries & Environments"
+                        list="searchable-statBlocks" />
+                    <button id="simple-search-add-button">➕ Add</button>
                 </div>
-                <div class="results">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col">Name</th>
-                                <!-- TODO: Make some columns disappear when insufficient width -->
-                                <th scope="col">Type</th>
-                                <th scope="col">Points</th>
-                                <th scope="col">Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                        <template id="results-row-template">
-                            <tr>
-                                <td class="nowrap"><button>➕ Add</button></td>
-                                <td></td>
-                                <td class="nowrap"></td>
-                                <td class="nowrap"></td>
-                                <td></td>
-                            </tr>
-                        </template>
-                    </table>
+
+                <div id="browsing">
+                    <!-- TODO: Allow keyboard navigation of table and adding of statBlocks directly from search input?-->
+                    <div class="browsing-filters">
+                        <!-- TODO: There is some new styling bug causing search to jump when toggling this -->
+                        <button id="hide-full-search" class="subtle" title="Collapse to Simple Search">⏫</button>
+                        <input id="browsing-search" type="text" placeholder="Search Adversaries & Environments" />
+                        <select id="browsing-source">
+                            <option value="">Any source</option>
+                            <option>SRD</option>
+                            <option>Custom</option>
+                        </select>
+                        <select id="browsing-tier">
+                            <option value="">Any tier</option>
+                            <option value="1">Tier 1</option>
+                            <option value="2">Tier 2</option>
+                            <option value="3">Tier 3</option>
+                            <option value="4">Tier 4</option>
+                        </select>
+                        <select id="browsing-category">
+                            <option value="">Any category</option>
+                            <option value="Adversary">Adversaries</option>
+                            <option value="Environment">Environments</option>
+                        </select>
+                        <select id="browsing-type">
+                            <option value="">Any type</option>
+                            <!-- Hide group when specific categories selected? Would require resetting type if category changes, sometimes -->
+                            <optgroup label="Adversaries">
+                                <option>Bruiser</option>
+                                <option>Horde</option>
+                                <option>Leader</option>
+                                <option>Minion</option>
+                                <option>Ranged</option>
+                                <option>Skulk</option>
+                                <option>Social</option>
+                                <option>Solo</option>
+                                <option>Standard</option>
+                                <option>Support</option>
+                            </optgroup>
+                            <optgroup label="Environments">
+                                <option>Event</option>
+                                <option>Exploration</option>
+                                <option>Social</option>
+                                <option>Traversal</option>
+                            </optgroup>
+                        </select>
+                        <button id="browsing-reset-filters">Reset Filters</button>
+                    </div>
+                    <div class="results">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Name</th>
+                                    <!-- TODO: Make some columns disappear when insufficient width -->
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Points</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <template id="results-row-template">
+                                <tr>
+                                    <td class="nowrap"><button>➕ Add</button></td>
+                                    <td></td>
+                                    <td class="nowrap"></td>
+                                    <td class="nowrap"></td>
+                                    <td></td>
+                                </tr>
+                            </template>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="battle-points">
+                    Target Battle Points: <span id="target-battle-points"></span> (<span id="current-battle-points"></span> <span id="current-battle-points-suffix"></span>)
                 </div>
             </div>
 
@@ -876,6 +886,7 @@
         const simpleSearchInput = document.getElementById("simple-search-input");
         const fullSearch = document.getElementById("browsing");
         const fullSearchInput = document.getElementById("browsing-search");
+        const battlePointsDisplay = document.getElementById("battle-points");
 
         const resultsRowTemplate = document.getElementById("results-row-template");
         const conditionTemplate = document.getElementById("condition-template");
@@ -1625,20 +1636,20 @@
 
         function refreshBattlePoints() {
             const encounter = getSelected().encounter;
-            const battlePointsDiv = document.querySelector("#battle-points");
             const currentBattlePoints = calculateBattlePoints(encounter);
 
-            battlePointsDiv.querySelector("[name='target-battle-points']").innerText = encounter.targetBattlePoints;
+            battlePointsDisplay.classList.remove("hidden");
+            battlePointsDisplay.querySelector("#target-battle-points").innerText = encounter.targetBattlePoints;
 
             // Round to nearest 0.1 for display
             const remainingBattlePoints = Math.round((encounter.targetBattlePoints - currentBattlePoints) * 10) / 10;
 
             if (remainingBattlePoints < 0) {
-                battlePointsDiv.querySelector("[name='current-battle-points']").innerText = `⚠️ ${Math.abs(remainingBattlePoints)}`;
-                battlePointsDiv.querySelector("[name='remaining-suffix']").innerText = "over";
+                battlePointsDisplay.querySelector("#current-battle-points").innerText = `⚠️ ${Math.abs(remainingBattlePoints)}`;
+                battlePointsDisplay.querySelector("#current-battle-points-suffix").innerText = "over";
             } else {
-                battlePointsDiv.querySelector("[name='current-battle-points']").innerText = Math.abs(remainingBattlePoints);
-                battlePointsDiv.querySelector("[name='remaining-suffix']").innerText = "left";
+                battlePointsDisplay.querySelector("#current-battle-points").innerText = Math.abs(remainingBattlePoints);
+                battlePointsDisplay.querySelector("#current-battle-points-suffix").innerText = "left";
             }
         }
 
@@ -2248,6 +2259,7 @@
             encounterSelector.innerHTML = "";
             const searchableCampaigns = document.getElementById("searchable-campaigns");
             searchableCampaigns.innerHTML = "";
+            battlePointsDisplay.classList.add("hidden");
             const encounterDiv = document.getElementById("encounter");
             encounterDiv.innerHTML = ""; // Clear any existing content
 
@@ -2329,12 +2341,6 @@
             encounterBar.className = "encounter-bar";
             encounterDiv.appendChild(encounterBar);
 
-            // TODO: Should be able to initiate edit from here? Should this move to top bar?
-            //       Seems like it could be created statically.
-            const battlePointsDiv = document.createElement("div");
-            battlePointsDiv.id = "battle-points";
-            battlePointsDiv.innerHTML = 'Target Battle Points: <span name="target-battle-points"></span> (<span name="current-battle-points"></span> <span name="remaining-suffix"></span>)';
-            encounterBar.appendChild(battlePointsDiv);
             refreshBattlePoints();
 
             updateFearDisplay(campaign);
