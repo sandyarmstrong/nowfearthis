@@ -1390,7 +1390,6 @@
                 }
                 encounter = {}
                 campaign.encounters.push(encounter);
-                selectedEncounterIndex = campaign.encounters.length - 1;
             } else if (campaign !== previouslySelectedCampaign) {
                 needsRefreshDisplay = true;
                 if (previouslySelectedCampaign?.encounters?.length) {
@@ -1403,9 +1402,9 @@
                     }
                 }
                 campaign.encounters.push(encounter);
-                selectedEncounterIndex = campaign.encounters.length - 1;
             }
 
+            selectedEncounterIndex = campaign.encounters.length - 1;
             selectedCampaignIndex = state.campaigns.indexOf(campaign);
 
             encounter.name = encounterEditor.querySelector("#encounter-name").value.trim();
@@ -1442,17 +1441,18 @@
             const selected = getSelected();
             if (selected.encounter) {
                 selected.campaign.encounters.splice(selectedEncounterIndex, 1);
-                selectedEncounterIndex = Math.max(Math.min(selectedEncounterIndex, selected.campaign.encounters.length - 1), 0);
                 if (!selected.campaign.encounters.length) {
                     state.campaigns.splice(selectedCampaignIndex, 1);
                     selectedCampaignIndex = Math.max(Math.min(selectedCampaignIndex, state.campaigns.length - 1), 0);
-                    saveState();
-                    if (!state.campaigns.length) {
-                        showEncounterEditor();
-                    }
-                } else {
-                    saveState();
                 }
+                const lastEncounterIndex = state.campaigns?.length ? state.campaigns[selectedCampaignIndex].encounters.length - 1 : 0;
+                selectedEncounterIndex = Math.max(Math.min(selectedEncounterIndex, lastEncounterIndex), 0);
+
+                saveState();
+                if (!state.campaigns.length) {
+                    showEncounterEditor();
+                }
+
                 refreshDisplay();
             }
             hideEncounterMenu();
