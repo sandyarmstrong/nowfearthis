@@ -497,9 +497,9 @@
         </datalist>
 
         <datalist id="searchable-campaigns">
-            <option>Campaign 1</option>
-            <option>Campaign 2</option>
-            <option>Campaign 3</option>
+        </datalist>
+
+        <datalist id="searchable-statBlocks">
         </datalist>
 
         <div id="top-bar">
@@ -567,10 +567,12 @@
                 </label>
                 <br>
                 <label>Campaign:
+                    <!-- autocomplete=off to restrict dataset to those explicitly in the list -->
                     <input
                         type="text"
                         id="encounter-campaign-name"
                         placeholder="(optional)"
+                        autocomplete="off"
                         list="searchable-campaigns" />
                 </label>
                 <br>
@@ -2242,6 +2244,8 @@
             // TODO: Is it really necessary to wipe the encounter/campaign selectors on each refresh?
             campaignSelector.innerHTML = "";
             encounterSelector.innerHTML = "";
+            const searchableCampaigns = document.getElementById("searchable-campaigns");
+            searchableCampaigns.innerHTML = "";
             const encounterDiv = document.getElementById("encounter");
             encounterDiv.innerHTML = ""; // Clear any existing content
 
@@ -2293,8 +2297,10 @@
                     displayName = "(default)";
                 }
                 const option = createElement("option", null, displayName);
+                const searchableOption = createElement("option", null, state.campaigns[i].name);
                 option.value = i;
                 campaignSelector.appendChild(option);
+                searchableCampaigns.appendChild(searchableOption);
             }
             campaignSelector.value = selectedCampaignIndex;
 
@@ -2521,13 +2527,11 @@
             }
         }
 
-        const statBlockDatalist = document.createElement("datalist");
-        statBlockDatalist.id = "searchable-statBlocks";
+        const statBlockDatalist = document.getElementById("searchable-statBlocks");
         const browsingTableBody = fullSearch.querySelector("tbody");
         for (let i = 0; i < srdStatBlocks.length; i++) {
             addStatBlockToSearch(srdStatBlocks[i]);
         }
-        document.body.appendChild(statBlockDatalist);
         refreshCustomStatBlocksInSearch();
 
         refreshDisplay();
