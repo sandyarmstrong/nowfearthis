@@ -1410,10 +1410,10 @@
             const selected = getSelected();
             if (selected.encounter) {
                 selected.campaign.encounters.splice(selectedEncounterIndex, 1);
-                selectedEncounterIndex = Math.min(selectedEncounterIndex, selected.campaign.encounters.length - 1);
+                selectedEncounterIndex = Math.max(Math.min(selectedEncounterIndex, selected.campaign.encounters.length - 1), 0);
                 if (selected.campaign.encounters.length === 0) {
                     state.campaigns.splice(selectedCampaignIndex, 1);
-                    selectedCampaignIndex = Math.min(selectedCampaignIndex, state.campaigns.length - 1);
+                    selectedCampaignIndex = Math.max(Math.min(selectedCampaignIndex, state.campaigns.length - 1), 0);
                     saveState();
                     showEncounterEditor();
                 } else {
@@ -2252,10 +2252,10 @@
             let campaign = null;
             let encounter = null;
             if (state?.campaigns?.length) {
-                selectedCampaignIndex = Math.min(selectedCampaignIndex, state.campaigns.length - 1);
+                selectedCampaignIndex = Math.max(Math.min(selectedCampaignIndex, state.campaigns.length - 1), 0);
                 campaign = state.campaigns[selectedCampaignIndex];
                 if (campaign.encounters?.length) {
-                    selectedEncounterIndex = Math.min(selectedEncounterIndex, campaign.encounters.length - 1);
+                    selectedEncounterIndex = Math.max(Math.min(selectedEncounterIndex, campaign.encounters.length - 1), 0);
                     encounter = campaign.encounters[selectedEncounterIndex];
                 } else {
                     // If selected campaign has no encounters, find the first one that does
