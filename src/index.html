@@ -2315,7 +2315,7 @@
                 const loadSamplesButon = createElement("button", "load-samples", "Load Sample Encounters");
                 noEncounters.appendChild(loadSamplesButon)
                 loadSamplesButon.addEventListener("click", () => {
-                    state = loadState(JSON.parse(JSON.stringify(sampleState)));
+                    loadState(JSON.parse(JSON.stringify(sampleState)));
                     const defaults = getDefaultSelectedIndexes();
                     selectedCampaignIndex = defaults.campaignIndex;
                     selectedEncounterIndex = defaults.encounterIndex;
