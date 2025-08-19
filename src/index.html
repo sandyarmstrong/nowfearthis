@@ -783,6 +783,7 @@
                             <option value="">Any source</option>
                             <option>SRD</option>
                             <option>Custom</option>
+                            <option>Extra</option>
                         </select>
                         <select id="browsing-tier">
                             <option value="">Any tier</option>
@@ -2540,13 +2541,15 @@
             // Clear custom entries from search
             for (let i = statBlockDatalist.children.length - 1; i >= 0; i--) {
                 const option = statBlockDatalist.children[i];
-                if (option.statBlock.source !== "SRD") {
+                const source = option.statBlock.source;
+                if (source !== "SRD" && source !== "Extra") {
                     option.remove();
                 }
             }
             for (let i = browsingTableBody.children.length - 1; i >= 0; i--) {
                 const row = browsingTableBody.children[i];
-                if (row.statBlock.source !== "SRD") {
+                const source = row.statBlock.source;
+                if (source !== "SRD" && source !== "Extra") {
                     row.remove();
                 }
             }

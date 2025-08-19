@@ -442,6 +442,26 @@ const srdStatBlocks = [
     ]
   },
   {
+    "name": "Blank Adversary",
+    "originalName": "Blank Adversary",
+    "source": "Extra",
+    "tier": 1,
+    "category": "Adversary",
+    "description": "",
+    "difficulty": 10,
+    "type": "Standard"
+  },
+  {
+    "name": "Blank Environment",
+    "originalName": "Blank Environment",
+    "source": "Extra",
+    "tier": 1,
+    "category": "Environment",
+    "description": "",
+    "difficulty": 10,
+    "type": "Event"
+  },
+  {
     "name": "Brawny Zombie",
     "originalName": "Brawny Zombie",
     "source": "SRD",
