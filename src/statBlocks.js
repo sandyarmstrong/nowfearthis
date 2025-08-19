@@ -803,6 +803,16 @@ const srdStatBlocks = [
     ]
   },
   {
+    "name": "Countdown",
+    "originalName": "Countdown",
+    "source": "Extra",
+    "tier": 1,
+    "category": "Environment",
+    "description": "Add countdowns here that are independent of any other adversary or environment.",
+    "difficulty": 10,
+    "type": "Event"
+  },
+  {
     "name": "Courtesan",
     "originalName": "Courtesan",
     "source": "SRD",

@@ -853,6 +853,13 @@
                 </div>
             </div>
 
+            <template id="countdown-template">
+                <div class="countdown">
+                    <input type="text" size="30" class="countdown-name">
+                    <input type="number" min="0" max="99" class="countdown-value">
+                </div>
+            </template>
+
             <div id="encounter"></div>
 
             <div id="repo-info">
@@ -2129,6 +2136,10 @@
                 };
                 instanceTopActions.appendChild(removeInstanceButton);
             }
+
+            const countdownTemplate = document.getElementById("countdown-template");
+            const countdownClone = countdownTemplate.content.cloneNode(true);
+            statBlockDiv.appendChild(countdownClone);
 
             setupStatBlockActionButton(statBlockDiv, statBlock);
 
