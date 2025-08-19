@@ -2554,7 +2554,10 @@
                 }
             }
 
-            // Add custom entries
+            addCustomStatBlocksToSearch();
+        }
+
+        function addCustomStatBlocksToSearch() {
             if (state?.custom?.statBlocks?.length) {
                 state.custom.statBlocks.forEach(function(statBlock) {
                     addStatBlockToSearch(statBlock);
@@ -2567,7 +2570,7 @@
         for (let i = 0; i < srdStatBlocks.length; i++) {
             addStatBlockToSearch(srdStatBlocks[i]);
         }
-        refreshCustomStatBlocksInSearch();
+        addCustomStatBlocksToSearch();
 
         refreshDisplay();
         updateBrowsingTableFiltering(); // TODO: Move into refreshDisplay?
