@@ -311,6 +311,17 @@
                 }
             }
 
+            .countdowns-container {
+                font-size: smaller;
+                .countdowns {
+                    list-style: none;
+                    padding: 0px;
+                }
+                button.add-countdown-button {
+                    font-size: smaller;
+                }
+            }
+
             button.inline-add {
                 border: 0px;
                 border-radius: 2px;
@@ -320,7 +331,7 @@
                 padding: 10px;
             }
 
-            button.add-conditions-button, button.add-countdown-button {
+            button.add-conditions-button {
                 font-size: smaller;
             }
 
@@ -854,9 +865,18 @@
             </div>
 
             <template id="countdown-template">
-                <div class="countdown">
-                    <input type="text" size="30" class="countdown-name">
-                    <input type="number" min="0" max="99" class="countdown-value">
+                <li class="countdown">
+                    <input type="text" size="30" class="countdown-name" placeholder="Countdown Name" title="Countdown name">
+                    <input type="number" min="0" max="99" class="countdown-value" title="Countdown value">
+                    <button class="inline-delete" title="Remove countdown">❌</button>
+                </li>
+            </template>
+
+            <template id="countdowns-template">
+                <div class="countdowns-container">
+                    <ul class="countdowns">
+                    </ul>
+                    <button class="add-countdown-button">Add Countdown</button>
                 </div>
             </template>
 
@@ -2121,6 +2141,10 @@
                 instanceDiv.appendChild(conditionsDiv);
                 updateConditionsDisplay(conditionsDiv, instance, false);
 
+                // TODO: Should the button appear inline with the "Add Conditions"
+                //       button when there are no countdowns?
+                updateCountdownsDisplay(instance, instanceDiv);
+
                 const instanceTopActions = createElement("div", "top-actions");
                 instanceDiv.appendChild(instanceTopActions);
 
@@ -2137,15 +2161,69 @@
                 instanceTopActions.appendChild(removeInstanceButton);
             }
 
-            // const countdownTemplate = document.getElementById("countdown-template");
-            // const countdownClone = countdownTemplate.content.cloneNode(true);
-            // statBlockDiv.appendChild(countdownClone);
-            const addCountdown = createElement("button", "add-countdown-button", "Add Countdown");
-            statBlockDiv.appendChild(addCountdown);
+            // TODO: Does this take up too much space? Should it be in a menu?
+            if (statBlock.category !== "Adversary") {
+                updateCountdownsDisplay(statBlock, statBlockDiv);
+            }
 
             setupStatBlockActionButton(statBlockDiv, statBlock);
 
             return statBlockDiv;
+        }
+
+        function updateCountdownsDisplay(item, container) {
+            let countdownsContainer = container.querySelector(".countdowns-container");
+            if (!countdownsContainer) {
+                countdownsContainer = document.getElementById("countdowns-template").content.cloneNode(true).children[0];
+                container.appendChild(countdownsContainer);
+            }
+
+            const countdownsList = countdownsContainer.querySelector(".countdowns");
+            countdownsList.innerHTML = ""; // Clear existing countdowns
+
+            if (item.countdowns?.length) {
+                item.countdowns.forEach(function(countdown) {
+                    const countdownItem = document.getElementById("countdown-template").content.cloneNode(true).children[0];
+
+                    // TODO: Replace all these inner function event listeners with
+                    //       global functions?
+                    const nameInput = countdownItem.querySelector(".countdown-name");
+                    nameInput.value = countdown.name;
+                    nameInput.addEventListener("input", function(event) {
+                        countdown.name = event.target.value;
+                        saveState();
+                    });
+
+                    const valueInput = countdownItem.querySelector(".countdown-value");
+                    valueInput.value = countdown.value;
+                    valueInput.addEventListener("input", function(event) {
+                        countdown.value = parseInt(event.target.value);
+                        saveState();
+                    });
+
+                    countdownItem.querySelector(".inline-delete").onclick = function(event) {
+                        item.countdowns.splice(item.countdowns.indexOf(countdown), 1);
+                        countdownsList.removeChild(countdownItem);
+                        saveState();
+                    };
+                    countdownsList.appendChild(countdownItem);
+                });
+            }
+
+            countdownsContainer.querySelector(".add-countdown-button").onclick = function(event) {
+                const newCountdown = {
+                    name: "",
+                    value: 6,
+                };
+                if (!item.countdowns) {
+                    item.countdowns = [];
+                }
+                item.countdowns.push(newCountdown);
+                saveState();
+                // TODO: Make this more efficient. No need to wipe everything.
+                updateCountdownsDisplay(item, container);
+                countdownsList.children[countdownsList.children.length - 1].querySelector(".countdown-name").focus();
+            };
         }
 
         function addStatBlock(container, encounter, statBlock) {
