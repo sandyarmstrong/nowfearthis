@@ -1021,13 +1021,14 @@
             featureElement.appendChild(instanceTopActions);
 
             // TODO: Could put this and Name in a flex container instead, to avoid overlap when super narrow
-            const removeInstanceButton = createElement("button", "child-action", "🗑️");
-            removeInstanceButton.title = "Remove this feature";
-            removeInstanceButton.onclick = function(event) {
+            const removeFeatureButton = createElement("button", "child-action", "🗑️");
+            removeFeatureButton.type = "button";
+            removeFeatureButton.title = "Remove this feature";
+            removeFeatureButton.onclick = function(event) {
                 event.target.closest(".feature").remove();
                 // Editor will handle saving state and refreshing display
             };
-            instanceTopActions.appendChild(removeInstanceButton);
+            instanceTopActions.appendChild(removeFeatureButton);
 
             return featureElement;
         }
