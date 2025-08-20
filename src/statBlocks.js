@@ -803,14 +803,20 @@ const srdStatBlocks = [
     ]
   },
   {
-    "name": "Countdown",
-    "originalName": "Countdown",
+    "name": "Countdowns",
+    "originalName": "Countdowns",
     "source": "Extra",
     "tier": 1,
     "category": "Environment",
-    "description": "Add countdowns here that are independent of any other adversary or environment.",
+    "description": "Add countdowns here that are independent of any other adversary or environment. Countdown effects trigger at 0.",
     "difficulty": 10,
-    "type": "Event"
+    "type": "Event",
+    "features": [
+      {
+        "name": "Dynamic Advancement",
+        "text": "Create a Progress countdown and a Consequence countdown. Have players make action rolls to determine results, following this table:\n\nFailure+Fear | Progress: 0 | Consequence: 3\nFailure+Hope | Progress: 0 | Consequence: 2\nSuccess+Fear | Progress: 1 | Consequence: 1\nSuccess+Hope | Progress: 2 | Consequence: 0\nCrit Success | Progress: 3 | Consequence: 0"
+      }
+    ]
   },
   {
     "name": "Courtesan",
