@@ -320,7 +320,7 @@
                 padding: 10px;
             }
 
-            button.add-conditions-button {
+            button.add-conditions-button, button.add-countdown-button {
                 font-size: smaller;
             }
 
@@ -1517,7 +1517,7 @@
             const rows = browsingTableBody.querySelectorAll("tr");
             rows.forEach(function(row) {
                 if ((!selectedSource || row.statBlock.source == selectedSource) &&
-                    (!selectedTier || row.statBlock.tier == selectedTier) &&
+                    (!selectedTier || row.statBlock.tier == selectedTier || row.statBlock.source === "Extra") &&
                     (!selectedCategory || row.statBlock.category == selectedCategory) &&
                     (!selectedType || row.statBlock.type == selectedType) &&
                     (!searchText || statBlockMatchesSearch(row.statBlock, searchText))) {
@@ -2137,9 +2137,11 @@
                 instanceTopActions.appendChild(removeInstanceButton);
             }
 
-            const countdownTemplate = document.getElementById("countdown-template");
-            const countdownClone = countdownTemplate.content.cloneNode(true);
-            statBlockDiv.appendChild(countdownClone);
+            // const countdownTemplate = document.getElementById("countdown-template");
+            // const countdownClone = countdownTemplate.content.cloneNode(true);
+            // statBlockDiv.appendChild(countdownClone);
+            const addCountdown = createElement("button", "add-countdown-button", "Add Countdown");
+            statBlockDiv.appendChild(addCountdown);
 
             setupStatBlockActionButton(statBlockDiv, statBlock);
 
