@@ -2312,6 +2312,7 @@
                 statBlock.originalName = statBlock.name;
                 const newCustomStatBlock = JSON.parse(JSON.stringify(statBlock));
                 delete newCustomStatBlock.instances;
+                delete newCustomStatBlock.countdowns;
                 if (!state.custom) {
                     state.custom = {};
                 }
