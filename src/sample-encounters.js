@@ -431,6 +431,16 @@ const sampleState = {
                                     "name": "Crowd Control - Reaction",
                                     "text": "When one of the PCs splits from the group, the crowds shift and cut them off from the party.\n\n  *Where does the crowd’s movement carry them? How do they feel about being alone but surrounded?*"
                                 }
+                            ],
+                            "countdowns": [
+                                {
+                                    "name": "Sticky Fingers - Progress",
+                                    "value": 6
+                                },
+                                {
+                                    "name": "Sticky Fingers - Consequence",
+                                    "value": 4
+                                }
                             ]
                         },
                         {
@@ -509,7 +519,13 @@ const sampleState = {
                                 {
                                     "name": "Head Guard #1",
                                     "hpMarked": 0,
-                                    "stressMarked": 0
+                                    "stressMarked": 0,
+                                    "countdowns": [
+                                        {
+                                            "name": "On My Signal",
+                                            "value": 5
+                                        }
+                                    ]
                                 }
                             ]
                         },
