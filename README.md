@@ -3,9 +3,10 @@
 A tool for folks like me who can't draw squares very quickly.
 
 * Keep track of _HP, Stress, and Conditions_ for any number of adversaries.
-* Easily _browse adversaries_ from the SRD or your own custom list.
-* Edit any adversary and _make it your own_.
+* Easily _browse adversaries and environments_ from the SRD or your own custom list.
+* Edit any adversary or environment, and _make it your own_.
 * Manage multiple encounters and _keep track of your Fear_ from session to session.
+* Attach _countdowns_ to any environment or adversary instance.
 * Save and share your encounters (or just your custom stat blocks) with a _simple JSON format_.
 * Works _entirely offline_, no accounts, no ads, no tracking or cookies. State is persisted in `localStorage`.
 * [Download and run _your own copy_](https://codeberg.org/sandyarmstrong/nowfearthis/archive/main.zip) from your desktop. No build, no package manager, no dependencies.
