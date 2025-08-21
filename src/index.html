@@ -641,6 +641,7 @@
                     <span class="statBlock-editor-adversary">
                         <label>Type:
                             <select id="adversary-type" list="srd-adversary-types">
+                                <option value="">(none)</option>
                                 <option>Bruiser</option>
                                 <option>Horde</option>
                                 <option>Leader</option>
@@ -2374,7 +2375,6 @@
                 case "solo":
                     return 5;
                 default:
-                    console.warn("Unknown adversary type:", adversaryType);
                     return 0;
             }
         }
