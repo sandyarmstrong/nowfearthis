@@ -263,8 +263,16 @@
                 position: relative; /* For action button */
                 margin-top: 10px;
                 background-color: var(--stats-bg-color);
+                border: 1px solid var(--stats-bg-color);
                 border-radius: 3px;
-                padding: 5px;
+                padding: 4px;
+
+                &.vulnerable {
+                    border-color: orange;
+                }
+                &.defeated {
+                    opacity: 0.5;
+                }
             }
             .instance h4 {
                 margin: 0px;
@@ -1829,15 +1837,25 @@
             browsingTableBody.insertBefore(tr, browsingTableBody.childNodes[insertBeforeIndex]);
         }
 
-        function updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName) {
+        function updateResource(
+            container,
+            adversary,
+            adversarySlotsPropertyName,
+            instance,
+            instanceMarkedPropertyName,
+            slotsFullClassName) {
             const slots = adversary[adversarySlotsPropertyName];
             const marked = instance[instanceMarkedPropertyName];
 
-            // TODO: Reduce opacity or something when HP is fully marked?
-            //       - Would also need to do it on initial/refresh layout
-            //       - Would also need to differentiate between HP and Stress
-            // TODO: Add "Vulnerable (stress full)" condition when stress is fully marked?
-            //       Would have to make sure it couldn't be deleted otherwise though.
+            const instanceDiv = container.closest(".instance");
+            const slotInfoDiv = container.closest(".slotInfo");
+            if (marked === slots) {
+                slotInfoDiv.title = `This adversary is ${slotsFullClassName}`;
+                instanceDiv.classList.add(slotsFullClassName);
+            } else {
+                slotInfoDiv.title = "";
+                instanceDiv.classList.remove(slotsFullClassName);
+            }
 
             if (container.childElementCount != slots) {
                 const checkboxes = [];
@@ -1851,7 +1869,13 @@
                             instance[instanceMarkedPropertyName]--;
                         }
                         saveState();
-                        updateResource(container, adversary, adversarySlotsPropertyName, instance, instanceMarkedPropertyName);
+                        updateResource(
+                            container,
+                            adversary,
+                            adversarySlotsPropertyName,
+                            instance,
+                            instanceMarkedPropertyName,
+                            slotsFullClassName);
                     };
                     checkboxes.push(slot)
                 }
@@ -2148,15 +2172,15 @@
 
                 const hpDiv = createElement("div", "slotInfo", "HP:");
                 const hpSlotsDiv = createElement("div", "slots");
-                updateResource(hpSlotsDiv, statBlock, "hp", instance, "hpMarked");
                 hpDiv.appendChild(hpSlotsDiv);
                 instanceDiv.appendChild(hpDiv);
+                updateResource(hpSlotsDiv, statBlock, "hp", instance, "hpMarked", "defeated");
 
                 const stressDiv = createElement("div", "slotInfo", "Stress:");
                 const stressSlotsDiv = createElement("div", "slots");
-                updateResource(stressSlotsDiv, statBlock, "stress", instance, "stressMarked");
                 stressDiv.appendChild(stressSlotsDiv);
                 instanceDiv.appendChild(stressDiv);
+                updateResource(stressSlotsDiv, statBlock, "stress", instance, "stressMarked", "vulnerable");
 
                 const conditionsDiv = createElement("div", "conditions");
                 conditionsDiv.innerHTML = "<ul class='conditions-list'></ul>";
