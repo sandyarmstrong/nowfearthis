@@ -332,7 +332,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Fumigation - Action",
-        "text": "Drop a smoke bomb that fills the air within Close range with smoke, Dizzilying all targets in this area. Dizzied targets have disadvantage on their next action roll, then clear the condition."
+        "text": "Drop a smoke bomb that fills the air within Close range with smoke, Dizzying all targets in this area. Dizzied targets have disadvantage on their next action roll, then clear the condition."
       }
     ]
   },
