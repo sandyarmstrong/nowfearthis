@@ -1444,10 +1444,16 @@
             selectedEncounterIndex = campaign.encounters.length - 1;
             selectedCampaignIndex = state.campaigns.indexOf(campaign);
 
+            const previousTier = encounter.playerTier;
+
             encounter.name = encounterEditor.querySelector("#encounter-name").value.trim();
             encounter.playerTier = parseInt(encounterEditor.querySelector("#encounter-tier").value);
             encounter.playerCount = parseInt(encounterEditor.querySelector("#encounter-player-count").value);
             encounter.targetBattlePoints = parseInt(encounterEditor.querySelector("#encounter-target-battle-points").value);
+
+            if (previousTier !== encounter.playerTier) {
+                needsRefreshDisplay = true;
+            }
 
             saveState();
             if (needsRefreshDisplay) {
