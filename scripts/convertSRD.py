@@ -20,7 +20,7 @@ with urllib.request.urlopen(srdEnvironmentsUrl) as url:
     srdEnvironments = json.load(url)
 
 # Horde type is usually of the form "Horde ({count}/HP)"
-perHpRegex = re.compile("(.+)\s+\((\d+)/HP\)\s*")
+perHpRegex = re.compile(r"(.+)\s+\((\d+)/HP\)\s*")
 
 items = []
 
