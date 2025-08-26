@@ -200,9 +200,10 @@
                     transform: translateX(-50%);
                 }
             }
-            .statBlock h3 {
+            .statBlock h3 { /* h2 size closer to SRD styling, but causes overlap with buttons */
                 margin: 8px 0px;
                 color: var(--header-text-color);
+                text-transform: uppercase;
             }
             #conditions-editor h3 {
                 margin: 0px;
@@ -2063,6 +2064,8 @@
             statBlockDiv.statBlock = statBlock;
             // TODO: Make it easier for source to be identified and changed
             //       in statBlockSavedToCustom/statBlockDeletedFromCustom
+            // TODO: This should be in a container (flexbox?) with action buttons
+            //       so that long names don't ovelap.
             const statBlockHeader = createElement("h3", null, statBlock.name);
             statBlockHeader.title = `Source: ${statBlock.originalName}, ${statBlock.source}`;
             statBlockDiv.appendChild(statBlockHeader);
