@@ -6,8 +6,8 @@ import urllib.request
 from pypdf import PdfReader
 from enum import Enum
 
-if len(sys.argv) != 2:
-    sys.exit("Usage: convertPDF.py {pathToPDF}")
+if len(sys.argv) != 3:
+    sys.exit("Usage: convertPDF.py {inputPDFPath} {outputJSONPath}")
 
 pdfUrl = sys.argv[1]
 print("Loading adversaries from", pdfUrl, "...")
@@ -25,6 +25,20 @@ featureLineRegex = re.compile(r"^([^\:]+)\:\s*(.+)$")
 
 items = []
 
+def fixNameCase(name):
+    makeLowerCase = False
+    fixedName = ""
+    for c in name:
+        if c.isspace():
+            fixedName += c
+            makeLowerCase = False
+        elif not(makeLowerCase):
+            fixedName += c
+            makeLowerCase = True
+        else:
+            fixedName += c.lower()
+    return fixedName
+
 class ParsingState(Enum):
     LookingForStatBlock = 1
     BuildingDescription = 2
@@ -38,6 +52,10 @@ def loadPage(pageText):
     state = ParsingState.LookingForStatBlock
     currentItem = {}
 
+    # Add an extra line with a single space so the real final line gets
+    # processed correctly without any extra work.
+    pageText += '\n '
+
     for line in pageText.splitlines():
         features = currentItem.get('features', [])
 
@@ -45,7 +63,7 @@ def loadPage(pageText):
         if m:
             pendingFeatureTextLine = ""
             state = ParsingState.BuildingDescription
-            name = lastLine.strip()
+            name = fixNameCase(lastLine.strip())
             currentItem = {
                 'name': name,
                 'originalName': name,
@@ -120,6 +138,8 @@ def loadPage(pageText):
                         continue
 
                 features = currentItem.get('features', [])
+                # TODO: Try to detect if a feature has intentional line breaks,
+                #       e.g. bullet points.
                 if not(lastLineIsFirstFeatureLine) and len(features) > 0:
                     features[-1]['text'] += " " + lastLine.strip()
                 lastLineIsFirstFeatureLine = False
@@ -150,8 +170,9 @@ customContainer = {
     },
 }
 
-thisFileDirectory = os.path.dirname(os.path.realpath(__file__))
-outputPath = os.path.join(thisFileDirectory, '..', 'src', 'pdfStatBlocks.json')
+# thisFileDirectory = os.path.dirname(os.path.realpath(__file__))
+# outputPath = os.path.join(thisFileDirectory, '..', 'src', 'pdfStatBlocks.json')
+outputPath = sys.argv[2]
 
 with open(outputPath, 'w') as f:
     f.write(json.dumps(customContainer, indent=2))
