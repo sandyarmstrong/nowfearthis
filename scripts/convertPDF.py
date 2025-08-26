@@ -1,15 +1,64 @@
+from argparse import ArgumentParser
 import json
-import os
 import re
-import sys
-import urllib.request
 from pypdf import PdfReader
 from enum import Enum
 
-if len(sys.argv) != 3:
-    sys.exit("Usage: convertPDF.py {inputPDFPath} {outputJSONPath}")
+parser = ArgumentParser()
+parser.add_argument('inputPDFPath')
+parser.add_argument('outputJSONPath')
+parser.add_argument('--pages', '-p', default="1-", help="Optional pages pattern like: 2-4,8,10-")
+args = parser.parse_args()
 
-pdfUrl = sys.argv[1]
+class PageRanges:
+    ranges = []
+    def contains(self, pageNumber):
+        for range in self.ranges:
+            if pageNumber >= range[0] and (range[1] is None or pageNumber <= range[1]):
+                return True
+        return False
+    def __init__(self, pattern):
+        currentRange = None
+        buildingStart = False
+        buildingEnd = False
+        count = 0
+        for c in pattern:
+            count += 1
+            if c.isspace():
+                raise ValueError("Spaces are not allowed in page range patterns")
+            if c.isdigit():
+                if currentRange is None:
+                    page = int(c)
+                    currentRange = (page, page)
+                    buildingStart = True
+                elif buildingStart:
+                    page = currentRange[0]*10 + int(c)
+                    currentRange = (page, page)
+                elif buildingEnd:
+                    currentEnd = 0 if currentRange[1] is None else currentRange[1]
+                    currentRange = (currentRange[0], currentEnd*10 + int(c))
+            elif c == ',':
+                if currentRange and currentRange[1] is None:
+                    raise ValueError("Unterminated ranges must be the last range in the pattern" + str(count))
+                elif currentRange is None:
+                    raise ValueError("Commas are only allowed following ranges")
+                else:
+                    self.ranges.append(currentRange)
+                    currentRange = None
+                    buildingStart = False
+                    buildingEnd = False
+            elif c == '-':
+                if not(buildingStart):
+                    raise ValueError("Dashes are only allowed after range start")
+                buildingStart = False
+                buildingEnd = True
+                currentRange = (currentRange[0], None)
+        if currentRange:
+            self.ranges.append(currentRange)
+
+pageRanges = PageRanges(args.pages)
+
+pdfUrl = args.inputPDFPath
 print("Loading adversaries from", pdfUrl, "...")
 
 pdfReader = PdfReader(pdfUrl)
@@ -22,8 +71,6 @@ difficultyLineRegex = re.compile(r"^\s*Difficulty:\s*(\d+)(?:[\s|]+Thresholds:\s
 attackLineRegex = re.compile(r"^\s*ATK:\s*([^|]+)[\s|]+(.+)\:\s*([^|]+)[\s|]+([^|]+)$")
 experienceLineRegex = re.compile(r"^\s*(?:Experience|Potential Adversaries):\s*(.+)\s*$")
 featureLineRegex = re.compile(r"^([^\:]+)\:\s*(.+)$")
-
-items = []
 
 def fixNameCase(name):
     makeLowerCase = False
@@ -45,6 +92,8 @@ class ParsingState(Enum):
     BuildingDifficulty = 3
     BuildingAttack = 4
     BuildingExperienceAndFeatures = 5
+
+items = []
 
 def loadPage(pageText):
     lastLine = ""
@@ -159,8 +208,11 @@ def loadPage(pageText):
 
         lastLine = line
 
+pageNum = 1
 for page in pdfReader.pages:
-    loadPage(page.extract_text())
+    if pageRanges.contains(pageNum):
+        loadPage(page.extract_text())
+    pageNum += 1
 
 items.sort(key=lambda statBlock: statBlock['name'])
 
@@ -172,7 +224,7 @@ customContainer = {
 
 # thisFileDirectory = os.path.dirname(os.path.realpath(__file__))
 # outputPath = os.path.join(thisFileDirectory, '..', 'src', 'pdfStatBlocks.json')
-outputPath = sys.argv[2]
+outputPath = args.outputJSONPath
 
 with open(outputPath, 'w') as f:
     f.write(json.dumps(customContainer, indent=2))
