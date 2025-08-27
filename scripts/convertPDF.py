@@ -10,6 +10,7 @@ parser.add_argument('outputPath', help="File path to write importable JSON conte
 parser.add_argument('--source', '-s', default="Custom")
 parser.add_argument('--pages', '-p', default="1-", help="Optional pages pattern like: 2-4,8,10-")
 parser.add_argument('--jsVar', '-j', help="Specify to output JS instead of JSON, storing the list of stat blocks directly in named variable")
+parser.add_argument('--debug', '-d')
 args = parser.parse_args()
 
 class PageRanges:
@@ -127,6 +128,8 @@ class ParsingState(Enum):
 items = []
 
 def loadPage(pageText):
+    if args.debug:
+        print(pageText)
     lastLine = ""
     lastLineIsFirstFeatureLine = False
     state = ParsingState.LookingForStatBlock
