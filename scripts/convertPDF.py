@@ -143,12 +143,23 @@ def loadPage(pageText):
             pendingFeatureTextLine = ""
             state = ParsingState.BuildingDescription
             name = fixNameCase(lastLine.strip())
+
+            # Extract countPerHp if it's set. The SRD only uses
+            # this for Hordes, but support for all types here just in case.
+            entryType = m.group(2)
+            countPerHp = 1
+            m2 = perHpRegex.match(entryType)
+            if m2:
+                entryType = m2.group(1)
+                countPerHp = int(m2.group(2))
+
             currentItem = {
                 'name': name,
                 'originalName': name,
                 'source': "Custom",
                 'tier': int(m.group(1)),
-                'type': m.group(2),
+                'type': entryType,
+                'countPerHp': countPerHp,
                 'category': "Adversary",
             }
             items.append(currentItem)
