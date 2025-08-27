@@ -65,9 +65,9 @@ pdfReader = PdfReader(pdfUrl)
 
 # Horde type is usually of the form "Horde ({count}/HP)"
 perHpRegex = re.compile(r"(.+)\s+\((\d+)/HP\)\s*")
-tierTypeRegex = re.compile(r"^\s*Tier (\d+) (\S+)\s*$")
+tierTypeRegex = re.compile(r"^\s*Tier (\d+) (\S.+\S)\s*$")
 motivesOrImpulsesRegex = re.compile(r"^\s*(Motives & Tactics|Impulses):\s*(.+)$")
-difficultyLineRegex = re.compile(r"^\s*Difficulty:\s*(\d+)(?:[\s|]+Thresholds:\s*(\S+)[\s|]+HP:\s*(\d+)(?:-\d+)?[\s|]+Stress:\s*(\d+))?$")
+difficultyLineRegex = re.compile(r"^\s*Diffi\s*culty:\s*(\d+)(?:[\s|]+Thresholds:\s*(\S+)[\s|]+HP:\s*(\d+)(?:-\d+)?[\s|]+Stress:\s*(\d+))?\s*$")
 attackLineRegex = re.compile(r"^\s*ATK:\s*([^|]+)[\s|]+(.+)\:\s*([^|]+)[\s|]+([^|]+)$")
 experienceLineRegex = re.compile(r"^\s*(?:Experience|Potential Adversaries):\s*(.+)\s*$")
 featureLineRegex = re.compile(r"^([^\:]+)\:\s*(.+)$")
@@ -85,6 +85,35 @@ def fixNameCase(name):
         else:
             fixedName += c.lower()
     return fixedName
+
+def deunicodeString(string):
+    # Also to consider:
+    # \u2014 - emdash
+    # \u2022 - bullet
+    replacements = [
+        ('\u00a0', ' '),
+        ('\u2019', '\''),
+        ('\u201c', '"'),
+        ('\u201d', '"'),
+        ('\u2212', '-'),
+        ('\ue53f', '0'),
+        ('\ue541', '1'),
+        ('\ue542', '2'),
+        ('\ue543', '3'),
+        ('\ue544', '4'),
+        ('\ue545', '5'),
+        ('\ue546', '6'),
+        ('\ue547', '7'),
+        ('\ue548', '8'),
+        ('\ue549', '9'),
+        ('\ufb00', 'ff'),
+        ('\ufb01', 'fi'),
+        ('\ufb02', 'fl'),
+        ('\ufb03', 'ffi'),
+    ]
+    for pair in replacements:
+        string = string.replace(pair[0], pair[1])
+    return string
 
 class ParsingState(Enum):
     LookingForStatBlock = 1
@@ -106,6 +135,7 @@ def loadPage(pageText):
     pageText += '\n '
 
     for line in pageText.splitlines():
+        line = deunicodeString(line)
         features = currentItem.get('features', [])
 
         m = tierTypeRegex.match(line)
