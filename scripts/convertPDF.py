@@ -73,7 +73,7 @@ motivesOrImpulsesRegex = re.compile(r"^\s*(Motives & Tactics|Impulses):\s*(.+)$"
 difficultyLineRegex = re.compile(r"^\s*Diffi\s*culty:\s*([^|]+)(?:[\s|]+Thresholds:\s*(\S+)[\s|]+HP:\s*(\d+)(?:-\d+)?[\s|]+Stress:\s*(\d+))?\s*$")
 attackLineRegex = re.compile(r"^\s*ATK:\s*([^|]+)[\s|]+(.+)\:\s*([^|]+)[\s|]+([^|]+)$")
 experienceLineRegex = re.compile(r"^\s*(?:Experience|Potential Adversaries):\s*(.+)\s*$")
-featureLineRegex = re.compile(r"^([^\:]+)\:\s*(.+)$")
+featureLineRegex = re.compile(r"^([^\:]+)\:\s*(.*)$")
 
 def fixNameCase(name):
     makeLowerCase = False
@@ -249,8 +249,9 @@ def loadPage(pageText):
                 features = currentItem.get('features', [])
                 # TODO: Try to detect if a feature has intentional line breaks,
                 #       e.g. bullet points. (For now, fixing up bullet points later)
+                # TODO: Better support for feature names that are longer than a line
                 if not(lastLineIsFirstFeatureLine) and len(features) > 0 and len(lastLine) > 0:
-                    features[-1]['text'] += " " + lastLine
+                    features[-1]['text'] = (features[-1]['text'] + " " + lastLine).strip()
                 lastLineIsFirstFeatureLine = False
                 m = featureLineRegex.match(line)
                 if m and not(line[0] == '\u2022'):
