@@ -5,9 +5,11 @@ from pypdf import PdfReader
 from enum import Enum
 
 parser = ArgumentParser()
-parser.add_argument('inputPDFPath')
-parser.add_argument('outputJSONPath')
+parser.add_argument('inputPath', help="The PDF file to parse")
+parser.add_argument('outputPath', help="File path to write importable JSON content to (or JS if --jsVar specified)")
+parser.add_argument('--source', '-s', default="Custom")
 parser.add_argument('--pages', '-p', default="1-", help="Optional pages pattern like: 2-4,8,10-")
+parser.add_argument('--jsVar', '-j', help="Specify to output JS instead of JSON, storing the list of stat blocks directly in named variable")
 args = parser.parse_args()
 
 class PageRanges:
@@ -58,8 +60,8 @@ class PageRanges:
 
 pageRanges = PageRanges(args.pages)
 
-pdfUrl = args.inputPDFPath
-print("Loading adversaries from", pdfUrl, "...")
+pdfUrl = args.inputPath
+print("Loading stat blocks from", pdfUrl, "...")
 
 pdfReader = PdfReader(pdfUrl)
 
@@ -137,6 +139,8 @@ def loadPage(pageText):
     for line in pageText.splitlines():
         line = deunicodeString(line).strip()
         # Also get rid of weird extra spaces
+        # TODO: What's going on with "lift you offthe ground"? (Abandoned Grove - Barbed Vines)
+        #       Also "the crowds shift and cut them offfrom the party" (Bustling Marketplace - Crowd Closes In)
         line = line.replace("   ", "").replace("  ", "")
         features = currentItem.get('features', [])
 
@@ -157,11 +161,11 @@ def loadPage(pageText):
             currentItem = {
                 'name': name,
                 'originalName': name,
-                'source': "Custom",
+                'source': args.source,
                 'tier': int(m.group(1)),
+                'category': "Adversary",
                 'type': entryType,
                 'countPerHp': countPerHp,
-                'category': "Adversary",
             }
             items.append(currentItem)
             continue
@@ -174,6 +178,7 @@ def loadPage(pageText):
                     if m.group(1) == 'Impulses':
                         key = 'impulses'
                         currentItem['category'] = "Environment"
+                        del currentItem['countPerHp']
                     currentItem[key] = m.group(2).strip()
                     state = ParsingState.BuildingDifficulty
                 else:
@@ -223,6 +228,7 @@ def loadPage(pageText):
                     m = experienceLineRegex.match(line)
                     if m:
                         if currentItem['category'] == "Adversary":
+                            # TODO: Set to null if this is never found? That's what previous converter did.
                             currentItem['experience'] = m.group(1).strip()
                         else:
                             currentItem['potentialAdversaries'] = m.group(1).strip()
@@ -259,16 +265,20 @@ for page in pdfReader.pages:
 
 items.sort(key=lambda statBlock: statBlock['name'])
 
-customContainer = {
-    'custom' : {
-        'statBlocks': items,
-    },
-}
-
-# thisFileDirectory = os.path.dirname(os.path.realpath(__file__))
-# outputPath = os.path.join(thisFileDirectory, '..', 'src', 'pdfStatBlocks.json')
-outputPath = args.outputJSONPath
-
-with open(outputPath, 'w') as f:
+def getJsonOutput(obj):
     # Easier to convert unicode bullets here
-    f.write(json.dumps(customContainer, indent=2).replace('\\u2022', "\\n*"))
+    return json.dumps(obj, indent=2).replace('\\u2022', "\\n*")
+
+outputPath = args.outputPath
+print("Saving output to", outputPath, "...")
+with open(outputPath, 'w') as f:
+    if args.jsVar:
+        f.write("const " + args.jsVar + " = ")
+        f.write(getJsonOutput(items))
+        f.write(";")
+    else:
+        f.write(getJsonOutput({
+            'custom' : {
+                'statBlocks': items
+                }
+            }))
