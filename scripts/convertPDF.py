@@ -142,6 +142,12 @@ def loadPage(pageText):
         # TODO: What's going on with "lift you offthe ground"? (Abandoned Grove - Barbed Vines)
         #       Also "the crowds shift and cut them offfrom the party" (Bustling Marketplace - Crowd Closes In)
         line = line.replace("   ", "").replace("  ", "")
+
+        # Avoid appending SRD page number text (usually appears in the form "{pageNumber}\nDaggerheart SRD")
+        if line == "Daggerheart SRD":
+            lastLine = ""
+            continue
+
         features = currentItem.get('features', [])
 
         m = tierTypeRegex.match(line)
@@ -240,8 +246,7 @@ def loadPage(pageText):
                 features = currentItem.get('features', [])
                 # TODO: Try to detect if a feature has intentional line breaks,
                 #       e.g. bullet points. (For now, fixing up bullet points later)
-                # TODO: Avoid appending SRD page number text
-                if not(lastLineIsFirstFeatureLine) and len(features) > 0:
+                if not(lastLineIsFirstFeatureLine) and len(features) > 0 and len(lastLine) > 0:
                     features[-1]['text'] += " " + lastLine
                 lastLineIsFirstFeatureLine = False
                 m = featureLineRegex.match(line)
