@@ -69,7 +69,7 @@ pdfReader = PdfReader(pdfUrl)
 perHpRegex = re.compile(r"(.+)\s+\((\d+)/HP\)\s*")
 tierTypeRegex = re.compile(r"^\s*Tier (\d+) (\S.+\S)\s*$")
 motivesOrImpulsesRegex = re.compile(r"^\s*(Motives & Tactics|Impulses):\s*(.+)$")
-difficultyLineRegex = re.compile(r"^\s*Diffi\s*culty:\s*(\d+)(?:[\s|]+Thresholds:\s*(\S+)[\s|]+HP:\s*(\d+)(?:-\d+)?[\s|]+Stress:\s*(\d+))?\s*$")
+difficultyLineRegex = re.compile(r"^\s*Diffi\s*culty:\s*([^|]+)(?:[\s|]+Thresholds:\s*(\S+)[\s|]+HP:\s*(\d+)(?:-\d+)?[\s|]+Stress:\s*(\d+))?\s*$")
 attackLineRegex = re.compile(r"^\s*ATK:\s*([^|]+)[\s|]+(.+)\:\s*([^|]+)[\s|]+([^|]+)$")
 experienceLineRegex = re.compile(r"^\s*(?:Experience|Potential Adversaries):\s*(.+)\s*$")
 featureLineRegex = re.compile(r"^([^\:]+)\:\s*(.+)$")
@@ -190,7 +190,10 @@ def loadPage(pageText):
             case ParsingState.BuildingDifficulty:
                 m = difficultyLineRegex.match(line)
                 if m:
-                    currentItem['difficulty'] = int(m.group(1))
+                    difficulty = m.group(1).strip()
+                    if difficulty.isdecimal():
+                        difficulty = int(difficulty)
+                    currentItem['difficulty'] = difficulty
                     if currentItem['category'] == "Adversary":
                         # Most thresholds are in a form like '6/11', but
                         # minions have 'None', and some adversaries like
