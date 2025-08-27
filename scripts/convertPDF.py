@@ -267,6 +267,8 @@ def loadPage(pageText):
                     else:
                         currentItem['potentialAdversaries'] += " " + line
 
+        if len(line) == 0:
+            state = ParsingState.LookingForStatBlock
         lastLine = line
 
 pageNum = 1
