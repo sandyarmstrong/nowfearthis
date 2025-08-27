@@ -41,8 +41,6 @@ def loadEntry(entry, category):
         'source': "SRD",
         'tier': int(entry.get('tier')),
         'category': category,
-        'description': entry.get('description'),
-        'difficulty': difficulty,
     }
 
     # Category-specific fields
@@ -68,11 +66,13 @@ def loadEntry(entry, category):
 
         item['type'] = entryType
         item['countPerHp'] = countPerHp
+        item['description'] = entry.get('description')
         item['motivesAndTactics'] = entry.get('motives_and_tactics')
-        item['hp'] = int(entry.get('hp'))
-        item['stress'] = int(entry.get('stress'))
+        item['difficulty'] = difficulty
         item['majorThreshold'] = thresholds[0]
         item['severeThreshold'] = thresholds[1]
+        item['hp'] = int(entry.get('hp'))
+        item['stress'] = int(entry.get('stress'))
         item['attackModifier'] = entry.get('atk')
         item['attackDescription'] = entry.get('attack')
         item['attackRange'] = entry.get('range')
@@ -81,7 +81,9 @@ def loadEntry(entry, category):
         item['features'] = entry.get('feats')
     elif category == "Environment":
         item['type'] = entryType
+        item['description'] = entry.get('description')
         item['impulses'] = entry.get('impulses')
+        item['difficulty'] = difficulty
         # Could be 'Any' or various abbreviations instead of exact name matches
         item['potentialAdversaries'] = entry.get('potential_adversaries')
 
