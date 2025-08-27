@@ -135,14 +135,15 @@ def loadPage(pageText):
     pageText += '\n '
 
     for line in pageText.splitlines():
-        line = deunicodeString(line)
+        line = deunicodeString(line).strip()
+        # Also get rid of weird extra spaces
+        line = line.replace("   ", "").replace("  ", "")
         features = currentItem.get('features', [])
 
         m = tierTypeRegex.match(line)
         if m:
-            pendingFeatureTextLine = ""
             state = ParsingState.BuildingDescription
-            name = fixNameCase(lastLine.strip())
+            name = fixNameCase(lastLine)
 
             # Extract countPerHp if it's set. The SRD only uses
             # this for Hordes, but support for all types here just in case.
@@ -179,7 +180,7 @@ def loadPage(pageText):
                     description = currentItem.get('description','')
                     if len(description) > 0:
                         description += " "
-                    description += line.strip()
+                    description += line
                     currentItem['description'] = description
             case ParsingState.BuildingDifficulty:
                 m = difficultyLineRegex.match(line)
@@ -206,9 +207,9 @@ def loadPage(pageText):
                         state = ParsingState.BuildingExperienceAndFeatures
                 else:
                     if currentItem['category'] == "Adversary":
-                        currentItem['motivesAndTactics'] += " " + line.strip()
+                        currentItem['motivesAndTactics'] += " " + line
                     else:
-                        currentItem['impulses'] += " " + line.strip()
+                        currentItem['impulses'] += " " + line
             case ParsingState.BuildingAttack:
                 m = attackLineRegex.match(line)
                 if m:
@@ -229,23 +230,24 @@ def loadPage(pageText):
 
                 features = currentItem.get('features', [])
                 # TODO: Try to detect if a feature has intentional line breaks,
-                #       e.g. bullet points.
+                #       e.g. bullet points. (For now, fixing up bullet points later)
+                # TODO: Avoid appending SRD page number text
                 if not(lastLineIsFirstFeatureLine) and len(features) > 0:
-                    features[-1]['text'] += " " + lastLine.strip()
+                    features[-1]['text'] += " " + lastLine
                 lastLineIsFirstFeatureLine = False
                 m = featureLineRegex.match(line)
-                if m:
+                if m and not(line[0] == '\u2022'):
                     features.append({
                         'name': m.group(1).strip(),
                         'text': m.group(2).strip(),
                     })
                     currentItem['features'] = features
                     lastLineIsFirstFeatureLine = True
-                elif len(features) == 0 and ('experience' in currentItem or 'potentialAdversaries' in currentItem) and line.strip() != "FEATURES":
+                elif len(features) == 0 and ('experience' in currentItem or 'potentialAdversaries' in currentItem) and line != "FEATURES":
                     if currentItem['category'] == "Adversary":
-                        currentItem['experience'] += " " + line.strip()
+                        currentItem['experience'] += " " + line
                     else:
-                        currentItem['potentialAdversaries'] += " " + line.strip()
+                        currentItem['potentialAdversaries'] += " " + line
 
         lastLine = line
 
@@ -268,4 +270,5 @@ customContainer = {
 outputPath = args.outputJSONPath
 
 with open(outputPath, 'w') as f:
-    f.write(json.dumps(customContainer, indent=2))
+    # Easier to convert unicode bullets here
+    f.write(json.dumps(customContainer, indent=2).replace('\\u2022', "\\n*"))
