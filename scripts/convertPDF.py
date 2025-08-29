@@ -131,6 +131,7 @@ def loadPage(pageText):
     if args.debug:
         print(pageText)
     lastLine = ""
+    lastLastLine = ""
     lastLineIsFirstFeatureLine = False
     state = ParsingState.LookingForStatBlock
     currentItem = {}
@@ -156,7 +157,12 @@ def loadPage(pageText):
         m = tierTypeRegex.match(line)
         if m:
             state = ParsingState.BuildingDescription
-            name = fixNameCase(lastLine)
+            # TODO: Better multi-line name detection...for now only do this for SRD
+            if args.source == "SRD" and len(lastLastLine) > 0 and lastLastLine == lastLastLine.upper() and not(lastLastLine.endswith(')') or '|' in lastLastLine):
+                name = lastLastLine + " " + lastLine
+            else:
+                name = lastLine
+            name = fixNameCase(name)
 
             # Extract countPerHp if it's set. The SRD only uses
             # this for Hordes, but support for all types here just in case.
@@ -269,6 +275,7 @@ def loadPage(pageText):
 
         if len(line) == 0:
             state = ParsingState.LookingForStatBlock
+        lastLastLine = lastLine
         lastLine = line
 
 pageNum = 1
