@@ -273,6 +273,10 @@ def loadPage(pageText):
                     else:
                         currentItem['potentialAdversaries'] += " " + line
 
+                # Stop reading feature lines in case of art titles
+                if line != "FEATURES" and (line.upper() == line or line.startswith("Art by")):
+                    state = ParsingState.LookingForStatBlock
+
         if len(line) == 0:
             state = ParsingState.LookingForStatBlock
         lastLastLine = lastLine
