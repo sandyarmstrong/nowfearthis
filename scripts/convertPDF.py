@@ -70,10 +70,14 @@ pdfReader = PdfReader(pdfUrl)
 perHpRegex = re.compile(r"(.+)\s+\((\d+)/HP\)\s*")
 tierTypeRegex = re.compile(r"^\s*Tier (\d+) (\S.+\S)\s*$")
 motivesOrImpulsesRegex = re.compile(r"^\s*(Motives & Tactics|Impulses):\s*(.+)$")
+# "Diffi\s*culty" is something that happens frequently in SRD
 difficultyLineRegex = re.compile(r"^\s*Diffi\s*culty:\s*([^|]+)(?:[\s|]+Thresholds:\s*(\S+)[\s|]+HP:\s*(\d+)(?:-\d+)?[\s|]+Stress:\s*(\d+))?\s*$")
 attackLineRegex = re.compile(r"^\s*ATK:\s*([^|]+)[\s|]+(.+)\:\s*([^|]+)[\s|]+([^|]+)$")
 experienceLineRegex = re.compile(r"^\s*(?:Experience|Potential Adversaries):\s*(.+)\s*$")
-featureLineRegex = re.compile(r"^([^\:]+)\:\s*(.*)$")
+# TODO: Split out feature type (action, reaction, or passive)?
+#       This pattern enforces a dash in the feature "name", but
+#       splitting could allow a more semantic representation...
+featureLineRegex = re.compile(r"^([^\:]+-[^\:]+)\:\s*(.*)$")
 
 def fixNameCase(name):
     makeLowerCase = False
