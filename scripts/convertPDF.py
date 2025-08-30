@@ -262,7 +262,11 @@ def loadPage(pageText):
                     currentItem['attackDamage'] = m.group(4).strip()
                     state = ParsingState.BuildingExperienceAndFeatures
             case ParsingState.BuildingExperienceAndFeatures:
-                if not('experience' in currentItem or 'potentialAdversaries' in currentItem) and not('features' in currentItem):
+                # Ensure adversaries have experience set, even to null,
+                # for compat with old converter (not actually needed but helps with diffs)
+                if currentItem['category'] == "Adversary":
+                    currentItem['experience'] = currentItem.get('experience', None)
+                if not(('experience' in currentItem and currentItem['experience']) or 'potentialAdversaries' in currentItem) and not('features' in currentItem):
                     m = experienceLineRegex.match(line)
                     if m:
                         if currentItem['category'] == "Adversary":
@@ -289,7 +293,12 @@ def loadPage(pageText):
                     lastLineIsFirstFeatureLine = True
                 elif len(features) == 0 and ('experience' in currentItem or 'potentialAdversaries' in currentItem) and line != "FEATURES":
                     if currentItem['category'] == "Adversary":
-                        currentItem['experience'] += " " + line
+                        experience = currentItem['experience']
+                        if not experience:
+                            experience = line
+                        else:
+                            experience += " " + line
+                        currentItem['experience'] = experience
                     else:
                         currentItem['potentialAdversaries'] += " " + line
 
