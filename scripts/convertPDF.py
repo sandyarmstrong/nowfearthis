@@ -79,7 +79,7 @@ experienceLineRegex = re.compile(r"^\s*(?:Experience|Potential Adversaries):\s*(
 #       splitting could allow a more semantic representation...
 featureLineRegex = re.compile(r"^([^\:]+-[^\:]+)\:\s*(.*)$")
 
-def fixNameCase(name):
+def fixName(name):
     makeLowerCase = False
     fixedName = ""
     for c in name:
@@ -91,6 +91,22 @@ def fixNameCase(name):
             makeLowerCase = True
         else:
             fixedName += c.lower()
+    replacements = [
+        ('A V Arice', 'Avarice'),
+        ('Adul T', 'Adult'),
+        ('Ca Ve', 'Cave'),
+        ('Cul T', 'Cult'),
+        ('Dry Ad', 'Dryad'),
+        ('Flickerfl Y', 'Flickerfly'),
+        ('Mol Ten', 'Molten'),
+        ('Roy Al', 'Royal'),
+        ('Syl V An', 'Sylvan'),
+        ('Ta Vern', 'Tavern'),
+        ('V Ampire', 'Vampire'),
+        ('V Aul T', 'Vault'),
+    ]
+    for r in replacements:
+        fixedName = fixedName.replace(r[0], r[1])
     return fixedName
 
 def deunicodeString(string):
@@ -166,7 +182,7 @@ def loadPage(pageText):
                 name = lastLastLine + " " + lastLine
             else:
                 name = lastLine
-            name = fixNameCase(name)
+            name = fixName(name)
 
             # Extract countPerHp if it's set. The SRD only uses
             # this for Hordes, but support for all types here just in case.
@@ -296,7 +312,18 @@ items.sort(key=lambda statBlock: statBlock['name'])
 
 def getJsonOutput(obj):
     # Easier to convert unicode bullets here
-    return json.dumps(obj, indent=2).replace('\\u2022', "\\n*")
+    # TODO: Yeah, except this doesn't help with knowing when
+    #       the last bullet ends. The rest of the feature text
+    #       may end up appended to the last bullet.
+    replacements = [
+        ('\\u2022', '\\n-'),
+        ('T arget', 'Target'),
+        ('/hyphen.tab', '-'),
+    ]
+    output = json.dumps(obj, indent=2)
+    for r in replacements:
+        output = output.replace(r[0], r[1])
+    return output
 
 outputPath = args.outputPath
 print("Saving output to", outputPath, "...")
