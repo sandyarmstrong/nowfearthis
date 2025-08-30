@@ -83,7 +83,7 @@ def fixName(name):
     makeLowerCase = False
     fixedName = ""
     for c in name:
-        if c.isspace():
+        if c.isspace() or c == '-':
             fixedName += c
             makeLowerCase = False
         elif not(makeLowerCase):
@@ -92,6 +92,8 @@ def fixName(name):
         else:
             fixedName += c.lower()
     replacements = [
+        (' Of ', ' of '),
+        (' The ', ' the '),
         ('A V Arice', 'Avarice'),
         ('Adul T', 'Adult'),
         ('Ca Ve', 'Cave'),
