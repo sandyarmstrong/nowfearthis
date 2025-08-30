@@ -938,6 +938,45 @@
         const conditionTemplate = document.getElementById("condition-template");
         const featureEditorTemplate = document.getElementById("feature-editor-template");
 
+        const extraStatBlocks = [
+            {
+                "name": "Blank Adversary",
+                "originalName": "Blank Adversary",
+                "source": "Extra",
+                "tier": 1,
+                "category": "Adversary",
+                "description": "",
+                "difficulty": 10,
+                "type": "Standard"
+            },
+            {
+                "name": "Blank Environment",
+                "originalName": "Blank Environment",
+                "source": "Extra",
+                "tier": 1,
+                "category": "Environment",
+                "description": "",
+                "difficulty": 10,
+                "type": "Event"
+            },
+            {
+                "name": "Countdowns",
+                "originalName": "Countdowns",
+                "source": "Extra",
+                "tier": 1,
+                "category": "Environment",
+                "description": "Add countdowns here that are independent of any other adversary or environment. Countdown effects trigger at 0.",
+                "difficulty": 10,
+                "type": "Event",
+                "features": [
+                    {
+                        "name": "Dynamic Advancement",
+                        "text": "Create a Progress countdown and a Consequence countdown. Have players make action rolls to determine results, following this table:\n\nFailure+Fear | Progress: 0 | Consequence: 3\nFailure+Hope | Progress: 0 | Consequence: 2\nSuccess+Fear | Progress: 1 | Consequence: 1\nSuccess+Hope | Progress: 2 | Consequence: 0\nCrit Success | Progress: 3 | Consequence: 0"
+                    }
+                ]
+            },
+        ];
+
         function createElement(tagName, className = null, innerText = null) {
             const element = document.createElement(tagName);
             if (className) {
@@ -2306,21 +2345,23 @@
                 saveState();
             });
             statBlockElement.addEventListener("statBlockCopiedFromSource", function(event) {
-                // TODO: This is mostly a dupe of addStatBlockButton.onclick
+                // TODO: This is mostly a dupe of click handlers for search add buttons
                 let newStatBlock = null;
                 if (statBlock.source == "SRD") {
                     const sourceStatBlock = srdStatBlocks.find(function(a) {
                         return a.name === statBlock.originalName;
                     });
                     newStatBlock = JSON.parse(JSON.stringify(sourceStatBlock));
-                } else if (statBlock.source == "Custom" && state.custom && state.custom.statBlocks) { // TODO: Case-insensive?
+                } else if (statBlock.source == "Extra") {
+                    const sourceStatBlock = extraStatBlocks.find(function(a) {
+                        return a.name === statBlock.originalName;
+                    });
+                    newStatBlock = JSON.parse(JSON.stringify(sourceStatBlock));
+                } else if (state.custom && state.custom.statBlocks) {
                     const sourceStatBlock = state.custom.statBlocks.find(function(a) {
                         return a.name === statBlock.originalName;
                     });
                     newStatBlock = JSON.parse(JSON.stringify(sourceStatBlock));
-                } else {
-                    console.warn("Only 'SRD' and 'Custom' sources are supported");
-                    return;
                 }
 
                 if (newStatBlock.category == "Adversary" && !newStatBlock.instances?.length) {
@@ -2703,12 +2744,12 @@
                 }
             }
 
-            addCustomStatBlocksToSearch();
+            addStatBlocksToSearch(state?.custom?.statBlocks);
         }
 
-        function addCustomStatBlocksToSearch() {
-            if (state?.custom?.statBlocks?.length) {
-                state.custom.statBlocks.forEach(function(statBlock) {
+        function addStatBlocksToSearch(statBlocks) {
+            if (statBlocks?.length) {
+                statBlocks.forEach(function(statBlock) {
                     addStatBlockToSearch(statBlock);
                 });
             }
@@ -2719,7 +2760,8 @@
         for (let i = 0; i < srdStatBlocks.length; i++) {
             addStatBlockToSearch(srdStatBlocks[i]);
         }
-        addCustomStatBlocksToSearch();
+        addStatBlocksToSearch(state?.custom?.statBlocks);
+        addStatBlocksToSearch(extraStatBlocks);
 
         refreshDisplay();
         updateBrowsingTableFiltering(); // TODO: Move into refreshDisplay?

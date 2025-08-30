@@ -442,26 +442,6 @@ const srdStatBlocks = [
     ]
   },
   {
-    "name": "Blank Adversary",
-    "originalName": "Blank Adversary",
-    "source": "Extra",
-    "tier": 1,
-    "category": "Adversary",
-    "description": "",
-    "difficulty": 10,
-    "type": "Standard"
-  },
-  {
-    "name": "Blank Environment",
-    "originalName": "Blank Environment",
-    "source": "Extra",
-    "tier": 1,
-    "category": "Environment",
-    "description": "",
-    "difficulty": 10,
-    "type": "Event"
-  },
-  {
     "name": "Brawny Zombie",
     "originalName": "Brawny Zombie",
     "source": "SRD",
@@ -799,22 +779,6 @@ const srdStatBlocks = [
       {
         "name": "Death Quake - Reaction",
         "text": "When the Construct marks their last HP, the magic powering them ruptures in an explosion of force. Make an attack with advantage against all targets within Very Close range. Targets the Construct succeeds against take 1d12+2 magic damage."
-      }
-    ]
-  },
-  {
-    "name": "Countdowns",
-    "originalName": "Countdowns",
-    "source": "Extra",
-    "tier": 1,
-    "category": "Environment",
-    "description": "Add countdowns here that are independent of any other adversary or environment. Countdown effects trigger at 0.",
-    "difficulty": 10,
-    "type": "Event",
-    "features": [
-      {
-        "name": "Dynamic Advancement",
-        "text": "Create a Progress countdown and a Consequence countdown. Have players make action rolls to determine results, following this table:\n\nFailure+Fear | Progress: 0 | Consequence: 3\nFailure+Hope | Progress: 0 | Consequence: 2\nSuccess+Fear | Progress: 1 | Consequence: 1\nSuccess+Hope | Progress: 2 | Consequence: 0\nCrit Success | Progress: 3 | Consequence: 0"
       }
     ]
   },
