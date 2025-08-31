@@ -114,6 +114,7 @@ def fixName(name):
 def deunicodeString(string):
     # Also to consider:
     # \u2014 - emdash
+    # \u2018 - left single quote `
     # \u2022 - bullet
     replacements = [
         ('\u00a0', ' '),
@@ -328,9 +329,17 @@ def getJsonOutput(obj):
     #       may end up appended to the last bullet.
     replacements = [
         ('\\u2022', '\\n-'),
-        ('T arget', 'Target'),
         ('/hyphen.tab', '-'),
         ('/comma.tab', ','),
+        ('T ', 'T'),
+        ('Off- ', 'Off - '),
+        ('offof', 'off of'),
+        ('offthe', 'off the'),
+        ('Offthe', 'Off the'),
+        ('offtheir', 'off their'),
+        ('offfrom', 'off from'),
+        ('offheads', 'off heads'),
+        ('offinterlopers', 'off interlopers'),
     ]
     output = json.dumps(obj, indent=2)
     for r in replacements:
