@@ -330,6 +330,7 @@ def getJsonOutput(obj):
         ('\\u2022', '\\n-'),
         ('T arget', 'Target'),
         ('/hyphen.tab', '-'),
+        ('/comma.tab', ','),
     ]
     output = json.dumps(obj, indent=2)
     for r in replacements:
