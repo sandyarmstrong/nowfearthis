@@ -175,7 +175,7 @@
             }
 
             .statBlock, .no-encounters {
-                position: relative; /* For action button */
+                position: relative; /* For action menu */
                 display: inline-block;
                 vertical-align: top;
                 /*
@@ -261,7 +261,6 @@
             }
 
             .instance {
-                position: relative; /* For action button */
                 margin-top: 10px;
                 background-color: var(--stats-bg-color);
                 border: 1px solid var(--stats-bg-color);
@@ -355,11 +354,7 @@
             button.action {
                 float: right;
             }
-            .top-actions {
-                position: absolute;
-                right: 5px;
-                top: 5px; /* Make sure to update menu positioning in actionsButton click handler if this changes */
-
+            .actions{
                 button {
                     padding: 2px;
                     margin-left: 3px;
@@ -423,13 +418,29 @@
                 box-shadow: 10px 10px 10px black;
 
                 .feature {
-                    position: relative; /* For top action bar */
+                    margin-top: 10px;
                 }
             }
             @media (max-width: 1100px) {
                 .editor {
                     width: 90%;
                 }
+            }
+
+            .item-with-actions {
+                display: flex;
+                justify-content: space-between;
+                /* h3 {
+                    margin: 0px;
+                } */
+                :last-child {
+                    white-space: nowrap;
+                }
+            }
+
+            /* TODO: Do the same for names, feature names in editor, etc */
+            .instance .item-with-actions input[type=text] {
+                width: 100%;
             }
 
             textarea {
@@ -746,10 +757,14 @@
                     <div id="statBlock-features">
                         <template id="feature-editor-template">
                             <div class="feature">
-                                <label>Name:
-                                    <input type="text" class="statBlock-feature-name" size="30" />
-                                </label>
-                                <br />
+                                <div class="item-with-actions">
+                                    <label>Name:
+                                        <input type="text" class="statBlock-feature-name" size="30" />
+                                    </label>
+                                    <div class="actions">
+                                        <button type="button" class="child-action" title="Remove this feature">🗑️</button>
+                                    </div>
+                                </div>
                                 <label>Description:
                                     <textarea type="text" class="statBlock-feature-text" rows="4"></textarea>
                                 </label>
@@ -1064,20 +1079,10 @@
             const featureElement = featureEditorTemplate.content.cloneNode(true).children[0];
             featureElement.querySelector(".statBlock-feature-name").value = feature?.name ?? "";
             featureElement.querySelector(".statBlock-feature-text").value = feature?.text ?? "";
-
-            const instanceTopActions = createElement("div", "top-actions");
-            featureElement.appendChild(instanceTopActions);
-
-            // TODO: Could put this and Name in a flex container instead, to avoid overlap when super narrow
-            const removeFeatureButton = createElement("button", "child-action", "🗑️");
-            removeFeatureButton.type = "button";
-            removeFeatureButton.title = "Remove this feature";
-            removeFeatureButton.onclick = function(event) {
+            featureElement.querySelector(".child-action").onclick = function(event) {
                 event.target.closest(".feature").remove();
                 // Editor will handle saving state and refreshing display
             };
-            instanceTopActions.appendChild(removeFeatureButton);
-
             return featureElement;
         }
 
@@ -1941,7 +1946,7 @@
             }
         }
 
-        function setupStatBlockActionButton(statBlockElement, statBlock) {
+        function createStatBlockActions(statBlockElement, statBlock) {
             const actionsMenu = createElement("menu", "actions-menu hidden");
 
             function dismissActionsMenu() {
@@ -1988,8 +1993,7 @@
             actionsMenu.appendChild(deleteCustomAction);
 
             const topActions = document.createElement("div");
-            topActions.className = "top-actions";
-            statBlockElement.appendChild(topActions);
+            topActions.className = "actions";
 
             if (statBlock.category == "Adversary") {
                 const addInstanceButton = createElement("button", null, "➕");
@@ -2043,6 +2047,8 @@
             };
             statBlockElement.appendChild(actionsMenu)
             topActions.appendChild(actionsButton);
+
+            return topActions;
         }
 
         // TODO: Pass list directly instead of container
@@ -2116,11 +2122,12 @@
             statBlockDiv.statBlock = statBlock;
             // TODO: Make it easier for source to be identified and changed
             //       in statBlockSavedToCustom/statBlockDeletedFromCustom
-            // TODO: This should be in a container (flexbox?) with action buttons
-            //       so that long names don't ovelap.
+            const statBlockHeaderContainer = createElement("div", "item-with-actions");
             const statBlockHeader = createElement("h3", null, statBlock.name);
             statBlockHeader.title = `Source: ${statBlock.originalName}, ${statBlock.source}`;
-            statBlockDiv.appendChild(statBlockHeader);
+            statBlockHeaderContainer.appendChild(statBlockHeader);
+            statBlockHeaderContainer.appendChild(createStatBlockActions(statBlockDiv, statBlock));
+            statBlockDiv.appendChild(statBlockHeaderContainer);
 
             let tierTypeSuffix = "";
             let tierTypeSuffixComponents = [];
@@ -2215,15 +2222,16 @@
                 instanceDiv.instance = instance;
                 statBlockDiv.appendChild(instanceDiv);
 
+                const nameAndActions = createElement("div", "item-with-actions");
                 const instanceName = document.createElement("input")
                 instanceName.type = "text";
-                instanceName.size = 30; // TODO: Change all size like we changed cols to scale down when narrow
                 instanceName.value = instance.name;
                 instanceName.addEventListener("input", function(event) {
                     instance.name = event.target.value;
                     saveState();
                 });
-                instanceDiv.appendChild(instanceName);
+                nameAndActions.appendChild(instanceName);
+                instanceDiv.appendChild(nameAndActions);
 
                 const hpDiv = createElement("div", "slotInfo", "HP:");
                 const hpSlotsDiv = createElement("div", "slots");
@@ -2244,8 +2252,8 @@
 
                 updateCountdownsDisplay(instance, instanceDiv);
 
-                const instanceTopActions = createElement("div", "top-actions");
-                instanceDiv.appendChild(instanceTopActions);
+                const instanceTopActions = createElement("div", "actions");
+                nameAndActions.appendChild(instanceTopActions);
 
                 const addCountdownButton = createElement("button", "child-action", "⏲️");
                 addCountdownButton.title = "Add a countdown";
@@ -2270,8 +2278,6 @@
             if (statBlock.category !== "Adversary") {
                 updateCountdownsDisplay(statBlock, statBlockDiv);
             }
-
-            setupStatBlockActionButton(statBlockDiv, statBlock);
 
             return statBlockDiv;
         }
