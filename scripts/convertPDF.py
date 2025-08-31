@@ -298,7 +298,7 @@ def loadPage(pageText):
                     ]
                     for q in questionStarts:
                         if lastLine.startswith(q):
-                            separator = "\n"
+                            separator = "\n\n"
                             break
                     features[-1]['text'] = (features[-1]['text'] + separator + lastLine).strip()
                 lastLineIsFirstFeatureLine = False
