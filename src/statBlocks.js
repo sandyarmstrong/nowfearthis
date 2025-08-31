@@ -19,7 +19,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Barbed Vines - Action",
-        "text": "Pick a point within the grove. All targets within Very Close range of that point must succeed on an Agility Reaction Roll or take 1d8+3 physical damage and become Restrained by barbed vines. Restrained lasts until they\u2019re freed with a successful Finesse or Strength roll or by dealing at least 6 damage to the vines."
+        "text": "Pick a point within the grove. All targets within Very Close range of that point must succeed on an Agility Reaction Roll or take 1d8+3 physical damage and become Restrained by barbed vines. Restrained lasts until they're freed with a successful Finesse or Strength roll or by dealing at least 6 damage to the vines."
       },
       {
         "name": "You Are Not Welcome Here - Action",
@@ -62,7 +62,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Spit Acid - Action",
-        "text": "Make an attack against all targets in front of the Burrower within Close range. Targets the Burrower succeeds against take 2d6 physical damage and must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP and you gain a Fear."
+        "text": "Make an attack against all targets in front of the Burrower within Close range. Targets the Burrower succeeds against take 2d6 physical damage and must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can't mark an Armor Slot, they must mark an additional HP and you gain a Fear."
       },
       {
         "name": "Acid Bath - Reaction",
@@ -97,7 +97,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Never Misses - Passive",
-        "text": "When the Flickerfly makes an attack, the target\u2019s Evasion is halved against the attack."
+        "text": "When the Flickerfly makes an attack, the target's Evasion is halved against the attack."
       },
       {
         "name": "Deadly Flight - Passive",
@@ -109,7 +109,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Mind Dance - Action",
-        "text": "Mark a Stress to create a magically dazzling display that grapples the minds of nearby foes. All targets within Close range must make an Instinct Reaction Roll. For each target who failed, you gain a Fear and the Flickerfly learns one of the target\u2019s fears."
+        "text": "Mark a Stress to create a magically dazzling display that grapples the minds of nearby foes. All targets within Close range must make an Instinct Reaction Roll. For each target who failed, you gain a Fear and the Flickerfly learns one of the target's fears."
       },
       {
         "name": "Hallucinatory Breath - Action: Countdown (Loop 1d6)",
@@ -130,7 +130,7 @@ const srdStatBlocks = [
     "type": "Event",
     "description": "An ambush is set to catch an unsuspecting party off-guard.",
     "impulses": "Overwhelm, scatter, surround",
-    "difficulty": "Special (see \u201cRelative Strength\u201d)",
+    "difficulty": "Special (see \"Relative Strength\")",
     "potentialAdversaries": "Any",
     "features": [
       {
@@ -152,7 +152,7 @@ const srdStatBlocks = [
     "type": "Event",
     "description": "An ambush is set by the PCs to catch unsuspecting adversaries off-guard.",
     "impulses": "Escape, group up, protect the most vulnerable",
-    "difficulty": "Special (see \u201cRelative Strength\u201d)",
+    "difficulty": "Special (see \"Relative Strength\")",
     "potentialAdversaries": "Any",
     "features": [
       {
@@ -247,7 +247,7 @@ const srdStatBlocks = [
     "category": "Adversary",
     "type": "Ranged",
     "countPerHp": 1,
-    "description": "A tall guard bearing a longbow and quiver with arrows fletched in the settlement\u2019s colors.",
+    "description": "A tall guard bearing a longbow and quiver with arrows fletched in the settlement's colors.",
     "motivesAndTactics": "Arrest, close gates, make it through the day, pin down",
     "difficulty": 10,
     "majorThreshold": 4,
@@ -324,7 +324,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Grindeloth Venom - Passive",
-        "text": "Targets who mark HP from the Assassin\u2019s attacks are Vulnerable until they clear a HP."
+        "text": "Targets who mark HP from the Assassin's attacks are Vulnerable until they clear a HP."
       },
       {
         "name": "Out of Nowhere - Passive",
@@ -367,7 +367,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Overcharge - Reaction",
-        "text": "Before rolling damage for the Box\u2019s attack, you can mark a Stress to add a d6 to the damage roll. Additionally, you gain a Fear."
+        "text": "Before rolling damage for the Box's attack, you can mark a Stress to add a d6 to the damage roll. Additionally, you gain a Fear."
       },
       {
         "name": "Death Quake - Reaction",
@@ -398,7 +398,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Overwhelming Force - Passive",
-        "text": "Targets who mark HP from the Bear\u2019s standard attack are knocked back to Very Close range."
+        "text": "Targets who mark HP from the Bear's standard attack are knocked back to Very Close range."
       },
       {
         "name": "Bite - Action",
@@ -418,7 +418,7 @@ const srdStatBlocks = [
     "category": "Adversary",
     "type": "Standard",
     "countPerHp": 1,
-    "description": "An armored guard bearing a sword and shield painted in the settlement\u2019s colors.",
+    "description": "An armored guard bearing a sword and shield painted in the settlement's colors.",
     "motivesAndTactics": "Arrest, close gates, make it through the day, pin down",
     "difficulty": 12,
     "majorThreshold": 5,
@@ -464,7 +464,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Slow - Passive",
-        "text": "When you spotlight the Zombie and they don\u2019t have a token on their stat block, they can\u2019t act yet. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Zombie and they have a token on their stat block, clear the token and they can act."
+        "text": "When you spotlight the Zombie and they don't have a token on their stat block, they can't act yet. Place a token on their stat block and describe what they're preparing to do. When you spotlight the Zombie and they have a token on their stat block, clear the token and they can act."
       },
       {
         "name": "Rend Asunder - Action",
@@ -532,11 +532,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Sticky Fingers - Action",
-        "text": "A thief tries to steal something from a PC. The PC must succeed on an Instinct Roll to notice the thief or lose an item of the GM\u2019s choice as the thief escapes to a Close distance. To retrieve the stolen item, the PCs must complete a Progress Countdown (6) to chase down the thief before the thief completes a Consequence Countdown (4) and escapes to their hideout.\n\n  *What drove this person to pickpocketing? Where is the thief\u2019s hideout and how has it avoided notice?*"
+        "text": "A thief tries to steal something from a PC. The PC must succeed on an Instinct Roll to notice the thief or lose an item of the GM's choice as the thief escapes to a Close distance. To retrieve the stolen item, the PCs must complete a Progress Countdown (6) to chase down the thief before the thief completes a Consequence Countdown (4) and escapes to their hideout.\n\n  *What drove this person to pickpocketing? Where is the thief's hideout and how has it avoided notice?*"
       },
       {
         "name": "Crowd Control - Reaction",
-        "text": "When one of the PCs splits from the group, the crowds shift and cut them off from the party.\n\n  *Where does the crowd\u2019s movement carry them? How do they feel about being alone but surrounded?*"
+        "text": "When one of the PCs splits from the group, the crowds shift and cut them off from the party.\n\n  *Where does the crowd's movement carry them? How do they feel about being alone but surrounded?*"
       }
     ]
   },
@@ -558,7 +558,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Siege Weapons (Environment Change) - Action",
-        "text": "Consequence Countdown (5). The attacking force deploys siege weapons to try to raze the defenders\u2019 fortifications. Activate the countdown when the siege begins (for a protracted siege, make this a long-term countdown instead). When it triggers, the defenders\u2019 fortifications have been breached and the attackers flood in. You gain 2 Fear, then shift to the Pitched Battle environment and spotlight it.\n\n  *What siege weapons are being deployed? Are they magical, mundane, or a mixture of both? What defenses must the characters overcome to storm the castle?*"
+        "text": "Consequence Countdown (5). The attacking force deploys siege weapons to try to raze the defenders' fortifications. Activate the countdown when the siege begins (for a protracted siege, make this a long-term countdown instead). When it triggers, the defenders' fortifications have been breached and the attackers flood in. You gain 2 Fear, then shift to the Pitched Battle environment and spotlight it.\n\n  *What siege weapons are being deployed? Are they magical, mundane, or a mixture of both? What defenses must the characters overcome to storm the castle?*"
       },
       {
         "name": "Reinforcements - Action",
@@ -566,7 +566,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Collateral Damage - Reaction",
-        "text": "When an adversary is defeated, you can spend a Fear to have a stray attack from a siege weapon hit a point on the battlefield. All targets within Very Close range of that point must make an Agility Reaction Roll.\n\n  - Targets who fail take 3d8+3 physical or magic damage and must mark a Stress.\n  - Targets who succeed must mark a Stress.\n\n  *What debris is scattered by the attack? What is broken by the strike that can\u2019t be easily mended?*"
+        "text": "When an adversary is defeated, you can spend a Fear to have a stray attack from a siege weapon hit a point on the battlefield. All targets within Very Close range of that point must make an Agility Reaction Roll.\n\n  - Targets who fail take 3d8+3 physical or magic damage and must mark a Stress.\n  - Targets who succeed must mark a Stress.\n\n  *What debris is scattered by the attack? What is broken by the strike that can't be easily mended?*"
       }
     ]
   },
@@ -597,7 +597,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Bone Breaker - Passive",
-        "text": "The Ogre\u2019s attacks deal direct damage."
+        "text": "The Ogre's attacks deal direct damage."
       },
       {
         "name": "Hail of Boulders - Action",
@@ -623,7 +623,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Impossible Architecture - Passive",
-        "text": "Up is down, down is right, right is a stairway. Gravity and directionality themselves are in flux, and any attempt to move through this realm is an odyssey unto itself, requiring a Progress Countdown (8). On a failure, a PC must mark a Stress in addition to the roll\u2019s other consequences.\n\n  *What does it feel like to move in a space so alien to the Mortal Realm? What landmark or point do you fixate on to maintain your balance? What bizarre landmarks do you traverse on your journey?*"
+        "text": "Up is down, down is right, right is a stairway. Gravity and directionality themselves are in flux, and any attempt to move through this realm is an odyssey unto itself, requiring a Progress Countdown (8). On a failure, a PC must mark a Stress in addition to the roll's other consequences.\n\n  *What does it feel like to move in a space so alien to the Mortal Realm? What landmark or point do you fixate on to maintain your balance? What bizarre landmarks do you traverse on your journey?*"
       },
       {
         "name": "Everything You Are This Place Will Take from You - Action",
@@ -635,11 +635,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Outer Realms Predators - Action",
-        "text": "Spend a Fear to summon an Outer Realms Abomination, an Outer Realms Corruptor, and 2d6 Outer Realms Thralls, who appear at Close range of a chosen PC in defiance of logic and causality. Immediately spotlight one of these adversaries, and you can spend an additional Fear to automatically succeed on that adversary\u2019s standard attack.\n\n  *What half-consumed remnants of the shattered soul do these monstrosities cast aside in pursuit of living flesh? What jagged reflections of former personhood do you catch between moments of unquenching malice?*"
+        "text": "Spend a Fear to summon an Outer Realms Abomination, an Outer Realms Corruptor, and 2d6 Outer Realms Thralls, who appear at Close range of a chosen PC in defiance of logic and causality. Immediately spotlight one of these adversaries, and you can spend an additional Fear to automatically succeed on that adversary's standard attack.\n\n  *What half-consumed remnants of the shattered soul do these monstrosities cast aside in pursuit of living flesh? What jagged reflections of former personhood do you catch between moments of unquenching malice?*"
       },
       {
         "name": "Disorienting Reality - Reaction",
-        "text": "On a result with Fear, you can ask the PC to describe which of their fears the Chaos Realm evokes as a vision of reality unmakes and reconstitutes itself to the PC. The PC loses a Hope. If it is their last Hope, you gain a Fear.\n\n  *What moment do they see? If it\u2019s a memory, how is it usurped by this place? How hard will it be to hold on to the real memory?*"
+        "text": "On a result with Fear, you can ask the PC to describe which of their fears the Chaos Realm evokes as a vision of reality unmakes and reconstitutes itself to the PC. The PC loses a Hope. If it is their last Hope, you gain a Fear.\n\n  *What moment do they see? If it's a memory, how is it usurped by this place? How hard will it be to hold on to the real memory?*"
       }
     ]
   },
@@ -666,7 +666,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Levitation - Passive",
-        "text": "The Skull levitates several feet off the ground and can\u2019t be Restrained."
+        "text": "The Skull levitates several feet off the ground and can't be Restrained."
       },
       {
         "name": "Wards - Passive",
@@ -704,7 +704,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Fall - Action",
-        "text": "Spend a Fear to have a PC\u2019s handhold fail, plummeting them toward the ground. If they aren\u2019t saved on the next action, they must make a roll; tick up the countdown by 1, and they take 1d12 physical damage if the countdown is between 8 and 12, 2d12 between 4 and 7, and 3d12 at 3 or lower.\n\n  *How can you tell how many others have fallen here before? What lives in these walls that might try to scare adventurers into falling for an easy meal?*"
+        "text": "Spend a Fear to have a PC's handhold fail, plummeting them toward the ground. If they aren't saved on the next action, they must make a roll; tick up the countdown by 1, and they take 1d12 physical damage if the countdown is between 8 and 12, 2d12 between 4 and 7, and 3d12 at 3 or lower.\n\n  *How can you tell how many others have fallen here before? What lives in these walls that might try to scare adventurers into falling for an easy meal?*"
       }
     ]
   },
@@ -770,11 +770,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Trample - Action",
-        "text": "Mark a Stress to make an attack against all targets in the Construct\u2019s path when they move. Targets the Construct succeeds against take 1d8 physical damage."
+        "text": "Mark a Stress to make an attack against all targets in the Construct's path when they move. Targets the Construct succeeds against take 1d8 physical damage."
       },
       {
         "name": "Overload - Reaction",
-        "text": "Before rolling damage for the Construct\u2019s attack, you can mark a Stress to gain a +10 bonus to the damage roll. The Construct can then take the spotlight again."
+        "text": "Before rolling damage for the Construct's attack, you can mark a Stress to gain a +10 bonus to the damage roll. The Construct can then take the spotlight again."
       },
       {
         "name": "Death Quake - Reaction",
@@ -805,7 +805,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Searing Glance - Reaction",
-        "text": "When a PC within Close range makes a Presence Roll, you can mark a Stress to cast a gaze toward the aftermath. On the target\u2019s failure, they must mark 2 Stress and are Vulnerable until the scene ends or they succeed on a social action against the Courtesan. On the target\u2019s success, they must mark a Stress."
+        "text": "When a PC within Close range makes a Presence Roll, you can mark a Stress to cast a gaze toward the aftermath. On the target's failure, they must mark 2 Stress and are Vulnerable until the scene ends or they succeed on a social action against the Courtesan. On the target's success, they must mark a Stress."
       }
     ]
   },
@@ -901,7 +901,7 @@ const srdStatBlocks = [
     "experience": null,
     "features": [
       {
-        "name": "Shadow\u2019s Embrace - Passive",
+        "name": "Shadow's Embrace - Passive",
         "text": "The Fang can climb and walk on vertical surfaces. Mark a Stress to move from one shadow to another within Far range."
       },
       {
@@ -955,19 +955,19 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Desecrated Ground - Passive",
-        "text": "Cultists dedicated this place to the Fallen Gods, and their foul influence seeps into it. Reduce the PCs\u2019 Hope Die to a d10 while in this environment. The desecration can be removed with a Progress Countdown (6).\n\n  *How do the PCs first notice that something is wrong about this place? What fears resurface while hope is kept at bay?*"
+        "text": "Cultists dedicated this place to the Fallen Gods, and their foul influence seeps into it. Reduce the PCs' Hope Die to a d10 while in this environment. The desecration can be removed with a Progress Countdown (6).\n\n  *How do the PCs first notice that something is wrong about this place? What fears resurface while hope is kept at bay?*"
       },
       {
         "name": "Blasphemous Might - Action",
-        "text": "A portion of the ritual\u2019s power is diverted into a cult member to fight off interlopers. Choose one adversary to become Imbued with terrible magic until the scene ends or they\u2019re defeated. An Imbued adversary immediately takes the spotlight and gains one of the following benefits, or all three if you spend a Fear:\n\n  - They gain advantage on all attacks.\n  - They deal an extra 1d10 damage on a successful attack.\n  - They gain the following feature:\n    Relentless (2) - Passive: This adversary can be spotlighted multiple times per GM turn. Spend Fear as usual to spotlight them.\n\n  *How does the enemy change in appearance? What fears do their blows bring to the surface?*"
+        "text": "A portion of the ritual's power is diverted into a cult member to fight off interlopers. Choose one adversary to become Imbued with terrible magic until the scene ends or they're defeated. An Imbued adversary immediately takes the spotlight and gains one of the following benefits, or all three if you spend a Fear:\n\n  - They gain advantage on all attacks.\n  - They deal an extra 1d10 damage on a successful attack.\n  - They gain the following feature:\n    Relentless (2) - Passive: This adversary can be spotlighted multiple times per GM turn. Spend Fear as usual to spotlight them.\n\n  *How does the enemy change in appearance? What fears do their blows bring to the surface?*"
       },
       {
         "name": "The Summoning - Reaction",
-        "text": "Countdown (6). When the PCs enter the scene or the cult begins the ritual to summon a demon, activate the countdown. Designate one adversary to lead the ritual. The countdown ticks down when a PC rolls with Fear. When it triggers, summon a Minor Demon within Very Close range of the ritual\u2019s leader. If the leader is defeated, the countdown ends with no effect as the ritual fails.\n\n  *What will the cult do with this leashed demon if they succeed? What will they try to summon next?*"
+        "text": "Countdown (6). When the PCs enter the scene or the cult begins the ritual to summon a demon, activate the countdown. Designate one adversary to lead the ritual. The countdown ticks down when a PC rolls with Fear. When it triggers, summon a Minor Demon within Very Close range of the ritual's leader. If the leader is defeated, the countdown ends with no effect as the ritual fails.\n\n  *What will the cult do with this leashed demon if they succeed? What will they try to summon next?*"
       },
       {
         "name": "Complete the Ritual - Reaction",
-        "text": "If the ritual\u2019s leader is targeted by an attack or spell, an ally within Very Close range of them can mark a Stress to be targeted by that attack or spell instead.\n\n  *What does it feel like to see such devotion turned to the pursuit of fear and domination?*"
+        "text": "If the ritual's leader is targeted by an attack or spell, an ally within Very Close range of them can mark a Stress to be targeted by that attack or spell instead.\n\n  *What does it feel like to see such devotion turned to the pursuit of fear and domination?*"
       }
     ]
   },
@@ -1025,11 +1025,11 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Money Talks - Passive",
-        "text": "Attacks against the Demon are made with disadvantage unless the attacker spends a handful of gold. This Demon starts with a number of handfuls equal to the number of PCs. When a target marks HP from the Demon\u2019s standard attack, they can spend a handful of gold instead of marking HP (1 handful per HP). Add a handful of gold to the Demon for each handful of gold spent by PCs on this feature."
+        "text": "Attacks against the Demon are made with disadvantage unless the attacker spends a handful of gold. This Demon starts with a number of handfuls equal to the number of PCs. When a target marks HP from the Demon's standard attack, they can spend a handful of gold instead of marking HP (1 handful per HP). Add a handful of gold to the Demon for each handful of gold spent by PCs on this feature."
       },
       {
         "name": "Numbers Must Go Up - Passive",
-        "text": "Add a bonus to the Demon\u2019s attack rolls equal to the number of handfuls of gold they have."
+        "text": "Add a bonus to the Demon's attack rolls equal to the number of handfuls of gold they have."
       },
       {
         "name": "Money is Time - Action",
@@ -1107,7 +1107,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Unparalleled Skill - Action",
-        "text": "Mark a Stress to deal the Demon\u2019s standard attack damage to a target within Close range."
+        "text": "Mark a Stress to deal the Demon's standard attack damage to a target within Close range."
       },
       {
         "name": "The Root of Villainy - Action",
@@ -1128,7 +1128,7 @@ const srdStatBlocks = [
     "type": "Ranged",
     "countPerHp": 1,
     "description": "A fickle creature of spindly limbs and insatiable desires.",
-    "motivesAndTactics": "Join in on others\u2019 success, take what belongs to others, hold grudges",
+    "motivesAndTactics": "Join in on others' success, take what belongs to others, hold grudges",
     "difficulty": 17,
     "majorThreshold": 17,
     "severeThreshold": 30,
@@ -1142,7 +1142,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Unprotected Mind - Passive",
-        "text": "The Demon\u2019s standard attack deals direct damage."
+        "text": "The Demon's standard attack deals direct damage."
       },
       {
         "name": "My Turn - Reaction",
@@ -1153,8 +1153,8 @@ const srdStatBlocks = [
         "text": "When a creature within Close range takes damage from a different adversary, you can mark a Stress to add a d4 to the damage roll."
       },
       {
-        "name": "What\u2019s Yours Is Mine - Reaction",
-        "text": "When a PC takes severe damage within Very Close range of the Demon, you can spend a Fear to cause the target to make a Finesse Reaction Roll. On a failure, the Demon seizes one item or consumable of their choice from the target\u2019s inventory."
+        "name": "What's Yours Is Mine - Reaction",
+        "text": "When a PC takes severe damage within Very Close range of the Demon, you can spend a Fear to cause the target to make a Finesse Reaction Roll. On a failure, the Demon seizes one item or consumable of their choice from the target's inventory."
       }
     ]
   },
@@ -1181,7 +1181,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Anger Unrelenting - Passive",
-        "text": "The Demon\u2019s attacks deal direct damage."
+        "text": "The Demon's attacks deal direct damage."
       },
       {
         "name": "Battle Lust - Action",
@@ -1312,7 +1312,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Final Preparations - Passive",
-        "text": "When the environment first takes the spotlight, designate one adversary as the Usurper seeking to overthrow the gods. Activate a Long-Term Countdown (8) as the Usurper assembles what they need to conduct the ritual. When it triggers, spotlight this environment to use the \u201cBeginning of the End\u201d feature. While this environment remains in play, you can hold up to 15 Fear.\n\n  *What does the Usurper still require: The heart of a High Seraph? The last notes of an ancient vignette? The loyalty of two archenemies? The heartbroken tears of a pure soul?*"
+        "text": "When the environment first takes the spotlight, designate one adversary as the Usurper seeking to overthrow the gods. Activate a Long-Term Countdown (8) as the Usurper assembles what they need to conduct the ritual. When it triggers, spotlight this environment to use the \"Beginning of the End\" feature. While this environment remains in play, you can hold up to 15 Fear.\n\n  *What does the Usurper still require: The heart of a High Seraph? The last notes of an ancient vignette? The loyalty of two archenemies? The heartbroken tears of a pure soul?*"
       },
       {
         "name": "Divine Blessing - Passive",
@@ -1320,15 +1320,15 @@ const srdStatBlocks = [
       },
       {
         "name": "Defiers Abound - Action",
-        "text": "Spend 2 Fear to summon 1d4+2 Fallen Shock Troops that appear within Close range of the Usurper to assist their divine siege. Immediately spotlight the Shock Troops to use a \u201cGroup Attack\u201d action.\n\n  *Which High Fallen do these troops serve? Which god\u2019s flesh do they wish to feast upon?*"
+        "text": "Spend 2 Fear to summon 1d4+2 Fallen Shock Troops that appear within Close range of the Usurper to assist their divine siege. Immediately spotlight the Shock Troops to use a \"Group Attack\" action.\n\n  *Which High Fallen do these troops serve? Which god's flesh do they wish to feast upon?*"
       },
       {
         "name": "Godslayer - Action",
-        "text": "If the Divine Siege Countdown (see \u201cBeginning of the End\u201d) has triggered, you can spend 3 Fear to describe the Usurper slaying one of the gods of the Hallows Above, feasting upon their power and growing stronger. The Usurper clears 2 HP. Increase their Difficulty, damage, attack modifier, or give them a new feature from the slain god.\n\n  *Which god meets their end? What are their last words? How does the Usurper\u2019s new stolen power manifest?*"
+        "text": "If the Divine Siege Countdown (see \"Beginning of the End\") has triggered, you can spend 3 Fear to describe the Usurper slaying one of the gods of the Hallows Above, feasting upon their power and growing stronger. The Usurper clears 2 HP. Increase their Difficulty, damage, attack modifier, or give them a new feature from the slain god.\n\n  *Which god meets their end? What are their last words? How does the Usurper's new stolen power manifest?*"
       },
       {
         "name": "Beginning of the End - Reaction",
-        "text": "When the \u201cFinal Preparations\u201d long-term countdown triggers, the Usurper begins hammering on the gates of the Hallows themselves. Activate a Divine Siege Countdown (10). Spotlight the Usurper to describe the Usurper\u2019s assault and tick down this countdown by 1. If the Usurper takes Major or greater damage, tick up the countdown by 1. When it triggers, the Usurper shatters the barrier between the Mortal Realm and the Hallows Above to slay the gods and take their place. You gain a Fear for each unmarked HP the Usurper has. You can immediately use the \u201cGodslayer\u201d feature without spending Fear to make an additional GM move.\n\n  *How does the Mortal Realm writhe as the natural order is violated? What mortals witness this blasphemy from afar?*"
+        "text": "When the \"Final Preparations\" long-term countdown triggers, the Usurper begins hammering on the gates of the Hallows themselves. Activate a Divine Siege Countdown (10). Spotlight the Usurper to describe the Usurper's assault and tick down this countdown by 1. If the Usurper takes Major or greater damage, tick up the countdown by 1. When it triggers, the Usurper shatters the barrier between the Mortal Realm and the Hallows Above to slay the gods and take their place. You gain a Fear for each unmarked HP the Usurper has. You can immediately use the \"Godslayer\" feature without spending Fear to make an additional GM move.\n\n  *How does the Mortal Realm writhe as the natural order is violated? What mortals witness this blasphemy from afar?*"
       },
       {
         "name": "Ritual Nexus - Reaction",
@@ -1367,7 +1367,7 @@ const srdStatBlocks = [
       },
       {
         "name": "We Are All One - Reaction",
-        "text": "When an ally dies within Close range, you can spend a Fear to clear 2 HP and 2 Stress as the fallen ally\u2019s life force is returned to the forest."
+        "text": "When an ally dies within Close range, you can spend a Fear to clear 2 HP and 2 Stress as the fallen ally's life force is returned to the forest."
       }
     ]
   },
@@ -1459,7 +1459,7 @@ const srdStatBlocks = [
         "text": "Mark a Stress to move into Melee range of an ally and make a standard attack against a target within Very Close range. On a success, deal 2d10+2 physical damage and the ally can clear a Stress."
       },
       {
-        "name": "Vassal\u2019s Loyalty - Reaction",
+        "name": "Vassal's Loyalty - Reaction",
         "text": "When the Soldier is within Very Close range of a knight or other noble who would take damage, you can mark a Stress to move into Melee range of them and take the damage instead."
       }
     ]
@@ -1507,7 +1507,7 @@ const srdStatBlocks = [
     "category": "Adversary",
     "type": "Minion",
     "countPerHp": 1,
-    "description": "A cursed soul bound to the Fallen\u2019s will.",
+    "description": "A cursed soul bound to the Fallen's will.",
     "motivesAndTactics": "Crush, dominate, earn relief, punish",
     "difficulty": 18,
     "majorThreshold": null,
@@ -1581,7 +1581,7 @@ const srdStatBlocks = [
     "category": "Adversary",
     "type": "Solo",
     "countPerHp": 1,
-    "description": "A fallen God, wreathed in rage and resentment, bearing millennia of experience in breaking heroes\u2019 spirits.",
+    "description": "A fallen God, wreathed in rage and resentment, bearing millennia of experience in breaking heroes' spirits.",
     "motivesAndTactics": "Corrupt, dominate, punish, break the weak",
     "difficulty": 20,
     "majorThreshold": 36,
@@ -1702,7 +1702,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Deadly Companion - Action",
-        "text": "Twice per scene, summon a Bear, Dire Wolf, or similar Tier 1 animal adversary under the Beastmaster\u2019s control. The adversary appears at Close range and is immediately spotlighted."
+        "text": "Twice per scene, summon a Bear, Dire Wolf, or similar Tier 1 animal adversary under the Beastmaster's control. The adversary appears at Close range and is immediately spotlighted."
       }
     ]
   },
@@ -1772,11 +1772,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Take Off - Action",
-        "text": "Make an attack against a target within Very Close range. On a success, deal 2d4+3 physical damage and the target must succeed on an Agility Reaction Roll or become temporarily Restrained within the Eagle\u2019s massive talons. If the target is Restrained, the Eagle immediately lifts them to the air to Very Far range above the battlefield while holding them."
+        "text": "Make an attack against a target within Very Close range. On a success, deal 2d4+3 physical damage and the target must succeed on an Agility Reaction Roll or become temporarily Restrained within the Eagle's massive talons. If the target is Restrained, the Eagle immediately lifts them to the air to Very Far range above the battlefield while holding them."
       },
       {
         "name": "Deadly Drop - Action",
-        "text": "While flying, the Eagle can drop a Restrained target they are holding. When dropped, the target is no longer Restrained but starts falling. If their fall isn\u2019t prevented during the PCs\u2019 next action, the target takes 2d20 physical damage when they land."
+        "text": "While flying, the Eagle can drop a Restrained target they are holding. When dropped, the target is no longer Restrained but starts falling. If their fall isn't prevented during the PCs' next action, the target takes 2d20 physical damage when they land."
       }
     ]
   },
@@ -1811,7 +1811,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Bloodseeker - Reaction",
-        "text": "When the Mosquitoes\u2019 attack causes a target to mark HP, you can mark a Stress to force the target to mark an additional HP."
+        "text": "When the Mosquitoes' attack causes a target to mark HP, you can mark a Stress to force the target to mark an additional HP."
       }
     ]
   },
@@ -1935,7 +1935,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Armor-Shredding Shards - Passive",
-        "text": "On a successful attack within Melee range against the Snake, the attacker must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
+        "text": "On a successful attack within Melee range against the Snake, the attacker must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can't mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Spinning Serpent - Action",
@@ -1974,11 +1974,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Suneater Arrows - Passive",
-        "text": "When the Gorgon makes a successful standard attack, the target Glows until the end of the scene and can\u2019t become Hidden. Attack rolls made against a Glowing target have advantage."
+        "text": "When the Gorgon makes a successful standard attack, the target Glows until the end of the scene and can't become Hidden. Attack rolls made against a Glowing target have advantage."
       },
       {
         "name": "Crown of Serpents - Action",
-        "text": "Make an attack roll against a target within Melee range using the Gorgon\u2019s protective snakes. On a success, mark Stress to deal 2d10+4 physical damage and the target must mark a Stress."
+        "text": "Make an attack roll against a target within Melee range using the Gorgon's protective snakes. On a success, mark Stress to deal 2d10+4 physical damage and the target must mark a Stress."
       },
       {
         "name": "Petrifying Gaze - Reaction",
@@ -2013,11 +2013,11 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Slow - Passive",
-        "text": "When you spotlight the Elemental and they don\u2019t have a token on their stat block, they can\u2019t act yet. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Elemental and they have a token on their stat block, clear the token and they can act."
+        "text": "When you spotlight the Elemental and they don't have a token on their stat block, they can't act yet. Place a token on their stat block and describe what they're preparing to do. When you spotlight the Elemental and they have a token on their stat block, clear the token and they can act."
       },
       {
         "name": "Crushing Blows - Passive",
-        "text": "When the Elemental makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Elemental makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can't mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Immovable Object - Passive",
@@ -2056,7 +2056,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Water Jet - Action",
-        "text": "Mark a Stress to attack a target within Very Close range. On a success, deal 2d4+7 physical damage and the target\u2019s next action has disadvantage. On a failure, the target must mark a Stress."
+        "text": "Mark a Stress to attack a target within Very Close range. On a success, deal 2d4+7 physical damage and the target's next action has disadvantage. On a failure, the target must mark a Stress."
       },
       {
         "name": "Drowning Embrace - Action",
@@ -2091,11 +2091,11 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Slow - Passive",
-        "text": "When you spotlight the Ooze and they don\u2019t have a token on their stat block, they can\u2019t act. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Ooze and they have a token on their stat block, clear the token and they can act."
+        "text": "When you spotlight the Ooze and they don't have a token on their stat block, they can't act. Place a token on their stat block and describe what they're preparing to do. When you spotlight the Ooze and they have a token on their stat block, clear the token and they can act."
       },
       {
         "name": "Acidic Form - Passive",
-        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can't mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Envelope - Action",
@@ -2191,7 +2191,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Divine Guidance - Passive",
-        "text": "A PC who prays to a deity while in the Hallowed Temple can make an Instinct Roll to receive answers. If the god they beseech isn\u2019t welcome in this temple, roll this made with disadvantage.\n\n  - Critical Success: The PC gains clear information. Additionally, they gain 1d4 Hope, which can be distributed between the party if they share the vision and guidance they received.\n  - Success with Hope: The PC receives clear information.\n  - Success with Fear: The PC receives brief flashes of insight and an emotional impression conveying an answer.\n  - Any Failure: The PC receives only vague flashes. They can mark a Stress to receive one clear image without context.\n\n  *What does it feel like as you are touched by this vision? What feeling lingers after the images have passed?*"
+        "text": "A PC who prays to a deity while in the Hallowed Temple can make an Instinct Roll to receive answers. If the god they beseech isn't welcome in this temple, roll this made with disadvantage.\n\n  - Critical Success: The PC gains clear information. Additionally, they gain 1d4 Hope, which can be distributed between the party if they share the vision and guidance they received.\n  - Success with Hope: The PC receives clear information.\n  - Success with Fear: The PC receives brief flashes of insight and an emotional impression conveying an answer.\n  - Any Failure: The PC receives only vague flashes. They can mark a Stress to receive one clear image without context.\n\n  *What does it feel like as you are touched by this vision? What feeling lingers after the images have passed?*"
       },
       {
         "name": "Restless Hope - Reaction",
@@ -2244,7 +2244,7 @@ const srdStatBlocks = [
     "description": "An abandoned city populated by the restless spirits of eras past.",
     "impulses": "Misdirect and disorient, replay apocalypses both public and personal",
     "difficulty": 14,
-    "potentialAdversaries": "Ghosts (Spectral Archer, Spectral Captain, Spectral Guardian), (ghostly versions of other adversaries (see \u201cGhostly Form\u201d))",
+    "potentialAdversaries": "Ghosts (Spectral Archer, Spectral Captain, Spectral Guardian), (ghostly versions of other adversaries (see \"Ghostly Form\"))",
     "features": [
       {
         "name": "Buried Knowledge - Passive",
@@ -2350,7 +2350,7 @@ const srdStatBlocks = [
     "category": "Adversary",
     "type": "Leader",
     "countPerHp": 1,
-    "description": "A divine champion, head of a hallowed host of warriors who enforce their god\u2019s will.",
+    "description": "A divine champion, head of a hallowed host of warriors who enforce their god's will.",
     "motivesAndTactics": "Enforce dogma, fly, pronounce judgment, smite",
     "difficulty": 20,
     "majorThreshold": 37,
@@ -2373,7 +2373,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Judgment - Action",
-        "text": "Spend a Fear to make a target Guilty in the eyes of the Seraph\u2019s god until the Seraph is defeated. While Guilty, the target doesn\u2019t gain Hope on a result with Hope. When the Seraph succeeds on a standard attack against a Guilty target, they deal Severe damage instead of their standard damage. The Seraph can only mark one target at a time."
+        "text": "Spend a Fear to make a target Guilty in the eyes of the Seraph's god until the Seraph is defeated. While Guilty, the target doesn't gain Hope on a result with Hope. When the Seraph succeeds on a standard attack against a Guilty target, they deal Severe damage instead of their standard damage. The Seraph can only mark one target at a time."
       },
       {
         "name": "God Rays - Action",
@@ -2408,11 +2408,11 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Slow - Passive",
-        "text": "When you spotlight the Ooze and they don\u2019t have a token on their stat block, they can\u2019t act yet. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Ooze and they have a token on their stat block, clear the token and they can act."
+        "text": "When you spotlight the Ooze and they don't have a token on their stat block, they can't act yet. Place a token on their stat block and describe what they're preparing to do. When you spotlight the Ooze and they have a token on their stat block, clear the token and they can act."
       },
       {
         "name": "Acidic Form - Passive",
-        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can't mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Envelop - Action",
@@ -2451,7 +2451,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Relentless (X) - Passive",
-        "text": "The Hydra can be spotlighted X times per GM turn, where X is the Hydra\u2019s number of heads. Spend Fear as usual to spotlight them."
+        "text": "The Hydra can be spotlighted X times per GM turn, where X is the Hydra's number of heads. Spend Fear as usual to spotlight them."
       },
       {
         "name": "Regeneration - Action",
@@ -2463,7 +2463,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Magical Weakness - Reaction",
-        "text": "When the Hydra takes magic damage, they become Dazed until the next roll with Fear. While Dazed, they can\u2019t use their Regeneration action but are immune to magic damage."
+        "text": "When the Hydra takes magic damage, they become Dazed until the next roll with Fear. While Dazed, they can't use their Regeneration action but are immune to magic damage."
       }
     ]
   },
@@ -2481,7 +2481,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "All Roads Lead Here - Passive",
-        "text": "While in the Imperial Court, a PC has disadvantage on Presence Rolls made to take actions that don\u2019t fit the imperial way of life or support the empire\u2019s dominance.\n\n  *How does the way language is used make even discussing alternative ways of living difficult? What obvious benefits for loyalty create friction when you try to discuss alternatives?*"
+        "text": "While in the Imperial Court, a PC has disadvantage on Presence Rolls made to take actions that don't fit the imperial way of life or support the empire's dominance.\n\n  *How does the way language is used make even discussing alternative ways of living difficult? What obvious benefits for loyalty create friction when you try to discuss alternatives?*"
       },
       {
         "name": "Rival Vassals - Passive",
@@ -2489,15 +2489,15 @@ const srdStatBlocks = [
       },
       {
         "name": "The Gravity of Empire - Action",
-        "text": "Spend a Fear to present a PC with a golden opportunity or offer to satisfy a major goal in exchange for obeying or supporting the empire. The target must make a Presence Reaction Roll. On a failure, they must mark all their Stress or accept the offer. If they have already marked all their Stress, they must reduce their Stress track by 1d4. On a success, they must mark 1d4 Stress as they\u2019re taxed by temptation.\n\n  *What do the PCs want so desperately they might consider throwing in with this ruthless power? How did imperial agents learn the PC\u2019s greatest desires?*"
+        "text": "Spend a Fear to present a PC with a golden opportunity or offer to satisfy a major goal in exchange for obeying or supporting the empire. The target must make a Presence Reaction Roll. On a failure, they must mark all their Stress or accept the offer. If they have already marked all their Stress, they must reduce their Stress track by 1d4. On a success, they must mark 1d4 Stress as they're taxed by temptation.\n\n  *What do the PCs want so desperately they might consider throwing in with this ruthless power? How did imperial agents learn the PC's greatest desires?*"
       },
       {
         "name": "Imperial Decree - Action",
-        "text": "Spend a Fear to tick down a long-term countdown related to the empire\u2019s agenda by 1d4. If this triggers the countdown, a proclamation related to the agenda is announced at court as the plan is executed.\n\n  *What display of power or transfer of wealth was needed to expedite this plan? Whose lives were disrupted or upended to make this happen?*"
+        "text": "Spend a Fear to tick down a long-term countdown related to the empire's agenda by 1d4. If this triggers the countdown, a proclamation related to the agenda is announced at court as the plan is executed.\n\n  *What display of power or transfer of wealth was needed to expedite this plan? Whose lives were disrupted or upended to make this happen?*"
       },
       {
         "name": "Eyes Everywhere - Reaction",
-        "text": "On a result with Fear, you can spend a Fear to have someone loyal to the empire overhear seditious talk within the court. A PC must succeed on an Instinct Reaction Roll to notice that the group has been overheard so they can try to intercept the witness before the PCs are exposed.\n\n  *How has the empire compromised this witness? Why is their first impulse to protect the empire, even if doesn\u2019t treat them well?*"
+        "text": "On a result with Fear, you can spend a Fear to have someone loyal to the empire overhear seditious talk within the court. A PC must succeed on an Instinct Reaction Roll to notice that the group has been overheard so they can try to intercept the witness before the PCs are exposed.\n\n  *How has the empire compromised this witness? Why is their first impulse to protect the empire, even if doesn't treat them well?*"
       }
     ]
   },
@@ -2509,7 +2509,7 @@ const srdStatBlocks = [
     "category": "Adversary",
     "type": "Standard",
     "countPerHp": 1,
-    "description": "A cunning criminal in a cloak bearing one of the gang\u2019s iconic knives.",
+    "description": "A cunning criminal in a cloak bearing one of the gang's iconic knives.",
     "motivesAndTactics": "Escape, profit, steal, throw smoke",
     "difficulty": 12,
     "majorThreshold": 8,
@@ -2585,7 +2585,7 @@ const srdStatBlocks = [
     "experience": "Thief +2, Unveiled Threats +3",
     "features": [
       {
-        "name": "I\u2019ve Got \u2018Em - Passive",
+        "name": "I've Got \u2018Em - Passive",
         "text": "Creatures Restrained by the Kneebreaker take double damage from attacks by other adversaries."
       },
       {
@@ -2691,7 +2691,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Cloaked - Action",
-        "text": "Become Hidden until after the Shadow\u2019s next attack. Attacks made while Hidden from this feature have advantage."
+        "text": "Become Hidden until after the Shadow's next attack. Attacks made while Hidden from this feature have advantage."
       }
     ]
   },
@@ -2749,11 +2749,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Peerless Accuracy - Passive",
-        "text": "Before the Flickerfly makes an attack, roll a d6. On a result of 4 or higher, the target\u2019s Evasion is halved against this attack."
+        "text": "Before the Flickerfly makes an attack, roll a d6. On a result of 4 or higher, the target's Evasion is halved against this attack."
       },
       {
         "name": "Mind Dance - Action",
-        "text": "Mark a Stress to create a magically dazzling display that grapples the minds of nearby foes. All targets within Close range must make an Instinct Reaction Roll. For each target who failed, you gain a Fear and the Flickerfly learns one of the target\u2019s fears."
+        "text": "Mark a Stress to create a magically dazzling display that grapples the minds of nearby foes. All targets within Close range must make an Instinct Reaction Roll. For each target who failed, you gain a Fear and the Flickerfly learns one of the target's fears."
       },
       {
         "name": "Hallucinatory Breath - Reaction: Countdown (Loop 1d6)",
@@ -2784,7 +2784,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Chevalier - Passive",
-        "text": "While the Knight is on a mount, they gain a +2 bonus to their Difficulty. When they take Severe damage, they\u2019re knocked from their mount and lose this benefit until they\u2019re next spotlighted."
+        "text": "While the Knight is on a mount, they gain a +2 bonus to their Difficulty. When they take Severe damage, they're knocked from their mount and lose this benefit until they're next spotlighted."
       },
       {
         "name": "Heavily Armored - Passive",
@@ -2856,20 +2856,20 @@ const srdStatBlocks = [
     "potentialAdversaries": "Guards (Bladed Guard, Head Guard), Mercenaries (Harrier, Sellsword, Spellblade, Weaponmaster), Merchant",
     "features": [
       {
-        "name": "What\u2019s the Talk of the Town? - Passive",
-        "text": "A PC can ask the bartender, staff, or patrons about local events, rumors, and potential work with a Presence Roll. On a success, they can pick two of the below details to learn\u2014or three if they critically succeed. On a failure, they can pick one and mark a Stress as the local carries on about something irrelevant.\n\n  - A fascinating rumor with a connection to a PC\u2019s background\n  - A promising job for the party involving a nearby threat or situation\n  - Local folklore that relates to something they\u2019ve seen\n  - Town gossip that hints at a community problem\n\n  *Who has what kind of information? What gossip do the locals start spreading about the PCs?*"
+        "name": "What's the Talk of the Town? - Passive",
+        "text": "A PC can ask the bartender, staff, or patrons about local events, rumors, and potential work with a Presence Roll. On a success, they can pick two of the below details to learn\u2014or three if they critically succeed. On a failure, they can pick one and mark a Stress as the local carries on about something irrelevant.\n\n  - A fascinating rumor with a connection to a PC's background\n  - A promising job for the party involving a nearby threat or situation\n  - Local folklore that relates to something they've seen\n  - Town gossip that hints at a community problem\n\n  *Who has what kind of information? What gossip do the locals start spreading about the PCs?*"
       },
       {
         "name": "Sing for Your Supper - Passive",
-        "text": "A PC can perform one time for the guests by making a Presence Roll. On a success, they earn 1d4 handfuls of gold (2d4 if they critically succeed). On a failure, they mark a Stress.\n\n  *What piece do you perform? What does that piece mean to you? When\u2019s the last time you performed it for a crowd?*"
+        "text": "A PC can perform one time for the guests by making a Presence Roll. On a success, they earn 1d4 handfuls of gold (2d4 if they critically succeed). On a failure, they mark a Stress.\n\n  *What piece do you perform? What does that piece mean to you? When's the last time you performed it for a crowd?*"
       },
       {
         "name": "Mysterious Stranger - Action",
-        "text": "Reveal a stranger concealing their identity, lurking in a shaded booth.\n\n  *What do they want? What\u2019s their impression of the PCs? What mannerisms or accessories do they have?*"
+        "text": "Reveal a stranger concealing their identity, lurking in a shaded booth.\n\n  *What do they want? What's their impression of the PCs? What mannerisms or accessories do they have?*"
       },
       {
         "name": "Someone Comes to Town - Action",
-        "text": "Introduce a significant NPC who wants to hire the party for something or who relates to a PC\u2019s background.\n\n  *Did they know the PCs were here? What do they want in this town?*"
+        "text": "Introduce a significant NPC who wants to hire the party for something or who relates to a PC's background.\n\n  *Did they know the PCs were here? What do they want in this town?*"
       },
       {
         "name": "Bar Fight - Action",
@@ -2900,7 +2900,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Quick Hands - Action",
-        "text": "Make an attack against a target within Melee range. On a success, deal 1d8+2 physical damage and the Thief steals one item or consumable from the target\u2019s inventory."
+        "text": "Make an attack against a target within Melee range. On a success, deal 1d8+2 physical damage and the Thief steals one item or consumable from the target's inventory."
       },
       {
         "name": "Escape Plan - Action",
@@ -2930,12 +2930,12 @@ const srdStatBlocks = [
     "experience": "Command +3, Intrusion +3",
     "features": [
       {
-        "name": "Won\u2019t See It Coming - Passive",
-        "text": "The Assassin deals direct damage while they\u2019re Hidden."
+        "name": "Won't See It Coming - Passive",
+        "text": "The Assassin deals direct damage while they're Hidden."
       },
       {
         "name": "Strike as One - Action",
-        "text": "Mark a Stress to spotlight a number of other Assassins equal to the Assassin\u2019s unmarked Stress."
+        "text": "Mark a Stress to spotlight a number of other Assassins equal to the Assassin's unmarked Stress."
       },
       {
         "name": "The Subtle Blade - Reaction",
@@ -3005,7 +3005,7 @@ const srdStatBlocks = [
       },
       {
         "name": "The Best Muscle Money Can Buy - Action",
-        "text": "Once per scene, mark a Stress to summon 1d4+1 Tier 1 adversaries, who appear at Far range, to enforce the Baron\u2019s will."
+        "text": "Once per scene, mark a Stress to summon 1d4+1 Tier 1 adversaries, who appear at Far range, to enforce the Baron's will."
       }
     ]
   },
@@ -3087,7 +3087,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Reaper - Reaction",
-        "text": "Before rolling damage for the Demon\u2019s attack, you can mark a Stress to gain a bonus to the damage roll equal to the Demon\u2019s current number of marked HP."
+        "text": "Before rolling damage for the Demon's attack, you can mark a Stress to gain a bonus to the damage roll equal to the Demon's current number of marked HP."
       },
       {
         "name": "Momentum - Reaction",
@@ -3196,7 +3196,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Charging Bull - Action",
-        "text": "Mark a Stress to charge through a group within Close range and make an attack against all targets in the Minotaur\u2019s path. Targets the Minotaur succeeds against take 2d6+8 physical damage and are knocked back to Very Far range. If a target is knocked into a solid object or another creature, they take an extra 1d6 damage (combine their damage)."
+        "text": "Mark a Stress to charge through a group within Close range and make an attack against all targets in the Minotaur's path. Targets the Minotaur succeeds against take 2d6+8 physical damage and are knocked back to Very Far range. If a target is knocked into a solid object or another creature, they take an extra 1d6 damage (combine their damage)."
       },
       {
         "name": "Gore - Action",
@@ -3231,11 +3231,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Crossguard - Action",
-        "text": "Once per scene, mark a Stress to summon Tier X Minions, who appear at Close range to enforce the Monarch\u2019s will."
+        "text": "Once per scene, mark a Stress to summon Tier X Minions, who appear at Close range to enforce the Monarch's will."
       },
       {
         "name": "Census Bell - Reaction: Long-Term Countdown (8)",
-        "text": "Spend a Fear to activate after the Monarch\u2019s desire for war is first revealed. When it triggers, the Monarch has a reason to rally the nation to war and the support to act on that reason. You gain 1d4 Fear."
+        "text": "Spend a Fear to activate after the Monarch's desire for war is first revealed. When it triggers, the Monarch has a reason to rally the nation to war and the support to act on that reason. You gain 1d4 Fear."
       }
     ]
   },
@@ -3300,17 +3300,17 @@ const srdStatBlocks = [
       },
       {
         "name": "Raptor Nest - Reaction",
-        "text": "When the PCs enter the raptors\u2019 hunting grounds, two Giant Eagles appear at Very Far range of a chosen PC, identifying the PCs as likely prey.\n\n  *How long has it been since the eagles last found prey? Do they have eggs in their nest, or unfledged young?*"
+        "text": "When the PCs enter the raptors' hunting grounds, two Giant Eagles appear at Very Far range of a chosen PC, identifying the PCs as likely prey.\n\n  *How long has it been since the eagles last found prey? Do they have eggs in their nest, or unfledged young?*"
       },
       {
         "name": "Icy Winds - Reaction",
-        "text": "Countdown (Loop 4). When the PCs enter the mountain pass, activate the countdown. When it triggers, all characters traveling through the pass must succeed on a Strength Reaction Roll or mark a Stress. A PC wearing clothes appropriate for extreme cold gains advantage on these rolls.\n\n  *What parts of the PCs\u2019 bodies go numb first? How do they try to keep warm as they press forward?*"
+        "text": "Countdown (Loop 4). When the PCs enter the mountain pass, activate the countdown. When it triggers, all characters traveling through the pass must succeed on a Strength Reaction Roll or mark a Stress. A PC wearing clothes appropriate for extreme cold gains advantage on these rolls.\n\n  *What parts of the PCs' bodies go numb first? How do they try to keep warm as they press forward?*"
       }
     ]
   },
   {
-    "name": "Necromancer\u2019s Ossuary",
-    "originalName": "Necromancer\u2019s Ossuary",
+    "name": "Necromancer's Ossuary",
+    "originalName": "Necromancer's Ossuary",
     "source": "SRD",
     "tier": 4,
     "category": "Environment",
@@ -3318,7 +3318,7 @@ const srdStatBlocks = [
     "description": "A dusty crypt with a library, twisting corridors, and abundant sarcophagi; spattered with the blood of ill-fated invaders.",
     "impulses": "Confound intruders, delve into secrets best left buried, manifest unlife, unleash a tide of undead",
     "difficulty": 19,
-    "potentialAdversaries": "Arch-Necromancer\u2019s Host (Perfected Zombie, Zombie Legion)",
+    "potentialAdversaries": "Arch-Necromancer's Host (Perfected Zombie, Zombie Legion)",
     "features": [
       {
         "name": "No Place for the Living - Passive",
@@ -3326,7 +3326,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Centuries of Knowledge - Passive",
-        "text": "A PC can investigate the library and laboratory and make a Knowledge Roll to learn information related to arcana, local history, and the Necromancer\u2019s plans.\n\n  *What are the names of the tomes? What project is the necromancer working on and what does it communicate about their plans?*"
+        "text": "A PC can investigate the library and laboratory and make a Knowledge Roll to learn information related to arcana, local history, and the Necromancer's plans.\n\n  *What are the names of the tomes? What project is the necromancer working on and what does it communicate about their plans?*"
       },
       {
         "name": "Skeletal Burst - Action",
@@ -3338,7 +3338,7 @@ const srdStatBlocks = [
       },
       {
         "name": "They Just Keep Coming! - Action",
-        "text": "Spend a Fear to summon 1d6 Rotted Zombies, two Perfected Zombies, or a Zombie Legion, who appear at Close range of a chosen PC.\n\n  *Who were these people before they became the necromancer\u2019s pawns? What vestiges of those lives remain for the heroes to see?*"
+        "text": "Spend a Fear to summon 1d6 Rotted Zombies, two Perfected Zombies, or a Zombie Legion, who appear at Close range of a chosen PC.\n\n  *Who were these people before they became the necromancer's pawns? What vestiges of those lives remain for the heroes to see?*"
       }
     ]
   },
@@ -3412,7 +3412,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Summon Tormentors - Action",
-        "text": "Once per day, spend 2 Fear to summon 2d4 Tier 2 or below Minions relevant to one of the PC\u2019s personal nightmares. They appear at Close range relative to that PC."
+        "text": "Once per day, spend 2 Fear to summon 2d4 Tier 2 or below Minions relevant to one of the PC's personal nightmares. They appear at Close range relative to that PC."
       },
       {
         "name": "Ominous Knowledge - Reaction",
@@ -3539,7 +3539,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Rumors Abound - Passive",
-        "text": "Gossip is the fastest-traveling currency in the realm. A PC can inquire about major events by making a Presence Roll. What they learn depends on the outcome of their roll, based on the following criteria:\n\n  - Critical Success: Learn about two major events. The PC can ask one follow-up question about one of the rumors and get a truthful (if not always complete) answer.\n  - Success with Hope: Learn about two events, at least one of which is relevant to the character\u2019s background.\n  - Success with Fear: Learn an alarming rumor related to the character\u2019s background.\n  - Any Failure: The locals respond poorly to their inquiries. The PC must mark a Stress to learn one relevant rumor.\n\n  *What news do the PCs hear that they could pass along to curious travelers? What do the locals think about these events?*"
+        "text": "Gossip is the fastest-traveling currency in the realm. A PC can inquire about major events by making a Presence Roll. What they learn depends on the outcome of their roll, based on the following criteria:\n\n  - Critical Success: Learn about two major events. The PC can ask one follow-up question about one of the rumors and get a truthful (if not always complete) answer.\n  - Success with Hope: Learn about two events, at least one of which is relevant to the character's background.\n  - Success with Fear: Learn an alarming rumor related to the character's background.\n  - Any Failure: The locals respond poorly to their inquiries. The PC must mark a Stress to learn one relevant rumor.\n\n  *What news do the PCs hear that they could pass along to curious travelers? What do the locals think about these events?*"
       },
       {
         "name": "Society of the Broken Compass - Passive",
@@ -3550,7 +3550,7 @@ const srdStatBlocks = [
         "text": "Another adventuring party is here, seeking the same treasure or leads as the PCs.\n\n  *Which PC has a connection to one of the rival party members? Do they approach the PC first or do they wait for the PC to move?*"
       },
       {
-        "name": "It\u2019d Be a Shame If Something Happened to Your Store - Action",
+        "name": "It'd Be a Shame If Something Happened to Your Store - Action",
         "text": "The PCs witness as agents of a local crime boss shake down a general goods store.\n\n  *What trouble does it cause if the PCs intervene?*"
       },
       {
@@ -3625,7 +3625,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Fearsome Presence - Passive",
-        "text": "PCs can\u2019t spend Hope to use features against the Zombie."
+        "text": "PCs can't spend Hope to use features against the Zombie."
       },
       {
         "name": "Perfect Strike - Action",
@@ -3664,11 +3664,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Guards, Seize Them! - Action",
-        "text": "Once per scene, mark a Stress to summon 1d4 Bladed Guards, who appear at Far range to enforce the Noble\u2019s will."
+        "text": "Once per scene, mark a Stress to summon 1d4 Bladed Guards, who appear at Far range to enforce the Noble's will."
       },
       {
         "name": "Exile - Action",
-        "text": "Spend a Fear and target a PC. The Noble proclaims that the target and their allies are exiled from the noble\u2019s territory. While exiled, the target and their allies have disadvantage during social situations within the Noble\u2019s domain."
+        "text": "Spend a Fear and target a PC. The Noble proclaims that the target and their allies are exiled from the noble's territory. While exiled, the target and their allies have disadvantage during social situations within the Noble's domain."
       }
     ]
   },
@@ -3817,7 +3817,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Dangerous Crossing - Passive",
-        "text": "Crossing the river requires the party to complete a Progress Countdown (4). A PC who rolls a failure with Fear is immediately targeted by the \u201cUndertow\u201d action without requiring a Fear to be spent on the feature.\n\n  *Have any of the PCs forded rivers like this before? Are any of them afraid of drowning?*"
+        "text": "Crossing the river requires the party to complete a Progress Countdown (4). A PC who rolls a failure with Fear is immediately targeted by the \"Undertow\" action without requiring a Fear to be spent on the feature.\n\n  *Have any of the PCs forded rivers like this before? Are any of them afraid of drowning?*"
       },
       {
         "name": "Undertow - Action",
@@ -3825,7 +3825,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Patient Hunter - Action",
-        "text": "Spend a Fear to summon a Glass Snake within Close range of a chosen PC. The Snake appears in or near the river and immediately takes the spotlight to use their \u201cSpinning Serpent\u201d action.\n\n  *What treasures does the beast have in their burrow? What travelers have already fallen victim to this predator?*"
+        "text": "Spend a Fear to summon a Glass Snake within Close range of a chosen PC. The Snake appears in or near the river and immediately takes the spotlight to use their \"Spinning Serpent\" action.\n\n  *What treasures does the beast have in their burrow? What travelers have already fallen victim to this predator?*"
       }
     ]
   },
@@ -3856,7 +3856,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Ignite - Action",
-        "text": "Make an attack against a target within Very Close range. On a success, the target takes 1d8 magic damage and is ignited until they\u2019re extinguished with a successful Finesse Roll (14). While ignited, the target takes 1d4 magic damage when they make an action roll."
+        "text": "Make an attack against a target within Very Close range. On a success, the target takes 1d8 magic damage and is ignited until they're extinguished with a successful Finesse Roll (14). While ignited, the target takes 1d4 magic damage when they make an action roll."
       },
       {
         "name": "Split - Reaction",
@@ -3922,7 +3922,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Bend Ears - Action",
-        "text": "Mark a Stress to influence an NPC within Melee range with whispered words. That target\u2019s opinion on one matter shifts toward the Advisor\u2019s preference unless it is in direct opposition to the target\u2019s motives."
+        "text": "Mark a Stress to influence an NPC within Melee range with whispered words. That target's opinion on one matter shifts toward the Advisor's preference unless it is in direct opposition to the target's motives."
       },
       {
         "name": "Scapegoat - Action",
@@ -3956,7 +3956,7 @@ const srdStatBlocks = [
         "text": "Spend 2 Fear to spotlight 1d4 allies. Attacks they make while spotlighted in this way deal half damage."
       },
       {
-        "name": "Our Master\u2019s Will - Reaction",
+        "name": "Our Master's Will - Reaction",
         "text": "When you spotlight an ally within Far range, mark a Stress to gain a Fear."
       },
       {
@@ -4027,7 +4027,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Horrifying - Passive",
-        "text": "Targets who mark HP from the Zombie\u2019s attacks must also mark a Stress."
+        "text": "Targets who mark HP from the Zombie's attacks must also mark a Stress."
       }
     ]
   },
@@ -4058,11 +4058,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Rending Bite - Passive",
-        "text": "When the Shark makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Shark makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can't mark an Armor Slot, they must mark an additional HP."
       },
       {
         "name": "Blood in the Water - Reaction",
-        "text": "When a creature within Close range of the Shark marks HP from another creature\u2019s attack, you can mark a Stress to immediately spotlight the Shark, moving them into Melee range of the target and making a standard attack."
+        "text": "When a creature within Close range of the Shark marks HP from another creature's attack, you can mark a Stress to immediately spotlight the Shark, moving them into Melee range of the target and making a standard attack."
       }
     ]
   },
@@ -4093,7 +4093,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Enchanting Song - Action",
-        "text": "Spend a Fear to sing a song that affects all targets within Close range. Targets must succeed on an Instinct Reaction Roll or become Entranced until they mark 2 Stress. Other Sirens within Close range of the target can mark a Stress to each add a +1 bonus to the Difficulty of the reaction roll. While Entranced, a target can\u2019t act and is Vulnerable."
+        "text": "Spend a Fear to sing a song that affects all targets within Close range. Targets must succeed on an Instinct Reaction Roll or become Entranced until they mark 2 Stress. Other Sirens within Close range of the target can mark a Stress to each add a +1 bonus to the Difficulty of the reaction roll. While Entranced, a target can't act and is Vulnerable."
       }
     ]
   },
@@ -4287,7 +4287,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Hold Fast - Reaction",
-        "text": "When the Captain\u2019s Spectral allies are forced to make a reaction roll, you can mark a Stress to give those allies a +2 bonus to the roll."
+        "text": "When the Captain's Spectral allies are forced to make a reaction roll, you can mark a Stress to give those allies a +2 bonus to the roll."
       },
       {
         "name": "Momentum - Reaction",
@@ -4349,7 +4349,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Arcane Steel - Passive",
-        "text": "Damage dealt by the Spellblade\u2019s standard attack is considered both physical and magic."
+        "text": "Damage dealt by the Spellblade's standard attack is considered both physical and magic."
       },
       {
         "name": "Suppressing Blast - Action",
@@ -4532,7 +4532,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Blend In - Reaction",
-        "text": "When the Soldier makes a successful attack, you can mark a Stress to become Hidden until the Soldier\u2019s next attack or a PC succeeds on an Instinct Roll (14) to find them."
+        "text": "When the Soldier makes a successful attack, you can mark a Stress to become Hidden until the Soldier's next attack or a PC succeeds on an Instinct Roll (14) to find them."
       }
     ]
   },
@@ -4567,7 +4567,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Drain and Multiply - Reaction",
-        "text": "When an attack from the Bramble causes a target to mark HP and there are three or more Tangle Bramble Minions within Close range, you can combine the Minions into a Tangle Bramble Swarm Horde. The Horde\u2019s HP is equal to the number of Minions combined."
+        "text": "When an attack from the Bramble causes a target to mark HP and there are three or more Tangle Bramble Minions within Close range, you can combine the Minions into a Tangle Bramble Swarm Horde. The Horde's HP is equal to the number of Minions combined."
       }
     ]
   },
@@ -4629,7 +4629,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Acidic Form - Passive",
-        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can\u2019t mark an Armor Slot, they must mark an additional HP."
+        "text": "When the Ooze makes a successful attack, the target must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can't mark an Armor Slot, they must mark an additional HP."
       }
     ]
   },
@@ -4699,7 +4699,7 @@ const srdStatBlocks = [
     "category": "Adversary",
     "type": "Standard",
     "countPerHp": 1,
-    "description": "An intelligent undead with blood-stained lips and a predator\u2019s smile.",
+    "description": "An intelligent undead with blood-stained lips and a predator's smile.",
     "motivesAndTactics": "Bite, charm, deceive, feed, intimidate",
     "difficulty": 16,
     "majorThreshold": 18,
@@ -4776,15 +4776,15 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Kinetic Slam - Passive",
-        "text": "Targets who take damage from the Sentinel\u2019s standard attack are knocked back to Very Close range."
+        "text": "Targets who take damage from the Sentinel's standard attack are knocked back to Very Close range."
       },
       {
         "name": "Box In - Action",
-        "text": "Mark a Stress to choose a target within Very Close range to focus on. That target has disadvantage on attack rolls when they\u2019re within Very Close range of the Sentinel. The Sentinel can only focus on one target at a time."
+        "text": "Mark a Stress to choose a target within Very Close range to focus on. That target has disadvantage on attack rolls when they're within Very Close range of the Sentinel. The Sentinel can only focus on one target at a time."
       },
       {
         "name": "Mana Bolt - Action",
-        "text": "Spend a Fear to lob explosive magic at a point within Far range. All targets within Very Close range of that point must make an Agility Reaction Roll. Targets who fail take 8d20 magic damage and are knocked back to Close range. Targets who succeed take half damage and aren\u2019t knocked back."
+        "text": "Spend a Fear to lob explosive magic at a point within Far range. All targets within Very Close range of that point must make an Agility Reaction Roll. Targets who fail take 8d20 magic damage and are knocked back to Close range. Targets who succeed take half damage and aren't knocked back."
       },
       {
         "name": "Momentum - Reaction",
@@ -4815,7 +4815,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Slow Firing - Passive",
-        "text": "When you spotlight the Turret and they don\u2019t have a token on their stat block, they can\u2019t make a standard attack. Place a token on their stat block and describe what they\u2019re preparing to do. When you spotlight the Turret and they have a token on their stat block, clear the token and they can attack."
+        "text": "When you spotlight the Turret and they don't have a token on their stat block, they can't make a standard attack. Place a token on their stat block and describe what they're preparing to do. When you spotlight the Turret and they have a token on their stat block, clear the token and they can attack."
       },
       {
         "name": "Mark Target - Action",
@@ -4823,7 +4823,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Concentrate Fire - Reaction",
-        "text": "When another adversary deals damage to a target within Far range of the Turret, you can mark a Stress to add the Turret\u2019s standard attack damage to the damage roll."
+        "text": "When another adversary deals damage to a target within Far range of the Turret, you can mark a Stress to add the Turret's standard attack damage to the damage roll."
       },
       {
         "name": "Detonation - Reaction",
@@ -4862,7 +4862,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Ashes to Ashes - Passive",
-        "text": "When a PC rolls a failure while within Close range of the Ashen Tyrant, they lose a Hope and you gain a Fear. If the PC can\u2019t lose a Hope, they must mark a HP."
+        "text": "When a PC rolls a failure while within Close range of the Ashen Tyrant, they lose a Hope and you gain a Fear. If the PC can't lose a Hope, they must mark a HP."
       },
       {
         "name": "Desperate Rampage - Action",
@@ -4913,7 +4913,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Eruption - Action",
-        "text": "Spend a Fear to erupt lava from beneath the Scourge\u2019s scales, filling area within Very Close range with lava. All targets must make Agility Reaction Roll or take 4d6+6 physical damage and be knocked back to Close range. The area remains lava (6 HP damage on entry or action)."
+        "text": "Spend a Fear to erupt lava from beneath the Scourge's scales, filling area within Very Close range with lava. All targets must make Agility Reaction Roll or take 4d6+6 physical damage and be knocked back to Close range. The area remains lava (6 HP damage on entry or action)."
       },
       {
         "name": "Volcanic Breath - Reaction",
@@ -4995,11 +4995,11 @@ const srdStatBlocks = [
       },
       {
         "name": "Refresh Warding Sphere - Action",
-        "text": "Mark a Stress to refresh the Wizard\u2019s \u201cWarding Sphere\u201d reaction."
+        "text": "Mark a Stress to refresh the Wizard's \"Warding Sphere\" reaction."
       },
       {
         "name": "Eruption - Action",
-        "text": "Spend a Fear and choose a point within Far range. A Very Close area around that point erupts into impassable terrain. All targets within that area must make an Agility Reaction Roll (14). Targets who fail take 2d10 physical damage and are thrown out of the area. Targets who succeed take half damage and aren\u2019t moved."
+        "text": "Spend a Fear and choose a point within Far range. A Very Close area around that point erupts into impassable terrain. All targets within that area must make an Agility Reaction Roll (14). Targets who fail take 2d10 physical damage and are thrown out of the area. Targets who succeed take half damage and aren't moved."
       },
       {
         "name": "Arcane Artillery - Action",
@@ -5007,7 +5007,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Warding Sphere - Reaction",
-        "text": "When the Wizard takes damage from an attack within Close range, deal 2d6 magic damage to the attacker. This reaction can\u2019t be used again until the Wizard refreshes it with their \u201cRefresh Warding Sphere\u201d action."
+        "text": "When the Wizard takes damage from an attack within Close range, deal 2d6 magic damage to the attacker. This reaction can't be used again until the Wizard refreshes it with their \"Refresh Warding Sphere\" action."
       }
     ]
   },
@@ -5054,7 +5054,7 @@ const srdStatBlocks = [
     "category": "Adversary",
     "type": "Leader",
     "countPerHp": 1,
-    "description": "An imperious tree-person leading their forest\u2019s defenses.",
+    "description": "An imperious tree-person leading their forest's defenses.",
     "motivesAndTactics": "Command, nurture, prune the unwelcome",
     "difficulty": 11,
     "majorThreshold": 6,
@@ -5073,7 +5073,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Thorny Cage - Action",
-        "text": "Spend a Fear to form a cage around a target within Very Close range and Restrain them until they\u2019re freed with a successful Strength Roll. When a creature makes an action roll against the cage, they must mark a Stress."
+        "text": "Spend a Fear to form a cage around a target within Very Close range and Restrain them until they're freed with a successful Strength Roll. When a creature makes an action roll against the cage, they must mark a Stress."
       },
       {
         "name": "Momentum - Reaction",
@@ -5108,7 +5108,7 @@ const srdStatBlocks = [
       },
       {
         "name": "Rend and Crush - Passive",
-        "text": "If a target damaged by the Dragon doesn\u2019t mark an Armor Slot to reduce the damage, they must mark a Stress."
+        "text": "If a target damaged by the Dragon doesn't mark an Armor Slot to reduce the damage, they must mark a Stress."
       },
       {
         "name": "No Hope - Passive",
