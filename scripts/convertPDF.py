@@ -166,8 +166,6 @@ def loadPage(pageText):
     for line in pageText.splitlines():
         line = deunicodeString(line).strip()
         # Also get rid of weird extra spaces
-        # TODO: What's going on with "lift you offthe ground"? (Abandoned Grove - Barbed Vines)
-        #       Also "the crowds shift and cut them offfrom the party" (Bustling Marketplace - Crowd Closes In)
         line = line.replace("   ", "").replace("  ", "")
 
         # Avoid appending SRD page number text (usually appears in the form "{pageNumber}\nDaggerheart SRD")
@@ -273,7 +271,6 @@ def loadPage(pageText):
                     m = experienceLineRegex.match(line)
                     if m:
                         if currentItem['category'] == "Adversary":
-                            # TODO: Set to null if this is never found? That's what previous converter did.
                             currentItem['experience'] = m.group(1).strip()
                         else:
                             currentItem['potentialAdversaries'] = m.group(1).strip()

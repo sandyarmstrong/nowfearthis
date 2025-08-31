@@ -1,3 +1,10 @@
+# This script converts from the JSON format found on https://github.com/seansbox/daggerheart-srd
+# to the format used by Now Fear This.
+#
+# However, it is no longer used. See convertPDF.py for the new script that parses
+# the SRD PDF directly, and may work with other PDFs that structure statblocks
+# similarly.
+
 import json
 import os
 import re
