@@ -21,6 +21,4 @@ For full license terms, see: https://darringtonpress.com/license/
 
 ## Additional Content
 
-Daggerheart SRD JSON comes from the amazing https://github.com/seansbox/daggerheart-srd project.
-
 Site favicon courtesy of [twemoji](https://github.com/twitter/twemoji/blob/master/LICENSE-GRAPHICS).
