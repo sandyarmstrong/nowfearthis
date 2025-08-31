@@ -281,7 +281,26 @@ def loadPage(pageText):
                 #       e.g. bullet points. (For now, fixing up bullet points later)
                 # TODO: Better support for feature names that are longer than a line
                 if not(lastLineIsFirstFeatureLine) and len(features) > 0 and len(lastLine) > 0:
-                    features[-1]['text'] = (features[-1]['text'] + " " + lastLine).strip()
+                    separator = " "
+                    questionStarts = [
+                        "Are ",
+                        "Did ",
+                        "Do ",
+                        "Have ",
+                        "How ",
+                        "Is ",
+                        "What ",
+                        "Where ",
+                        "Which ",
+                        "Who ",
+                        "Why ",
+                        "Will ",
+                    ]
+                    for q in questionStarts:
+                        if lastLine.startswith(q):
+                            separator = "\n"
+                            break
+                    features[-1]['text'] = (features[-1]['text'] + separator + lastLine).strip()
                 lastLineIsFirstFeatureLine = False
                 m = featureLineRegex.match(line)
                 if m and not(line[0] == '\u2022'):
