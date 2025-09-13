@@ -136,6 +136,20 @@ def deunicodeString(string):
         ('\ufb01', 'fi'),
         ('\ufb02', 'fl'),
         ('\ufb03', 'ffi'),
+        ('/uni00A0', ' '),
+        ('/period.tab', '.'),
+        ('/hyphen.tab', '-'),
+        ('/comma.tab', ','),
+        ('/one.tnum', '1'),
+        ('/two.tnum', '2'),
+        ('/three.tnum', '3'),
+        ('/four.tnum', '4'),
+        ('/five.tnum', '5'),
+        ('/six.tnum', '6'),
+        ('/seven.tnum', '7'),
+        ('/eight.tnum', '8'),
+        ('/nine.tnum', '9'),
+        ('/zero.tnum', '0'),
     ]
     for pair in replacements:
         string = string.replace(pair[0], pair[1])
@@ -171,6 +185,9 @@ def loadPage(pageText):
         # Avoid appending SRD page number text (usually appears in the form "{pageNumber}\nDaggerheart SRD")
         if line == "Daggerheart SRD":
             lastLine = ""
+            continue
+        # Except the Sept 2025 update has single-line entries like "105104 Daggerheart SRD Daggerheart SRD" instead
+        elif line.endswith("Daggerheart SRD"):
             continue
 
         features = currentItem.get('features', [])
@@ -345,8 +362,6 @@ def getJsonOutput(obj):
     #       may end up appended to the last bullet.
     replacements = [
         ('\\u2022', '\\n-'),
-        ('/hyphen.tab', '-'),
-        ('/comma.tab', ','),
         ('T ', 'T'),
         ('Off- ', 'Off - '),
         ('offof', 'off of'),

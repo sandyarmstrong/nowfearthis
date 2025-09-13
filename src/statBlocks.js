@@ -110,7 +110,7 @@ const srdStatBlocks = [
         "text": "Mark a Stress to create a magically dazzling display that grapples the minds of nearby foes. All targets within Close range must make an Instinct Reaction Roll. For each target who failed, you gain a Fear and the Flickerfly learns one of the target's fears."
       },
       {
-        "name": "Hallucinatory Breath - Action",
+        "name": "Hallucinatory Breath - Reaction",
         "text": "Countdown (Loop 1d6). When the Flickerfly takes damage for the first time, activate the countdown. When it triggers, the Flickerfly breathes hallucinatory gas on all targets in front of them up to Far range. Targets must make an Instinct Reaction Roll or be tormented by fearful hallucinations. Targets whose fears are known to the Flickerfly have disadvantage on this roll. Targets who fail lose 2 Hope and take 3d8+3 direct magic damage."
       },
       {
@@ -357,7 +357,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Relentless (2) - Passive",
-        "text": "The Box can be spotlighted up to two times times per GM turn. Spend Fear as usual to spotlight them."
+        "text": "The Box can be spotlighted up to two times per GM turn. Spend Fear as usual to spotlight them."
       },
       {
         "name": "Randomized Tactics - Action",
@@ -1933,7 +1933,7 @@ const srdStatBlocks = [
     "features": [
       {
         "name": "Armor-Shredding Shards - Passive",
-        "text": "On a successful attack within Melee range against the Snake, the attacker must mark an Armor Slot without receiving its benefits (they can still use armor to reduce the damage). If they can't mark an Armor Slot, they must mark an additional HP."
+        "text": "After a successful attack against the Snake within Melee range, the attacker must mark an Armor Slot. If they can't mark an Armor Slot, they must mark an HP."
       },
       {
         "name": "Spinning Serpent - Action",
@@ -5158,7 +5158,7 @@ const srdStatBlocks = [
     "hp": 8,
     "stress": 5,
     "attackModifier": "+2",
-    "attackDescription": "Tentacles",
+    "attackDescription": "Undead Hands",
     "attackRange": "Close",
     "attackDamage": "4d6+10 phy",
     "experience": null,
